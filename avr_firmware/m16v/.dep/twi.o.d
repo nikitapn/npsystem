@@ -1,0 +1,43 @@
+obj/twi.o: ../src/twi.c ../src/msvc.h /usr/lib/avr/include/avr/io.h \
+ /usr/lib/avr/include/avr/sfr_defs.h /usr/lib/avr/include/inttypes.h \
+ /usr/lib/gcc/avr/5.4.0/include/stdint.h /usr/lib/avr/include/stdint.h \
+ /usr/lib/avr/include/avr/iom16.h /usr/lib/avr/include/avr/portpins.h \
+ /usr/lib/avr/include/avr/common.h /usr/lib/avr/include/avr/version.h \
+ /usr/lib/avr/include/avr/fuse.h /usr/lib/avr/include/avr/lock.h \
+ /usr/lib/avr/include/avr/interrupt.h /usr/lib/avr/include/util/twi.h \
+ /usr/lib/avr/include/string.h /usr/lib/gcc/avr/5.4.0/include/stddef.h \
+ ../src/../include/avr_firmware/twi.h
+
+../src/msvc.h:
+
+/usr/lib/avr/include/avr/io.h:
+
+/usr/lib/avr/include/avr/sfr_defs.h:
+
+/usr/lib/avr/include/inttypes.h:
+
+/usr/lib/gcc/avr/5.4.0/include/stdint.h:
+
+/usr/lib/avr/include/stdint.h:
+
+/usr/lib/avr/include/avr/iom16.h:
+
+/usr/lib/avr/include/avr/portpins.h:
+
+/usr/lib/avr/include/avr/common.h:
+
+/usr/lib/avr/include/avr/version.h:
+
+/usr/lib/avr/include/avr/fuse.h:
+
+/usr/lib/avr/include/avr/lock.h:
+
+/usr/lib/avr/include/avr/interrupt.h:
+
+/usr/lib/avr/include/util/twi.h:
+
+/usr/lib/avr/include/string.h:
+
+/usr/lib/gcc/avr/5.4.0/include/stddef.h:
+
+../src/../include/avr_firmware/twi.h:

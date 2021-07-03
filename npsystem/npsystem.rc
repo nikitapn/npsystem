@@ -1,0 +1,1047 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlres.h"
+#include "Ribbon.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""atlres.h""\r\n"
+    "#include ""Ribbon.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#include ""Ribbon.rc""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR 16, 15
+BEGIN
+    BUTTON      ID_EDIT_UNDO
+    BUTTON      ID_EDIT_REDO
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\toolbar.bmp"
+
+ID_START_ONLINE         BITMAP                  "res\\start_online.bmp"
+
+ID_STOP_ONLINE          BITMAP                  "res\\stop_online.bmp"
+
+ID_UPLOAD_ALGORITHM     BITMAP                  "res\\upload_algorithm.bmp"
+
+ID_SELECT_CURSOR        BITMAP                  "res\\blocks\\cursor_selected.bmp"
+
+ID_CREATE_BLOCK_INPUT   BITMAP                  "res\\blocks\\output.svg.bmp"
+
+ID_CREATE_BLOCK_OUTPUT  BITMAP                  "res\\blocks\\input.svg.bmp"
+
+ID_CREATE_BLOCK_OR      BITMAP                  "res\\blocks\\or.bmp"
+
+ID_CREATE_BLOCK_AND     BITMAP                  "res\\blocks\\and.bmp"
+
+ID_CREATE_BLOCK_NOT     BITMAP                  "res\\blocks\\not.bmp"
+
+ID_CREATE_BLOCK_RS      BITMAP                  "res\\blocks\\rs_trigger.svg.bmp"
+
+ID_CREATE_BLOCK_PE      BITMAP                  "res\\blocks\\positive_edge.svg.bmp"
+
+ID_CREATE_BLOCK_NE      BITMAP                  "res\\blocks\\negative_edge.svg.bmp"
+
+ID_CREATE_BLOCK_AE      BITMAP                  "res\\blocks\\any_edge.svg.bmp"
+
+ID_CREATE_BLOCK_BINARY_ENCODER BITMAP                  "res\\blocks\\be.bmp"
+
+ID_CREATE_BLOCK_BINARY_DECODER BITMAP                  "res\\blocks\\bd.bmp"
+
+ID_CREATE_BLOCK_DELAY   BITMAP                  "res\\blocks\\delay.bmp"
+
+ID_CREATE_BLOCK_TIME    BITMAP                  "res\\blocks\\clock.svg.bmp"
+
+ID_CREATE_BLOCK_SCHEDULE BITMAP                  "res\\blocks\\schedule.svg.bmp"
+
+ID_CREATE_BLOCK_ADD     BITMAP                  "res\\blocks\\add.bmp"
+
+ID_CREATE_BLOCK_SUB     BITMAP                  "res\\blocks\\sub.bmp"
+
+ID_CREATE_BLOCK_MUL     BITMAP                  "res\\blocks\\mul.bmp"
+
+ID_CREATE_BLOCK_DIV     BITMAP                  "res\\blocks\\div.bmp"
+
+ID_CREATE_BLOCK_COMPARATOR BITMAP                  "res\\blocks\\cmp.bmp"
+
+ID_CREATE_BLOCK_FUNCTION BITMAP                  "res\\blocks\\block_function.bmp"
+
+ID_CREATE_BLOCK_PID     BITMAP                  "res\\blocks\\pid.bmp"
+
+ID_CREATE_BLOCK_CMP_ABOVE BITMAP                  "res\\blocks\\cpa.bmp"
+
+ID_CREATE_BLOCK_CMP_BELOW BITMAP                  "res\\blocks\\cpb.bmp"
+
+ID_CREATE_BLOCK_COUNTER BITMAP                  "res\\blocks\\cnt.svg.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM "&Redo\tCtrl+Y",               ID_EDIT_REDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Ribbon",                     ID_VIEW_RIBBON
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "&System Tree",                ID_VIEW_SYSTEM_TREE
+        MENUITEM "&Output",                     ID_VIEW_OUTPUT
+        MENUITEM "&Properties",                 ID_VIEW_PROPERTY_GRID
+    END
+    POPUP "&Realtime"
+    BEGIN
+        MENUITEM "&Start Online",               ID_START_ONLINE
+        MENUITEM "&Stop Online",                ID_STOP_ONLINE
+        MENUITEM "&Upload Algoritm",            ID_UPLOAD_ALGORITHM
+        MENUITEM "&Select pointer",             ID_SELECT_CURSOR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About npsystem",             ID_APP_ABOUT
+    END
+END
+
+IDR_MENU_ALG_CONTEXT_SELECTED MENU
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Cut",                        ID_EDIT_CUT
+        MENUITEM "&Copy",                       ID_EDIT_COPY
+    END
+END
+
+IDR_MENU_ALG_CONTEXT_BLOCK MENU
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Cut",                        ID_EDIT_CUT
+        MENUITEM "&Copy",                       ID_EDIT_COPY
+        MENUITEM SEPARATOR
+        MENUITEM "Properties",                  ID_BLOCK_PROPERTIES
+    END
+END
+
+IDR_MENU_ALG_CONTEXT MENU
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Paste",                      ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Properties",                  ID_ALGORITHM_PROPERTIES
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\npsystem.svg.ico"
+
+IDI_CTRL_NL             ICON                    "res\\controller.ico"
+
+IDI_CTRL_BAD            ICON                    "res\\controller_bad.ico"
+
+IDI_CTRL_GOOD           ICON                    "res\\controller_good.ico"
+
+IDI_ALGORITHM           ICON                    "res\\algorithm.ico"
+
+IDI_NETWORK             ICON                    "res\\network.ico"
+
+IDI_SYSTEM              ICON                    "res\\system.ico"
+
+IDI_INPUTS              ICON                    "res\\inputs.ico"
+
+IDI_OUTPUTS             ICON                    "res\\outputs.ico"
+
+IDI_HARDWARE            ICON                    "res\\hardware.ico"
+
+IDI_SOFTWARE            ICON                    "res\\software.ico"
+
+IDI_IO                  ICON                    "res\\input_output.ico"
+
+IDI_OPIN                ICON                    "res\\o_pin.ico"
+
+IDI_AI_PIN              ICON                    "res\\input_analog.ico"
+
+IDI_DI_PIN              ICON                    "res\\input.ico"
+
+IDI_DO_PIN              ICON                    "res\\output.ico"
+
+IDI_STOP_BUTTON         ICON                    "res\\stop_button.ico"
+
+IDI_START_BUTTON        ICON                    "res\\start_button.ico"
+
+IDI_MAIN                ICON                    "res\\main.ico"
+
+IDI_FILE_ICON           ICON                    "res\\file.ico"
+
+IDI_FOLDER_CLOSE        ICON                    "res\\folder_closed.ico"
+
+IDI_FOLDER_OPEN         ICON                    "res\\folder_open.ico"
+
+IDI_MODULES             ICON                    "res\\codeblocks.ico"
+
+IDI_MODULE              ICON                    "res\\module_file_format.ico"
+
+IDI_TXT_FILE            ICON                    "res\\mime-template_source.ico"
+
+IDI_H_FILE              ICON                    "res\\source_h.ico"
+
+IDI_S_FILE              ICON                    "res\\source_s.ico"
+
+IDI_C_FILE              ICON                    "res\\source_c.ico"
+
+IDI_FILE_DELETE         ICON                    "res\\document_delete.ico"
+
+IDI_EXCLAM              ICON                    "res\\exclamation.ico"
+
+IDI_EMPTY               ICON                    "res\\empty.ico"
+
+IDI_CTRL_DEV            ICON                    "res\\blockdevice.ico"
+
+IDI_BOOK                ICON                    "res\\book.ico"
+
+IDI_LIBRARY             ICON                    "res\\Library.ico"
+
+IDI_FUNCTIONS           ICON                    "res\\functions.ico"
+
+IDI_FUN                 ICON                    "res\\function.ico"
+
+IDI_SOURCE              ICON                    "res\\src.ico"
+
+IDI_BINARY              ICON                    "res\\binary.ico"
+
+IDI_PC                  ICON                    "res\\mycomputer.ico"
+
+IDI_CHIP                ICON                    "res\\pinned.ico"
+
+IDI_VAR                 ICON                    "res\\var_ico.ico"
+
+IDI_PINNED              ICON                    "res\\pinned.ico"
+
+IDI_UNPINNED            ICON                    "res\\unpinned.ico"
+
+IDI_I2C                 ICON                    "res\\i2c.ico"
+
+IDI_CONTAINER           ICON                    "res\\container.ico"
+
+IDI_BLOCK               ICON                    "res\\block.ico"
+
+IDI_NP_QUESTION         ICON                    "res\\question.svg.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 187, 102
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 10, "Lucida Console", 400, 0, 0xCC
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,126,46,50,14
+    CTEXT           "npsystem v1.0\nby Nikita Pennie\n\n(c) Copyright 2020",IDC_STATIC,25,57,78,32
+    ICON            IDR_MAINFRAME,IDC_STATIC,55,26,16,20
+    GROUPBOX        "",IDC_STATIC,7,7,115,88
+END
+
+IDD_DLG_NEW_CONTROLLER DIALOGEX 0, 0, 289, 57
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New Controller"
+FONT 10, "Segoe UI", 400, 0, 0xCC
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,223,21,50,14
+    COMBOBOX        IDC_COMBO1,15,22,195,89,CBS_DROPDOWNLIST | WS_TABSTOP
+END
+
+IDD_DLG_IOBLOCK DIALOGEX 0, 0, 285, 264
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "PARAMETER CONFIGURATION"
+FONT 12, "Segoe UI", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,202,237,50,14
+    EDITTEXT        IDC_EDIT_NAME,31,21,221,12,ES_UPPERCASE | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_LINK,31,174,221,12,ES_UPPERCASE | ES_AUTOHSCROLL | NOT WS_VISIBLE
+    CONTROL         "DISCKRETE",IDC_RADIO_BT_1,"Button",BS_AUTORADIOBUTTON | BS_VCENTER | WS_GROUP,31,76,87,10
+    CONTROL         "UNSIGNED 8 BIT",IDC_RADIO_BT_2,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,31,94,87,10
+    CONTROL         "SIGNED 8 BIT",IDC_RADIO_BT_3,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,165,94,87,10
+    CONTROL         "UNSIGNED 16 BIT",IDC_RADIO_BT_4,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,31,112,87,10
+    CONTROL         "SIGNED 16 BIT",IDC_RADIO_BT_5,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,165,112,87,10
+    CONTROL         "UNSIGNED 32 BIT",IDC_RADIO_BT_6,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,31,130,87,10
+    CONTROL         "SIGNED 32 BIT",IDC_RADIO_BT_7,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,165,130,87,10
+    CONTROL         "FLOAT",IDC_RADIO_BT_8,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,165,76,87,10
+    CONTROL         "INTERNAL REFERENCE",IDC_RADIO_BT_9,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,31,153,87,10
+    CONTROL         "EXTERNAL REFERENCE",IDC_RADIO_BT_10,"Button",BS_AUTORADIOBUTTON | BS_VCENTER,165,153,87,10
+    GROUPBOX        "NAME",IDC_STATIC,17,8,248,35
+    GROUPBOX        "TYPE",IDC_STATIC,17,44,248,154
+    COMBOBOX        IDC_COMBO1,31,212,221,30,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "QUALITY",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,59,45,10
+    GROUPBOX        "STRINGS SET",IDC_STATIC,17,200,248,32
+END
+
+IDD_DLG_CONTROLLER DIALOGEX 0, 0, 694, 403
+STYLE DS_SETFONT | WS_CHILD
+EXSTYLE WS_EX_CLIENTEDGE
+FONT 14, "Consolas", 400, 0, 0xCC
+BEGIN
+    EDITTEXT        IDC_EDIT1,256,20,107,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT2,86,20,107,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT3,426,20,107,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Address:",IDC_STATIC,213,22,32,8
+    LTEXT           "Model:",IDC_STATIC,45,22,23,8
+    LTEXT           "Version:",IDC_STATIC,383,22,32,8
+    PUSHBUTTON      "Advise",IDC_BUTTON1,533,65,103,14
+    CONTROL         "",IDC_TREE1,"SysTreeView32",NOT WS_VISIBLE | WS_BORDER | WS_HSCROLL | WS_TABSTOP,56,48,463,179
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,56,241,463,134
+END
+
+IDD_DLG_PROGRAMMER DIALOGEX 0, 0, 155, 185
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Define your programmer"
+FONT 8, "Segoe UI", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,92,153,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,13,153,50,14
+    COMBOBOX        IDC_COMBO1,34,23,89,84,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_PINCONFIG DIALOGEX 0, 0, 263, 72
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Pin config"
+FONT 10, "Segoe UI", 400, 0, 0xCC
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,194,21,50,14
+    COMBOBOX        IDC_COMBO1,18,22,150,45,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Inverted",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,18,48,43,10
+END
+
+IDD_DLG_ONLINE DIALOGEX 0, 0, 283, 69
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 12, "Segoe UI", 400, 0, 0xCC
+BEGIN
+    CONTROL         "Enter",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,205,38,64,18
+    EDITTEXT        IDC_EDIT1,16,41,175,12
+    COMBOBOX        IDC_COMBO1,16,14,175,34,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_ONLINE_DISCRETE DIALOGEX 0, 0, 283, 69
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 10, "Segoe UI", 0, 0, 0x0
+BEGIN
+    CONTROL         "Enter",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,211,26,64,18
+    CONTROL         "FALSE",IDC_RADIO_BT_FALSE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,35,20,36,10
+    CONTROL         "TRUE",IDC_RADIO_BT_TRUE,"Button",BS_AUTORADIOBUTTON,154,20,33,10
+    COMBOBOX        IDC_COMBO1,35,43,152,34,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_AVR_MEMORY_VIEWER DIALOGEX 0, 0, 478, 530
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 16, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+END
+
+IDD_DLG_MODULE DIALOGEX 0, 0, 176, 132
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 12, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,113,111,50,14
+    EDITTEXT        IDC_EDIT1,78,22,85,12,ES_AUTOHSCROLL
+    LTEXT           "Slave Adress:",IDC_STATIC,15,24,46,8
+    CONTROL         "0 - byte",IDC_RADIO_BT_1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,78,54,41,10
+    CONTROL         "1 - byte",IDC_RADIO_BT_2,"Button",BS_AUTORADIOBUTTON,78,71,41,10
+    CONTROL         "2 - byte",IDC_RADIO_BT_3,"Button",BS_AUTORADIOBUTTON,78,88,41,10
+    LTEXT           "Address Size:",IDC_STATIC,15,55,46,8
+END
+
+IDD_DLG_NEWFILE DIALOGEX 0, 0, 575, 263
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New Item"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,455,242,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,518,242,50,14
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,7,561,174
+    EDITTEXT        IDC_EDIT1,70,218,441,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse",IDC_BUTTON1,518,218,50,14
+    LTEXT           "Directory:",IDC_STATIC,7,218,63,15,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT4,70,196,498,14,ES_AUTOHSCROLL
+    LTEXT           "Name:",IDC_STATIC,7,196,63,15,SS_CENTERIMAGE
+END
+
+IDD_DLG_LIBPROPERTIES DIALOGEX 0, 0, 157, 125
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Additional Libraries"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,45,104,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,100,104,50,14
+    CONTROL         "",IDC_LIST2,"SysListView32",LVS_LIST | LVS_SINGLESEL | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,143,89
+END
+
+IDD_DLG_SEGMENT DIALOGEX 0, 0, 205, 118
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Segment"
+FONT 12, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,130,93,50,14
+    EDITTEXT        IDC_EDIT1,53,27,127,12,ES_AUTOHSCROLL
+    LTEXT           "Offset:",IDC_STATIC,18,29,23,8
+    COMBOBOX        IDC_COMBO1,53,62,127,30,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Type:",IDC_STATIC,18,64,20,8
+END
+
+IDD_DLG_SEGMENTVALUE DIALOGEX 0, 0, 187, 103
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Segment Value"
+FONT 12, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,124,75,50,14
+    COMBOBOX        IDC_COMBO1,12,47,162,141,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT1,12,21,162,12,ES_UPPERCASE | ES_AUTOHSCROLL
+END
+
+IDD_DLG_DOCLIST DIALOGEX 0, 0, 320, 200
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "TCS"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "Yes",IDYES,37,169,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,225,169,50,14
+    PUSHBUTTON      "No",IDNO,135,169,50,14
+    LISTBOX         IDC_LIST1,7,23,306,119,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Save changes to the following items?",IDC_STATIC,7,10,133,8
+END
+
+IDD_DLG_ONLINELIST DIALOGEX 0, 0, 569, 381
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,25,48,516,210
+    PUSHBUTTON      "Advise",IDC_BUTTON1,491,270,50,14
+END
+
+IDD_DLG_ALGORITHM_PROPERTIES DIALOGEX 0, 0, 190, 179
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 14, "Verdana", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,122,154,50,14
+    EDITTEXT        IDC_EDIT1,88,24,84,12,ES_AUTOHSCROLL
+    LTEXT           "Scan period:",IDC_STATIC,14,26,44,8
+END
+
+IDD_DLG_SIMPLE_INPUT DIALOGEX 0, 0, 230, 62
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 14, "Verdana", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,155,24,50,14
+    EDITTEXT        IDC_EDIT1,25,25,101,12,ES_AUTOHSCROLL
+END
+
+IDD_DLG_LOADING_MANAGER DIALOGEX 0, 0, 435, 286
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "npsystem loader"
+FONT 10, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_DISABLED | WS_TABSTOP,356,256,50,14
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,32,24,374,14
+    CONTROL         "",IDC_CUSTOM1,"RICHEDIT50W",WS_BORDER | WS_VSCROLL | WS_HSCROLL | 0x804,32,55,374,190
+END
+
+IDD_DLG_PARAMETER DIALOGEX 0, 0, 205, 138
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 10, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,134,104,50,14
+    CONTROL         "History",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,32,25,39,10
+END
+
+IDD_DLG_CONFIGURABLE_BLOCK DIALOGEX 0, 0, 302, 240
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+FONT 10, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,235,210,50,14
+    LISTBOX         IDC_LIST2,178,31,106,163,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "-->",IDC_BUTTON1,"Button",BS_OWNERDRAW | WS_TABSTOP,126,39,50,14
+    CONTROL         "<--",IDC_BUTTON2,"Button",BS_OWNERDRAW | WS_TABSTOP,126,65,50,14
+    LISTBOX         IDC_LIST1,18,31,106,163,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_BLOCK_FUNCTION DIALOGEX 0, 0, 328, 47
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 10, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,260,15,50,14
+END
+
+IDD_DLG_STRING DIALOGEX 0, 0, 205, 118
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "String"
+FONT 12, "Microsoft Sans Serif", 400, 0, 0xCC
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,130,93,50,14
+    EDITTEXT        IDC_EDIT1,53,27,127,12,ES_AUTOHSCROLL
+    LTEXT           "Name",IDC_STATIC,18,29,23,8
+    LTEXT           "Value",IDC_STATIC,18,64,20,8
+    EDITTEXT        IDC_EDIT2,53,62,127,12,ES_AUTOHSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 95
+    END
+
+    IDD_DLG_NEW_CONTROLLER, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_IOBLOCK, DIALOG
+    BEGIN
+        VERTGUIDE, 17
+        VERTGUIDE, 31
+        VERTGUIDE, 165
+        VERTGUIDE, 252
+        VERTGUIDE, 265
+        BOTTOMMARGIN, 256
+    END
+
+    IDD_DLG_CONTROLLER, DIALOG
+    BEGIN
+        VERTGUIDE, 45
+        VERTGUIDE, 56
+        VERTGUIDE, 519
+        VERTGUIDE, 533
+        HORZGUIDE, 26
+        HORZGUIDE, 282
+    END
+
+    IDD_DLG_PROGRAMMER, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_PINCONFIG, DIALOG
+    BEGIN
+        VERTGUIDE, 18
+    END
+
+    IDD_DLG_ONLINE, DIALOG
+    BEGIN
+        VERTGUIDE, 16
+        HORZGUIDE, 47
+    END
+
+    IDD_DLG_ONLINE_DISCRETE, DIALOG
+    BEGIN
+        VERTGUIDE, 35
+        VERTGUIDE, 187
+        BOTTOMMARGIN, 68
+    END
+
+    IDD_DLG_AVR_MEMORY_VIEWER, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_MODULE, DIALOG
+    BEGIN
+        VERTGUIDE, 15
+        VERTGUIDE, 71
+        VERTGUIDE, 78
+        VERTGUIDE, 163
+        HORZGUIDE, 28
+        HORZGUIDE, 59
+    END
+
+    IDD_DLG_NEWFILE, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_LIBPROPERTIES, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_SEGMENT, DIALOG
+    BEGIN
+        VERTGUIDE, 18
+        VERTGUIDE, 53
+        VERTGUIDE, 180
+        BOTTOMMARGIN, 117
+        HORZGUIDE, 33
+        HORZGUIDE, 68
+    END
+
+    IDD_DLG_SEGMENTVALUE, DIALOG
+    BEGIN
+        VERTGUIDE, 12
+        VERTGUIDE, 174
+    END
+
+    IDD_DLG_DOCLIST, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_ONLINELIST, DIALOG
+    BEGIN
+    END
+
+    IDD_DLG_ALGORITHM_PROPERTIES, DIALOG
+    BEGIN
+        VERTGUIDE, 14
+        VERTGUIDE, 172
+        HORZGUIDE, 30
+    END
+
+    IDD_DLG_SIMPLE_INPUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+        HORZGUIDE, 31
+    END
+
+    IDD_DLG_LOADING_MANAGER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 428
+        VERTGUIDE, 32
+        VERTGUIDE, 406
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 279
+    END
+
+    IDD_DLG_PARAMETER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 198
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 131
+        HORZGUIDE, 30
+    END
+
+    IDD_DLG_CONFIGURABLE_BLOCK, DIALOG
+    BEGIN
+        VERTGUIDE, 151
+        BOTTOMMARGIN, 239
+        HORZGUIDE, 31
+    END
+
+    IDD_DLG_BLOCK_FUNCTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 321
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 40
+    END
+
+    IDD_DLG_STRING, DIALOG
+    BEGIN
+        VERTGUIDE, 18
+        VERTGUIDE, 53
+        VERTGUIDE, 180
+        BOTTOMMARGIN, 117
+        HORZGUIDE, 33
+        HORZGUIDE, 68
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_PEN                 CURSOR                  "res\\cursors\\pen.cur"
+
+IDC_LINKSEL             CURSOR                  "res\\cursors\\aero_link_l.cur"
+
+IDC_NODROP              CURSOR                  "res\\cursors\\nodrop.cur"
+
+IDC_POINTER_COPY        CURSOR                  "res\\cursors\\arrowcop.cur"
+
+IDC_POINTER             CURSOR                  "res\\cursors\\arrow.cur"
+
+IDC_DROP                CURSOR                  "res\\cursors\\drop.cur"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_DELETE,      ID_EDIT_DELETE,         VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileDescription", "npsystem Module"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "npsystem"
+            VALUE "LegalCopyright", "Copyright 2018"
+            VALUE "OriginalFilename", "npsystem.exe"
+            VALUE "ProductName", "npsystem Module"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_ABOUTBOX AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_SEGMENTVALUE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_ONLINE_DISCRETE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_ALGORITHM_PROPERTIES AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_ALGORITHM_PROPERTIES AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_SIMPLE_INPUT AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_IOBLOCK AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_ONLINE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_CONTROLLER AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_LOADING_MANAGER AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_MODULE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_SEGMENT AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_PARAMETER AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_PINCONFIG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_CONFIGURABLE_BLOCK AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_BLOCK_FUNCTION AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_STRING AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_AVR_MEMORY_VIEWER AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    ID_CREATE_BLOCK_INPUT   "input"
+    ID_CREATE_BLOCK_OUTPUT  "output"
+    ID_CREATE_BLOCK_OR      "or"
+    ID_CREATE_BLOCK_AND     "and"
+    ID_CREATE_BLOCK_NOT     "not"
+    ID_CREATE_BLOCK_RS      "RS Trigger"
+    ID_CREATE_BLOCK_PE      "Positive Edge"
+    ID_CREATE_BLOCK_NE      "Negativ Edge"
+    ID_CREATE_BLOCK_AE      "Any Edge"
+    ID_CREATE_BLOCK_BINARY_ENCODER "Binary Encoder"
+    ID_CREATE_BLOCK_BINARY_DECODER "Binary Decoder"
+    ID_CREATE_BLOCK_DELAY   "Delay"
+    ID_CREATE_BLOCK_ADD     "Addition"
+END
+
+STRINGTABLE
+BEGIN
+    ID_CREATE_BLOCK_SUB     "Substraction"
+    ID_CREATE_BLOCK_MUL     "Multiplication"
+    ID_CREATE_BLOCK_DIV     "Division"
+    ID_CREATE_BLOCK_CMP_ABOVE "Compare Above"
+    ID_CREATE_BLOCK_CMP_BELOW "Compare Below"
+    ID_CREATE_BLOCK_PID     "PID"
+END
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "npsystem"
+    IDR_VIEW                "npsystem_View"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+    ID_VIEW_RIBBON          "Show or hide the ribbon\nToggle Ribbon"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_SCSIZE          "Change the window size"
+    ATL_IDS_SCMOVE          "Change the window position"
+    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_SCRESTORE       "Restore the window to normal size"
+    ATL_IDS_SCTASKLIST      "Activate Task List"
+    ATL_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_MRU_FILE        "Open this document"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "Ribbon.rc"
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

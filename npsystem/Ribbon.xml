@@ -1,0 +1,212 @@
+<!-- Ribbon.xml -->
+
+<Application xmlns="http://schemas.microsoft.com/windows/2009/Ribbon">
+
+  <Application.Commands>
+
+    <!-- npsystem.rc Commands -->
+    <!-- don't modify default  ids -->
+    
+    <Command Name="wtl_FILE_NEW" Symbol="ID_FILE_NEW" Id="0xE100"/>
+    <Command Name="wtl_FILE_OPEN" Symbol="ID_FILE_OPEN" Id="0xE101"/>
+    <Command Name="wtl_FILE_CLOSE" Symbol="ID_FILE_CLOSE" Id="0xE102"/>
+    <Command Name="wtl_FILE_SAVE" Symbol="ID_FILE_SAVE" Id="0xE103"/>
+    <Command Name="wtl_FILE_SAVE_AS" Symbol="ID_FILE_SAVE_AS" Id="0xE104"/>
+      
+    <Command Name="wtl_FILE_PAGE_SETUP" Symbol="ID_FILE_PAGE_SETUP" Id="0xE105"/>
+    <Command Name="wtl_FILE_PRINT_SETUP" Symbol="ID_FILE_PRINT_SETUP" Id="0xE106"/>
+    <Command Name="wtl_FILE_PRINT" Symbol="ID_FILE_PRINT" Id="0xE107"/>
+    <Command Name="wtl_FILE_PRINT_DIRECT" Symbol="ID_FILE_PRINT_DIRECT" Id="0xE108"/>
+    <Command Name="wtl_FILE_PRINT_PREVIEW" Symbol="ID_FILE_PRINT_PREVIEW" Id="0xE109"/>
+    
+    <Command Name="wtl_EDIT_CUT" Symbol="ID_EDIT_CUT" Id="0xE123"/>
+    <Command Name="wtl_EDIT_COPY" Symbol="ID_EDIT_COPY" Id="0xE122"/>
+    <Command Name="wtl_EDIT_PASTE" Symbol="ID_EDIT_PASTE" Id="0xE125"/>
+    <Command Name="wtl_EDIT_FIND" Symbol="ID_EDIT_FIND" Id="0xE124"/>
+    <Command Name="wtl_EDIT_REPEAT" Symbol="ID_EDIT_REPEAT" Id="0xE128"/>
+    <Command Name="wtl_EDIT_REPLACE" Symbol="ID_EDIT_REPLACE" Id="0xE129"/>
+    <Command Name="wtl_EDIT_SELECT_AL" Symbol="ID_EDIT_SELECT_AL" Id="0xE12A"/>
+    <Command Name="wtl_EDIT_UNDO" Symbol="ID_EDIT_UNDO" Id="0xE12B"/>
+    <Command Name="wtl_EDIT_REDO" Symbol="ID_EDIT_REDO" Id="0xE12C"/> 
+
+    <Command Name="wtl_WINDOW_NEW" Symbol="ID_WINDOW_NEW" Id="0xE130"/>
+    <Command Name="wtl_WINDOW_SPLIT" Symbol="ID_WINDOW_SPLIT" Id="0xE135"/>
+
+    <Command Name="wtl_APP_ABOUT" Symbol="ID_APP_ABOUT" Id="0xE140"/>
+    <Command Name="wtl_APP_EXIT" Symbol="ID_APP_EXIT" Id="0xE141"/>
+
+    <Command Name="wtl_NEXT_PANE" Symbol="ID_NEXT_PANE" Id="0xE150"/>
+    <Command Name="wtl_PREV_PANE" Symbol="ID_PREV_PANE" Id="0xE151"/>
+    <Command Name="wtl_PANE_CLOSE" Symbol="ID_PANE_CLOSE" Id="0xE152"/>
+
+    <!-- Predefined Views -->
+    <Command Name="wtl_VIEW_TOOLBAR" Symbol="ID_VIEW_TOOLBAR" Id="0xE800"/>
+    <Command Name="wtl_VIEW_STATUS_BAR" Symbol="ID_VIEW_STATUS_BAR" Id="0xE801"/>
+    <Command Name="wtl_VIEW_RIBBON" Symbol="ID_VIEW_RIBBON" Id="0xE804"/>
+    <!-- My Views -->
+    <Command Name="wtl_VIEW_SYSTEM_TREE" Symbol="ID_VIEW_SYSTEM_TREE" Id="0xE805"/>
+    <Command Name="wtl_VIEW_OUTPUT" Symbol="ID_VIEW_OUTPUT" Id="0xE806"/>
+    <Command Name="wtl_VIEW_PROPERTY_GRID" Symbol="ID_VIEW_PROPERTY_GRID" Id="0xE807"/>
+
+
+    <Command Name="wtl_PANE_COLLAPSE" Symbol="ID_PANE_COLLAPSE" Id="0xE900"/>
+    <Command Name="wtl_PANE_PIN" Symbol="ID_PANE_PIN" Id="0xE901"/>
+    
+    <!-- Algorithm View -->
+
+    <Command Name="wtl_RIBBON_COMMANDS_BEGIN" Symbol="ID_RIBBON_COMMANDS_BEGIN" Id="0xA000"/>
+    <Command Name="wtl_START_ONLINE" Symbol="ID_START_ONLINE" Id="0xA001"/>
+    <Command Name="wtl_STOP_ONLINE" Symbol="ID_STOP_ONLINE" Id="0xA002"/>
+    <Command Name="wtl_UPLOAD_ALGORITHM" Symbol="ID_UPLOAD_ALGORITHM" Id="0xA003"/>
+    <Command Name="wtl_UNLOAD_ALGORITHM" Symbol="ID_UNLOAD_ALGORITHM" Id="0xA004"/>
+    <Command Name="wtl_ALGORITHM_PROPERTIES" Symbol="ID_ALGORITHM_PROPERTIES" Id="0xA005"/>
+    <Command Name="wtl_BLOCK_PROPERTIES" Symbol="ID_BLOCK_PROPERTIES" Id="0xA006"/>
+    <Command Name="wtl_EXPAND_INPUTS" Symbol="ID_EXPAND_INPUTS" Id="0xA007"/>
+    <Command Name="wtl_AE_COPY_AS_LINK" Symbol="ID_AE_COPY_AS_LINK" Id="0xA009"/>
+    <Command Name="wtl_AE_COPY_SLOT_PATH_TO_CB" Symbol="ID_AE_COPY_SLOT_PATH_TO_CB" Id="0xA00A"/>
+    <Command Name="wtl_CONFIGURABLE_BLOCK_EDIT" Symbol="ID_CONFIGURABLE_BLOCK_EDIT" Id="0xA00B"/>
+    <Command Name="wtl_CONFIGURABLE_BLOCK_EQUATION" Symbol="ID_CONFIGURABLE_BLOCK_EQUATION" Id="0xA00C"/>
+    <Command Name="wtl_RIBBON_COMMANDS_END" Symbol="ID_RIBBON_COMMANDS_END" Id="0xA00D"/>
+
+    <Command Name="Gallery" Symbol="ID_GALLERY_BLOCKS" Id="0xA300" LabelTitle ="Blocks" />
+    <!-- IO -->
+    <Command Name="wtl_CREATE_BLOCK_INPUT" Symbol="ID_CREATE_BLOCK_INPUT" Id="0xA301"/>
+    <Command Name="wtl_CREATE_BLOCK_OUTPUT" Symbol="ID_CREATE_BLOCK_OUTPUT" Id="0xA302"/>
+    <!-- Logic -->
+    <Command Name="wtl_CREATE_BLOCK_OR" Symbol="ID_CREATE_BLOCK_OR" Id="0xA303"/>
+    <Command Name="wtl_CREATE_BLOCK_AND" Symbol="ID_CREATE_BLOCK_AND" Id="0xA304"/>
+    <Command Name="wtl_CREATE_BLOCK_NOT" Symbol="ID_CREATE_BLOCK_NOT" Id="0xA305"/>
+    <Command Name="wtl_CREATE_BLOCK_RS" Symbol="ID_CREATE_BLOCK_RS" Id="0xA306"/>
+    <Command Name="wtl_CREATE_BLOCK_PE" Symbol="ID_CREATE_BLOCK_PE" Id="0xA307"/>
+    <Command Name="wtl_CREATE_BLOCK_NE" Symbol="ID_CREATE_BLOCK_NE" Id="0xA308"/>
+    <Command Name="wtl_CREATE_BLOCK_AE" Symbol="ID_CREATE_BLOCK_AE" Id="0xA309"/>
+    <Command Name="wtl_CREATE_BLOCK_BINARY_ENCODER" Symbol="ID_CREATE_BLOCK_BINARY_ENCODER" Id="0xA30A"/>
+    <Command Name="wtl_CREATE_BLOCK_BINARY_DECODER" Symbol="ID_CREATE_BLOCK_BINARY_DECODER" Id="0xA30B"/>
+    <Command Name="wtl_CREATE_BLOCK_DELAY" Symbol="ID_CREATE_BLOCK_DELAY" Id="0xA30C"/>
+    <Command Name="wtl_CREATE_BLOCK_TIME" Symbol="ID_CREATE_BLOCK_TIME" Id="0xA30D"/>
+    <Command Name="wtl_CREATE_BLOCK_SCHEDULE" Symbol="ID_CREATE_BLOCK_SCHEDULE" Id="0xA30E"/>
+    <Command Name="wtl_CREATE_BLOCK_COUNTER" Symbol="ID_CREATE_BLOCK_COUNTER" Id="0xA30F"/>
+    <!-- Math -->
+    <Command Name="wtl_CREATE_BLOCK_ADD" Symbol="ID_CREATE_BLOCK_ADD" Id="0xA310"/>
+    <Command Name="wtl_CREATE_BLOCK_SUB" Symbol="ID_CREATE_BLOCK_SUB" Id="0xA311"/>
+    <Command Name="wtl_CREATE_BLOCK_MU" Symbol="ID_CREATE_BLOCK_MUL" Id="0xA312"/>
+    <Command Name="wtl_CREATE_BLOCK_DIV" Symbol="ID_CREATE_BLOCK_DIV" Id="0xA313"/>
+    <Command Name="wtl_CREATE_BLOCK_COMPARATOR" Symbol="ID_CREATE_BLOCK_COMPARATOR" Id="0xA314"/>
+    <Command Name="wtl_CREATE_BLOCK_FUNCTION" Symbol="ID_CREATE_BLOCK_FUNCTION" Id="0xA315"/>
+    <!-- Alarms -->
+    <Command Name="wtl_CREATE_BLOCK_CMP_ABOVE" Symbol="ID_CREATE_BLOCK_CMP_ABOVE" Id="0xA316"/>
+    <Command Name="wtl_CREATE_BLOCK_CMP_BELOW" Symbol="ID_CREATE_BLOCK_CMP_BELOW" Id="0xA317"/>
+    <!-- Control -->
+    <Command Name="wtl_CREATE_BLOCK_PID" Symbol="ID_CREATE_BLOCK_PID" Id="0xA318"/>
+    <!-- Last Block Id -->
+    <Command Name="wtl_CREATE_BLOCK_LAST" Symbol="ID_CREATE_BLOCK_LAST" Id="0xA319"/>
+
+    <Command Name="wtl_SELECT_CURSOR" Symbol="ID_SELECT_CURSOR" Id="0xA400"/>
+    
+    <!-- Tabs -->
+    <Command Name="TabHome" Symbol="ID_TAB_HOME" LabelTitle="Home" />
+    <!-- Groups -->
+    <Command Name="GroupRealTime" Symbol="ID_GROUP_REALTIME" LabelTitle="Realtime" />
+    <Command Name="GroupBlocks" Symbol="ID_GROUP_BLOCKS" LabelTitle="Blocks" />
+    <Command Name="GroupView" Symbol="ID_GROUP_VIEW" LabelTitle="View" />
+    <Command Name="GroupTools" Symbol="ID_GROUP_TOOLS" LabelTitle="Tools" />
+    <!-- App Menu, MRU list, Help button and Quick Access Toolbar -->
+    <Command Name="AppMenu" Symbol="ID_RIBBON_APP_MENU"/>
+    <Command Name="SaveMore" Symbol="ID_SAVEMORE"/>
+    <Command Name="PrintMore" Symbol="ID_PRINTMORE"/>
+    <Command Name="QAT" Symbol="ID_RIBBON_QAT"/>
+  </Application.Commands>
+  
+  <Application.Views>
+    <Ribbon>
+      <!-- Application Menu -->
+      <Ribbon.ApplicationMenu >
+        <ApplicationMenu CommandName="AppMenu" >
+          <MenuGroup >
+            <Button CommandName="wtl_APP_EXIT"/>
+          </MenuGroup>
+        </ApplicationMenu>
+      </Ribbon.ApplicationMenu >
+
+      <!-- Help button -->
+      <Ribbon.HelpButton>
+        <HelpButton CommandName="wtl_APP_ABOUT" />
+      </Ribbon.HelpButton>
+
+      <!-- QAT (Quick Access Toolbar) -->
+      <Ribbon.QuickAccessToolbar>
+        <QuickAccessToolbar CommandName="QAT">
+          <QuickAccessToolbar.ApplicationDefaults>
+            <Button CommandName="wtl_EDIT_UNDO"/>
+            <Button CommandName="wtl_EDIT_REDO"/>
+          </QuickAccessToolbar.ApplicationDefaults>
+        </QuickAccessToolbar>
+      </Ribbon.QuickAccessToolbar>
+
+      <Ribbon.Tabs>
+        <Tab CommandName="TabHome">
+          <Group CommandName="GroupRealTime" SizeDefinition="ThreeButtons">
+            <Button CommandName="wtl_START_ONLINE"/>
+            <Button CommandName="wtl_STOP_ONLINE"/>
+            <Button CommandName="wtl_UPLOAD_ALGORITHM"/>
+          </Group>
+        
+         <Group CommandName = "GroupTools" SizeDefinition="OneButton" >
+            <ToggleButton CommandName = "wtl_SELECT_CURSOR" />
+          </Group>
+          <Group CommandName="GroupBlocks"  SizeDefinition="OneInRibbonGallery">
+            <InRibbonGallery CommandName="Gallery" 
+                             ItemHeight="56" ItemWidth="64"  
+                             MinColumnsLarge="12" TextPosition="Hide" />
+          </Group>
+          
+          <Group CommandName="GroupView">
+            <SizeDefinition>
+              <ControlNameMap>
+                <ControlNameDefinition Name="wtl_VIEW_RIBBON" />
+                <ControlNameDefinition Name="wtl_VIEW_TOOLBAR" />
+                <ControlNameDefinition Name="wtl_VIEW_STATUS_BAR" />
+                <ControlNameDefinition Name="wtl_VIEW_SYSTEM_TREE" />
+                <ControlNameDefinition Name="wtl_VIEW_OUTPUT" />
+                <ControlNameDefinition Name="wtl_VIEW_PROPERTY_GRID" />
+              </ControlNameMap>
+              <GroupSizeDefinition Size="Large">
+                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_TOOLBAR" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_SYSTEM_TREE" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_OUTPUT" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_PROPERTY_GRID" ImageSize="Small" IsLabelVisible="true" />
+              </GroupSizeDefinition>
+              <GroupSizeDefinition Size="Medium">
+                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_TOOLBAR" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_SYSTEM_TREE" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_OUTPUT" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_PROPERTY_GRID" ImageSize="Small" IsLabelVisible="true" />
+              </GroupSizeDefinition>
+              <GroupSizeDefinition Size="Small">
+                <ControlSizeDefinition ControlName="wtl_VIEW_RIBBON" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_TOOLBAR" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_STATUS_BAR" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_SYSTEM_TREE" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_OUTPUT" ImageSize="Small" IsLabelVisible="true" />
+                <ControlSizeDefinition ControlName="wtl_VIEW_PROPERTY_GRID" ImageSize="Small" IsLabelVisible="true" />
+              </GroupSizeDefinition>
+            </SizeDefinition>
+            <CheckBox CommandName="wtl_VIEW_RIBBON" />
+            <CheckBox CommandName="wtl_VIEW_TOOLBAR" />
+            <CheckBox CommandName="wtl_VIEW_STATUS_BAR" />
+            <CheckBox CommandName="wtl_VIEW_SYSTEM_TREE" />
+            <CheckBox CommandName="wtl_VIEW_OUTPUT" />
+            <CheckBox CommandName="wtl_VIEW_PROPERTY_GRID" />
+          </Group>
+          
+        </Tab>
+        
+        
+      </Ribbon.Tabs>
+    </Ribbon>
+  </Application.Views>
+</Application>

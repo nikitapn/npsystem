@@ -1,0 +1,722 @@
+Archive member included to satisfy reference by file (symbol)
+
+/usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                              /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o (exit)
+/usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+                              obj/tcpip/lan.o (__do_copy_data)
+/usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                              obj/net_c.o (__do_clear_bss)
+/usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+                              obj/pc_link.o (memcpy)
+/usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+                              obj/tcpip/lan.o (memset)
+
+Allocating common symbols
+Common symbol       size              file
+
+info                0x5               obj/net_c.o
+rdata               0x64              obj/net_c.o
+r_data_cnt          0x1               obj/net_c.o
+net_buf             0xc8              obj/tcpip/lan.o
+transit_accepted    0x1               obj/net_c.o
+frame               0x88              obj/net_c.o
+transit             0x1               obj/net_c.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x0000000000000000 0x0000000000001c00 xr
+nrww             0x0000000000001c00 0x0000000000000400 xr
+data             0x0000000000800062 0x0000000000000400 rw !x
+eeprom           0x0000000000810000 0x0000000000000200 rw !x
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+LOAD obj/pc_link.o
+LOAD obj/net_c.o
+LOAD obj/tcpip/enc28j60.o
+LOAD obj/tcpip/lan.o
+LOAD obj/pclink/timers.o
+LOAD obj/net_s.o
+LOAD obj/crc.o
+LOAD obj/zero_memory.o
+                0x0000000000002000                __TEXT_REGION_LENGTH__ = 0x2000
+                0x0000000000000400                __DATA_REGION_LENGTH__ = 0x400
+                0x0000000000000200                __EEPROM_REGION_LENGTH__ = 0x200
+                0x0000000000000040                __PAZESIZE__ = 0x40
+                0x0000000000001c00                __NRWW_ORIGIN__ = 0x1c00
+                0x0000000000000400                __NRWW_LENGTH__ = 0x400
+START GROUP
+LOAD /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a
+LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libm.a
+LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a
+LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a
+END GROUP
+
+.text           0x0000000000000000     0x163a
+ *(.vectors)
+ .vectors       0x0000000000000000       0x26 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+                0x0000000000000000                __vectors
+                0x0000000000000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+                0x0000000000000026                . = ALIGN (0x2)
+                0x0000000000000026                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x0000000000000026        0x0 linker stubs
+ *(.trampolines*)
+                0x0000000000000026                __trampolines_end = .
+ *libprintf_flt.a:*(.progmem.data)
+ *libc.a:*(.progmem.data)
+ *(.progmem*)
+                0x0000000000000026                . = ALIGN (0x2)
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x0000000000000026                __ctors_start = .
+ *(.ctors)
+                0x0000000000000026                __ctors_end = .
+                0x0000000000000026                __dtors_start = .
+ *(.dtors)
+                0x0000000000000026                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x0000000000000026        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+                0x0000000000000026                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x0000000000000026        0xc /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+ *(.init2)
+ *(.init3)
+ .init3         0x0000000000000032        0xe obj/zero_memory.o
+ *(.init3)
+ *(.init4)
+ .init4         0x0000000000000040       0x16 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+                0x0000000000000040                __do_copy_data
+ .init4         0x0000000000000056       0x10 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x0000000000000056                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x0000000000000066        0x4 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+ *(.init9)
+ *(.text)
+ .text          0x000000000000006a        0x2 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+                0x000000000000006a                __vector_12
+                0x000000000000006a                __bad_interrupt
+                0x000000000000006a                __vector_6
+                0x000000000000006a                __vector_17
+                0x000000000000006a                __vector_7
+                0x000000000000006a                __vector_5
+                0x000000000000006a                __vector_4
+                0x000000000000006a                __vector_2
+                0x000000000000006a                __vector_15
+                0x000000000000006a                __vector_8
+                0x000000000000006a                __vector_14
+                0x000000000000006a                __vector_10
+                0x000000000000006a                __vector_16
+                0x000000000000006a                __vector_18
+ .text          0x000000000000006c        0x0 obj/pc_link.o
+ .text          0x000000000000006c        0x0 obj/net_c.o
+ .text          0x000000000000006c        0x0 obj/tcpip/enc28j60.o
+ .text          0x000000000000006c        0x0 obj/tcpip/lan.o
+ .text          0x000000000000006c        0x0 obj/pclink/timers.o
+ .text          0x000000000000006c       0x10 obj/net_s.o
+                0x000000000000006c                __vector_3
+ .text          0x000000000000007c       0x1c obj/crc.o
+                0x000000000000007c                get_crc
+ .text          0x0000000000000098        0x0 obj/zero_memory.o
+ .text          0x0000000000000098        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text          0x0000000000000098        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text          0x0000000000000098        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text          0x0000000000000098        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+ .text          0x0000000000000098        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+                0x0000000000000098                . = ALIGN (0x2)
+ *(.text.*)
+ .text.udp_packet
+                0x0000000000000098       0x32 obj/pc_link.o
+                0x0000000000000098                udp_packet
+ .text.transit_send
+                0x00000000000000ca       0x10 obj/pc_link.o
+                0x00000000000000ca                transit_send
+ .text.transit_answer
+                0x00000000000000da       0x22 obj/pc_link.o
+                0x00000000000000da                transit_answer
+ .text.transit_timeout
+                0x00000000000000fc       0x1c obj/pc_link.o
+                0x00000000000000fc                transit_timeout
+ .text.status_led_proc
+                0x0000000000000118       0x16 obj/pc_link.o
+                0x0000000000000118                status_led_proc
+ .text.watch_enc28j60
+                0x000000000000012e        0xe obj/pc_link.o
+                0x000000000000012e                watch_enc28j60
+ .text.startup.main
+                0x000000000000013c       0x24 obj/pc_link.o
+                0x000000000000013c                main
+ .text.propagation_delay
+                0x0000000000000160       0x24 obj/net_c.o
+ .text.start_transmit
+                0x0000000000000184       0x64 obj/net_c.o
+ .text.send_sync_frame
+                0x00000000000001e8       0x28 obj/net_c.o
+ .text.read_answer
+                0x0000000000000210      0x1e6 obj/net_c.o
+ .text.timeout_for_answer
+                0x00000000000003f6       0x36 obj/net_c.o
+ .text.answer_has_been_recived
+                0x000000000000042c       0x2e obj/net_c.o
+ .text.inc_ac   0x000000000000045a       0x26 obj/net_c.o
+ .text.idle_40  0x0000000000000480       0x24 obj/net_c.o
+ .text.idle_10  0x00000000000004a4       0x28 obj/net_c.o
+ .text.access_time
+                0x00000000000004cc      0x16e obj/net_c.o
+ .text.net_init
+                0x000000000000063a       0x66 obj/net_c.o
+                0x000000000000063a                net_init
+ .text.net_poll
+                0x00000000000006a0       0x5a obj/net_c.o
+                0x00000000000006a0                net_poll
+ .text.__vector_11
+                0x00000000000006fa       0x54 obj/net_c.o
+                0x00000000000006fa                __vector_11
+ .text.__vector_13
+                0x000000000000074e       0x62 obj/net_c.o
+                0x000000000000074e                __vector_13
+ .text.__vector_1
+                0x00000000000007b0      0x130 obj/net_c.o
+                0x00000000000007b0                __vector_1
+ .text.prepare_answer
+                0x00000000000008e0      0x12a obj/net_c.o
+                0x00000000000008e0                prepare_answer
+ .text.send_answer
+                0x0000000000000a0a       0x1e obj/net_c.o
+ .text.enc28j60_rxtx
+                0x0000000000000a28        0xa obj/tcpip/enc28j60.o
+                0x0000000000000a28                enc28j60_rxtx
+ .text.enc28j60_read_op
+                0x0000000000000a32       0x20 obj/tcpip/enc28j60.o
+                0x0000000000000a32                enc28j60_read_op
+ .text.enc28j60_write_op
+                0x0000000000000a52       0x16 obj/tcpip/enc28j60.o
+                0x0000000000000a52                enc28j60_write_op
+ .text.enc28j60_soft_reset
+                0x0000000000000a68       0x1a obj/tcpip/enc28j60.o
+                0x0000000000000a68                enc28j60_soft_reset
+ .text.enc28j60_set_bank
+                0x0000000000000a82       0x34 obj/tcpip/enc28j60.o
+                0x0000000000000a82                enc28j60_set_bank
+ .text.enc28j60_rcr
+                0x0000000000000ab6        0xe obj/tcpip/enc28j60.o
+                0x0000000000000ab6                enc28j60_rcr
+ .text.enc28j60_rcr16
+                0x0000000000000ac4       0x28 obj/tcpip/enc28j60.o
+                0x0000000000000ac4                enc28j60_rcr16
+ .text.enc28j60_wcr
+                0x0000000000000aec       0x16 obj/tcpip/enc28j60.o
+                0x0000000000000aec                enc28j60_wcr
+ .text.enc28j60_wcr16
+                0x0000000000000b02       0x26 obj/tcpip/enc28j60.o
+                0x0000000000000b02                enc28j60_wcr16
+ .text.enc28j60_bfc
+                0x0000000000000b28       0x16 obj/tcpip/enc28j60.o
+                0x0000000000000b28                enc28j60_bfc
+ .text.enc28j60_bfs
+                0x0000000000000b3e       0x16 obj/tcpip/enc28j60.o
+                0x0000000000000b3e                enc28j60_bfs
+ .text.enc28j60_read_buffer
+                0x0000000000000b54       0x3a obj/tcpip/enc28j60.o
+                0x0000000000000b54                enc28j60_read_buffer
+ .text.enc28j60_write_buffer
+                0x0000000000000b8e       0x38 obj/tcpip/enc28j60.o
+                0x0000000000000b8e                enc28j60_write_buffer
+ .text.enc28j60_read_phy
+                0x0000000000000bc6       0x1e obj/tcpip/enc28j60.o
+                0x0000000000000bc6                enc28j60_read_phy
+ .text.enc28j60_write_phy
+                0x0000000000000be4       0x20 obj/tcpip/enc28j60.o
+                0x0000000000000be4                enc28j60_write_phy
+ .text.enc28j60_init
+                0x0000000000000c04       0xbc obj/tcpip/enc28j60.o
+                0x0000000000000c04                enc28j60_init
+ .text.enc28j60_send_packet
+                0x0000000000000cc0       0x60 obj/tcpip/enc28j60.o
+                0x0000000000000cc0                enc28j60_send_packet
+ .text.enc28j60_recv_packet
+                0x0000000000000d20       0xaa obj/tcpip/enc28j60.o
+                0x0000000000000d20                enc28j60_recv_packet
+ .text.enc28cj60_reinit_if_failed
+                0x0000000000000dca       0x10 obj/tcpip/enc28j60.o
+                0x0000000000000dca                enc28cj60_reinit_if_failed
+ .text.udp_filter
+                0x0000000000000dda       0x1a obj/tcpip/lan.o
+                0x0000000000000dda                udp_filter
+ .text.ip_cksum
+                0x0000000000000df4       0x80 obj/tcpip/lan.o
+                0x0000000000000df4                ip_cksum
+ .text.arp_search_cache
+                0x0000000000000e74       0x4e obj/tcpip/lan.o
+                0x0000000000000e74                arp_search_cache
+ .text.eth_resend
+                0x0000000000000ec2        0x6 obj/tcpip/lan.o
+                0x0000000000000ec2                eth_resend
+ .text.ip_resend
+                0x0000000000000ec8       0x40 obj/tcpip/lan.o
+                0x0000000000000ec8                ip_resend
+ .text.eth_send
+                0x0000000000000f08       0x18 obj/tcpip/lan.o
+                0x0000000000000f08                eth_send
+ .text.arp_resolve
+                0x0000000000000f20       0xc8 obj/tcpip/lan.o
+                0x0000000000000f20                arp_resolve
+ .text.ip_send  0x0000000000000fe8      0x136 obj/tcpip/lan.o
+                0x0000000000000fe8                ip_send
+ .text.udp_send
+                0x000000000000111e       0x60 obj/tcpip/lan.o
+                0x000000000000111e                udp_send
+ .text.eth_reply
+                0x000000000000117e       0x2a obj/tcpip/lan.o
+                0x000000000000117e                eth_reply
+ .text.ip_reply
+                0x00000000000011a8       0x74 obj/tcpip/lan.o
+                0x00000000000011a8                ip_reply
+ .text.udp_reply
+                0x000000000000121c       0x6c obj/tcpip/lan.o
+                0x000000000000121c                udp_reply
+ .text.icmp_filter
+                0x0000000000001288       0x20 obj/tcpip/lan.o
+                0x0000000000001288                icmp_filter
+ .text.ip_filter
+                0x00000000000012a8       0xb8 obj/tcpip/lan.o
+                0x00000000000012a8                ip_filter
+ .text.arp_filter
+                0x0000000000001360      0x11a obj/tcpip/lan.o
+                0x0000000000001360                arp_filter
+ .text.eth_filter
+                0x000000000000147a       0x26 obj/tcpip/lan.o
+                0x000000000000147a                eth_filter
+ .text.lan_init
+                0x00000000000014a0       0x4e obj/tcpip/lan.o
+                0x00000000000014a0                lan_init
+ .text.lan_poll
+                0x00000000000014ee       0x2e obj/tcpip/lan.o
+                0x00000000000014ee                lan_poll
+ .text.lan_up   0x000000000000151c       0x1e obj/tcpip/lan.o
+                0x000000000000151c                lan_up
+ .text.__vector_9
+                0x000000000000153a       0x32 obj/pclink/timers.o
+                0x000000000000153a                __vector_9
+ .text.timers_init
+                0x000000000000156c       0x10 obj/pclink/timers.o
+                0x000000000000156c                timers_init
+ .text.timers_update
+                0x000000000000157c       0x26 obj/pclink/timers.o
+                0x000000000000157c                timers_update
+ .text.timer_reset
+                0x00000000000015a2       0x1a obj/pclink/timers.o
+                0x00000000000015a2                timer_reset
+ .text.timer_get_count
+                0x00000000000015bc       0x1e obj/pclink/timers.o
+                0x00000000000015bc                timer_get_count
+ .text.timer_expired
+                0x00000000000015da       0x3c obj/pclink/timers.o
+                0x00000000000015da                timer_expired
+ .text.libgcc.mul
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc.div
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc   0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc.prologue
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc.builtins
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc.fmul
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc.fixed
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc.mul
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc.div
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc   0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc.prologue
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc.builtins
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc.fmul
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc.fixed
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .text.libgcc.mul
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc.div
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc.prologue
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc.builtins
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc.fmul
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc.fixed
+                0x0000000000001616        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.avr-libc
+                0x0000000000001616       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+                0x0000000000001616                memcpy
+ .text.avr-libc
+                0x0000000000001628        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+                0x0000000000001628                memset
+                0x0000000000001636                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x0000000000001636        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x0000000000001636                exit
+                0x0000000000001636                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x0000000000001636        0x4 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ *(.fini0)
+                0x000000000000163a                _etext = .
+
+.nrww           0x0000000000001c00      0x200
+                0x0000000000001c00                _nrww_start = .
+ *(.nrww.crc)
+ .nrww.crc      0x0000000000001c00      0x200 obj/crc.o
+                0x0000000000001e00                . = ALIGN (0x2)
+ *(.nrww.tt)
+                0x0000000000001e00                . = ALIGN (__PAZESIZE__)
+ *(.nrww.rd)
+                0x0000000000001e00                . = ALIGN (__PAZESIZE__)
+ *(.nrww.io)
+                0x0000000000001e00                . = ALIGN (__PAZESIZE__)
+ *(.nrww)
+                0x0000000000001e00                . = ALIGN (0x2)
+
+.data           0x0000000000800062        0x6 load address 0x000000000000163a
+                0x0000000000800062                _sys_ram_start = .
+                0x0000000000800062                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x0000000000800062        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+ .data          0x0000000000800062        0x0 obj/pc_link.o
+ .data          0x0000000000800062        0x0 obj/net_c.o
+ .data          0x0000000000800062        0x0 obj/tcpip/enc28j60.o
+ .data          0x0000000000800062        0x0 obj/tcpip/lan.o
+ .data          0x0000000000800062        0x0 obj/pclink/timers.o
+ .data          0x0000000000800062        0x0 obj/net_s.o
+ .data          0x0000000000800062        0x0 obj/crc.o
+ .data          0x0000000000800062        0x0 obj/zero_memory.o
+ .data          0x0000000000800062        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .data          0x0000000000800062        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .data          0x0000000000800062        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .data          0x0000000000800062        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+ .data          0x0000000000800062        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+ *(.data*)
+ .data.mac_addr
+                0x0000000000800062        0x6 obj/tcpip/lan.o
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x0000000000800068                . = ALIGN (0x2)
+                0x0000000000800068                _edata = .
+                0x0000000000800068                PROVIDE (__data_end, .)
+
+.bss            0x0000000000800068      0x20c
+                0x0000000000800068                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x0000000000800068        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+ .bss           0x0000000000800068        0x0 obj/pc_link.o
+ .bss           0x0000000000800068        0x0 obj/net_c.o
+ .bss           0x0000000000800068        0x0 obj/tcpip/enc28j60.o
+ .bss           0x0000000000800068        0x0 obj/tcpip/lan.o
+ .bss           0x0000000000800068        0x0 obj/pclink/timers.o
+ .bss           0x0000000000800068        0x0 obj/net_s.o
+ .bss           0x0000000000800068        0x0 obj/crc.o
+ .bss           0x0000000000800068        0x0 obj/zero_memory.o
+ .bss           0x0000000000800068        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .bss           0x0000000000800068        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+ .bss           0x0000000000800068        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .bss           0x0000000000800068        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+ .bss           0x0000000000800068        0x0 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+ *(.bss*)
+ .bss.saved_ocr
+                0x0000000000800068        0x1 obj/net_c.o
+ .bss.saved_ptf
+                0x0000000000800069        0x2 obj/net_c.o
+ .bss.ptf       0x000000000080006b        0x2 obj/net_c.o
+ .bss.rx_len    0x000000000080006d        0x1 obj/net_c.o
+ .bss.tx_count  0x000000000080006e        0x1 obj/net_c.o
+ .bss.ac        0x000000000080006f        0x1 obj/net_c.o
+ .bss.ibbpc     0x0000000000800070        0x1 obj/net_c.o
+ .bss.cur_req_num
+                0x0000000000800071        0x1 obj/net_c.o
+ .bss.pCurBufPtr
+                0x0000000000800072        0x2 obj/net_c.o
+ .bss.pend_data
+                0x0000000000800074        0x2 obj/net_c.o
+ .bss.pbegin_data
+                0x0000000000800076        0x2 obj/net_c.o
+ .bss.padding.1849
+                0x0000000000800078        0x1 obj/tcpip/enc28j60.o
+ .bss.macadr.1841
+                0x0000000000800079        0x2 obj/tcpip/enc28j60.o
+ .bss.enc28j60_rxrdpt
+                0x000000000080007b        0x2 obj/tcpip/enc28j60.o
+ .bss.enc28j60_current_bank
+                0x000000000080007d        0x1 obj/tcpip/enc28j60.o
+ .bss.arp_cache
+                0x000000000080007e       0x1e obj/tcpip/lan.o
+ .bss.arp_cache_wr
+                0x000000000080009c        0x1 obj/tcpip/lan.o
+ .bss.ip_gateway
+                0x000000000080009d        0x4 obj/tcpip/lan.o
+ .bss.ip_mask   0x00000000008000a1        0x4 obj/tcpip/lan.o
+ .bss.ip_addr   0x00000000008000a5        0x4 obj/tcpip/lan.o
+ .bss.last.1640
+                0x00000000008000a9        0x1 obj/pclink/timers.o
+ .bss.timers    0x00000000008000aa        0xa obj/pclink/timers.o
+ .bss.timer_cnt
+                0x00000000008000b4        0x2 obj/pclink/timers.o
+ .bss.timer_cnt_unsafe
+                0x00000000008000b6        0x2 obj/pclink/timers.o
+ *(COMMON)
+ COMMON         0x00000000008000b8       0xf4 obj/net_c.o
+                0x00000000008000b8                info
+                0x00000000008000bd                rdata
+                0x0000000000800121                r_data_cnt
+                0x0000000000800122                transit_accepted
+                0x0000000000800123                frame
+                0x00000000008001ab                transit
+ COMMON         0x00000000008001ac       0xc8 obj/tcpip/lan.o
+                0x00000000008001ac                net_buf
+                0x0000000000800274                PROVIDE (__bss_end, .)
+                0x000000000000163a                __data_load_start = LOADADDR (.data)
+                0x0000000000001640                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.user_text      0x0000000000001640        0x0
+                0x0000000000001640                . = ALIGN (__PAZESIZE__)
+                0x0000000000001640                __user_text = .
+
+.noinit         0x0000000000800274        0x0
+                0x0000000000800274                _noinit_start = .
+                [!provide]                        PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                [!provide]                        PROVIDE (__noinit_end, .)
+                0x0000000000800274                _end = .
+                0x0000000000800274                _sys_ram_end = .
+
+.eeprom         0x0000000000810000       0xc8
+ *(.eeprom.data)
+ *(.eeprom*)
+                0x0000000000810000                _user_eeprom_start = .
+ FILL mask 0x00
+                0x00000000008100c8                . = (. + 0xc8)
+ *fill*         0x0000000000810000       0xc8 00
+                0x00000000008100c8                __eeprom_end = .
+OUTPUT(../../x64/firmware/pc-link.elf elf32-avr)
+LOAD linker stubs
+
+.note.gnu.avr.deviceinfo
+                0x0000000000000000       0x3c
+ .note.gnu.avr.deviceinfo
+                0x0000000000000000       0x3c /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+
+.comment        0x0000000000000000       0x11
+ .comment       0x0000000000000000       0x11 obj/pc_link.o
+                                         0x12 (size before relaxing)
+ .comment       0x0000000000000011       0x12 obj/net_c.o
+ .comment       0x0000000000000011       0x12 obj/tcpip/enc28j60.o
+ .comment       0x0000000000000011       0x12 obj/tcpip/lan.o
+ .comment       0x0000000000000011       0x12 obj/pclink/timers.o
+
+.debug_abbrev   0x0000000000000000      0x44e
+ .debug_abbrev  0x0000000000000000      0x44e /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+
+.debug_info     0x0000000000000000      0x48c
+ .debug_info    0x0000000000000000      0x48c /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+
+.debug_line     0x0000000000000000       0x1a
+ .debug_line    0x0000000000000000       0x1a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+
+.debug_str      0x0000000000000000      0x17a
+ .debug_str     0x0000000000000000      0x17a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+
+.stab           0x0000000000000000     0x3f90
+ .stab          0x0000000000000000      0xa80 obj/pc_link.o
+ .stab          0x0000000000000a80     0x129c obj/net_c.o
+                                       0x17a0 (size before relaxing)
+ .stab          0x0000000000001d1c      0xcd8 obj/tcpip/enc28j60.o
+                                        0xea0 (size before relaxing)
+ .stab          0x00000000000029f4     0x1098 obj/tcpip/lan.o
+                                       0x1284 (size before relaxing)
+ .stab          0x0000000000003a8c      0x504 obj/pclink/timers.o
+                                        0x6cc (size before relaxing)
+
+.stabstr        0x0000000000000000     0x34c9
+ .stabstr       0x0000000000000000     0x34c9 obj/pc_link.o
+
+Cross Reference Table
+
+Symbol                                            File
+__FUSE_REGION_LENGTH__                            /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__bad_interrupt                                   /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__bss_end                                         /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+__bss_start                                       /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+__data_end                                        /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+__data_load_start                                 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+__data_start                                      /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+__do_clear_bss                                    /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                                                  obj/pclink/timers.o
+                                                  obj/tcpip/lan.o
+                                                  obj/tcpip/enc28j60.o
+                                                  obj/net_c.o
+__do_copy_data                                    /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_copy_data.o)
+                                                  obj/tcpip/lan.o
+__heap_end                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__init                                            /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__stack                                           /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_1                                        obj/net_c.o
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_10                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_11                                       obj/net_c.o
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_12                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_13                                       obj/net_c.o
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_14                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_15                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_16                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_17                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_18                                       /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_2                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_3                                        obj/net_s.o
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_4                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_5                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_6                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_7                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_8                                        /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_9                                        obj/pclink/timers.o
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vector_default                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+__vectors                                         /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+_exit                                             /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+arp_filter                                        obj/tcpip/lan.o
+arp_resolve                                       obj/tcpip/lan.o
+arp_search_cache                                  obj/tcpip/lan.o
+enc28cj60_reinit_if_failed                        obj/tcpip/enc28j60.o
+                                                  obj/pc_link.o
+enc28j60_bfc                                      obj/tcpip/enc28j60.o
+enc28j60_bfs                                      obj/tcpip/enc28j60.o
+enc28j60_init                                     obj/tcpip/enc28j60.o
+                                                  obj/tcpip/lan.o
+enc28j60_rcr                                      obj/tcpip/enc28j60.o
+enc28j60_rcr16                                    obj/tcpip/enc28j60.o
+enc28j60_read_buffer                              obj/tcpip/enc28j60.o
+enc28j60_read_op                                  obj/tcpip/enc28j60.o
+enc28j60_read_phy                                 obj/tcpip/enc28j60.o
+enc28j60_recv_packet                              obj/tcpip/enc28j60.o
+                                                  obj/tcpip/lan.o
+enc28j60_rxtx                                     obj/tcpip/enc28j60.o
+enc28j60_send_packet                              obj/tcpip/enc28j60.o
+                                                  obj/tcpip/lan.o
+enc28j60_set_bank                                 obj/tcpip/enc28j60.o
+enc28j60_soft_reset                               obj/tcpip/enc28j60.o
+enc28j60_wcr                                      obj/tcpip/enc28j60.o
+enc28j60_wcr16                                    obj/tcpip/enc28j60.o
+enc28j60_write_buffer                             obj/tcpip/enc28j60.o
+enc28j60_write_op                                 obj/tcpip/enc28j60.o
+enc28j60_write_phy                                obj/tcpip/enc28j60.o
+eth_filter                                        obj/tcpip/lan.o
+eth_reply                                         obj/tcpip/lan.o
+eth_resend                                        obj/tcpip/lan.o
+eth_send                                          obj/tcpip/lan.o
+exit                                              /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+frame                                             obj/net_c.o
+                                                  obj/pc_link.o
+get_crc                                           obj/crc.o
+                                                  obj/net_c.o
+icmp_filter                                       obj/tcpip/lan.o
+info                                              obj/net_c.o
+ip_cksum                                          obj/tcpip/lan.o
+ip_filter                                         obj/tcpip/lan.o
+ip_reply                                          obj/tcpip/lan.o
+ip_resend                                         obj/tcpip/lan.o
+ip_send                                           obj/tcpip/lan.o
+lan_init                                          obj/tcpip/lan.o
+                                                  obj/pc_link.o
+lan_poll                                          obj/tcpip/lan.o
+                                                  obj/pc_link.o
+lan_up                                            obj/tcpip/lan.o
+main                                              obj/pc_link.o
+                                                  /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
+memcpy                                            /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+                                                  obj/net_c.o
+                                                  obj/pc_link.o
+memset                                            /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+                                                  obj/tcpip/lan.o
+net_buf                                           obj/tcpip/lan.o
+                                                  obj/net_c.o
+                                                  obj/pc_link.o
+net_init                                          obj/net_c.o
+                                                  obj/pc_link.o
+net_poll                                          obj/net_c.o
+                                                  obj/pc_link.o
+prepare_answer                                    obj/net_c.o
+                                                  obj/pc_link.o
+r_data_cnt                                        obj/net_c.o
+rdata                                             obj/net_c.o
+status_led_proc                                   obj/pc_link.o
+timer_expired                                     obj/pclink/timers.o
+                                                  obj/pc_link.o
+timer_get_count                                   obj/pclink/timers.o
+timer_reset                                       obj/pclink/timers.o
+timers_init                                       obj/pclink/timers.o
+                                                  obj/pc_link.o
+timers_update                                     obj/pclink/timers.o
+                                                  obj/pc_link.o
+transit                                           obj/net_c.o
+                                                  obj/tcpip/lan.o
+                                                  obj/pc_link.o
+transit_accepted                                  obj/net_c.o
+transit_answer                                    obj/pc_link.o
+                                                  obj/net_c.o
+transit_send                                      obj/pc_link.o
+                                                  obj/net_c.o
+transit_timeout                                   obj/pc_link.o
+                                                  obj/net_c.o
+udp_filter                                        obj/tcpip/lan.o
+udp_packet                                        obj/pc_link.o
+                                                  obj/tcpip/lan.o
+udp_reply                                         obj/tcpip/lan.o
+                                                  obj/pc_link.o
+udp_send                                          obj/tcpip/lan.o
+watch_enc28j60                                    obj/pc_link.o

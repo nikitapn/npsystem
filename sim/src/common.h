@@ -1,0 +1,6 @@
+#pragma once
+
+enum MICROCONTROLLER {
+	MC_ATMEGA8,
+	MC_ATMEGA16,
+};

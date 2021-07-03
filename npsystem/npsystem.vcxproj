@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{17F8DFCA-FF64-4F9E-ADB3-9D1181677BC1}</ProjectGuid>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>npsystem</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\nprpc\include;$(MYLIB_DIR)\include;..\..\mywtl\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\mywtl\lib;..\x64\Debug;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\nprpc\include;$(MYLIB_DIR)\include;..\..\mywtl\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>..\..\mywtl\lib;..\x64\Release;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MinimalRebuild>true</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DelayLoadDLLs>propsys.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <HeaderFileName>Apha.h</HeaderFileName>
+      <InterfaceIdentifierFileName>Apha_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>Apha_p.c</ProxyFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)/Apha.tlb</TypeLibraryName>
+      <DllDataFileName />
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <MinimalRebuild>false</MinimalRebuild>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;WINVER=_WIN32_WINNT_WIN10;_SCL_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;__WIN32__;_WIN32_WINNT=_WIN32_WINNT_WIN10;__x86__;__NT__;__OSVERSION__=4;_WINDOWS;STRICT;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\nplib\include;..\avr_firmware\include;..\avr_info\include;..\npc\include;..\npdbclient\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <DelayLoadDLLs>propsys.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>nprpcd.lib;nprpcstd.lib;nplib.lib;npdbstatic.lib;npc.lib;npsys.lib;npdbclient.lib;sim.lib;avr_info.lib;mywtl_x64_Debug.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <HeaderFileName>Apha.h</HeaderFileName>
+      <InterfaceIdentifierFileName>Apha_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>Apha_p.c</ProxyFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)/Apha.tlb</TypeLibraryName>
+      <DllDataFileName />
+    </Midl>
+    <Manifest>
+      <AdditionalManifestFiles>npsystem.exe.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <ExceptionHandling />
+      <DebugInformationFormat />
+      <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>propsys.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <HeaderFileName>Apha.h</HeaderFileName>
+      <InterfaceIdentifierFileName>Apha_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>Apha_p.c</ProxyFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)/Apha.tlb</TypeLibraryName>
+      <DllDataFileName />
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;WINVER=_WIN32_WINNT_WIN10;_SCL_SECURE_NO_WARNINGS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;__WIN32__;_WIN32_WINNT=_WIN32_WINNT_WIN10;__x86__;__NT__;__OSVERSION__=4;_WINDOWS;STRICT;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\nplib\include;..\avr_firmware\include;..\avr_info\include;..\npc\include;..\npdbclient\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <DelayLoadDLLs>propsys.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalDependencies>nprpc.lib;nprpcst.lib;nplib.lib;npdbstatic.lib;npc.lib;npsys.lib;npdbclient.lib;sim.lib;avr_info.lib;mywtl_x64_Release.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <HeaderFileName>Apha.h</HeaderFileName>
+      <InterfaceIdentifierFileName>Apha_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>Apha_p.c</ProxyFileName>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>$(IntDir)/Apha.tlb</TypeLibraryName>
+      <DllDataFileName />
+    </Midl>
+    <Manifest>
+      <AdditionalManifestFiles>npsystem.exe.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="algext.cpp" />
+    <ClCompile Include="npsys.cpp" />
+    <ClCompile Include="npsystem.cpp" />
+    <ClInclude Include="algext.h" />
+    <ClInclude Include="assignedalgorithm.h" />
+    <ClInclude Include="avrassigned.h" />
+    <ClInclude Include="avrcommand.h" />
+    <ClInclude Include="avrconfigurator.h" />
+    <ClInclude Include="block.h" />
+    <ClInclude Include="blockcomposition.h" />
+    <ClInclude Include="blockdecl.h" />
+    <ClInclude Include="blockpropertyid.h" />
+    <ClInclude Include="codegenerator.h" />
+    <ClInclude Include="command.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="configurator.h" />
+    <ClInclude Include="controlwindow.h" />
+    <ClInclude Include="cpp_deleter.h" />
+    <ClInclude Include="customitem.h" />
+    <ClInclude Include="dlgabout.h" />
+    <ClInclude Include="dlgalgorithmproperties.h" />
+    <ClInclude Include="dlgavrmemoryviewer.h" />
+    <ClInclude Include="dlgbase.h" />
+    <ClInclude Include="dlgblockfunctionequation.h" />
+    <ClInclude Include="dlgblockparam.h" />
+    <ClInclude Include="dlgconfigurableblock.h" />
+    <ClInclude Include="dlgdoclist.h" />
+    <ClInclude Include="dlgloadingmanager.h" />
+    <ClInclude Include="dlgmodule.h" />
+    <ClInclude Include="dlgnewcontroller.h" />
+    <ClInclude Include="dlgonlinediscrete.h" />
+    <ClInclude Include="dlgonlinevalue.h" />
+    <ClInclude Include="dlgparameter.h" />
+    <ClInclude Include="dlgpinconfig.h" />
+    <ClInclude Include="dlgsegment.h" />
+    <ClInclude Include="dlgsegmentvalue.h" />
+    <ClInclude Include="dlgsimpleinput.h" />
+    <ClInclude Include="dlgstring.h" />
+    <ClInclude Include="dockable.h" />
+    <ClInclude Include="dockable_index.h" />
+    <ClInclude Include="dynamiclinker.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="element.h" />
+    <ClInclude Include="gccwrapperavr.h" />
+    <ClInclude Include="codegenerator_avr.h" />
+    <ClInclude Include="genhelper.h" />
+    <ClInclude Include="graphics.h" />
+    <ClInclude Include="io_avr.h" />
+    <ClInclude Include="libfunction.h" />
+    <ClInclude Include="library.h" />
+    <ClInclude Include="line.h" />
+    <ClInclude Include="listcontrolview.h" />
+    <ClInclude Include="manipulator.h" />
+    <ClInclude Include="memorymanager.h" />
+    <ClInclude Include="module.h" />
+    <ClInclude Include="mybutton.h" />
+    <ClInclude Include="myedit.h" />
+    <ClInclude Include="myonlinetreectrl.h" />
+    <ClInclude Include="mystatusbar.h" />
+    <ClInclude Include="comassert.h" />
+    <ClCompile Include="assigned.cpp" />
+    <ClCompile Include="avrassigned.cpp" />
+    <ClCompile Include="avrcommand.cpp" />
+    <ClCompile Include="avrconfigurator.cpp" />
+    <ClCompile Include="avrcontroller.cpp" />
+    <ClCompile Include="block.cpp" />
+    <ClCompile Include="blockcomposition.cpp" />
+    <ClCompile Include="boost_export.cpp" />
+    <ClCompile Include="command.cpp" />
+    <ClCompile Include="configurator.cpp" />
+    <ClCompile Include="device.cpp" />
+    <ClCompile Include="dlgloadingmanager.cpp" />
+    <ClCompile Include="error.cpp" />
+    <ClCompile Include="gccwrapperavr.cpp" />
+    <ClCompile Include="gdiglobal.cpp" />
+    <ClCompile Include="codegenerator_avr.cpp" />
+    <ClCompile Include="global.cpp" />
+    <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="io_avr.cpp" />
+    <ClCompile Include="hash.cpp" />
+    <ClCompile Include="library.cpp" />
+    <ClCompile Include="line.cpp" />
+    <ClCompile Include="listcontrolview.cpp" />
+    <ClCompile Include="memorymanager.cpp" />
+    <ClCompile Include="module.cpp" />
+    <ClCompile Include="myonlinetreectrl.cpp" />
+    <ClCompile Include="outputwnd.cpp" />
+    <ClCompile Include="slot.cpp" />
+    <ClCompile Include="tabcontainer.cpp" />
+    <ClCompile Include="tr_block.cpp" />
+    <ClCompile Include="tr_controllers.cpp" />
+    <ClCompile Include="tr_item.cpp" />
+    <ClCompile Include="mypropertygrid.cpp" />
+    <ClCompile Include="mytabview.cpp" />
+    <ClCompile Include="mytreeview.cpp" />
+    <ClCompile Include="propertygrid.cpp" />
+    <ClCompile Include="propertygridcombo.cpp" />
+    <ClCompile Include="propertygridinplaceedit.cpp" />
+    <ClCompile Include="scintillawindow.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="stuff.cpp" />
+    <ClCompile Include="tr_all.cpp" />
+    <ClCompile Include="typedeterminant.cpp" />
+    <ClCompile Include="variable.cpp" />
+    <ClCompile Include="variableloader.cpp" />
+    <ClCompile Include="vartype.cpp" />
+    <ClCompile Include="view.cpp" />
+    <ClCompile Include="view_algorithm.cpp" />
+    <ClCompile Include="view_controller.cpp" />
+    <ClCompile Include="visitorblocks.cpp" />
+    <ClInclude Include="serialization_atl_rect.h" />
+    <ClInclude Include="wm_user.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gdiglobal.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="mytabview.h" />
+    <ClInclude Include="color.h" />
+    <ClInclude Include="mainfrm.h" />
+    <ClInclude Include="messages.h" />
+    <ClInclude Include="error.h" />
+    <ClInclude Include="exception.h" />
+    <ClInclude Include="hash.h" />
+    <ClInclude Include="network_ext.h" />
+    <ClInclude Include="onlinetreeitem.h" />
+    <ClInclude Include="outputwnd.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="thread_safe_set.h" />
+    <ClInclude Include="tr_controller.h" />
+    <ClInclude Include="tr_request.h" />
+    <ClInclude Include="ribbonstate.h" />
+    <ClInclude Include="tabcontainer.h" />
+    <ClInclude Include="tr_block.h" />
+    <ClInclude Include="tr_hardware.h" />
+    <ClInclude Include="tr_module.h" />
+    <ClInclude Include="tr_network.h" />
+    <ClInclude Include="tr_item.h" />
+    <ClInclude Include="iter.h" />
+    <ClInclude Include="math2d.h" />
+    <ClInclude Include="mytreeview.h" />
+    <ClInclude Include="mypropertygrid.h" />
+    <ClInclude Include="propertygrid.h" />
+    <ClInclude Include="propertygridcombo.h" />
+    <ClInclude Include="propertygridinplaceedit.h" />
+    <ClInclude Include="quadrant.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ribbon.h" />
+    <ClInclude Include="scintillawindow.h" />
+    <ClInclude Include="serialization_d2d.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stuff.h" />
+    <ClInclude Include="tr_system.h" />
+    <ClInclude Include="tr_alg.h" />
+    <ClInclude Include="variableloader.h" />
+    <ClInclude Include="vartype.h" />
+    <ClInclude Include="view.h" />
+    <ClInclude Include="view_algorithm.h" />
+    <ClInclude Include="view_controller.h" />
+    <ClInclude Include="visitorbase.h" />
+    <ClInclude Include="visitorblocks.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ai_pin.ico" />
+    <Image Include="res\algorithm.ico" />
+    <Image Include="res\algorithm_loaded.ico" />
+    <Image Include="res\algorithm_not_loaded.ico" />
+    <Image Include="res\blocks\any_edge.svg.bmp" />
+    <Image Include="res\blocks\clock.svg.bmp" />
+    <Image Include="res\blocks\input.svg.bmp" />
+    <Image Include="res\blocks\negative_edge.svg.bmp" />
+    <Image Include="res\blocks\output.svg.bmp" />
+    <Image Include="res\blocks\positive_edge.svg.bmp" />
+    <Image Include="res\blocks\rs_trigger.svg.bmp" />
+    <Image Include="res\blocks\schedule.svg.bmp" />
+    <Image Include="res\npsystem.ico" />
+    <Image Include="res\binary.ico" />
+    <Image Include="res\block.ico" />
+    <Image Include="res\blockdevice.ico" />
+    <Image Include="res\blocks\add.bmp" />
+    <Image Include="res\blocks\ae.bmp" />
+    <Image Include="res\blocks\and.bmp" />
+    <Image Include="res\blocks\bd.bmp" />
+    <Image Include="res\blocks\be.bmp" />
+    <Image Include="res\blocks\block_function.bmp" />
+    <Image Include="res\blocks\cmp.bmp" />
+    <Image Include="res\blocks\cpa.bmp" />
+    <Image Include="res\blocks\cpb.bmp" />
+    <Image Include="res\blocks\cursor_selected.bmp" />
+    <Image Include="res\blocks\delay.bmp" />
+    <Image Include="res\blocks\div.bmp" />
+    <Image Include="res\blocks\in.bmp" />
+    <Image Include="res\blocks\mul.bmp" />
+    <Image Include="res\blocks\ne.bmp" />
+    <Image Include="res\blocks\not.bmp" />
+    <Image Include="res\blocks\or.bmp" />
+    <Image Include="res\blocks\out.bmp" />
+    <Image Include="res\blocks\pe.bmp" />
+    <Image Include="res\blocks\pid.bmp" />
+    <Image Include="res\blocks\rs.bmp" />
+    <Image Include="res\blocks\sub.bmp" />
+    <Image Include="res\blocks\time.bmp" />
+    <Image Include="res\book.ico" />
+    <Image Include="res\codeblocks.ico" />
+    <Image Include="res\container.ico" />
+    <Image Include="res\controller.ico" />
+    <Image Include="res\controller_bad.ico" />
+    <Image Include="res\controller_good.ico" />
+    <Image Include="res\ctrl_accessible.ico" />
+    <Image Include="res\ctrl_deactivated.ico" />
+    <Image Include="res\ctrl_inaccessible.ico" />
+    <Image Include="res\di_pin.ico" />
+    <Image Include="res\document_delete.ico" />
+    <Image Include="res\do_pin.ico" />
+    <Image Include="res\empty.ico" />
+    <Image Include="res\exclamation.ico" />
+    <Image Include="res\file.ico" />
+    <Image Include="res\folder_closed.ico" />
+    <Image Include="res\folder_open.ico" />
+    <Image Include="res\function.ico" />
+    <Image Include="res\functions.ico" />
+    <Image Include="res\hardware.ico" />
+    <Image Include="res\hardwarechip.ico" />
+    <Image Include="res\i2c.ico" />
+    <Image Include="res\icon3.ico" />
+    <Image Include="res\input.ico" />
+    <Image Include="res\inputs.ico" />
+    <Image Include="res\input_analog.ico" />
+    <Image Include="res\input_output.ico" />
+    <Image Include="res\library.ico" />
+    <Image Include="res\main.ico" />
+    <Image Include="res\mime-template_source.ico" />
+    <Image Include="res\module_file_format.ico" />
+    <Image Include="res\mycomputer.ico" />
+    <Image Include="res\network.ico" />
+    <Image Include="res\npsystem.svg.ico" />
+    <Image Include="res\output.ico" />
+    <Image Include="res\outputs.ico" />
+    <Image Include="res\o_pin.ico" />
+    <Image Include="res\pin.ico" />
+    <Image Include="res\pinned.ico" />
+    <Image Include="res\pins.ico" />
+    <Image Include="res\question.svg.ico" />
+    <Image Include="res\software.ico" />
+    <Image Include="res\source_c.ico" />
+    <Image Include="res\source_h.ico" />
+    <Image Include="res\source_s.ico" />
+    <Image Include="res\src.ico" />
+    <Image Include="res\start_button.ico" />
+    <Image Include="res\start_online.bmp" />
+    <Image Include="res\stop_button.ico" />
+    <Image Include="res\stop_online.bmp" />
+    <Image Include="res\system.ico" />
+    <Image Include="res\system_rotate.ico" />
+    <Image Include="res\toolbar.bmp" />
+    <Image Include="res\tree_button_collapsed_focused.ico" />
+    <Image Include="res\tree_button_collapsed_not_focused.ico" />
+    <Image Include="res\tree_button_expanded_focused.ico" />
+    <Image Include="res\tree_button_expanded_not_focused.ico" />
+    <Image Include="res\unpinned.ico" />
+    <Image Include="res\upload_algorithm.bmp" />
+    <Image Include="res\var_ico.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Ribbon.xml">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling Ribbon.xml</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">uicc Ribbon.xml Ribbon.bml /header:Ribbon.h /res:Ribbon.rc</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Ribbon.bml;Ribbon.rc;Ribbon.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling Ribbon.xml</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">uicc Ribbon.xml Ribbon.bml /header:Ribbon.h /res:Ribbon.rc</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Ribbon.bml;Ribbon.rc;Ribbon.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling Ribbon.xml</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">uicc Ribbon.xml Ribbon.bml /header:Ribbon.h /res:Ribbon.rc</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Ribbon.bml;Ribbon.rc;Ribbon.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling Ribbon.xml</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">uicc Ribbon.xml Ribbon.bml /header:Ribbon.h /res:Ribbon.rc</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Ribbon.bml;Ribbon.rc;Ribbon.h;%(Outputs)</Outputs>
+      <SubType>Designer</SubType>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="arrow.cur" />
+    <None Include="arrowcop.cur" />
+    <None Include="nodrop.cur" />
+    <None Include="npsystem.ruleset" />
+    <None Include="res\cursors\aero_link_l.cur" />
+    <None Include="res\cursors\arrow.cur" />
+    <None Include="res\cursors\arrowcop.cur" />
+    <None Include="res\cursors\drop.cur" />
+    <None Include="res\cursors\nodrop.cur" />
+    <None Include="res\cursors\pen.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="npsystem.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="npsystem.exe.manifest" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

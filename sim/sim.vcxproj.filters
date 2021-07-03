@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="linux">
+      <UniqueIdentifier>{60a84d9f-9d8a-4043-a428-943659fab3d2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\cpu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\boost_export.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\medium.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hexparser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\atmega16_def.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpu.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mctypes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\peripheral_atmega16.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sim.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\atmega16.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opcodes.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\atmega8_def.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\atmega8.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\peripheral_atmega8.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\avrmc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\boost_export.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sim\boost_export.h" />
+    <ClInclude Include="include\sim\sim.h" />
+    <ClInclude Include="src\stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\peripheral_uart.h" />
+    <ClInclude Include="src\peripheral.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\sim\medium.h" />
+    <ClInclude Include="include\sim\special.h" />
+    <ClInclude Include="src\event_list.h" />
+    <ClInclude Include="src\hexparserflash.h" />
+    <ClInclude Include="include\sim\import_export.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\intrisics.h" />
+    <ClInclude Include="src\vm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile">
+      <Filter>linux</Filter>
+    </None>
+  </ItemGroup>
+</Project>

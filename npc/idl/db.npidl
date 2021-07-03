@@ -1,0 +1,56 @@
+
+namespace cbt1 {
+using oid_t = u64;
+using uuid = u8[16];
+};
+
+namespace npd {
+DatabaseException: exception {
+	code: u32;
+}
+
+interface NodeCallback {
+	void OnNodeChanged(id: in cbt1::oid_t, data: in vector<u8>);
+	void OnNodeDeleted(id: in cbt1::oid_t);
+}
+
+BatchOperation : flat {
+	create_or_update: boolean;
+	id: cbt1::oid_t;
+	data: string;
+}
+
+interface Database {
+	string get_database_name();
+		
+	cbt1::uuid get_database_uuid()
+		raises(DatabaseException);
+		
+	cbt1::oid_t next_oid(amount: in cbt1::oid_t) 
+		raises(DatabaseException);
+
+	cbt1::oid_t last_oid() 
+		raises(DatabaseException);	
+	
+	cbt1::oid_t create(data: in vector<u8>, sync: in boolean) 
+		raises(DatabaseException);
+		
+	cbt1::oid_t put(id: in cbt1::oid_t, data: in vector<u8>, sync: in boolean) 
+		raises(DatabaseException);
+		
+	boolean exec_batch(data: in vector<BatchOperation>) 
+		raises(DatabaseException);
+		
+	boolean get(id: in cbt1::oid_t, data: out vector<u8>) 
+		raises(DatabaseException);
+		
+	u64 get_n(ids: in vector<cbt1::oid_t>, data: out vector<u8>) 
+		raises(DatabaseException);
+		
+	void remove(id: in cbt1::oid_t) 
+		raises(DatabaseException);
+		
+	void advise(id: in cbt1::oid_t, client: in object) 
+		raises(DatabaseException);
+}
+}

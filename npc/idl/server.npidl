@@ -1,0 +1,107 @@
+
+namespace cbt1 {
+	using discrete = boolean;
+	using oid_t = u64;
+	using uuid = u8[16];
+};
+
+namespace nps {
+
+using var_handle = u64;
+using var_type = u32;
+
+enum controller_type : u32 {
+	CT_AVR5
+}
+
+enum var_status : u32 {
+	VST_DEVICE_RESPONDED,
+	VST_DEVICE_NOT_RESPONDED,
+	VST_UNKNOWN
+}
+
+NPNetCommunicationError: exception {
+	code: i32;
+}
+
+server_value: flat {
+	h: var_handle;
+	s: var_status;
+	data: u8[8]; // max + quality + 3 reserved
+}
+
+RawDataDef: flat {
+	dev_addr: u8;
+	address: u16;
+	size: u8;
+}
+
+DataDef: flat {
+	dev_addr: u8;
+	mem_addr: u16;
+	type: var_type;
+}
+
+interface Pingable {
+	void Ping();
+}
+
+interface DataCallBack : Pingable {
+	void OnDataChanged(a: in vector<server_value>);
+}
+
+interface ItemManager : Pingable {
+	void Activate(client: in object);
+	void Advise(a: in vector<DataDef>, h: out vector<var_handle>) raises(NPNetCommunicationError);
+	void UnAdvise(a: in vector<var_handle>);
+}
+
+interface Server : Pingable {
+	void GetNetworkStatus(network_status: out vector<u8>);
+	
+	void CreateItemManager(im: out object);
+	void SendRawData(data: in vector<u8>) raises(NPNetCommunicationError);
+	
+	// Sync Write Operations
+	void Write_1(dev_addr: in u8, mem_addr: in u16, bit: in u8, value: in u8) raises(NPNetCommunicationError);
+	void Write_q1(dev_addr: in u8, mem_addr: in u16, bit: in u8, value: in u8, qvalue: in u8) raises(NPNetCommunicationError);
+	void Write_8(dev_addr: in u8, mem_addr: in u16, value: in u8) raises(NPNetCommunicationError);
+	void Write_q8(dev_addr: in u8, mem_addr: in u16, value: in u8, qvalue: in u8) raises(NPNetCommunicationError);
+	void Write_16(dev_addr: in u8, mem_addr: in u16, value: in u16) raises(NPNetCommunicationError);
+	void Write_q16(dev_addr: in u8, mem_addr: in u16, value: in u16, qvalue: in u8) raises(NPNetCommunicationError);
+	void Write_32(dev_addr: in u8, mem_addr: in u16, value: in u32) raises(NPNetCommunicationError);
+	void Write_q32(dev_addr: in u8, mem_addr: in u16, value: in u32, qvalue: in u8) raises(NPNetCommunicationError);
+	void WriteBlock(dev_addr: in u8, mem_addr: in u16, data: in vector<u8>) raises(NPNetCommunicationError);
+	
+	// Sync Read Operations
+	void ReadByte(dev_addr: in u8, addr: in u16, value: out u8) raises(NPNetCommunicationError);
+	void ReadBlock(dev_addr: in u8, addr: in u16, len: in u8, data: out vector<u8>) raises(NPNetCommunicationError);
+	
+	// AVR
+	boolean AVR_StopAlgorithm(dev_addr: in u8, alg_addr: in u16) raises(NPNetCommunicationError);
+	void AVR_ReinitIO(dev_addr: in u8) raises(NPNetCommunicationError);
+	void AVR_SendRemoteData(dev_addr: in u8, page_num: in u16, data: in vector<u8>) raises(NPNetCommunicationError);
+	
+	// no answer
+	void AVR_SendPage(dev_addr: in u8, page_num: in u8, data: in vector<u8>) raises(NPNetCommunicationError);
+	void AVR_RemoveAlgorithm(dev_addr: in u8, alg_addr: in u16) raises(NPNetCommunicationError);
+	void AVR_ReplaceAlgorithm(dev_addr: in u8, old_addr: in u16, new_addr: in u16) raises(NPNetCommunicationError);
+	void AVR_WriteEeprom(dev_addr: in u8, mem_addr: in u16, data: in vector<u8>) raises(NPNetCommunicationError);
+	void AVR_WriteTwiTable(dev_addr: in u8, page_num: in u8, data: in vector<u8>) raises(NPNetCommunicationError);
+	
+	// virtual
+	void AVR_V_GetFlash(device_id: in cbt1::oid_t, data: out vector<u16>) raises(NPNetCommunicationError);
+	boolean AVR_V_StoreFlash(device_id: in cbt1::oid_t) raises(NPNetCommunicationError);
+	
+	// notifications
+	boolean Notify_DeviceActivated(device_id: in cbt1::oid_t );
+	boolean Notify_DeviceDeactivated(device_id: in cbt1::oid_t);
+	void Notify_ParameterRemoved(param_id: in cbt1::oid_t);
+	void Notify_TypeOrVariableChanged(param_id: in cbt1::oid_t);
+	
+	// history
+	void History_AddParameter(param_id: in cbt1::oid_t);
+	void History_RemoveParameter(param_id: in cbt1::oid_t);
+}
+
+} // namespace nps
