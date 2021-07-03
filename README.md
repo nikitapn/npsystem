@@ -7,3 +7,5 @@ I created this to control various things in my house (pumps, well, valves, autom
 
 Here's 4 minutes video explainnig how it works:
 https://youtu.be/fGj7-ugnxMw
+
+It's been made mostly from scratch with a help of boost, wtl, scintilla, leveldb on which an object oriented database is built on.
