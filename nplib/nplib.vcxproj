@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\nplib\import_export.h" />
+    <ClInclude Include="include\nplib\utils\binary_search.hpp" />
     <ClInclude Include="include\nplib\utils\colored_cout.h" />
     <ClInclude Include="include\nplib\utils\config.h" />
     <ClInclude Include="include\nplib\utils\ext.h" />
@@ -149,9 +150,14 @@
     <ClInclude Include="include\nplib\utils\hexparser.h" />
     <ClInclude Include="include\nplib\utils\log.h" />
     <ClInclude Include="include\nplib\utils\msg_box.h" />
+    <ClInclude Include="include\nplib\utils\omembuf.hpp" />
+    <ClInclude Include="include\nplib\utils\singleton.hpp" />
     <ClInclude Include="include\nplib\utils\spinlock.h" />
     <ClInclude Include="include\nplib\utils\format.h" />
+    <ClInclude Include="include\nplib\utils\task_queue.h" />
+    <ClInclude Include="include\nplib\utils\thread_pool.hpp" />
     <ClInclude Include="include\nplib\utils\thread_safe_set.h" />
+    <ClInclude Include="include\nplib\utils\types.h" />
     <ClInclude Include="include\nplib\utils\utf8.h" />
     <ClInclude Include="include\nplib\utils\value_parser.h" />
     <ClInclude Include="include\nplib\utils\variant.h" />

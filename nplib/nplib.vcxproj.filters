@@ -21,6 +21,12 @@
     <ClInclude Include="include\nplib\utils\utf8.h" />
     <ClInclude Include="include\nplib\utils\helper.h" />
     <ClInclude Include="include\nplib\utils\thread_safe_set.h" />
+    <ClInclude Include="include\nplib\utils\omembuf.hpp" />
+    <ClInclude Include="include\nplib\utils\singleton.hpp" />
+    <ClInclude Include="include\nplib\utils\task_queue.h" />
+    <ClInclude Include="include\nplib\utils\thread_pool.hpp" />
+    <ClInclude Include="include\nplib\utils\types.h" />
+    <ClInclude Include="include\nplib\utils\binary_search.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
