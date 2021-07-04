@@ -58,7 +58,7 @@ void nps::DataCallBack::OnDataChanged(/*in*/::flat::Span<const nps::server_value
   __ch.function_idx() = 0;
   ::flat::SERVER__M1_Direct _(buf,24);
   _._1(a.size());
-  memcpy(_._1().data(), &a[0], a.size() * 24);
+  memcpy(_._1().data(), a.data(), a.size() * 24);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -136,7 +136,7 @@ void nps::ItemManager::Advise(/*in*/::flat::Span<const nps::DataDef> a, /*out*/s
   __ch.function_idx() = 1;
   ::flat::SERVER__M3_Direct _(buf,24);
   _._1(a.size());
-  memcpy(_._1().data(), &a[0], a.size() * 8);
+  memcpy(_._1().data(), a.data(), a.size() * 8);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -154,7 +154,7 @@ void nps::ItemManager::Advise(/*in*/::flat::Span<const nps::DataDef> a, /*out*/s
   {
     auto span = out._1();
     h.resize(span.size());
-    memcpy(&h[0], span.data(), 8 * span.size());
+    memcpy(h.data(), span.data(), 8 * span.size());
   }
 }
 
@@ -172,7 +172,7 @@ void nps::ItemManager::UnAdvise(/*in*/::flat::Span<const var_handle> a) {
   __ch.function_idx() = 2;
   ::flat::SERVER__M4_Direct _(buf,24);
   _._1(a.size());
-  memcpy(_._1().data(), &a[0], a.size() * 8);
+  memcpy(_._1().data(), a.data(), a.size() * 8);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -268,7 +268,7 @@ void nps::Server::GetNetworkStatus(/*out*/std::vector<uint8_t>& network_status) 
   {
     auto span = out._1();
     network_status.resize(span.size());
-    memcpy(&network_status[0], span.data(), 1 * span.size());
+    memcpy(network_status.data(), span.data(), 1 * span.size());
   }
 }
 
@@ -312,7 +312,7 @@ void nps::Server::SendRawData(/*in*/::flat::Span<const uint8_t> data) {
   __ch.function_idx() = 2;
   ::flat::SERVER__M5_Direct _(buf,24);
   _._1(data.size());
-  memcpy(_._1().data(), &data[0], data.size() * 1);
+  memcpy(_._1().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -589,7 +589,7 @@ void nps::Server::WriteBlock(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*
   _._1() = dev_addr;
   _._2() = mem_addr;
   _._3(data.size());
-  memcpy(_._3().data(), &data[0], data.size() * 1);
+  memcpy(_._3().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -669,7 +669,7 @@ void nps::Server::ReadBlock(/*in*/uint8_t dev_addr, /*in*/uint16_t addr, /*in*/u
   {
     auto span = out._1();
     data.resize(span.size());
-    memcpy(&data[0], span.data(), 1 * span.size());
+    memcpy(data.data(), span.data(), 1 * span.size());
   }
 }
 
@@ -751,7 +751,7 @@ void nps::Server::AVR_SendRemoteData(/*in*/uint8_t dev_addr, /*in*/uint16_t page
   _._1() = dev_addr;
   _._2() = page_num;
   _._3(data.size());
-  memcpy(_._3().data(), &data[0], data.size() * 1);
+  memcpy(_._3().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -782,7 +782,7 @@ void nps::Server::AVR_SendPage(/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /
   _._1() = dev_addr;
   _._2() = page_num;
   _._3(data.size());
-  memcpy(_._3().data(), &data[0], data.size() * 1);
+  memcpy(_._3().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -872,7 +872,7 @@ void nps::Server::AVR_WriteEeprom(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_add
   _._1() = dev_addr;
   _._2() = mem_addr;
   _._3(data.size());
-  memcpy(_._3().data(), &data[0], data.size() * 1);
+  memcpy(_._3().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -903,7 +903,7 @@ void nps::Server::AVR_WriteTwiTable(/*in*/uint8_t dev_addr, /*in*/uint8_t page_n
   _._1() = dev_addr;
   _._2() = page_num;
   _._3(data.size());
-  memcpy(_._3().data(), &data[0], data.size() * 1);
+  memcpy(_._3().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -949,7 +949,7 @@ void nps::Server::AVR_V_GetFlash(/*in*/const cbt1::oid_t& device_id, /*out*/std:
   {
     auto span = out._1();
     data.resize(span.size());
-    memcpy(&data[0], span.data(), 2 * span.size());
+    memcpy(data.data(), span.data(), 2 * span.size());
   }
 }
 

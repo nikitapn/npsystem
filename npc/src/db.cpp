@@ -23,7 +23,7 @@ void npd::NodeCallback::OnNodeChanged(/*in*/const cbt1::oid_t& id, /*in*/::flat:
   ::flat::DB__M1_Direct _(buf,24);
   _._1() = id;
   _._2(data.size());
-  memcpy(_._2().data(), &data[0], data.size() * 1);
+  memcpy(_._2().data(), data.data(), data.size() * 1);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -137,7 +137,7 @@ cbt1::uuid npd::Database::get_database_uuid() {
   cbt1::uuid __ret_value;
   {
     auto span = out._1();
-    memcpy(&__ret_value[0], span.data(), 1 * span.size());
+    memcpy(__ret_value.data(), span.data(), 1 * span.size());
   }
   return __ret_value;
 }
@@ -220,7 +220,7 @@ cbt1::oid_t npd::Database::create(/*in*/::flat::Span<const uint8_t> data, /*in*/
   __ch.function_idx() = 4;
   ::flat::DB__M5_Direct _(buf,24);
   _._1(data.size());
-  memcpy(_._1().data(), &data[0], data.size() * 1);
+  memcpy(_._1().data(), data.data(), data.size() * 1);
   _._2() = sync;
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -256,7 +256,7 @@ cbt1::oid_t npd::Database::put(/*in*/const cbt1::oid_t& id, /*in*/::flat::Span<c
   ::flat::DB__M6_Direct _(buf,24);
   _._1() = id;
   _._2(data.size());
-  memcpy(_._2().data(), &data[0], data.size() * 1);
+  memcpy(_._2().data(), data.data(), data.size() * 1);
   _._3() = sync;
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -349,7 +349,7 @@ bool npd::Database::get(/*in*/const cbt1::oid_t& id, /*out*/std::vector<uint8_t>
   {
     auto span = out._2();
     data.resize(span.size());
-    memcpy(&data[0], span.data(), 1 * span.size());
+    memcpy(data.data(), span.data(), 1 * span.size());
   }
   bool __ret_value;
   __ret_value = out._1();
@@ -370,7 +370,7 @@ uint64_t npd::Database::get_n(/*in*/::flat::Span<const cbt1::oid_t> ids, /*out*/
   __ch.function_idx() = 8;
   ::flat::DB__M10_Direct _(buf,24);
   _._1(ids.size());
-  memcpy(_._1().data(), &ids[0], ids.size() * 8);
+  memcpy(_._1().data(), ids.data(), ids.size() * 8);
   *(uint32_t*)buf.data().data() = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
     nprpc::EndPoint(this->_data().ip4, this->_data().port), buf, this->get_timeout()
@@ -388,7 +388,7 @@ uint64_t npd::Database::get_n(/*in*/::flat::Span<const cbt1::oid_t> ids, /*out*/
   {
     auto span = out._2();
     data.resize(span.size());
-    memcpy(&data[0], span.data(), 1 * span.size());
+    memcpy(data.data(), span.data(), 1 * span.size());
   }
   uint64_t __ret_value;
   __ret_value = out._1();
@@ -491,7 +491,7 @@ cbt1::uuid __ret_val;
       obuf.prepare(24);
       obuf.commit(24);
       ::flat::DB__M4_Direct oa(obuf,8);
-  memcpy(oa._1().data(), &__ret_val[0], __ret_val.size() * 1);
+  memcpy(oa._1().data(), __ret_val.data(), __ret_val.size() * 1);
       *((uint32_t*)obuf.data().data()) = static_cast<uint32_t>(obuf.size() - 4);
       *((uint32_t*)obuf.data().data() + 1) = ::nprpc::impl::MessageId::BlockResponse;
       break;

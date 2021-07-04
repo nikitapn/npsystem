@@ -412,12 +412,14 @@ void CAlgorithmExt::UnloadFromDevice() noexcept {
 }
 
 void CAlgorithmExt::DeletePermanent() noexcept {
+	editor_.remove();
+
 	fbd_blocks.fetch_all_nodes();
 	for (auto& block : fbd_blocks) {
 		block->e_block->DeletePermanent();
 	}
-	editor_.remove();
 	fbd_blocks.remove();
+
 	view_position.remove();
 }
 
