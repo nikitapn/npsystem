@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include "memorymanager.h"
 #include "vartype.h"
@@ -147,7 +150,7 @@ void CMemoryManager::AllocateMemory(npsys::variable_n& var_n, int fix_bit_n) {
 		for (int i = user_ram_begin_; i <= user_ram_end_; ++i) {
 			if (!sram_[i].value) {
 				sram_[i].alg_id = var->GetAlg().id();
-				sram_[i].bitcell = true; // захватываем под биты
+				sram_[i].bitcell = true;
 				if (fix_bit_n != -1) {
 					sram_[i].value |= (3 << fix_bit_n);
 					var->SetBit(fix_bit_n);

@@ -1,10 +1,13 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 #include "bridge.h"
 #include "config.h"
 #include <npsys/header.h>
 #include <nplib/utils/spinlock.h>
-#include <mylib/singleton/singleton.hpp>
+#include <nplib/utils/singleton.hpp>
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/system/error_code.hpp>
 #include "thread_pool.h"

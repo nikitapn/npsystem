@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 #ifndef __NPDB_H__
@@ -32,10 +35,6 @@
 #include "nodebuilder.h"
 #include "memento.h"
 #include <span>
-
-#if (defined(WIN32) && defined(_CONFIGURATOR_))
-#	include <mywtl/mwutf8.h>
-#endif
 
 #ifdef DEBUG
 #	define ASSERT_FETCH(node) ASSERT(node.fetch())

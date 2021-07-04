@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include "protocol.h"
 #include "config.h"
@@ -5,7 +8,7 @@
 #include "history.h"
 #include "itemmgr.h"
 #include "listener.h"
-#include <mylib/algorithm/binary_search.hpp>
+#include <nplib/utils/binary_search.hpp>
 
 namespace protocol {
 
@@ -22,7 +25,7 @@ protocol_service::protocol_service() {
 }
 
 void protocol_service::worker() {
-	using Result = mylib::task_queue::Result;
+	using Result = nplib::task_queue::Result;
 	if (g_cfg.log_level > 1) {
 		std::cout << "protocol_service: worker started." << std::endl;
 	}
@@ -93,7 +96,7 @@ int protocol_service::release_registers(released_regs_t& regs) noexcept {
 		wrarray_t::iterator founded;
 		wrarray_t::iterator begin = dev_reqs_[r.first.dev_addr].r.a.begin();
 		wrarray_t::iterator end = begin + dev_reqs_[r.first.dev_addr].r.n;
-		if (mylib::binary_find(begin, end, r.first, founded, 
+		if (nplib::binary_find(begin, end, r.first, founded, 
 			[](const Register_Ptr pReg, const server_handle& val) { return pReg->handle.value < val.value; }, 
 			[](const Register_Ptr pReg, const server_handle& val) { return pReg->handle.value == val.value; })
 			)
@@ -168,7 +171,7 @@ int protocol_service::add_register(NewRegister& r) {
 
 	wrarray_t::iterator it;
 
-	if (mylib::binary_find(begin, end, handle, it,
+	if (nplib::binary_find(begin, end, handle, it,
 		[](const Register_Ptr pReg, const server_handle& val) {
 			return pReg->handle.value < val.value; },
 		[](const Register_Ptr pReg, const server_handle& val) {

@@ -9,7 +9,6 @@ OBJS = $(addprefix obj/,$(addsuffix .o, $(basename $(notdir $(SRCS)))))
 DEFS = -DBOOST_LOG_DYN_LINK -DNDEBUG -DNPSYSTEM_FIRMWARE_API_CPP
 
 INC_DIR = \
-	-I../../mylib/include \
 	-I../npc/include \
 	-I../avr_info/include \
 	-I../sim/include \

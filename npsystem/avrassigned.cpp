@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include "libfunction.h"
 #include "avrassigned.h"
@@ -40,7 +43,7 @@ std::string CAVRAssignedObjectFile::DefSym() {
 	for (auto& f : expf) {
 		std::string str;
 		std::stringstream ss;
-		ss << std::hex << f.addr; // в GCC в байтах
+		ss << std::hex << f.addr;
 		ss >> str;
 		def += ",--defsym," + f.name + "=0x" + str;
 	}

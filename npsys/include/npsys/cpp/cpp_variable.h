@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 namespace npsys {
 std::string variable::to_ctype() const noexcept {
 	auto type = GetClearType();

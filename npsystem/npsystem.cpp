@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include "Ribbon.h"
 #include "resource.h"
@@ -18,9 +21,9 @@
 #include "config.h"
 #include <nplib/utils/log.h>
 #include <npdb/db.h>
-#include <mywtl/mwconsole.h>
+//#include <mywtl/mwconsole.h>
 #include <avr_info/avr_info.h>
-#include <mylib/thread/thread_pool.hpp>
+#include <nplib/utils/thread_pool.hpp>
 
 /*
 #include <boost/log/core.hpp>
@@ -58,7 +61,7 @@ static void init_log() {
 }
 */
 
-using thread_pool = mylib::thread_pool_2;
+using thread_pool = nplib::thread_pool_2;
 
 CAppModule _Module;
 std::unique_ptr<CMainFrame> wndMain;
@@ -176,7 +179,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
 #ifdef DEBUG
 	odb::check_memory_leak();
-	utils::DestroyConsole();
+	//utils::DestroyConsole();
 #endif
 
 	FreeLibrary(hDll);

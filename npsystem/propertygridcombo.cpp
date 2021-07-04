@@ -1,3 +1,5 @@
+// got it from codeproject
+
 #include "stdafx.h"
 #include "ControlWindow.h"
 #include "PropertyGridCombo.h"

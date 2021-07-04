@@ -1,3 +1,5 @@
+// got it from codeproject
+
 #include "stdafx.h"
 #include "ControlWindow.h"
 #include "PropertyGridInPlaceEdit.h"
@@ -32,13 +34,6 @@ void CPropertyGridInPlaceEdit::SetColors(COLORREF clrBack, COLORREF clrText) {
 	m_Brush.CreateSolidBrush(m_clrBack);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CPropertyGridInPlaceEdit message handlers
-
-// If an arrow key (or associated) is pressed, then exit if
-//  a) The Ctrl key was down, or
-//  b) m_bExitOnArrows == TRUE
-
 LRESULT CPropertyGridInPlaceEdit::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	if ((wParam == VK_PRIOR || wParam == VK_NEXT ||
 		wParam == VK_DOWN || wParam == VK_UP ||
@@ -53,10 +48,9 @@ LRESULT CPropertyGridInPlaceEdit::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lPa
 	return 0;
 }
 
-// As soon as this edit loses focus, kill it.
+
 LRESULT CPropertyGridInPlaceEdit::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
-	if (m_bCancel == FALSE)
-		EndEdit();
+	if (m_bCancel == FALSE) EndEdit();
 	return 0;
 }
 
@@ -64,9 +58,10 @@ LRESULT CPropertyGridInPlaceEdit::OnChar(UINT uMsg, WPARAM wParam, LPARAM lParam
 	TCHAR nChar = (TCHAR)wParam;
 
 	if (nChar == VK_TAB || nChar == VK_RETURN) {
-		GetParent().SetFocus();    // This will destroy this window
+		GetParent().SetFocus();
 		return 0;
 	}
+	
 	if (nChar == VK_ESCAPE) {
 		CancelEdit();
 		return 0;
@@ -81,36 +76,16 @@ LRESULT CPropertyGridInPlaceEdit::OnGetDlgCode(UINT uMsg, WPARAM wParam, LPARAM 
 	return DLGC_WANTALLKEYS;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CPropertyGridInPlaceEdit overrides
-
-/*
-BOOL CPropertyGridInPlaceEdit::PreTranslateMessage(MSG* pMsg) {
-	// Catch the Alt key so we don't choke if focus is going to an owner drawn button
-	if (pMsg->message == WM_SYSCHAR)
-		return TRUE;
-	return CEdit::PreTranslateMessage(pMsg);
-}
-*/
-
-////////////////////////////////////////////////////////////////////////////
-// CPropertyGridInPlaceEdit implementation
-
 void CPropertyGridInPlaceEdit::CancelEdit() {
 	m_bCancel = TRUE;
 	// restore previous text
-	if (IsWindow())
-		DestroyWindow();
+	if (IsWindow()) DestroyWindow();
 }
 
 void CPropertyGridInPlaceEdit::EndEdit() {
-	// EFW - BUG FIX - Clicking on a grid scroll bar in a derived class
-	// that validates input can cause this to get called multiple times
-	// causing assertions because the edit control goes away the first time.
 	static BOOL bAlreadyEnding = FALSE;
 
-	if (bAlreadyEnding)
-		return;
+	if (bAlreadyEnding) return;
 
 	bAlreadyEnding = TRUE;
 	m_text = GetWindowTextToStdStringW(m_hWnd);

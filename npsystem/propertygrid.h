@@ -1,3 +1,5 @@
+// got it from codeproject
+
 #pragma once
 
 #include <nplib/utils/variant.h>

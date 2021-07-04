@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 #ifndef AVR_INFO_H_
@@ -8,7 +11,7 @@
 #include <string>
 #include <vector>
 #include <array>
-#include <mylib/singleton/singleton.hpp>
+#include <nplib/utils/singleton.hpp>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
@@ -201,7 +204,7 @@ struct PeripheralInfo {
 
 using avr_controller_info_lst_t = std::array<FirmwareInfo, MODELS_MAX>;
 
-class AVRInfo : public mylib::singleton<AVRInfo> {
+class AVRInfo : public nplib::singleton<AVRInfo> {
 	std::array<PeripheralInfo*, MODELS_MAX> pinfo_lst_;
 	std::vector<avr_controller_info_lst_t> avrlst_;
 	PCLinkInfo pclink_info_;

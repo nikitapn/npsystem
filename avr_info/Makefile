@@ -11,7 +11,7 @@ DEFS = -DNDEBUG
 
 INCS = \
 	-I../avr_info/include \
-	-I../../mylib/include
+	-I../nplib/include
 
 LIB_DIR = -L../build/lib
 

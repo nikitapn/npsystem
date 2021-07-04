@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include "itemmgr.h"
 #include "config.h"
@@ -12,7 +15,7 @@ void ItemManagerImpl::keep_alive_timer(std::shared_ptr<std::atomic_bool> del) {
 
 //	if (timer_.expires_at() <= boost::asio::deadline_timer::traits_type::now()) {
 //		timer_.expires_at(boost::posix_time::pos_infin);
-//		mylib::async<false>(strand_, [this]() { this->fire_keep_alive(); });
+//		nplib::async<false>(strand_, [this]() { this->fire_keep_alive(); });
 //	}
 
 //	timer_.async_wait(std::bind(&ItemManagerImpl::keep_alive_timer, this, del));
@@ -62,7 +65,7 @@ void ItemManagerImpl::destroy() noexcept {
 //	boost::system::error_code ec;
 //	timer_.cancel(ec);
 
-	mylib::async<false>(strand_, [this]() {
+	nplib::async<false>(strand_, [this]() {
 		this->destroy_from_strand();
 	}); // last job
 }

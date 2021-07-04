@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 #include "frame.h"
@@ -6,7 +9,7 @@
 #include "regstatus.h"
 #include <avr_firmware/net.h>
 #include <functional>
-#include <mylib/thread/task_queue.h>
+#include <nplib/utils/task_queue.h>
 
 namespace protocol {
 
@@ -165,7 +168,7 @@ class protocol_service
 		} q;
 	};
 
-	mylib::task_queue tasks_;
+	nplib::task_queue tasks_;
 	std::thread worker_;
 	std::set<uint8_t> m_tag_changed;
 	std::set<uint8_t> m_valid_controllers;

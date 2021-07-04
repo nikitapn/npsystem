@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 #include <atomic>
@@ -43,19 +46,19 @@ public:
 
 	auto t_process_registers(const std::shared_ptr<updated_registers_t>& registers) {
 		task_count_++;
-		return mylib::async<false>(strand_, &listener::process_registers, this, registers);
+		return nplib::async<false>(strand_, &listener::process_registers, this, registers);
 	}
 
 	// wait only function
 	[[nodiscard]]
 	auto t_advise(const Span<nps::flat::DataDef>& a, Span<nps::var_handle>& handles) {
 		task_count_++;
-		return mylib::async<true>(strand_, &listener::advise, this, std::cref(a), std::ref(handles)).get();
+		return nplib::async<true>(strand_, &listener::advise, this, std::cref(a), std::ref(handles)).get();
 	}
 
 	auto t_release_all() {
 		task_count_++;
-		return mylib::async<false>(strand_, &listener::release_all, this);
+		return nplib::async<false>(strand_, &listener::release_all, this);
 	}
 
 	auto task_count() const noexcept { return task_count_.load(std::memory_order_relaxed); }

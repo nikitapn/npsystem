@@ -1,8 +1,11 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include "listener.h"
 #include <npsys/variable.h>
 #include <npc/server.hpp>
-#include <mylib/algorithm/binary_search.hpp>
+#include <nplib/utils/binary_search.hpp>
 
 namespace protocol {
 // strand context

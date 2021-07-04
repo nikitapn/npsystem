@@ -1,3 +1,4 @@
+// got it from codeproject
 
 #define WM_PG_ENDLABELEDIT (WM_USER + 488)
 

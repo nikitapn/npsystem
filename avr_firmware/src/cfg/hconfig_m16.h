@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #ifndef __ATMEGA16_HCONFIG_H__
 #define __ATMEGA16_HCONFIG_H__
 

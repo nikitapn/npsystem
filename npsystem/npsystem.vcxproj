@@ -72,7 +72,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\nprpc\include;$(MYLIB_DIR)\include;..\..\mywtl\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(IncludePath)</IncludePath>
+    <IncludePath>..\nprpc\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\mywtl\lib;..\x64\Debug;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -81,7 +81,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\nprpc\include;$(MYLIB_DIR)\include;..\..\mywtl\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\nprpc\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>..\..\mywtl\lib;..\x64\Release;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -321,7 +321,6 @@
     <ClCompile Include="tr_block.cpp" />
     <ClCompile Include="tr_controllers.cpp" />
     <ClCompile Include="tr_item.cpp" />
-    <ClCompile Include="mypropertygrid.cpp" />
     <ClCompile Include="mytabview.cpp" />
     <ClCompile Include="mytreeview.cpp" />
     <ClCompile Include="propertygrid.cpp" />
@@ -361,7 +360,6 @@
     <ClInclude Include="onlinetreeitem.h" />
     <ClInclude Include="outputwnd.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="thread_safe_set.h" />
     <ClInclude Include="tr_controller.h" />
     <ClInclude Include="tr_request.h" />
     <ClInclude Include="ribbonstate.h" />
@@ -374,7 +372,6 @@
     <ClInclude Include="iter.h" />
     <ClInclude Include="math2d.h" />
     <ClInclude Include="mytreeview.h" />
-    <ClInclude Include="mypropertygrid.h" />
     <ClInclude Include="propertygrid.h" />
     <ClInclude Include="propertygridcombo.h" />
     <ClInclude Include="propertygridinplaceedit.h" />

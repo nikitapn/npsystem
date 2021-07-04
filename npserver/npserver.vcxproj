@@ -121,12 +121,12 @@
     <LibraryPath>D:\opt\boost_1_65_1\stage_x86\lib;D:\opt\omniORB-4.2.2\lib\x86_win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\nprpc\include;$(BOOST_DIR);$(MYLIB_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\nprpc\include;$(BOOST_DIR);$(IncludePath)</IncludePath>
     <LibraryPath>..\x64\$(Configuration);$(BOOST_DIR)\stage_x64\lib;$(LibraryPath)</LibraryPath>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\nprpc\include;$(BOOST_DIR);$(MYLIB_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\nprpc\include;$(BOOST_DIR);$(IncludePath)</IncludePath>
     <LibraryPath>..\x64\$(Configuration);$(BOOST_DIR)\stage_x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

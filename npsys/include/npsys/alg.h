@@ -1,12 +1,12 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 #include "header.h"
 #include "access.h"
 #include <npdb/memento.h>
 #include <npsys/other/uploadable.h>
-
-
-
 
 namespace npsys {
 struct CAlgorithmViewPosition 

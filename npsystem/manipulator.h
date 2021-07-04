@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #pragma once
 
 class CAlgorithmView;
@@ -30,7 +33,6 @@ public:
 	virtual void MouseButtonUP(CPoint point, CAlgorithmView* pWnd) = 0;
 	virtual void Draw(CGraphics* pGraphics) = 0;
 protected:
-	/*Смещение от левого верхнего угла блока*/
 	D2D1::MyPoint2F _offset;
 	D2D1::MyPoint2F _oldpos;
 	D2D1::MyPoint2F _prevpos;

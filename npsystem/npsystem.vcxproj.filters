@@ -101,9 +101,6 @@
     <ClCompile Include="myonlinetreectrl.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="mypropertygrid.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="mytabview.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -307,9 +304,6 @@
     <ClInclude Include="myonlinetreectrl.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="mypropertygrid.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="mystatusbar.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -437,9 +431,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="stuff.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="thread_safe_set.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="wm_user.h">

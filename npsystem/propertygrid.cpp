@@ -1,3 +1,5 @@
+// got it from codeproject
+
 #include "stdafx.h"
 #include "CustomItem.h"
 #include "PropertyGrid.h"
@@ -869,7 +871,7 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, std::vector<CProperty
 		{
 			strValue = wide(boost::get<std::string>(it->v));
 			static const auto pattern = std::wregex(L"\r\n");
-			strValue = std::regex_replace(strValue, pattern, L"¶");
+			strValue = std::regex_replace(strValue, pattern, L"ï¿½");
 			break;
 		}
 
