@@ -10,8 +10,8 @@
 SIM_IMPORT_EXPORT
 Medium::Medium()
 	: controllers_count_(0) {
-	pause_.store(false, std::memory_order_relaxed);
-	running_.store(false, std::memory_order_relaxed);
+	paused_.store(false);
+	running_.store(false);
 	controllers_.fill(nullptr);
 	cpu_frequency_ = (double)GetCpuFrequency(1);
 }
@@ -39,7 +39,7 @@ uint64_t Medium::GetCpuFrequency(uint64_t seconds) {
 
 SIM_IMPORT_EXPORT
 void Medium::AddController(IController* controller) {
-	Pause([&]() {
+	pause_execution([&]() {
 		controllers_[controllers_count_] = controller;
 		controllers_count_++;
 		controller->SetMedium(this);
@@ -52,7 +52,7 @@ SIM_IMPORT_EXPORT
 bool Medium::RemoveController(IController* controller) {
 	auto founded = std::find(controllers_.begin(), controllers_.end(), controller);
 	if (founded == controllers_.end()) return false;
-	Pause([&]() {
+	pause_execution([&]() {
 		std::copy(std::next(founded), controllers_.end(), founded);
 		controllers_count_--;
 	});
@@ -66,15 +66,7 @@ int Medium::MediumProc() noexcept {
 	namespace chrono = std::chrono;
 	auto tp2 = chrono::high_resolution_clock::now();
 	while (running_.load(std::memory_order_relaxed)) {
-		if (pause_.load(std::memory_order_relaxed)) {
-			{
-				std::lock_guard lk(mut_);
-				paused_++;
-			}
-			cv_.notify_one();
-			std::unique_lock lk(mut2_);
-			cv2_.wait(lk, [this]() { return !pause_.load(std::memory_order_relaxed); });
-		}
+		wait_if_paused();
 		auto tp1 = chrono::high_resolution_clock::now();
 		auto duration = chrono::duration_cast<chrono::nanoseconds>(tp1 - tp2);
 		tp2 = tp1;
@@ -91,15 +83,7 @@ int Medium::MediumProc() noexcept {
 int Medium::CoreProc() noexcept {
 	try {
 		while (running_.load(std::memory_order_relaxed)) {
-			if (pause_.load(std::memory_order_relaxed)) {
-				{
-					std::lock_guard lk(mut_);
-					paused_++;
-				}
-				cv_.notify_one();
-				std::unique_lock lk(mut2_);
-				cv2_.wait(lk, [this]() { return !pause_.load(std::memory_order_relaxed); });
-			}
+			wait_if_paused();
 			if (!controllers_count_) continue;
 			auto ca = __rdtsc();
 			auto duration = 0.0;

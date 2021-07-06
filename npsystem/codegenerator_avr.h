@@ -52,7 +52,7 @@ public:
 	}
 	
 	void AddOperand(OP_TYPE type, const std::string& name, const npsys::variable* var);
-	void AddClobber(const std::string& r);
+	void AddClobber(int reg_num);
 
 	explicit AsmBlock(const std::string& block_id) 
 		: block_id_(block_id) 
@@ -69,9 +69,6 @@ protected:
 	size_t conv_bit_n_ = 0;
 
 	void AddLibrary(std::string lib);
-	void PasteCode(const std::string& code) noexcept {
-		m_code << "\t" << code << "\n";
-	}
 	std::string CastBit(const npsys::variable* var) noexcept;
 	std::string CastQBit(const npsys::variable* var) noexcept;
 public:
@@ -81,6 +78,7 @@ public:
 	CAVR5CodeGenerator(npsys::algorithm_n alg, const avrinfo::FirmwareInfo& info);
 	void SaveToFile();
 	virtual void Reset();
+	void GenerateAlarmBlock(CBlock* block, bool high);
 #define AAF(x) virtual void Generate(x*);
 	ALPHA_BLOCKS()
 #undef AAF

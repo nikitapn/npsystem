@@ -73,6 +73,8 @@ RibbonState g_ribbonState;
 npsystem::Config g_cfg;
 UINT g_clf_blocks;
 
+std::thread::id g_main_thread_id;
+
 void RibbonState::ResetBlockGallery() {
 	cursor_selected = true;
 	block_selected = 0;
@@ -80,6 +82,8 @@ void RibbonState::ResetBlockGallery() {
 }
 
 int Run(LPTSTR /*lpstrCmdLine*/ = NULL, int nCmdShow = SW_SHOWDEFAULT) {
+	g_main_thread_id = std::this_thread::get_id();
+
 	wndMain = std::make_unique<CMainFrame>();
 	
 	std::cout.rdbuf(&wndMain->m_wndOutput);

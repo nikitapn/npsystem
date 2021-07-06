@@ -32,7 +32,7 @@ public:
 	int End() const noexcept { return end_; }
 	void SetHash(const HASHMD5& hash) noexcept { hash_ = hash; }
 	void SetRange(int begin, int size_b, int pagesize);
-	void Reset() noexcept { start_ = end_ = size_b_ = 0; }
+	void SetUnloaded() noexcept { start_ = end_ = size_b_ = 0; }
 	const HASHMD5& GetHash() const noexcept { 
 		return hash_; 
 	}

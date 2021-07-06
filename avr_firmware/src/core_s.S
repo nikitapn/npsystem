@@ -141,14 +141,19 @@ core_run:
 	
 	push	xl
 	push	xh
+
 	set
 	bld		r_status, 5
-	ICALL
+
+	ICALL ; the fuction might not save R2-R17, R28, R29
+	
 	clt 
 	bld		r_status,5
+
 	pop		xh
 	pop		xl
 
+	; store return value (R24:R25) for current task 
 	cli
 	ST		-x, R25
 	ST		-x, R24

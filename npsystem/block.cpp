@@ -21,8 +21,8 @@
 #include "genhelper.h"
 
 #define IMPLEMENT_TRANSLATE(class_name) \
-void class_name ## ::Translate(CCodeGenerator* pGenerator) { \
-	pGenerator->Generate(this); \
+void class_name ## ::Translate(CCodeGenerator* code_generator) { \
+	code_generator->Generate(this); \
 }
 
 

@@ -99,18 +99,29 @@ void COutputEdit::Copy() {
 	std::cout << "COutputWnd::Copy()" << std::endl;
 }
 
-int COutputEdit::sync() {
+int COutputEdit::sync_impl() {
 	if (m_hWnd) {
-
-		auto len = GetWindowTextLengthA(m_hWnd);
+		auto len = ::SendMessage(m_hWnd, WM_GETTEXTLENGTH, 0, 0);
 		SetSel(len, len);
 		ptr_[length()] = '\0';
-		::SendMessageA(this->m_hWnd, EM_REPLACESEL, (WPARAM) 0, (LPARAM)ptr_);
-		
+		::SendMessageA(this->m_hWnd, EM_REPLACESEL, (WPARAM)0, (LPARAM)ptr_);
+
 		//AppendText(wide({ ptr_, length() }).c_str());
 		setp(ptr_, ptr_ + max_size_);
 	}
 	return 0;
+}
+
+int COutputEdit::sync() {
+	if (g_main_thread_id != std::this_thread::get_id()) {
+		PostMessage(WM_SYNCFROMMAINTHREAD, 0, 0);
+		return 0;
+	}
+	return sync_impl();
+}
+
+LRESULT COutputEdit::OnSyncFromMainThread(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/) {
+	return sync_impl();
 }
 
 /*

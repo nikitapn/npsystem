@@ -12,67 +12,42 @@
 #include <avr_firmware/net.h>
 #include <boost/log/trivial.hpp>
 
+#define BLOCK_BEGIN(block) \
+	auto block_id_str = "bid_" + std::to_string(block->top->self_node.id()); \
+	m_code << "\t/* " + block_id_str + " */\n{\n";
+
+#define BLOCK_END(block) \
+	m_code << "}\n";
 
 /*
 Call-Used Registers
-The call-used or call-clobbered general purpose registers (GPRs) are registers that might be destroyed (clobbered) by a function call.
+The call-used or call-clobbered general purpose registers (GPRs) are registers that might be destroyed (clobbered) 
+by a function call.
 
 R18-R27, R30, R31
-These GPRs are call clobbered. An ordinary function may use them without restoring the contents. Interrupt service routines (ISRs) must save and restore each register they use.
+These GPRs are call clobbered. An ordinary function may use them without restoring the contents.
+Interrupt service routines (ISRs) must save and restore each register they use.
+
 R0, T-Flag
-The temporary register and the T-flag in SREG are also call-clobbered, but this knowledge is not exposed explicitly to the compiler (R0 is a fixed register).
+The temporary register and the T-flag in SREG are also call-clobbered, 
+but this knowledge is not exposed explicitly to the compiler (R0 is a fixed register).
 
 Call-Saved Registers
 R2-R17, R28, R29
-The remaining GPRs are call-saved, i.e. a function that uses such a registers must restore its original content. This applies even if the register is used to pass a function argument.
+The remaining GPRs are call-saved, i.e. a function that uses such a registers must restore its original content.
+This applies even if the register is used to pass a function argument.
+
 R1
 The zero-register is implicity call-saved (implicit because R1 is a fixed register).
 */
 
-#define JOIN_(a, b) a ## b
-#define JOIN(a, b) JOIN_(a,b)
-
-#define COMMENT(Comment) \
-	m_code << JOIN("\t/* ", JOIN(Comment, " */\n"));
-
-#define COMMENT_BLOCK(block) \
-	auto block_id_str = "bid_" + std::to_string(block->top->self_node.id()); \
-	m_code << "\t/* " + block_id_str + " */\n";
-
-/*
-#define ASM_CONV_BYTE_1_TO_BIT(val, bit_val, bit_n) \
-	ASM_BEGIN(); \
-	ASM_CMD0("or %1, %1"); \
-	ASM_CMD0("in __tmp_reg__,__SREG__"); \
-	ASM_CMD0("bst __tmp_reg__, 1"); \
-	ASM_CMD0("bld %0, %2"); \
-	m_code << "\t:\"+r\"(" + bit_val + ")"; \
-	m_code << "\t:\"r\"(" + val + "), \"i\"(" + std::to_string(bit_n) + ")"; \
-	ASM_END();
-
-#define ASM_CONV_INV_BYTE_1_TO_BIT(val, bit_val, bit_n) \
-	ASM_BEGIN(); \
-	ASM_CMD0("and %1, %1"); \
-	ASM_CMD0("in __tmp_reg__,__SREG__"); \
-	ASM_CMD0("bst __tmp_reg__, 1"); \
-	ASM_CMD0("bld %0, %2"); \
-	m_code << "\t:\"+r\"(" + bit_val + ")"; \
-	m_code << "\t:\"r\"(" + val + "), \"i\"(" + std::to_string(bit_n) + ")"; \
-	ASM_END();
-*/
-
-void AsmBlock::AddClobber(const std::string& r) {
-	std::string str = r.substr(1);
-	std::stringstream ss;
-	ss << r.substr(1);
-	int n;
-	ss >> n;
-	if (!((n >= 18 && n <= 27) || (n >= 30 && n <= 31))) {
-		std::cout << "Register " << n << " is not call-used" << std::endl;
-		// throw "utilizing a non call-user register as is not allowed";
-	}
+void AsmBlock::AddClobber(int reg_num) {
+	//if (!((reg_num >= 18 && reg_num <= 27) || (reg_num >= 30 && reg_num <= 31))) {
+		//std::cout << "r" << reg_num << " is not call clobbered" << std::endl;
+		// throw "utilizing a not call clobbered register as is not allowed";
+	//}
 	if (!m_clobbers.empty()) m_clobbers += ',';
-	m_clobbers += "\"" + r + "\"";
+	m_clobbers += "\"r" + std::to_string(reg_num) + "\"";
 }
 
 void AsmBlock::AddOperand(OP_TYPE type, const std::string& name, const npsys::variable* var) {
@@ -206,8 +181,6 @@ void CAVR5CodeGenerator::Reset() {
 }
 
 void CAVR5CodeGenerator::SaveToFile() {
-	COMMENT("The End");
-
 	DWORD sp = static_cast<DWORD>((float)alg_->scan_period / 1000.0f / info_.mccfg.one_tick_time);
 	m_code << "\treturn " << sp << ";\n";
 
@@ -226,7 +199,22 @@ void CAVR5CodeGenerator::SaveToFile() {
 	}
 
 	alg_code << "#define discrete_t uint8_t\n";
-	alg_code << "__attribute__((section(\".text.algorithm\"))) uint16_t algorithm(void);\n";
+
+/*
+from https://gcc.gnu.org/onlinedocs/gcc-4.7.2/gcc/Function-Attributes.html
+	OS_main/OS_task
+	On AVR, functions with the OS_main or OS_task attribute do not save/restore any call-saved register in their prologue/epilogue.
+	The OS_main attribute can be used when there is guarantee that interrupts are disabled at the time when the function is entered. This will save resources when the stack pointer has to be changed to set up a frame for local variables.
+
+	The OS_task attribute can be used when there is no guarantee that interrupts are disabled at that time when the function is entered like for, e.g. task functions in a multi-threading operating system. In that case, changing the stack pointer register will be guarded by save/clear/restore of the global interrupt enable flag.
+
+	The differences to the naked function attribute are:
+
+	naked functions do not have a return instruction whereas OS_main and OS_task functions will have a RET or RETI return instruction.
+	naked functions do not set up a frame for local variables or a frame pointer whereas OS_main and OS_task do this as needed.
+*/
+
+	alg_code << "__attribute__((section(\".text.algorithm\"))) __attribute__((OS_task)) uint16_t algorithm(void);\n";
 	alg_code << "register uint8_t reserved_register_r2 asm(\"r2\") __attribute__((used));\n";
 	alg_code << "register uint8_t reserved_register_r3 asm(\"r3\") __attribute__((used));\n";
 	alg_code << "static uint32_t dwCnt __attribute__((section(\".dwCnt\"))) __attribute__((__used__));\n";
@@ -234,7 +222,6 @@ void CAVR5CodeGenerator::SaveToFile() {
 	alg_code << gcc_->GetVarDecl() + "\n";
 	alg_code << m_code.str();
 	alg_code << "}\n";
-	alg_code.close();
 }
 
 void CAVR5CodeGenerator::AddLibrary(std::string lib) {
@@ -244,15 +231,15 @@ void CAVR5CodeGenerator::AddLibrary(std::string lib) {
 
 std::string CAVR5CodeGenerator::CastBit(const npsys::variable* var) noexcept {
 	std::string var_name = "cnvb_" + std::to_string(conv_bit_n_++);
-	PasteCode("uint8_t " + var_name + " = (" +
-		var->to_vardecl() + " >> " + std::to_string(var->GetBit()) + ") & 0x01;");
+	m_code << "uint8_t " << var_name << " = (" <<
+		var->to_vardecl() << " >> " << var->GetBit() << ") & 0x01;";
 	return var_name;
 }
 
 std::string CAVR5CodeGenerator::CastQBit(const npsys::variable* var) noexcept {
 	std::string var_name = "cnvb_q_" + std::to_string(conv_bit_n_++);
-	PasteCode("uint8_t " + var_name + " = (" +
-		var->to_vardecl() + " >> " + std::to_string(var->GetQBit()) + ") & 0x01;");
+	m_code << "uint8_t " << var_name << " = (" <<
+		var->to_vardecl() << " >> " << var->GetQBit() << ") & 0x01;";
 	return var_name;
 }
 
@@ -262,7 +249,7 @@ void CAVR5CodeGenerator::Generate(CInput* block) {
 }
 
 void CAVR5CodeGenerator::Generate(COutput* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	const auto slot = static_cast<CInputSlot*>(block->GetSlot());
 	
@@ -327,22 +314,23 @@ void CAVR5CodeGenerator::Generate(COutput* block) {
 		m_code << bl;
 	} else {
 		if (!in->IsBit()) {
-			PasteCode(out->to_vardecl() + " = " + in->to_vardecl() + ";");
+			m_code << out->to_vardecl() << " = " << in->to_vardecl() << ";";
 			if (in->IsQuality() && out->IsQuality()) {
-				PasteCode(out->to_vardecl() + "_q = " + in->to_vardecl() + "_q;");
+				m_code << out->to_vardecl() << "_q = " << in->to_vardecl() << "_q;";
 			} else if (!in->IsQuality() && out->IsQuality()) {
-				PasteCode(out->to_vardecl() + "_q = 0xFF;");
+				m_code << out->to_vardecl() << "_q = 0xFF;";
 			}
 		} else {
 
 		}
 	}
+	BLOCK_END(block);
 }
 
 // Logic
 
 void CAVR5CodeGenerator::Generate(COr* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	auto connected_inputs = block->InputHasValidVariable();
 	if (connected_inputs == 0) return;
@@ -392,10 +380,11 @@ void CAVR5CodeGenerator::Generate(COr* block) {
 	bl.AddLabel("_end");
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CAnd* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto connected_inputs = block->InputHasValidVariable();
 	if (connected_inputs == 0) return;
 
@@ -445,10 +434,11 @@ void CAVR5CodeGenerator::Generate(CAnd* block) {
 	bl.AddLabel("_end");
 	
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CNot* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	auto& slots = block->top->slots;
 	const auto in = i_at(0).GetInputVariable();
@@ -481,10 +471,11 @@ void CAVR5CodeGenerator::Generate(CNot* block) {
 	} else if (!(in->GetType() & variable::VT_FLOAT)) {
 		// ASM_CONV_INV_BYTE_1_TO_BIT(in->to_vardecl(), out->to_vardecl(), out->GetBit());
 	}
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CRsTrigger* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	auto& slots = block->top->slots;
 
@@ -524,7 +515,7 @@ void CAVR5CodeGenerator::Generate(CRsTrigger* block) {
 	}
 
 	if (reset) {
-		bl.AddClobber("r24");
+		bl.AddClobber(24);
 		bl.AddCmd("ldi r24, 1 << ", reset->GetBit());
 		bl.AddCmd("eor r24, $reset");
 		bl.AddCmd("bst r24, ", reset->GetBit());
@@ -554,12 +545,12 @@ void CAVR5CodeGenerator::Generate(CRsTrigger* block) {
 		bl.AddLabel("_end");
 	}
 
-
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CPositiveEdge* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 
 	const auto in = i_at(0).GetInputVariable();
@@ -579,7 +570,7 @@ void CAVR5CodeGenerator::Generate(CPositiveEdge* block) {
 	gcc_->AddVariable(prev_in);
 	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$prev_in", prev_in);
 
-	bl.AddClobber("r24");
+	bl.AddClobber(24);
 
 	if (in->IsQuality()) {
 		bl.AddCmd("bst $in, ", in->GetQBit());
@@ -608,10 +599,11 @@ void CAVR5CodeGenerator::Generate(CPositiveEdge* block) {
 	bl.AddCmd("bld $out,", out->GetQBit());
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CNegativeEdge* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 
 	const auto in = i_at(0).GetInputVariable();
@@ -631,7 +623,7 @@ void CAVR5CodeGenerator::Generate(CNegativeEdge* block) {
 	gcc_->AddVariable(prev_in);
 	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$prev_in", prev_in);
 
-	bl.AddClobber("r24");
+	bl.AddClobber(24);
 
 	if (in->IsQuality()) {
 		bl.AddCmd("bst $in, ", in->GetQBit());
@@ -659,10 +651,11 @@ void CAVR5CodeGenerator::Generate(CNegativeEdge* block) {
 	bl.AddCmd("bld $out, ", out->GetQBit());
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CAnyEdge* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 
 	const auto in = i_at(0).GetInputVariable();
@@ -682,7 +675,7 @@ void CAVR5CodeGenerator::Generate(CAnyEdge* block) {
 	gcc_->AddVariable(prev_in);
 	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$prev_in", prev_in);
 
-	bl.AddClobber("r24");
+	bl.AddClobber(24);
 
 	if (in->IsQuality()) {
 		bl.AddCmd("bst $in, ", in->GetQBit());
@@ -703,10 +696,11 @@ void CAVR5CodeGenerator::Generate(CAnyEdge* block) {
 	bl.AddCmd("bld $out,", out->GetQBit());
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CBinaryEncoder* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 
 	if (!block->InputHasValidVariable()) return;
@@ -767,10 +761,11 @@ void CAVR5CodeGenerator::Generate(CBinaryEncoder* block) {
 	bl.AddLabel("_end");
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CBinaryDecoder* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 
 	AsmBlock bl(block_id_str);
@@ -784,7 +779,7 @@ void CAVR5CodeGenerator::Generate(CBinaryDecoder* block) {
 	auto begin = slots.begin_out(),
 		end = slots.end_out();
 
-	bl.AddClobber("r16");
+	bl.AddClobber(16);
 	bl.AddCmd("lds r16,", in->GetQAddr());
 
 	int var_size = in->GetSize() * 8;
@@ -812,10 +807,11 @@ void CAVR5CodeGenerator::Generate(CBinaryDecoder* block) {
 	}
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CDelay* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	auto& slots = block->top->slots;
 
@@ -844,17 +840,17 @@ void CAVR5CodeGenerator::Generate(CDelay* block) {
 	gcc_->AddVariable(out);
 	gcc_->AddVariable(timer);
 
-	//	PasteCode("uint32_t cnt;");
-	//	PasteCode("ATOMIC_BLOCK(ATOMIC_FORCEON) { cnt = dwCnt; }");
+	//	m_code << "uint32_t cnt;");
+	//	m_code << "ATOMIC_BLOCK(ATOMIC_FORCEON) { cnt = dwCnt; }");
 	//	bl.AddOperand(gcc__OP_R, "$cnt");
 
 	bl.AddOperand(OP_TYPE::GCC_OP_R, "$in", in);
 	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$mycnt", timer);
 
-	bl.AddClobber("r16");
-	bl.AddClobber("r17");
-	bl.AddClobber("r18");
+	bl.AddClobber(16);
+	bl.AddClobber(17);
+	bl.AddClobber(18);
 
 	// Body
 	bl.AddCmd("bst $in, ", in->GetQBit());
@@ -904,10 +900,11 @@ void CAVR5CodeGenerator::Generate(CDelay* block) {
 	bl.AddLabel("_end");
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CCounter* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 
 	const auto in = i_at(0).GetInputVariable();
@@ -934,7 +931,7 @@ void CAVR5CodeGenerator::Generate(CCounter* block) {
 	gcc_->AddVariable(prev_in);
 	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$prev_in", prev_in);
 
-	bl.AddClobber("r24");
+	bl.AddClobber(24);
 
 	if (reset) {
 		if (reset->IsQuality()) {
@@ -974,11 +971,12 @@ void CAVR5CodeGenerator::Generate(CCounter* block) {
 	bl.AddLabel("_end");
 
 	m_code << bl;
+	BLOCK_END(block);
 }
 
 // Math
 void CAVR5CodeGenerator::Generate(CAdd* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 	const auto in1 = i_at(0).GetInputVariable();
 	const auto in2 = i_at(1).GetInputVariable();
@@ -987,17 +985,17 @@ void CAVR5CodeGenerator::Generate(CAdd* block) {
 	} else if (!in1 && in2) {
 		gcc_->AddVariable(in2);
 		gcc_->AddVariable(out);
-		PasteCode(out->to_vardecl() + " = " +
-			(in2->IsBit() ? CastBit(in2) : in2->to_vardecl()) + ";");
-		PasteCode(out->to_vardeclq() + " = " +
-			(in2->IsBit() ? CastQBit(in2) : in2->to_vardeclq()) + ";");
+		m_code << out->to_vardecl() << " = " <<
+			(in2->IsBit() ? CastBit(in2) : in2->to_vardecl()) << ";\n";
+		m_code << out->to_vardeclq() << " = " <<
+			(in2->IsBit() ? CastQBit(in2) : in2->to_vardeclq()) + ";\n";
 	} else if (in1 && !in2) {
 		gcc_->AddVariable(in1);
 		gcc_->AddVariable(out);
-		PasteCode(out->to_vardecl() + " = " +
-			(in1->IsBit() ? CastBit(in1) : in1->to_vardecl()) + ";");
-		PasteCode(out->to_vardeclq() + " = " +
-			(in1->IsBit() ? CastQBit(in1) : in1->to_vardeclq()) + ";");
+		m_code << out->to_vardecl() << " = " <<
+			(in1->IsBit() ? CastBit(in1) : in1->to_vardecl()) << ";\n";
+		m_code << out->to_vardeclq() << " = " <<
+			(in1->IsBit() ? CastQBit(in1) : in1->to_vardeclq()) << ";\n";
 	} else {
 		int t1 = in1->GetType(), t2 = in2->GetType();
 		gcc_->AddVariable(in1);
@@ -1006,22 +1004,21 @@ void CAVR5CodeGenerator::Generate(CAdd* block) {
 		if ((t1 & variable::FLOAT_VALUE) || (t2 & variable::FLOAT_VALUE)) {
 			AddLibrary("avr_libm");
 		}
-		PasteCode(out->to_vardecl() + " = " +
-			(in1->IsBit() ? CastBit(in1) : in1->to_vardecl()) +
-			" + " +
-			(in2->IsBit() ? CastBit(in2) : in2->to_vardecl())
-			+ ";");
-		PasteCode(out->to_vardeclq() + " = " +
-			(in1->IsBit() ? CastQBit(in1) : in1->to_vardeclq()) +
-			" & " +
+		m_code << out->to_vardecl() << " = " <<
+			(in1->IsBit() ? CastBit(in1) : in1->to_vardecl()) <<
+			" + " << (in2->IsBit() ? CastBit(in2) : in2->to_vardecl()) << ";\n"
+		<< out->to_vardeclq() << " = " <<
+			(in1->IsBit() ? CastQBit(in1) : in1->to_vardeclq()) <<
+			" & " <<
 			(in2->IsBit() ? CastQBit(in2) : in2->to_vardeclq())
-			+ ";");
+			+ ";\n";
 	}
+	BLOCK_END(block);
 }
 
 /*
 void CAVR5CodeGenerator::Generate(CSub* pSub) {
-	COMMENT_BLOCK(pSub);
+	BLOCK_BEGIN(pSub);
 	auto it = pSub->begin();
 	const auto in1 = static_cast<CInputSlot*>((*it++))->var.get()();
 	const auto in2 = static_cast<CInputSlot*>((*it++))->var.get()();
@@ -1036,12 +1033,12 @@ void CAVR5CodeGenerator::Generate(CSub* pSub) {
 		if ((t1 & Variable::VT_FLOAT) || (t2 & Variable::VT_FLOAT)) {
 			AddLibrary("avr_libm");
 		}
-		PasteCode(out->to_vardecl() + " = " + in1->to_vardecl() + " - " + in2->to_vardecl() + ";");
+		m_code << out->to_vardecl() + " = " + in1->to_vardecl() + " - " + in2->to_vardecl() + ";");
 	}
 }
 
 void CAVR5CodeGenerator::Generate(CMul* pMul) {
-	COMMENT_BLOCK(pMul);
+	BLOCK_BEGIN(pMul);
 	auto it = pMul->begin();
 	const auto in1 = static_cast<CInputSlot*>((*it++))->var.get()();
 	const auto in2 = static_cast<CInputSlot*>((*it++))->var.get()();
@@ -1057,11 +1054,11 @@ void CAVR5CodeGenerator::Generate(CMul* pMul) {
 		if ((t1 & Variable::VT_FLOAT) || (t2 & Variable::VT_FLOAT)) {
 			AddLibrary("avr_libm");
 		}
-		PasteCode(out->to_vardecl() + " = " + in1->to_vardecl() + " * " + in2->to_vardecl() + ";");
+		m_code << out->to_vardecl() + " = " + in1->to_vardecl() + " * " + in2->to_vardecl() + ";");
 	}
 }
 void CAVR5CodeGenerator::Generate(CDiv* pDiv) {
-	COMMENT_BLOCK(pDiv);
+	BLOCK_BEGIN(pDiv);
 	auto it = pDiv->begin();
 	const auto in1 = static_cast<CInputSlot*>((*it++))->var.get()();
 	const auto in2 = static_cast<CInputSlot*>((*it++))->var.get()();
@@ -1078,11 +1075,11 @@ void CAVR5CodeGenerator::Generate(CDiv* pDiv) {
 		if ((t1 & Variable::VT_FLOAT) || (t2 & Variable::VT_FLOAT)) {
 			AddLibrary("avr_libm");
 		}
-		PasteCode(out->to_vardecl() + " = " + in1->to_vardecl() + " / " + in2->to_vardecl() + ";");
+		m_code << out->to_vardecl() + " = " + in1->to_vardecl() + " / " + in2->to_vardecl() + ";");
 	}
 }
 void CAVR5CodeGenerator::Generate(CPID* pid) {
-	COMMENT_BLOCK(pid);
+	BLOCK_BEGIN(pid);
 
 	auto begin_i = pid->slots.begin_in();
 	auto begin_o = pid->slots.begin_out();
@@ -1099,13 +1096,13 @@ void CAVR5CodeGenerator::Generate(CPID* pid) {
 		gcc_->AddVariable(out);
 		AddLibrary("avr_libm");
 		AddLibrary("pid");
-		PasteCode("pid_run((void*)0x" + to_hex(pid->variables_[0]->GetAddr()) + "," + in1->to_vardecl() + "," + in2->to_vardecl() + ");");
+		m_code << "pid_run((void*)0x" + to_hex(pid->variables_[0]->GetAddr()) + "," + in1->to_vardecl() + "," + in2->to_vardecl() + ");");
 	}
 }
 */
 
 void CAVR5CodeGenerator::Generate(CComparator* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	auto& slots = block->top->slots;
 	const auto in1 = i_at(0).GetInputVariable();
@@ -1124,21 +1121,19 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 	if (in1->GetType() & npsys::variable::FLOAT_VALUE || 
 		in2->GetType() & npsys::variable::FLOAT_VALUE) AddLibrary("avr_libm");
 
-	PasteCode("{");
-
-	PasteCode("uint8_t q_val;");
+	m_code << "uint8_t q_val;\n";
 	
 	if (in1->IsQuality() || in2->IsQuality()) {
 		if (in1->IsQuality() && in2->IsQuality()) {
-			PasteCode("if (" + in1->to_vardeclq() + " == 0x01 && " + in2->to_vardeclq() + " == 0x01) q_val = 0x01;");
+			m_code << "if (" << in1->to_vardeclq() << " == 0x01 && " << in2->to_vardeclq() << " == 0x01) q_val = 0x01;\n";
 		} else if (in1->IsQuality()) {
-			PasteCode("if (" + in1->to_vardeclq() + " == 0x01) q_val = 0x01;");
+			m_code << "if (" << in1->to_vardeclq() << " == 0x01) q_val = 0x01;\n";
 		} else {
-			PasteCode("if (" + in2->to_vardeclq() + " == 0x01) q_val = 0x01;");
+			m_code << "if (" << in2->to_vardeclq() << " == 0x01) q_val = 0x01;\n";
 		}
-		PasteCode("else q_val = 0x00;");
+		m_code << "else q_val = 0x00;\n";
 	} else {
-		PasteCode("q_val = 0x01");
+		m_code << "q_val = 0x01\n";
 	}
 	
 
@@ -1149,11 +1144,11 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 		gcc_->AddVariable(out);
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 		bl.AddOperand(OP_TYPE::GCC_OP_R, "$q_val", nullptr);
-		PasteCode("if (" + in1->to_vardecl() + " == " + in2->to_vardecl() + ") {");
-		PasteCode("__asm__ __volatile__ (\"set\");");
-		PasteCode("} else {");
-		PasteCode("\t__asm__ __volatile__ (\"clt\");");
-		PasteCode("}");
+		m_code << "if (" << in1->to_vardecl() << " == " << in2->to_vardecl() << ") {\n";
+		m_code << "__asm__ __volatile__ (\"set\");\n";
+		m_code << "} else {\n";
+		m_code << "\t__asm__ __volatile__ (\"clt\");\n";
+		m_code << "}\n";
 		bl.AddCmd("bld $out, ", out->GetBit());
 		bl.AddCmd("bst $q_val, 0");
 		bl.AddCmd("bld $out, ", out->GetQBit());
@@ -1168,11 +1163,11 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 		gcc_->AddVariable(out);
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 		bl.AddOperand(OP_TYPE::GCC_OP_R, "$q_val", nullptr);
-		PasteCode("if (" + in1->to_vardecl() + " != " + in2->to_vardecl() + ") {");
-		PasteCode("__asm__ __volatile__ (\"set\");");
-		PasteCode("} else {");
-		PasteCode("\t__asm__ __volatile__ (\"clt\");");
-		PasteCode("}");
+		m_code << "if (" << in1->to_vardecl() << " != " << in2->to_vardecl() << ") {\n";
+		m_code << "__asm__ __volatile__ (\"set\");\n";
+		m_code << "} else {\n";
+		m_code << "\t__asm__ __volatile__ (\"clt\");\n";
+		m_code << "}\n";
 		bl.AddCmd("bld $out, ", out->GetBit());
 		bl.AddCmd("bst $q_val, 0");
 		bl.AddCmd("bld $out, ", out->GetQBit());
@@ -1187,11 +1182,11 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 		gcc_->AddVariable(out);
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 		bl.AddOperand(OP_TYPE::GCC_OP_R, "$q_val", nullptr);
-		PasteCode("if (" + in1->to_vardecl() + " > " + in2->to_vardecl() + ") {");
-		PasteCode("__asm__ __volatile__ (\"set\");");
-		PasteCode("} else {");
-		PasteCode("\t__asm__ __volatile__ (\"clt\");");
-		PasteCode("}");
+		m_code << "if (" << in1->to_vardecl() << " > " << in2->to_vardecl() << ") {\n";
+		m_code << "__asm__ __volatile__ (\"set\");\n";
+		m_code << "} else {\n";
+		m_code << "\t__asm__ __volatile__ (\"clt\");\n";
+		m_code << "}\n";
 		bl.AddCmd("bld $out, ", out->GetBit());
 		bl.AddCmd("bst $q_val, 0");
 		bl.AddCmd("bld $out, ", out->GetQBit());
@@ -1206,11 +1201,11 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 		gcc_->AddVariable(out);
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 		bl.AddOperand(OP_TYPE::GCC_OP_R, "$q_val", nullptr);
-		PasteCode("if (" + in1->to_vardecl() + " >= " + in2->to_vardecl() + ") {");
-		PasteCode("__asm__ __volatile__ (\"set\");");
-		PasteCode("} else {");
-		PasteCode("\t__asm__ __volatile__ (\"clt\");");
-		PasteCode("}");
+		m_code << "if (" << in1->to_vardecl() << " >= " << in2->to_vardecl() << ") {\n";
+		m_code << "__asm__ __volatile__ (\"set\");\n";
+		m_code << "} else {\n";
+		m_code << "\t__asm__ __volatile__ (\"clt\");\n";
+		m_code << "}\n";
 		bl.AddCmd("bld $out, ", out->GetBit());
 		bl.AddCmd("bst $q_val, 0");
 		bl.AddCmd("bld $out, ", out->GetQBit());
@@ -1225,11 +1220,11 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 		gcc_->AddVariable(out);
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 		bl.AddOperand(OP_TYPE::GCC_OP_R, "$q_val", nullptr);
-		PasteCode("if (" + in1->to_vardecl() + " < " + in2->to_vardecl() + ") {");
-		PasteCode("__asm__ __volatile__ (\"set\");");
-		PasteCode("} else {");
-		PasteCode("\t__asm__ __volatile__ (\"clt\");");
-		PasteCode("}");
+		m_code << "if (" << in1->to_vardecl() << " < " << in2->to_vardecl() << ") {\n";
+		m_code << "__asm__ __volatile__ (\"set\");\n";
+		m_code << "} else {\n";
+		m_code << "\t__asm__ __volatile__ (\"clt\");\n";
+		m_code << "}\n";
 		bl.AddCmd("bld $out, ", out->GetBit());
 		bl.AddCmd("bst $q_val, 0");
 		bl.AddCmd("bld $out, ", out->GetQBit());
@@ -1244,21 +1239,22 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 		gcc_->AddVariable(out);
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 		bl.AddOperand(OP_TYPE::GCC_OP_R, "$q_val", nullptr);
-		PasteCode("if (" + in1->to_vardecl() + " <= " + in2->to_vardecl() + ") {");
-		PasteCode("__asm__ __volatile__ (\"set\");");
-		PasteCode("} else {");
-		PasteCode("\t__asm__ __volatile__ (\"clt\");");
-		PasteCode("}");
+		m_code << "if (" << in1->to_vardecl() << " <= " << in2->to_vardecl() << ") {\n";
+		m_code << "__asm__ __volatile__ (\"set\");\n";
+		m_code << "} else {\n";
+		m_code << "\t__asm__ __volatile__ (\"clt\");\n";
+		m_code << "}\n";
 		bl.AddCmd("bld $out, ", out->GetBit());
 		bl.AddCmd("bst $q_val, 0");
 		bl.AddCmd("bld $out, ", out->GetQBit());
 
 		m_code << bl;
 	}
-	PasteCode("}");
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CBlockFunction* block) {
+	BLOCK_BEGIN(block);
 	auto& slots = block->top->slots;
 	const auto in = i_at(0).GetInputVariable();
 	const auto out = o_at(0).GetVariable();
@@ -1273,15 +1269,24 @@ void CAVR5CodeGenerator::Generate(CBlockFunction* block) {
 
 	AddLibrary("avr_libm");
 
-	PasteCode("{");
 	static const auto pattern = std::regex("IN");
   auto exp = std::regex_replace(block->equation_, pattern, in_var);
-	PasteCode(out->to_vardecl() + " = " + exp + ";");
-	PasteCode("}");
+	m_code << out->to_vardecl() << " = " << exp << ";\n";
+	
+	BLOCK_END(block);
 }
 
+
 void CAVR5CodeGenerator::Generate(CAlarmHigh* block) {
-	COMMENT_BLOCK(block);
+	GenerateAlarmBlock(block, true);
+}
+
+void CAVR5CodeGenerator::Generate(CAlarmLow* block) {
+	GenerateAlarmBlock(block, false);
+}
+
+void CAVR5CodeGenerator::GenerateAlarmBlock(CBlock* block, bool high) {
+	BLOCK_BEGIN(block);
 
 	auto& slots = block->top->slots;
 	const auto value = i_at(0).GetInputVariable();
@@ -1289,6 +1294,11 @@ void CAVR5CodeGenerator::Generate(CAlarmHigh* block) {
 	const auto out = o_at(0).GetVariable();
 
 	if (!value || !sp) return;
+
+	if (value->GetType() & npsys::variable::BIT_VALUE || sp->GetType() & npsys::variable::BIT_VALUE) {
+		std::cerr << block->GetName() << ": discretre inputs are not supported\n";
+		return;
+	}
 
 	const auto& hyst = block->GetPropertyByKey<float>("hyst");
 
@@ -1304,56 +1314,57 @@ void CAVR5CodeGenerator::Generate(CAlarmHigh* block) {
 	gcc_->AddVariable(sp);
 	gcc_->AddVariable(out);
 
-	AsmBlock bl_qcheck(block_id_str);
-	bl_qcheck.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
+	if (value->IsQuality() || sp->IsQuality()) {
+		m_code << "unsigned char	quality = 0x01;\n";
+	}
 	
+	m_code << "unsigned char value = 0xFF;\n";
+
 	if (value->IsQuality()) {
-		bl_qcheck.AddCmd("lds __tmp_reg__, ", value->GetQAddr());
-		bl_qcheck.AddCmd("bst __tmp_reg__, 0");
-		bl_qcheck.AddCmd("bld $out, ", out->GetQBit());
-		bl_qcheck.AddCmd("brtc ", block_id_str, "_end");
+		m_code << "if (" << value->to_vardeclq() << " == 0) {\n"
+			"\tquality = 0; }\n";
 	}
 
-	if (sp->IsQuality()) {
-		bl_qcheck.AddCmd("lds __tmp_reg__, ", sp->GetQAddr());
-		bl_qcheck.AddCmd("bst __tmp_reg__, 0");
-		bl_qcheck.AddCmd("bld $out, ", out->GetQBit());
-		bl_qcheck.AddCmd("brtc ", block_id_str, "_end");
+	if (value->IsQuality()) {
+		m_code << "if (" << sp->to_vardeclq() << " == 0) {\n"
+			"\tquality = 0; }\n";
 	}
 
-	m_code << bl_qcheck;
+	if (high) {
+		m_code <<
+		"if (" << value->to_vardecl() << " >= " << sp->to_vardecl() << ") {\n"
+			"\tvalue = 0x01; }\n"
+		"else if (" << value->to_vardecl() << " < " << sp->to_vardecl() << " - " << val << ") {\n"
+			"\tvalue = 0x00; }\n";
+	} else {
+		m_code <<
+		"if (" << value->to_vardecl() << " < " << sp->to_vardecl() << ") {\n"
+			"\tvalue = 0x01; }\n"
+		"else if (" << value->to_vardecl() << " - " << val << " > " << sp->to_vardecl() << ") {\n"
+			"\tvalue = 0x00; }\n";
+	}
 
-	AsmBlock bl_1(block_id_str), bl_2(block_id_str), bl_3(block_id_str);
-	bl_1.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
-	bl_2.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
-	bl_3.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
+	AsmBlock bl(block_id_str);
 
-	PasteCode("if (" + value->to_vardecl() + " >= " + sp->to_vardecl() + ") {");
-	bl_1.AddCmd("set");
-	bl_1.AddCmd("bld $out, ", out->GetBit());
+	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
+	bl.AddOperand(OP_TYPE::GCC_OP_R, "$value", nullptr);
+	bl.AddOperand(OP_TYPE::GCC_OP_R, "$quality", nullptr);
+	
+	bl.AddCmd("bst $quality, 0");
+	bl.AddCmd("bld $out, ", out->GetQBit());
 
-	m_code << bl_1;
-	PasteCode("} else {");
+	bl.AddCmd("cpi $value, 0xFF");
+	bl.AddCmd("breq .+4");
+	bl.AddCmd("bst $value, 0");
+	bl.AddCmd("bld $out, ", out->GetBit());
 
-	bl_2.AddCmd("bst $out, ", out->GetBit());
-	bl_2.AddCmd("brtc ", block_id_str, "_end");
+	m_code << bl;
 
-	m_code << bl_2;
-
-	PasteCode("if (" + value->to_vardecl() + " < " + sp->to_vardecl() +
-		" - " + val + ") {");
-
-	bl_3.AddCmd("clt");
-	bl_3.AddCmd("bld $out, ", out->GetBit());
-
-	m_code << bl_3;
-
-	PasteCode("}\n}");
-	PasteCode("__asm__ __volatile__ ( \"" + block_id_str + "_end:\" );");
+	BLOCK_END(block);
 }
 
 void CAVR5CodeGenerator::Generate(CBlockSchedule* block) {
-	COMMENT_BLOCK(block);
+	BLOCK_BEGIN(block);
 
 	auto tm_size = block->variables_.size() / 2;
 
@@ -1377,10 +1388,10 @@ void CAVR5CodeGenerator::Generate(CBlockSchedule* block) {
 	bl.AddOperand(OP_TYPE::GCC_OP_R, "$hour", hour);
 	bl.AddOperand(OP_TYPE::GCC_OP_R, "$min", min);
 	bl.AddOperand(OP_TYPE::GCC_OP_R, "$sec", sec);
-	bl.AddClobber("r18"); // counter
-	bl.AddClobber("r19"); // temp
-	bl.AddClobber("r30"); // z
-	bl.AddClobber("r31"); // z
+	bl.AddClobber(18); // counter
+	bl.AddClobber(19); // temp
+	bl.AddClobber(30); // zl
+	bl.AddClobber(31); // zh
 	
 	bl.AddCmd("clt");
 	bl.AddCmd("tst $hour_q");
@@ -1442,77 +1453,10 @@ void CAVR5CodeGenerator::Generate(CBlockSchedule* block) {
 	bl.AddLabel("_block_exit");
 
 	m_code << bl;
+
+	BLOCK_END(block);
 }
 
-
-void CAVR5CodeGenerator::Generate(CAlarmLow* block) {
-	COMMENT_BLOCK(block);
-
-	auto& slots = block->top->slots;
-	const auto value = i_at(0).GetInputVariable();
-	const auto sp = i_at(1).GetInputVariable();
-	const auto out = o_at(0).GetVariable();
-
-	if (!value || !sp) return;
-
-	const auto hyst = block->GetPropertyByKey<float>("hyst");
-
-	std::string val;
-	if (value->GetType() & npsys::variable::FLOAT_VALUE || sp->GetType() & npsys::variable::FLOAT_VALUE) {
-		AddLibrary("avr_libm");
-		val = std::to_string(hyst->GetValue());
-	} else {
-		val = std::to_string((int)hyst->GetValue());
-	}
-
-	gcc_->AddVariable(value);
-	gcc_->AddVariable(sp);
-	gcc_->AddVariable(out);
-
-	AsmBlock bl_qcheck(block_id_str);
-	bl_qcheck.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
-	if (value->IsQuality()) {
-		bl_qcheck.AddCmd("lds __tmp_reg__, ", (value->GetAddr() + value->GetSize()));
-		bl_qcheck.AddCmd("bst __tmp_reg__, 0");
-		bl_qcheck.AddCmd("bld $out, ", out->GetQBit());
-		bl_qcheck.AddCmd("brtc ", block_id_str, "_end");
-	}
-	if (sp->IsQuality()) {
-		bl_qcheck.AddCmd("lds __tmp_reg__, ", (sp->GetAddr() + sp->GetSize()));
-		bl_qcheck.AddCmd("bst __tmp_reg__, 0");
-		bl_qcheck.AddCmd("bld $out, ", out->GetQBit());
-		bl_qcheck.AddCmd("brtc ", block_id_str, "_end");
-	}
-
-	m_code << bl_qcheck;
-
-	AsmBlock bl_1(block_id_str), bl_2(block_id_str), bl_3(block_id_str);
-	bl_1.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
-	bl_2.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
-	bl_3.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
-
-	PasteCode("if (" + value->to_vardecl() + " < " + sp->to_vardecl() + ") {");
-	bl_1.AddCmd("set");
-	bl_1.AddCmd("bld $out, ", out->GetBit());
-
-	m_code << bl_1;
-	PasteCode("} else {");
-
-	bl_2.AddCmd("bst $out, ", out->GetBit());
-	bl_2.AddCmd("brtc ", block_id_str, "_end");
-
-	m_code << bl_2;
-
-	PasteCode("if (" + value->to_vardecl() + " - " + val + " > " + sp->to_vardecl() + ") {");
-
-	bl_3.AddCmd("clt");
-	bl_3.AddCmd("bld $out, ", out->GetBit());
-
-	m_code << bl_3;
-
-	PasteCode("}\n}");
-	PasteCode("__asm__ __volatile__ ( \"" + block_id_str + "_end:\" );");
-}
 
 void CAVR5CodeGenerator::Generate(CSub*) {}
 void CAVR5CodeGenerator::Generate(CMul*) {}

@@ -5,6 +5,8 @@
 
 #include "dockable.h"
 
+#define WM_SYNCFROMMAINTHREAD WM_USER + 235
+
 class COutputEdit 
 	: public CWindowImpl<COutputEdit, CRichEditCtrlT<CDockableWindowT<COutputEdit, DockIndex::Output>>>
 	, public CRichEditCommands<COutputEdit>
@@ -19,6 +21,7 @@ protected:
 		std::ios_base::seekdir seek, 
 		std::ios_base::openmode mode);
 	virtual int sync();
+	int sync_impl();
 public:
 	explicit COutputEdit(size_t initial_size = 1 * 1024 * 1024) noexcept;
 	~COutputEdit();
@@ -40,6 +43,7 @@ public:
 	
 	BEGIN_MSG_MAP(COutputEdit)
 		MESSAGE_HANDLER(WM_CREATE, OnCreate)
+		MESSAGE_HANDLER(WM_SYNCFROMMAINTHREAD, OnSyncFromMainThread)
 		CHAIN_MSG_MAP_ALT(CRichEditCommands<COutputEdit>, 1)
 	END_MSG_MAP()
 	
@@ -50,4 +54,5 @@ protected:
 	void ToEnd();
 
 	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnSyncFromMainThread(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };

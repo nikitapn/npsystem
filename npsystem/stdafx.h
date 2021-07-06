@@ -132,6 +132,7 @@ namespace mp11 = boost::mp11;
 namespace wrl = Microsoft::WRL;
 
 extern HWND g_hMainWnd;
+extern std::thread::id g_main_thread_id;
 
 #include <nplib/utils/utf8.h>
 using namespace nplib::utf8;

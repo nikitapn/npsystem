@@ -1235,9 +1235,11 @@ CAVR5DynamicLinker::UnloadAlgorithm(npsys::algorithm_n& alg) {
 		}
 
 		alg->SetStatus(npsys::CAlgorithm::status_assigned);
-		
 		alg.store();
+
+		static_cast<npsys::CAVRAssignedAlgorithm*>(assigned.get())->SetUnloaded();
 		assigned.store();
+		
 		avr.store();
 
 		second_batch.exec();

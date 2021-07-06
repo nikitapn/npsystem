@@ -32,36 +32,45 @@ public:
 private:
 	uint64_t GetCpuFrequency(uint64_t seconds = 1);
 	template<typename Func>
-	void Pause(Func fn) {
-		if (running_ == false) {
-			fn();
-			return;
-		}
-		paused_ = 0;
-		pause_ = true;
+	void pause_execution(Func&& fn) {
+		if (running_.load(std::memory_order_relaxed) == false) { fn(); return; }
+		
+		cnt_paused_ = 0;
+		paused_.store(true, std::memory_order_release);
+		
 		{
 			std::unique_lock lk(mut_);
-			cv_.wait(lk, [this]() { return paused_ == 2; });
-			fn();
+			cv_.wait(lk, [this]() { return cnt_paused_ == 2; }); // both threads stopped
 		}
-		{
-			std::lock_guard lk(mut2_);
-			pause_ = false;
-		}
-		cv2_.notify_all();
+		
+		fn();
+
+		paused_.store(false, std::memory_order_release);
 	}
+
+	void wait_if_paused() {
+		if (paused_.load(std::memory_order_acquire)) {
+			{
+				std::lock_guard lk(mut_);
+				cnt_paused_++;
+			}
+			cv_.notify_one();
+			while (paused_.load(std::memory_order_relaxed));
+		}
+	}
+
 	void start() noexcept;
 	void stop() noexcept;
 
-	int paused_;
-	std::atomic_bool pause_;
+	std::atomic_bool running_;
+	std::atomic_bool paused_;
+
+	int cnt_paused_;
 	std::mutex mut_;
 	std::condition_variable cv_;
-	std::mutex mut2_;
-	std::condition_variable cv2_;
 	size_t controllers_count_;
 	std::array<IController*, 10> controllers_;
-	std::atomic_bool running_;
+	
 	std::thread medium_thread_;
 	std::thread core_thread_;
 	int MediumProc() noexcept;
