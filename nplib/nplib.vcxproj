@@ -70,12 +70,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\..\mycommon\include;include\;$(BOOST_DIR);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <IncludePath>$(OPENSSL_DIR)\include;..\..\mycommon\include;include\;$(BOOST_DIR);$(VC_IncludePath);$(VSC)\leveldb\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(OPENSSL_DIR)\lib;$(BOOST_DIR)\stage_x64\lib;C:\opt\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <TargetName>nplibd</TargetName>
+    <OutDir>C:\opt\x64\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\..\mycommon\include;include\;$(BOOST_DIR);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <IncludePath>$(OPENSSL_DIR)\include;..\..\mycommon\include;include\;$(BOOST_DIR);$(VC_IncludePath);$(VSC)\leveldb\include;$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(OPENSSL_DIR)\lib;$(BOOST_DIR)\stage_x64\lib;C:\opt\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <OutDir>C:\opt\x64\</OutDir>
+    <TargetName>nplib</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -85,9 +89,13 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>include\;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NPLIB_EXPORTS;USE_ATL_STRING;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;WINVER=_WIN32_WINNT;NPLIB_EXPORTS;USE_ATL_STRING;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>libssl.lib;libcrypto.lib;leveldbd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -121,15 +129,19 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalIncludeDirectories>include\;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NPLIB_EXPORTS;USE_ATL_STRING;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0A00;WINVER=_WIN32_WINNT;NPLIB_EXPORTS;USE_ATL_STRING;_WINDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libssl.lib;libcrypto.lib;leveldb.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\auth_system.cpp" />
+    <ClCompile Include="src\beast.cpp" />
     <ClCompile Include="src\win_service.cpp" />
     <None Include="src\service_error.mc">
       <FileType>Document</FileType>
@@ -162,6 +174,10 @@
     <ClInclude Include="include\nplib\utils\value_parser.h" />
     <ClInclude Include="include\nplib\utils\variant.h" />
     <ClInclude Include="include\nplib\utils\win_service.h" />
+    <ClInclude Include="include\nplib\webserver\auth_system.hpp" />
+    <ClInclude Include="include\nplib\webserver\network.hpp" />
+    <ClInclude Include="include\nplib\webserver\net_buffer_allocator.hpp" />
+    <ClInclude Include="include\nplib\webserver\ssl\server_certificate.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -122,12 +122,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>..\nprpc\include;$(BOOST_DIR);$(IncludePath)</IncludePath>
-    <LibraryPath>..\x64\$(Configuration);$(BOOST_DIR)\stage_x64\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\opt\x64;..\x64\$(Configuration);$(BOOST_DIR)\stage_x64\lib;$(LibraryPath)</LibraryPath>
     <IgnoreImportLibrary>false</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>..\nprpc\include;$(BOOST_DIR);$(IncludePath)</IncludePath>
-    <LibraryPath>..\x64\$(Configuration);$(BOOST_DIR)\stage_x64\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\opt\x64;..\x64\$(Configuration);$(BOOST_DIR)\stage_x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -156,7 +156,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>nplib.lib;npdbstatic.lib;npdbclient.lib;npc.lib;npsys.lib;sim.lib;avr_info.lib;nprpcd.lib;nprpcstd.lib;shlwapi.lib;Shell32.lib;Ole32.lib;ws2_32.lib;mswsock.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>npdbstatic.lib;npdbclient.lib;npc.lib;npsys.lib;sim.lib;avr_info.lib;nplibd.lib;nprpcd.lib;nprpcstd.lib;shlwapi.lib;Shell32.lib;Ole32.lib;ws2_32.lib;mswsock.lib;advapi32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -190,7 +190,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>nplib.lib;npdbstatic.lib;npdbclient.lib;npc.lib;npsys.lib;sim.lib;avr_info.lib;nprpc.lib;nprpcst.lib;shlwapi.lib;Shell32.lib;Ole32.lib;ws2_32.lib;mswsock.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>npdbstatic.lib;npdbclient.lib;npc.lib;npsys.lib;sim.lib;avr_info.lib;nplib.lib;nprpc.lib;nprpcst.lib;shlwapi.lib;Shell32.lib;Ole32.lib;ws2_32.lib;mswsock.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

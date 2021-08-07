@@ -5,9 +5,9 @@ build(){
 	(cd $1 && make install)
 }
 
-build nprpc
-build nplib
-build sim
-build npdbclient
-build npdbserver
-build npserver
+#build nprpc
+#build nplib
+#build sim
+#build npdbclient
+#build npdbserver
+#build npserver

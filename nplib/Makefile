@@ -11,17 +11,17 @@ OBJS = $(addprefix obj/,$(addsuffix .o, $(basename $(notdir $(SRCS)))))
 INCLUDE_DIRS := -I./include
 
 $(TARGET): $(OBJS) 
-	$(CXX) $(OBJS) -shared -o $(TARGET)
+	$(CXX) $(OBJS) -shared -lssl -lcrypto -lboost_serialization -lboost_system -lleveldb -o $(TARGET)
 
 obj/%.o: src/%.cpp | obj
 	$(CXX) $(CXXFLAGS) $(INCLUDE_DIRS) $(DEFINES) -c $^ -o $@
-	 
+
 obj: 
 	mkdir -p obj
-	
+
 install:
 	cp $(TARGET) /usr/local/bin
-	
+
 clean:
 	rm -rf ./obj
 	rm -f $(TARGET)

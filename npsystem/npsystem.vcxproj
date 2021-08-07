@@ -73,7 +73,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\nprpc\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\mywtl\lib;..\x64\Debug;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <LibraryPath>C:\opt\x64;..\..\mywtl\lib;..\x64\Debug;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\nprpc\include;..\npsys\include;..\common\;..\..\mycommon\include;$(BOOST_DIR);$(WTL_DIR)\Include;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>..\..\mywtl\lib;..\x64\Release;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <LibraryPath>C:\opt\x64;..\..\mywtl\lib;..\x64\Release;$(BOOST_DIR)\stage_x64\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <CodeAnalysisRuleSet>NativeMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -138,7 +138,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <DelayLoadDLLs>propsys.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <AdditionalDependencies>nprpcd.lib;nprpcstd.lib;nplib.lib;npdbstatic.lib;npc.lib;npsys.lib;npdbclient.lib;sim.lib;avr_info.lib;mywtl_x64_Debug.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>npdbstatic.lib;npc.lib;npsys.lib;npdbclient.lib;sim.lib;avr_info.lib;mywtl_x64_Debug.lib;nprpcd.lib;nprpcstd.lib;nplibd.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -207,7 +207,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <DelayLoadDLLs>propsys.dll;dwmapi.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
-      <AdditionalDependencies>nprpc.lib;nprpcst.lib;nplib.lib;npdbstatic.lib;npc.lib;npsys.lib;npdbclient.lib;sim.lib;avr_info.lib;mywtl_x64_Release.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>npdbstatic.lib;npc.lib;npsys.lib;npdbclient.lib;sim.lib;avr_info.lib;nplib.lib;nprpcst.lib;nprpc.lib;mywtl_x64_Release.lib;ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <Culture>0x0409</Culture>

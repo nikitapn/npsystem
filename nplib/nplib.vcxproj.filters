@@ -4,6 +4,8 @@
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\hexparser.cpp" />
     <ClCompile Include="src\win_service.cpp" />
+    <ClCompile Include="src\auth_system.cpp" />
+    <ClCompile Include="src\beast.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\nplib\utils\ext.h" />
@@ -27,6 +29,10 @@
     <ClInclude Include="include\nplib\utils\thread_pool.hpp" />
     <ClInclude Include="include\nplib\utils\types.h" />
     <ClInclude Include="include\nplib\utils\binary_search.hpp" />
+    <ClInclude Include="include\nplib\webserver\auth_system.hpp" />
+    <ClInclude Include="include\nplib\webserver\net_buffer_allocator.hpp" />
+    <ClInclude Include="include\nplib\webserver\network.hpp" />
+    <ClInclude Include="include\nplib\webserver\ssl\server_certificate.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

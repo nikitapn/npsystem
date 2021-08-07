@@ -16,8 +16,8 @@ public:
 
   DatabaseException() : ::nprpc::Exception("DatabaseException") {} 
   DatabaseException(uint32_t _code)
-  : ::nprpc::Exception("DatabaseException")
-  , code(_code)
+    : ::nprpc::Exception("DatabaseException")
+    , code(_code)
   {
   }
 };
@@ -104,6 +104,7 @@ public:
   void data(const char* str) { new (&base().data) ::flat::String(buffer_, str); }
   void data(const std::string& str) { new (&base().data) ::flat::String(buffer_, str); }
   auto data() noexcept { return (::flat::Span<char>)base().data; }
+  auto data_vd() noexcept {     return ::flat::String_Direct1(buffer_, offset_ + offsetof(BatchOperation, data));  }
 };
 } // namespace flat
 
@@ -150,5 +151,17 @@ public:
 
 } // namespace npd
 
+namespace db::helper {
+template<::nprpc::IterableCollection T>
+void assign_get_data(/*out*/::flat::Vector_Direct1<uint8_t>& dest, const T & src) {
+  dest.length(src.size());
+  memcpy(dest().data(), src.data(), src.size() * 1);
+}
+template<::nprpc::IterableCollection T>
+void assign_get_n_data(/*out*/::flat::Vector_Direct1<uint8_t>& dest, const T & src) {
+  dest.length(src.size());
+  memcpy(dest().data(), src.data(), src.size() * 1);
+}
+} // namespace db::helper
 
 #endif

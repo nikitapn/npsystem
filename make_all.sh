@@ -16,9 +16,9 @@ build(){
 	fi
 }
 
-build nprpc
-build npc
 build nplib
+build nprpc 
+build npc
 build npdbclient
 build npdbstatic
 build npdbserver

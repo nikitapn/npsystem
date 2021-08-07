@@ -114,6 +114,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nprpcst", "nprpc\nprpcst\nprpcst.vcxproj", "{2DDCBC5E-7CF0-4B98-8528-2B35CA78F764}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nprpc", "nprpc\nprpc.vcxproj", "{E7753197-A455-458F-8553-59165F12A86A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{504680FD-B84D-4346-95FD-48FF08953BE8} = {504680FD-B84D-4346-95FD-48FF08953BE8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "npcompiler", "npcompiler\npcompiler.vcxproj", "{CA36A776-4A24-4247-A391-D6C72A761AE2}"
 EndProject
@@ -372,7 +375,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {A5F3F734-376E-4D3E-A48F-E4E88936082F}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

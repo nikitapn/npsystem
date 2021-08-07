@@ -27,8 +27,8 @@ public:
 
   NPNetCommunicationError() : ::nprpc::Exception("NPNetCommunicationError") {} 
   NPNetCommunicationError(int32_t _code)
-  : ::nprpc::Exception("NPNetCommunicationError")
-  , code(_code)
+    : ::nprpc::Exception("NPNetCommunicationError")
+    , code(_code)
   {
   }
 };
@@ -323,5 +323,22 @@ public:
 
 } // namespace nps
 
+namespace server::helper {
+template<::nprpc::IterableCollection T>
+void assign_Advise_h(/*out*/::flat::Vector_Direct1<uint64_t>& dest, const T & src) {
+  dest.length(src.size());
+  memcpy(dest().data(), src.data(), src.size() * 8);
+}
+template<::nprpc::IterableCollection T>
+void assign_GetNetworkStatus_network_status(/*out*/::flat::Vector_Direct1<uint8_t>& dest, const T & src) {
+  dest.length(src.size());
+  memcpy(dest().data(), src.data(), src.size() * 1);
+}
+template<::nprpc::IterableCollection T>
+void assign_AVR_V_GetFlash_data(/*out*/::flat::Vector_Direct1<uint16_t>& dest, const T & src) {
+  dest.length(src.size());
+  memcpy(dest().data(), src.data(), src.size() * 2);
+}
+} // namespace server::helper
 
 #endif

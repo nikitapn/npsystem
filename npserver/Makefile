@@ -29,16 +29,15 @@ LIBS = \
 	-lnplib \
 	-lnpsys \
 	-lavr_info \
-	-lnprpc
+	-lnprpc \
+	-lnpc
 
 SLIBS = \
 	/usr/lib/libboost_system.a \
 	/usr/lib/libboost_thread.a \
 	/usr/lib/libboost_serialization.a \
 	/usr/lib/libboost_log.a \
-	../build/lib/nprpcst.o \
-	../npc/obj/server.o \
-	../npc/obj/db.o 
+	../build/lib/nprpcst.o
 
 $(TARGET): $(OBJS) 
 	$(CXX) $(OBJS) $(LIB_DIR) $(LIBS) $(SLIBS) -o $(TARGET)

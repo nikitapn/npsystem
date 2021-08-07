@@ -1,23 +1,21 @@
 # npc
-TARGET = ../build/lib/libnpc.a
+TARGET = ../build/lib/libnpc.so
 CXX = g++
 CXXFLAGS = -std=c++20 -Wall -O2 -fPIC
 DEFS = -DNDEBUG
 INCLUDE = -I./include/npc -I../nprpc/include
-OBJDIR = obj
-dummy := $(shell mkdir -p $(OBJDIR))
 
-$(TARGET): $(OBJDIR)/db.o $(OBJDIR)/server.o
-	ar rcs $(TARGET) $^
+$(TARGET): obj/db.o obj/server.o
+	$(CXX) $^ -shared -o $@
 
-$(OBJDIR)/db.o: src/db.cpp include/npc/db.hpp include/npc/db_m.hpp 
+obj/db.o: src/db.cpp include/npc/db.hpp include/npc/db_m.hpp | obj
 	$(CXX) $(CXXFLAGS) $(DEFS) $(INCLUDE) -c src/db.cpp -o $@
 	
-$(OBJDIR)/server.o: src/db.cpp include/npc/server.hpp include/npc/server_m.hpp 
-	$(CXX) $(CXXFLAGS) $(DEFS) $(INCLUDE) -c src/db.cpp -o $@
+obj/server.o: src/server.cpp include/npc/server.hpp include/npc/server_m.hpp | obj
+	$(CXX) $(CXXFLAGS) $(DEFS) $(INCLUDE) -c src/server.cpp -o $@
 
-$(OBJDIR):
-	mkdir $(OBJDIR)
+obj:
+	mkdir -p obj
 
 clean:
 	rm -f $(TARGET)
