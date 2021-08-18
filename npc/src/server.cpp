@@ -28,7 +28,6 @@ void nps::Pingable::Ping() {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -68,7 +67,6 @@ void nps::DataCallBack::OnDataChanged(/*in*/::flat::Span<const nps::server_value
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -82,7 +80,6 @@ void nps::IDataCallBack_Servant::dispatch(nprpc::Buffers& bufs, nprpc::EndPoint 
         IPingable_Servant::dispatch(bufs, remote_endpoint, true, ref_list);
         return;
       default:
-        assert(false);
         throw "unknown interface";
     }
   }
@@ -112,7 +109,7 @@ void nps::ItemManager::Activate(/*in*/const ObjectId& client) {
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 0;
   ::flat::server_M2_Direct _(buf,32);
-  memcpy(&_._1().ip4(), &client._data().ip4, 20);
+  memcpy(_._1().__data(), &client._data(), 24);
   _._1().class_id(client._data().class_id);
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -121,7 +118,6 @@ void nps::ItemManager::Activate(/*in*/const ObjectId& client) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -151,7 +147,6 @@ void nps::ItemManager::Advise(/*in*/::flat::Span<const nps::DataDef> a, /*out*/s
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::server_M4_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -185,7 +180,6 @@ void nps::ItemManager::UnAdvise(/*in*/::flat::Span<const var_handle> a) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -199,7 +193,6 @@ void nps::IItemManager_Servant::dispatch(nprpc::Buffers& bufs, nprpc::EndPoint r
         IPingable_Servant::dispatch(bufs, remote_endpoint, true, ref_list);
         return;
       default:
-        assert(false);
         throw "unknown interface";
     }
   }
@@ -269,7 +262,6 @@ void nps::Server::GetNetworkStatus(/*out*/std::vector<uint8_t>& network_status) 
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::server_M5_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -300,7 +292,6 @@ void nps::Server::CreateItemManager(/*out*/Object*& im) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::server_M2_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -333,7 +324,6 @@ void nps::Server::SendRawData(/*in*/::flat::Span<const uint8_t> data) {
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -365,7 +355,6 @@ void nps::Server::Write_1(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -398,7 +387,6 @@ void nps::Server::Write_q1(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -429,7 +417,6 @@ void nps::Server::Write_8(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -461,7 +448,6 @@ void nps::Server::Write_q8(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -492,7 +478,6 @@ void nps::Server::Write_16(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -524,7 +509,6 @@ void nps::Server::Write_q16(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*i
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -555,7 +539,6 @@ void nps::Server::Write_32(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -587,7 +570,6 @@ void nps::Server::Write_q32(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*i
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -619,7 +601,6 @@ void nps::Server::WriteBlock(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -649,7 +630,6 @@ void nps::Server::ReadByte(/*in*/uint8_t dev_addr, /*in*/uint16_t addr, /*out*/u
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::server_M15_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -683,7 +663,6 @@ void nps::Server::ReadBlock(/*in*/uint8_t dev_addr, /*in*/uint16_t addr, /*in*/u
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::server_M5_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -720,10 +699,9 @@ bool nps::Server::AVR_StopAlgorithm(/*in*/uint8_t dev_addr, /*in*/uint16_t alg_a
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
-  ::flat::server_M15_Direct out(buf, sizeof(::nprpc::impl::Header));
+  ::flat::server_M16_Direct out(buf, sizeof(::nprpc::impl::Header));
   bool __ret_value;
   __ret_value = out._1();
   return __ret_value;
@@ -754,7 +732,6 @@ void nps::Server::AVR_ReinitIO(/*in*/uint8_t dev_addr) {
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -786,7 +763,6 @@ void nps::Server::AVR_SendRemoteData(/*in*/uint8_t dev_addr, /*in*/uint16_t page
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -803,7 +779,7 @@ void nps::Server::AVR_SendPage(/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 17;
-  ::flat::server_M16_Direct _(buf,32);
+  ::flat::server_M17_Direct _(buf,32);
   _._1() = dev_addr;
   _._2() = page_num;
   _._3(data.size());
@@ -818,7 +794,6 @@ void nps::Server::AVR_SendPage(/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -848,7 +823,6 @@ void nps::Server::AVR_RemoveAlgorithm(/*in*/uint8_t dev_addr, /*in*/uint16_t alg
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -879,7 +853,6 @@ void nps::Server::AVR_ReplaceAlgorithm(/*in*/uint8_t dev_addr, /*in*/uint16_t ol
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -911,7 +884,6 @@ void nps::Server::AVR_WriteEeprom(/*in*/uint8_t dev_addr, /*in*/uint16_t mem_add
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -928,7 +900,7 @@ void nps::Server::AVR_WriteTwiTable(/*in*/uint8_t dev_addr, /*in*/uint8_t page_n
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 21;
-  ::flat::server_M16_Direct _(buf,32);
+  ::flat::server_M17_Direct _(buf,32);
   _._1() = dev_addr;
   _._2() = page_num;
   _._3(data.size());
@@ -943,7 +915,6 @@ void nps::Server::AVR_WriteTwiTable(/*in*/uint8_t dev_addr, /*in*/uint8_t page_n
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -960,7 +931,7 @@ void nps::Server::AVR_V_GetFlash(/*in*/const cbt1::oid_t& device_id, /*out*/std:
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 22;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = device_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -972,10 +943,9 @@ void nps::Server::AVR_V_GetFlash(/*in*/const cbt1::oid_t& device_id, /*out*/std:
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
-  ::flat::server_M18_Direct out(buf, sizeof(::nprpc::impl::Header));
+  ::flat::server_M19_Direct out(buf, sizeof(::nprpc::impl::Header));
   {
     auto span = out._1();
     data.resize(span.size());
@@ -996,7 +966,7 @@ bool nps::Server::AVR_V_StoreFlash(/*in*/const cbt1::oid_t& device_id) {
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 23;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = device_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1008,10 +978,9 @@ bool nps::Server::AVR_V_StoreFlash(/*in*/const cbt1::oid_t& device_id) {
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
-  ::flat::server_M15_Direct out(buf, sizeof(::nprpc::impl::Header));
+  ::flat::server_M16_Direct out(buf, sizeof(::nprpc::impl::Header));
   bool __ret_value;
   __ret_value = out._1();
   return __ret_value;
@@ -1030,7 +999,7 @@ bool nps::Server::Notify_DeviceActivated(/*in*/const cbt1::oid_t& device_id) {
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 24;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = device_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1039,10 +1008,9 @@ bool nps::Server::Notify_DeviceActivated(/*in*/const cbt1::oid_t& device_id) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
-  ::flat::server_M15_Direct out(buf, sizeof(::nprpc::impl::Header));
+  ::flat::server_M16_Direct out(buf, sizeof(::nprpc::impl::Header));
   bool __ret_value;
   __ret_value = out._1();
   return __ret_value;
@@ -1061,7 +1029,7 @@ bool nps::Server::Notify_DeviceDeactivated(/*in*/const cbt1::oid_t& device_id) {
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 25;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = device_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1070,10 +1038,9 @@ bool nps::Server::Notify_DeviceDeactivated(/*in*/const cbt1::oid_t& device_id) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
-  ::flat::server_M15_Direct out(buf, sizeof(::nprpc::impl::Header));
+  ::flat::server_M16_Direct out(buf, sizeof(::nprpc::impl::Header));
   bool __ret_value;
   __ret_value = out._1();
   return __ret_value;
@@ -1092,7 +1059,7 @@ void nps::Server::Notify_ParameterRemoved(/*in*/const cbt1::oid_t& param_id) {
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 26;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = param_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1101,7 +1068,6 @@ void nps::Server::Notify_ParameterRemoved(/*in*/const cbt1::oid_t& param_id) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -1118,7 +1084,7 @@ void nps::Server::Notify_TypeOrVariableChanged(/*in*/const cbt1::oid_t& param_id
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 27;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = param_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1127,7 +1093,6 @@ void nps::Server::Notify_TypeOrVariableChanged(/*in*/const cbt1::oid_t& param_id
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -1144,7 +1109,7 @@ void nps::Server::History_AddParameter(/*in*/const cbt1::oid_t& param_id) {
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 28;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = param_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1153,7 +1118,6 @@ void nps::Server::History_AddParameter(/*in*/const cbt1::oid_t& param_id) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -1170,7 +1134,7 @@ void nps::Server::History_RemoveParameter(/*in*/const cbt1::oid_t& param_id) {
   __ch.poa_idx() = this->_data().poa_idx;
   __ch.interface_idx() = interface_idx_;
   __ch.function_idx() = 29;
-  ::flat::server_M17_Direct _(buf,32);
+  ::flat::server_M18_Direct _(buf,32);
   _._1() = param_id;
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -1179,7 +1143,6 @@ void nps::Server::History_RemoveParameter(/*in*/const cbt1::oid_t& param_id) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -1193,7 +1156,6 @@ void nps::IServer_Servant::dispatch(nprpc::Buffers& bufs, nprpc::EndPoint remote
         IPingable_Servant::dispatch(bufs, remote_endpoint, true, ref_list);
         return;
       default:
-        assert(false);
         throw "unknown interface";
     }
   }
@@ -1513,7 +1475,7 @@ bool __ret_val;
       obuf.consume(obuf.size());
       obuf.prepare(17);
       obuf.commit(17);
-      ::flat::server_M15_Direct oa(obuf,16);
+      ::flat::server_M16_Direct oa(obuf,16);
   oa._1() = __ret_val;
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->size = static_cast<uint32_t>(obuf.size() - 4);
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->msg_id = ::nprpc::impl::MessageId::BlockResponse;
@@ -1563,7 +1525,7 @@ bool __ret_val;
       break;
     }
     case 17: {
-      ::flat::server_M16_Direct ia(bufs(), 32);
+      ::flat::server_M17_Direct ia(bufs(), 32);
       try {
       AVR_SendPage(ia._1(), ia._2(), ia._3());
       }
@@ -1647,7 +1609,7 @@ bool __ret_val;
       break;
     }
     case 21: {
-      ::flat::server_M16_Direct ia(bufs(), 32);
+      ::flat::server_M17_Direct ia(bufs(), 32);
       try {
       AVR_WriteTwiTable(ia._1(), ia._2(), ia._3());
       }
@@ -1668,12 +1630,12 @@ bool __ret_val;
       break;
     }
     case 22: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
       auto& obuf = bufs.flip();
       obuf.consume(obuf.size());
       obuf.prepare(152);
       obuf.commit(24);
-      ::flat::server_M18_Direct oa(obuf,16);
+      ::flat::server_M19_Direct oa(obuf,16);
       try {
       AVR_V_GetFlash(ia._1(), oa._1_vd());
       }
@@ -1696,7 +1658,7 @@ bool __ret_val;
       break;
     }
     case 23: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
 bool __ret_val;
       try {
       __ret_val = AVR_V_StoreFlash(ia._1());
@@ -1718,7 +1680,7 @@ bool __ret_val;
       obuf.consume(obuf.size());
       obuf.prepare(17);
       obuf.commit(17);
-      ::flat::server_M15_Direct oa(obuf,16);
+      ::flat::server_M16_Direct oa(obuf,16);
   oa._1() = __ret_val;
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->size = static_cast<uint32_t>(obuf.size() - 4);
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->msg_id = ::nprpc::impl::MessageId::BlockResponse;
@@ -1726,14 +1688,14 @@ bool __ret_val;
       break;
     }
     case 24: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
 bool __ret_val;
       __ret_val = Notify_DeviceActivated(ia._1());
       auto& obuf = bufs();
       obuf.consume(obuf.size());
       obuf.prepare(17);
       obuf.commit(17);
-      ::flat::server_M15_Direct oa(obuf,16);
+      ::flat::server_M16_Direct oa(obuf,16);
   oa._1() = __ret_val;
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->size = static_cast<uint32_t>(obuf.size() - 4);
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->msg_id = ::nprpc::impl::MessageId::BlockResponse;
@@ -1741,14 +1703,14 @@ bool __ret_val;
       break;
     }
     case 25: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
 bool __ret_val;
       __ret_val = Notify_DeviceDeactivated(ia._1());
       auto& obuf = bufs();
       obuf.consume(obuf.size());
       obuf.prepare(17);
       obuf.commit(17);
-      ::flat::server_M15_Direct oa(obuf,16);
+      ::flat::server_M16_Direct oa(obuf,16);
   oa._1() = __ret_val;
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->size = static_cast<uint32_t>(obuf.size() - 4);
       static_cast<::nprpc::impl::Header*>(obuf.data().data())->msg_id = ::nprpc::impl::MessageId::BlockResponse;
@@ -1756,25 +1718,25 @@ bool __ret_val;
       break;
     }
     case 26: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
       Notify_ParameterRemoved(ia._1());
       nprpc::impl::make_simple_answer(bufs(), nprpc::impl::MessageId::Success);
       break;
     }
     case 27: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
       Notify_TypeOrVariableChanged(ia._1());
       nprpc::impl::make_simple_answer(bufs(), nprpc::impl::MessageId::Success);
       break;
     }
     case 28: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
       History_AddParameter(ia._1());
       nprpc::impl::make_simple_answer(bufs(), nprpc::impl::MessageId::Success);
       break;
     }
     case 29: {
-      ::flat::server_M17_Direct ia(bufs(), 32);
+      ::flat::server_M18_Direct ia(bufs(), 32);
       History_RemoveParameter(ia._1());
       nprpc::impl::make_simple_answer(bufs(), nprpc::impl::MessageId::Success);
       break;

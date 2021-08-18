@@ -261,8 +261,12 @@ int protocol_service::add_listener(listener* ptr) noexcept {
 int protocol_service::remove_listener(listener* ptr) noexcept {
 	if (auto it = std::find(listeners_.begin(), listeners_.end(), ptr); it != listeners_.end()) {
 		listeners_.erase(it);
-		std::cout << "listeners_.size: " << listeners_.size() << std::endl;
+		if (g_cfg.log_level > 1) {
+			std::cout << "listeners_.size: " << listeners_.size() << std::endl;
+		}
 		return 0;
+	} else {
+		std::cerr << "Error: listener not found\n";
 	}
 	return -1;
 }

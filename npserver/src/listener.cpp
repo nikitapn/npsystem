@@ -101,7 +101,7 @@ void listener::process_registers(std::shared_ptr<updated_registers_t> registers)
 
 			if (npsys::variable::IsBit(type)) {
 				int bit_n = npsys::variable::GetBit(type);
-				back.data[0] = ((1 << bit_n) & reg->op_value.u8) ? ALPHA_TRUE : ALPHA_FALSE;
+				back.data[0] = ((1 << bit_n) & reg->op_value.u8) ? NPSYSTEM_TRUE : NPSYSTEM_FALSE;
 				if (npsys::variable::IsQuality(type)) {
 					back.data[1] = ((1 << (bit_n + 1)) & reg->op_value.u8) ? VQ_GOOD : VQ_BAD;
 				}

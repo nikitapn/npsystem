@@ -220,7 +220,7 @@ public:
 	}
 };
 
-}
+} // namespace nps
 
 //////////////////////////////////////////////////////////////////////
 std::unique_ptr<protocol::protocol_service> proto;
@@ -291,8 +291,12 @@ int start(int argc, char** argv) {
 
 		nps::Server_ServantImpl server_servant1;
 
-		nprpc::set_debug_level(nprpc::DebugLevel_Critical);
-		auto rpc = nprpc::init(thread_pool::get_instance().ctx(), 21000);
+		nprpc::Config rpc_cfg;
+		rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
+		rpc_cfg.port = 21010;
+		rpc_cfg.websocket_port = 21011;
+
+		auto rpc = nprpc::init(thread_pool::get_instance().ctx(), std::move(rpc_cfg));
 
 		server1_poa = rpc->create_poa(2, {
 			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get()

@@ -19,10 +19,9 @@ class ItemManagerImpl
 
 	nprpc::ObjectPtr<nps::DataCallBack> pd_client_;
 	boost::asio::deadline_timer timer_;
-	std::shared_ptr<std::atomic_bool> deleted_;
 	int death_counter_ = 0;
 
-	void destroy_from_strand() noexcept;
+	//void destroy_from_strand() noexcept;
 	void fire_keep_alive();
 	void keep_alive_timer(std::shared_ptr<std::atomic_bool> del);
 public:
@@ -48,4 +47,10 @@ public:
 	}
 	
 	ItemManagerImpl() noexcept;
+
+	~ItemManagerImpl() {
+		if (g_cfg.log_level > 2) {
+			std::cerr << "ItemManagerImpl::~ItemManagerImpl()\n";
+		}
+	}
 };

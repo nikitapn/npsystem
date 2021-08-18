@@ -22,6 +22,7 @@
     <ClInclude Include="include\npsys\cpp\cpp_slot.h" />
     <ClInclude Include="include\npsys\corba.h" />
     <ClInclude Include="include\npsys\fat_data_callback.h" />
+    <ClInclude Include="include\npsys\web.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\alg.cpp" />

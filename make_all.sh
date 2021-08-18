@@ -26,4 +26,5 @@ build npsys
 build avr_info
 build sim
 build npserver
+build npwebserver
 

@@ -21,7 +21,6 @@
 #include "config.h"
 #include <nplib/utils/log.h>
 #include <npdb/db.h>
-//#include <mywtl/mwconsole.h>
 #include <avr_info/avr_info.h>
 #include <nplib/utils/thread_pool.hpp>
 
@@ -141,8 +140,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
 	ClipboardRegister();
 
-	nprpc::set_debug_level(nprpc::DebugLevel_Critical);
-
 	bool failed = false;
 	try {
 		NPRPC_System::init(thread_pool::get_instance().ctx(), 
@@ -183,7 +180,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
 #ifdef DEBUG
 	odb::check_memory_leak();
-	//utils::DestroyConsole();
 #endif
 
 	FreeLibrary(hDll);

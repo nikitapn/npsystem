@@ -171,10 +171,10 @@ void CSlot::SetValue(const nps::server_value* value) {
 		if (value_.is_discrete()) {
 			if (has_quality) {
 				const auto& qbit = value_.to_Qbit();
-				activated_ = (qbit.value == ALPHA_TRUE);
+				activated_ = (qbit.value == NPSYSTEM_TRUE);
 			} else {
 				const auto& bit = value_.to_bit();
-				activated_ = (bit.value == ALPHA_TRUE);
+				activated_ = (bit.value == NPSYSTEM_TRUE);
 			}
 		}
 
@@ -427,10 +427,10 @@ void COutputSlot::SetValue(const nps::server_value* value) {
 				if (value_.is_discrete()) {
 					if (has_quality) {
 						const auto& qbit = value_.to_Qbit();
-						if (qbit.value == ALPHA_TRUE) width = CLine::LineWidth::Bold;
+						if (qbit.value == NPSYSTEM_TRUE) width = CLine::LineWidth::Bold;
 					} else {
 						const auto& bit = value_.to_bit();
-						if (bit.value == ALPHA_TRUE) width = CLine::LineWidth::Bold;
+						if (bit.value == NPSYSTEM_TRUE) width = CLine::LineWidth::Bold;
 					}
 				}
 				color = SolidColor::Black;

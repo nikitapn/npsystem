@@ -22,7 +22,8 @@ LIBS = \
 	-lnpc \
 	-lnpdb_static \
 	-lboost_log \
-	-lnprpc
+	-lnprpc \
+	-lsystemd
 
 SLIBS = \
 	/usr/lib/libboost_system.a \

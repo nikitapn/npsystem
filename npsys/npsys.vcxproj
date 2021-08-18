@@ -27,6 +27,7 @@
     <ClInclude Include="include\npsys\corba.h" />
     <ClInclude Include="include\npsys\cpp\cpp_slot.h" />
     <ClInclude Include="include\npsys\cpp\cpp_variable.h" />
+    <ClInclude Include="include\npsys\web.h" />
     <None Include="Makefile">
       <FileType>Document</FileType>
     </None>

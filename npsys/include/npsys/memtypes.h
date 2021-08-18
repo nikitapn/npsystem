@@ -9,8 +9,8 @@
 #define VQ_UNKNOWN	((uint8_t)0x02) 
 
 
-#define ALPHA_TRUE	((uint8_t)0xFF)
-#define ALPHA_FALSE	((uint8_t)0x00)
+#define NPSYSTEM_TRUE	  ((uint8_t)0xFF)
+#define NPSYSTEM_FALSE	((uint8_t)0x00)
 
 #include <stdint.h>
 

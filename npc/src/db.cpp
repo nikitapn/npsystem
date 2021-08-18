@@ -32,7 +32,6 @@ void npd::NodeCallback::OnNodeChanged(/*in*/const cbt1::oid_t& id, /*in*/::flat:
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -58,7 +57,6 @@ void npd::NodeCallback::OnNodeDeleted(/*in*/const cbt1::oid_t& id) {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -102,7 +100,6 @@ std::string npd::Database::get_database_name() {
   auto std_reply = nprpc::impl::handle_standart_reply(buf);
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M3_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -134,7 +131,6 @@ cbt1::uuid npd::Database::get_database_uuid() {
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M4_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -171,7 +167,6 @@ cbt1::oid_t npd::Database::next_oid(/*in*/const cbt1::oid_t& amount) {
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M2_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -203,7 +198,6 @@ cbt1::oid_t npd::Database::last_oid() {
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M2_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -239,7 +233,6 @@ cbt1::oid_t npd::Database::create(/*in*/::flat::Span<const uint8_t> data, /*in*/
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M2_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -276,7 +269,6 @@ cbt1::oid_t npd::Database::put(/*in*/const cbt1::oid_t& id, /*in*/::flat::Span<c
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M2_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -319,7 +311,6 @@ bool npd::Database::exec_batch(/*in*/::flat::Span<const npd::BatchOperation> dat
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M8_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -353,7 +344,6 @@ bool npd::Database::get(/*in*/const cbt1::oid_t& id, /*out*/std::vector<uint8_t>
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M9_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -393,7 +383,6 @@ uint64_t npd::Database::get_n(/*in*/::flat::Span<const cbt1::oid_t> ids, /*out*/
   }
   if (std_reply != -1) {
     std::cerr << "received an unusual reply for function with output arguments\n";
-    assert(false);
     throw nprpc::Exception("Unknown Error");
   }
   ::flat::db_M11_Direct out(buf, sizeof(::nprpc::impl::Header));
@@ -432,7 +421,6 @@ void npd::Database::remove(/*in*/const cbt1::oid_t& id) {
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 
@@ -451,7 +439,7 @@ void npd::Database::advise(/*in*/const cbt1::oid_t& id, /*in*/const ObjectId& cl
   __ch.function_idx() = 10;
   ::flat::db_M12_Direct _(buf,32);
   _._1() = id;
-  memcpy(&_._2().ip4(), &client._data().ip4, 20);
+  memcpy(_._2().__data(), &client._data(), 24);
   _._2().class_id(client._data().class_id);
   static_cast<::nprpc::impl::Header*>(buf.data().data())->size = static_cast<uint32_t>(buf.size() - 4);
   ::nprpc::impl::g_orb->call(
@@ -463,7 +451,6 @@ void npd::Database::advise(/*in*/const cbt1::oid_t& id, /*in*/const ObjectId& cl
   }
   if (std_reply != 0) {
     std::cerr << "received an unusual reply for function with no output arguments\n";
-    assert(false);
   }
 }
 

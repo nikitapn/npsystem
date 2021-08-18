@@ -104,6 +104,7 @@ public:
   void data(const char* str) { new (&base().data) ::flat::String(buffer_, str); }
   void data(const std::string& str) { new (&base().data) ::flat::String(buffer_, str); }
   auto data() noexcept { return (::flat::Span<char>)base().data; }
+  auto data() const noexcept { return (::flat::Span<const char>)base().data; }
   auto data_vd() noexcept {     return ::flat::String_Direct1(buffer_, offset_ + offsetof(BatchOperation, data));  }
 };
 } // namespace flat

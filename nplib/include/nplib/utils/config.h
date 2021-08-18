@@ -146,6 +146,8 @@ std::ostream& operator<<(std::ostream& os, const nplib::config::config_base<T>& 
 	namespace fuz = boost::fusion;
 	namespace mp11 = boost::mp11;
 	os << "Config:\n";
+	os << "config" << " = " << cfg.config << '\n';
+	os << "data_dir" << " = " << cfg.data_dir << '\n';
 	mp11::mp_for_each<mp11::mp_iota_c<fuz::result_of::size<T>::value>>([&](auto I) {
 		auto name = std::string(fuz::extension::struct_member_name<T, static_cast<int>(I)>::call());
 		auto const& val = fuz::at_c<static_cast<int>(I)>(static_cast<const T&>(cfg));

@@ -24,7 +24,8 @@
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-
+#include <boost/asio/signal_set.hpp>
+#include <boost/beast/core/error.hpp>
 #include <nprpc/nprpc_nameserver.hpp>
 #include <npc/db.hpp>
 
@@ -34,6 +35,8 @@
 #	include "windows.h"
 #	include "Shlobj_core.h"
 #	include <nplib/utils/win_service.h>
+#else
+# include <systemd/sd-daemon.h>
 #endif
 
 npdbserver::Config g_cfg;
@@ -366,16 +369,28 @@ static int get_ini_value(boost::property_tree::ptree& pt, const std::string& pat
 
 boost::asio::io_context ioc;
 
-/// Allow to close cleanly with ctrl + c
-void sigintHandler(int sig_num) {
-	ioc.stop();
-}
-
 #ifdef _WIN32
 int start(int argc, char** argv, Service::ready_t* ready = nullptr) {
 #else 
 int start(int argc, char** argv) {
+	bool as_service = false;
+	for (int i = 1; i < argc; ++i) {
+		if (!std::strcmp(argv[i], "-d")) {
+			as_service = true;
+		} else {
+			std::cerr << "Unknown option: " << argv[i];
+			return -1;
+		}
+	}
 #endif
+	auto wg = boost::asio::make_work_guard(ioc);
+	// need to start ioc thread before making any calls to rpc nameserver
+	auto ioc_thread = std::thread([]() { ioc.run(); });
+
+	// Capture SIGINT and SIGTERM to perform a clean shutdown
+	boost::asio::signal_set signals(ioc, SIGINT, SIGTERM);
+	signals.async_wait([&](boost::system::error_code const&, int) { ioc.stop(); });
+
 	g_cfg.load("npdb");
 	std::cout << g_cfg << std::endl;
 
@@ -393,12 +408,11 @@ int start(int argc, char** argv) {
 
 	try
 	{
-		auto wg = boost::asio::make_work_guard(ioc);
-		auto ioc_thread = std::thread([]() { ioc.run(); });
-		//std::thread([]() {ioc.run();}).detach();
-		
-		nprpc::set_debug_level(nprpc::DebugLevel_Critical);
-		auto rpc = nprpc::init(ioc, 23255);
+		nprpc::Config rpc_cfg;
+		rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
+		rpc_cfg.port = 21000;
+
+		auto rpc = nprpc::init(ioc, std::move(rpc_cfg));
 
 		poa = rpc->create_poa(1, {
 			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get()
@@ -411,6 +425,8 @@ int start(int argc, char** argv) {
 
 #ifdef _WIN32
 		if (ready) (*ready)();
+#else
+		if (as_service) sd_notify(0, "READY=1");
 #endif
 
 		ioc_thread.join();
@@ -432,7 +448,7 @@ int main(int argc, char** argv) {
 #ifdef _WIN32
 	if (Service::IsServiceMode()) {
 		Service service("npdbserver");
-		service.Start(start, std::bind(sigintHandler, 0));
+		service.Start(start, []() { ioc.stop(); });
 	} else if (argc > 1) {
 		if (strcmp(argv[1], "install") == 0) {
 			std::cout << "Installing npdbserver as a service..." << std::endl;

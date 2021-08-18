@@ -63,14 +63,14 @@ std::string online_value::to_string_impl(int precision, bool show_quality) const
 				if (variable::IsQuality(type_)) {
 					if (!show_quality) {
 						const Q_bit& bt = to_Qbit();
-						result = (bt.quality != VQ_GOOD) ? 'x' : (bt.value == ALPHA_TRUE ? '1' : '0');
+						result = (bt.quality != VQ_GOOD) ? 'x' : (bt.value == NPSYSTEM_TRUE ? '1' : '0');
 					} else {
 						const Q_bit& bt = to_Qbit();
-						result = (bt.value == ALPHA_TRUE ? "0b1, " : "0b0, ");
+						result = (bt.value == NPSYSTEM_TRUE ? "0b1, " : "0b0, ");
 						result += (bt.quality == VQ_GOOD ? "0b1" : "0b0");
 					}
 				} else {
-					result = to_bit().value == ALPHA_TRUE ? '1' : '0';
+					result = to_bit().value == NPSYSTEM_TRUE ? '1' : '0';
 				}
 				break;
 			case type_t::VT_BYTE:
@@ -229,12 +229,12 @@ template<typename T>
 inline void from_boolean_to_influx(const T& val, std::string& out) {
 	if constexpr (has_member_data_quality<T, uint8_t>::value) {
 		out = "value=";
-		out += (val.value == ALPHA_TRUE ? "true" : "false");
+		out += (val.value == NPSYSTEM_TRUE ? "true" : "false");
 		out += ",quality=";
 		out += std::to_string(val.quality) + 'i';
 	} else {
 		out = "value=";
-		out += (val.value == ALPHA_TRUE ? "true" : "false");
+		out += (val.value == NPSYSTEM_TRUE ? "true" : "false");
 	}
 }
 

@@ -85,6 +85,7 @@ public:
   void _1(const char* str) { new (&base()._1) ::flat::String(buffer_, str); }
   void _1(const std::string& str) { new (&base()._1) ::flat::String(buffer_, str); }
   auto _1() noexcept { return (::flat::Span<char>)base()._1; }
+  auto _1() const noexcept { return (::flat::Span<const char>)base()._1; }
   auto _1_vd() noexcept {     return ::flat::String_Direct1(buffer_, offset_ + offsetof(db_M3, _1));  }
 };
 } // namespace flat

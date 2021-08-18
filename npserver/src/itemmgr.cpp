@@ -23,7 +23,6 @@ void ItemManagerImpl::keep_alive_timer(std::shared_ptr<std::atomic_bool> del) {
 
 ItemManagerImpl::ItemManagerImpl() noexcept
 	: timer_(thread_pool::get_instance().ctx())
-	, deleted_(std::make_shared<std::atomic_bool>(false))
 {
 //	timer_.expires_at(boost::posix_time::pos_infin);
 //	keep_alive_timer(deleted_);
@@ -58,31 +57,37 @@ void ItemManagerImpl::Activate(nprpc::Object* client) {
 
 // nprpc thread
 void ItemManagerImpl::destroy() noexcept {
+	if (g_cfg.log_level > 2) {
+		std::cerr << "ItemManagerImpl::destroy()\n";
+	}
+
 	release_all();
-	deleted_->store(true);
-	proto->t_remove_listener(this).get();
+	proto->t_remove_listener(this).get(); // wait for listener to be removed
 
 //	boost::system::error_code ec;
 //	timer_.cancel(ec);
 
-	nplib::async<false>(strand_, [this]() {
-		this->destroy_from_strand();
-	}); // last job
+	pd_client_.reset();
+	delete this;
+
+//	nplib::async<false>(strand_, [this]() {
+//		this->destroy_from_strand();
+//	});
 }
 
 // strand context
-void ItemManagerImpl::destroy_from_strand() noexcept {
-	if (g_cfg.log_level > 1) {
-		std::cout <<
-			"ItemManagerImpl::destroy_from_strand() " << "task_count: " << task_count() << std::endl;
-	}
-	pd_client_.reset();
-	delete this;
-}
+//void ItemManagerImpl::destroy_from_strand() noexcept {
+//	if (g_cfg.log_level > 1) {
+//		std::cout <<
+//			"ItemManagerImpl::destroy_from_strand() " << "task_count: " << task_count() << std::endl;
+//	}
+//	pd_client_.reset();
+//	delete this;
+//}
 
 // strand context
 void ItemManagerImpl::OnDataChanged(const std::vector<nps::server_value>& ar) {
-	if (deleted_->load()) return;
+	if (is_deleted()) return;
 
 //	boost::system::error_code ec;
 //	timer_.expires_from_now(boost::posix_time::seconds(g_cfg.client_keep_alive_time), ec);
