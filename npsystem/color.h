@@ -32,6 +32,13 @@ enum class BlockColor {
 	Math,
 	Compare,
 	Control,
+	SfcBlockStep
 };
-constexpr size_t BlockColorCount = 6;
+constexpr size_t BlockColorCount = 7;
 
+
+enum class FONT_SIZE_CENTERED {
+	SIZE_8,
+	SIZE_12,
+	SIZE_18,
+};

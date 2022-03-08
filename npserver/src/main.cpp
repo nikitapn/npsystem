@@ -209,11 +209,11 @@ public:
 	}
 
 	virtual void History_AddParameter(cbt1::oid_t param_id) {
-		// hist->AddParameter(param_id);
+		g_hist->add_parameter(param_id);
 	}
 
 	virtual void History_RemoveParameter(cbt1::oid_t param_id) {
-		// hist->RemoveParameter(param_id);
+		g_hist->remove_parameter(param_id);
 	}
 
 	virtual void GetNetworkStatus(/*out*/::flat::Vector_Direct1<uint8_t> network_status) {
@@ -224,7 +224,7 @@ public:
 
 //////////////////////////////////////////////////////////////////////
 std::unique_ptr<protocol::protocol_service> proto;
-//std::unique_ptr<history> hist;
+std::unique_ptr<History> g_hist;
 
 void sigint_handler(int sig_num) {
 	std::cout << "npserver is shutting down..." << std::endl;
@@ -314,8 +314,7 @@ int start(int argc, char** argv) {
 
 		environment::get_instance().init();
 		proto = std::make_unique<protocol::protocol_service>();
-		//			hist = std::make_unique<history>();
-		//			hist->Init();
+		g_hist = std::make_unique<History>();
 		environment::get_instance().init_service_thread();
 
 #ifdef _WIN32

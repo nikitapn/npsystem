@@ -1,0 +1,12 @@
+IF 9 > 4 THEN
+    /ALG_1/PARAM_1.OUT := 6;
+    /ALG_1/PARAM_3.OUT := (8 + 1) + 1;
+ELSIF 3 THEN
+END_IF
+
+'PARAM_1.OUT := 3.2156;
+'PARAM_1.OUT := .01764;
+'PARAM_1.OUT := +.0113;
+'PARAM_1.OUT := -.0116;
+'PARAM_1.OUT := +1.715;
+'PARAM_1.OUT := -1.715;

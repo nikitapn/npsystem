@@ -8,14 +8,7 @@
 #include <npdb/db.h>
 #include "wm_user.h"
 
-class CMyTabView : public CWindowImpl<CMyTabView>
-{
-	static constexpr LONG c_separator_height = 3;
-	// distance beetween tab border and tab content
-	static constexpr LONG c_dist_v = 2;
-	static constexpr LONG c_dist_h = 2;
-	// distance beetween text and button
-	static constexpr LONG c_dist_text_btn = 4;
+class CMyTabView : public CWindowImpl<CMyTabView> {
 public:
 	CMyTabView();
 
@@ -49,28 +42,26 @@ public:
 			return nullptr;
 		return m_activeTab->view;
 	}
+
 	// Message filter function - to be called from PreTranslateMessage of the main window
 	BOOL PreTranslateMessage(MSG* pMsg) {
-		if (m_activeTab == m_tabs.end())
-			return 0;
-
-		if (pMsg->message == WM_COMMAND) {
-			WORD wID = LOWORD(pMsg->wParam);
+		// forwards some WM_COMMAND messages to active view 
+		if (pMsg->message == WM_COMMAND && m_activeTab != m_tabs.end()) { 
+			auto const wID = LOWORD(pMsg->wParam);
 			if (wID == ID_FILE_SAVE) {
 				auto view = GetActiveView();
 				view->Save();
 				return TRUE;
-			} else if ((wID > ID_RIBBON_COMMANDS_BEGIN && wID < ID_RIBBON_COMMANDS_END) ||
-				(wID > ID_GALLERY_BLOCKS && wID < ID_CREATE_BLOCK_LAST)) { // all my ribbon commands
-				auto view = GetActiveView();
-				view->SendMessage(pMsg->message, pMsg->wParam, pMsg->lParam);
-				return TRUE;
-			} else if (wID >= 0xE123 && wID <= 0xE12C) { // default edit messages are forwarded to view
+			} else if (
+				(wID > ID_RIBBON_COMMANDS_BEGIN && wID < ID_RIBBON_COMMANDS_END) ||	// custom messages
+				(wID >= 0xE123 && wID <= 0xE12C) // default edit messages
+				) {
 				auto view = GetActiveView();
 				view->SendMessage(pMsg->message, pMsg->wParam, pMsg->lParam);
 				return TRUE;
 			}
 		}
+
 		return FALSE;
 	}
 	void AddView(CView* view, const std::string& title);
@@ -128,6 +119,7 @@ public:
 		std::wstring text;
 		std::wstring text_context;
 		LONG text_width;
+
 		CRect rcTab;
 		CRect rcFreeSpace;
 		CRect rcBtnPin;
@@ -177,7 +169,8 @@ private:
 	CRect m_rcTab;
 	CRect m_rcSeparator;
 
-	LONG m_contentHeight;
+	LONG m_text_height;
+	LONG m_text_v_centered_offset;
 	
 	iterator m_pinnedBegin;
 	size_t m_lastIndexPlacedInTab;
@@ -212,6 +205,7 @@ struct IsDialog<CDialogImpl<Args...>> : std::true_type {};
 template<typename base>
 class CViewWindowT : public base 
 {
+	bool m_bFocused;
 public:
 	CViewWindowT(CMyTabView& tabview)
 		: m_tabview(tabview)
@@ -220,6 +214,8 @@ public:
 	}
 	static constexpr auto is_dialog = IsDialog<base>::value;
 protected:
+	CMyTabView& m_tabview;
+
 	BEGIN_MSG_MAP(CViewWindowT)
 		MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
 		MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
@@ -233,6 +229,7 @@ protected:
 		}
 		return 0;
 	}
+
 	LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 		m_tabview.SetFocus(true);
 		m_bFocused = true;
@@ -240,12 +237,10 @@ protected:
 		::SendMessage(g_hMainWnd, WM_TABVIEW_FOCUS, 0, 0);
 		return 0;
 	}
+
 	virtual bool IsFocused() const noexcept final {
 		return m_bFocused;
 	}
-	CMyTabView& m_tabview;
-private:
-	bool m_bFocused;
 };
 
 template<typename T>

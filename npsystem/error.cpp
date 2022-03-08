@@ -17,7 +17,7 @@ std::string_view TranslateError(uint32_t code) noexcept {
 	case S_COMMUNICATION_ERROR_CRC_RECIVE:
 		return "Bad crc recived"sv;
 	case S_COMMUNICATION_ERROR_NO_BUFFER_SIZE:
-		return "No buffer size"sv;
+		return "insufficient buffer size"sv;
 	case S_COMMUNICATION_ERROR_IN_FRAMESTRUCT:
 		return "Framestruct"sv;
 	case S_COMMUNICATION_ERROR_UNEXPECTED_FRAMELENGHT:

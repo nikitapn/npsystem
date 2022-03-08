@@ -23,6 +23,10 @@
 #include <npdb/db.h>
 #include <avr_info/avr_info.h>
 #include <nplib/utils/thread_pool.hpp>
+#include <nplib/windows/console.hpp>
+
+
+constexpr bool use_console = true;
 
 /*
 #include <boost/log/core.hpp>
@@ -76,8 +80,9 @@ std::thread::id g_main_thread_id;
 
 void RibbonState::ResetBlockGallery() {
 	cursor_selected = true;
-	block_selected = 0;
-	wndMain->m_ribbonBlocks.Select(-1, true);
+	block_selected = -1;
+	wndMain->m_ribbonFBDBlocks.Select(-1, true);
+	wndMain->m_ribbonSFCBlocks.Select(-1, true);
 }
 
 int Run(LPTSTR /*lpstrCmdLine*/ = NULL, int nCmdShow = SW_SHOWDEFAULT) {
@@ -85,8 +90,12 @@ int Run(LPTSTR /*lpstrCmdLine*/ = NULL, int nCmdShow = SW_SHOWDEFAULT) {
 
 	wndMain = std::make_unique<CMainFrame>();
 	
-	std::cout.rdbuf(&wndMain->m_wndOutput);
-	std::cerr.rdbuf(&wndMain->m_wndOutput);
+	if constexpr (use_console) {
+		nplib::win::create_console("debug", 1024, 480);
+	} else {
+		std::cout.rdbuf(&wndMain->m_wndOutput);
+		std::cerr.rdbuf(&wndMain->m_wndOutput);
+	}
 
 	std::cout << g_cfg << std::endl;
 

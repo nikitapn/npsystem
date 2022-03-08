@@ -121,7 +121,7 @@ public:
 
 	virtual bool IsModified() { return false; };
 	virtual void Save() {};
-
+	virtual HICON GetIcon() const noexcept;
 protected:
 	LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

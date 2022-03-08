@@ -13,10 +13,10 @@ class CAlgorithmCat
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int file_version) {
 		ar & name_;
-		ar & algs;
+		ar & units;
 	}
 public:
-	algorithm_l algs;
+	control_unit_l units;
 	CAlgorithmCat() = default;
 	CAlgorithmCat(std::string name) 
 		: odb::systree_item<CAlgorithmCat>(name) {}

@@ -138,11 +138,11 @@ inline void variable::SetDev(odb::weak_node<device_n> dev) noexcept {
 	dev_ = dev;
 	set_modified();
 }
-inline const odb::weak_node<algorithm_n>& variable::GetAlg() const noexcept {
+inline const odb::weak_node<control_unit_n>& variable::GetAlg() const noexcept {
 	return alg_;
 }
-inline void variable::SetAlg(npsys::algorithm_n& alg) noexcept {
-	alg_ = alg;
+inline void variable::SetAlg(odb::weak_node<control_unit_n> unit) noexcept {
+	alg_ = unit;
 	set_modified();
 }
 inline void variable::SetBit(int bit) noexcept {

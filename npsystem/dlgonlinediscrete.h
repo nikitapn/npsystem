@@ -4,7 +4,7 @@
 #pragma once
 
 #include "mybutton.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "error.h"
 #include "dlgbase.h"
 #include <npsys/corba.h>
@@ -12,7 +12,7 @@
 class CDlg_OnlineDiscrete : public CMyDlgBase<CDlg_OnlineDiscrete> {
 	using base = CMyDlgBase<CDlg_OnlineDiscrete>;
 public:
-	CDlg_OnlineDiscrete(CParameter* parameter, npsys::CAlgorithmExt* alg)
+	CDlg_OnlineDiscrete(CParameter* parameter, npsys::CFBDControlUnit* alg)
 		: parameter_(parameter)
 		, alg_(alg) {
 		var_ = parameter_->GetSlot()->GetVariable();
@@ -93,7 +93,7 @@ protected:
 	}
 
 	CParameter* parameter_;
-	npsys::CAlgorithmExt* alg_;
+	npsys::CFBDControlUnit* alg_;
 	npsys::variable* var_;
 	bool value_;
 

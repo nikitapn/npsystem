@@ -66,7 +66,7 @@ public:
 			auto& var = data_->ass->var;
 			ASSERT(var->IsQuality());
 			nodes.push_back(std::move(
-				std::make_unique<COnlineTreeItem>(GetName(), m_hIcon, *var.get())
+				std::make_unique<COnlineTreeItem>(GetName(), m_hIcon_24x24, *var.get())
 			));
 			nodes.back()->Insert(tree, hParent);
 			online_item_ = nodes.back().get();
@@ -93,7 +93,7 @@ private:
 		auto mod = segment->parent_module.fetch();
 
 		auto type = data_->parent->GetType();
-		auto factory = CBlockFactory();
+		auto factory = CFBDBlockFactory(nullptr);
 		npsys::fbd_block_n block;
 		if (type == io::SegmentType::WRITE) {
 			factory.CreateOutput(block);
@@ -181,7 +181,7 @@ public:
 	CTreeI2CAssignedModule(npsys::i2c_assigned_module_n& n, npsys::i2c_assigned_module_l& l, npsys::controller_n& ctrl)
 		: CTemplateItemHardwareStatus(n, l)
 		, ctrl_(ctrl) {
-		SetIcon(AlphaIcon::Module);
+		SetIcon(NPSystemIcon::Module);
 	}
 
 	void ConstructMenu(CMenu* menu) noexcept {
@@ -214,7 +214,7 @@ class CTreeAssignedI2CModulesCat : public CTemplateItemHardwareStatus<
 public:
 	CTreeAssignedI2CModulesCat(npsys::controller_n& ctrl)
 		: ctrl_(ctrl) {
-		SetIcon(AlphaIcon::Container);
+		SetIcon(NPSystemIcon::Container);
 		name_ = "I2C";
 		LoadChilds();
 	}
@@ -237,7 +237,7 @@ class CTreeAssignedModulesCat : public CTemplateItemHardwareStatus<
 	CTreeAssignedModulesCat> {
 public:
 	CTreeAssignedModulesCat(npsys::controller_n& ctrl) : ctrl_(ctrl) {
-		SetIcon(AlphaIcon::Container);
+		SetIcon(NPSystemIcon::Container);
 		name_ = "ASSIGNED MODULES";
 		LoadChilds();
 	}
@@ -259,13 +259,13 @@ class CTreeAssignedAlgorithm :
 public:
 	CTreeAssignedAlgorithm(npsys::assigned_algorithm_n& n, npsys::assigned_algorithms_l& l)
 		: CTemplateItemHardwareStatus(n, l) {
-		SetIcon(AlphaIcon::Algorithm);
+		SetIcon(NPSystemIcon::Algorithm);
 		n_->item = this;
-		ASSERT_FETCH(n_->alg);
+		ASSERT_FETCH(n_->unit);
 	}
 	virtual bool SetName(const std::string& name) { return false; }
 	void ConstructMenu(CMenu* menu) noexcept {
-		UINT loaded = (n_->alg->GetStatus() >= npsys::CAlgorithm::status_loaded) ? 0xFFFFFFFF : 0;
+		UINT loaded = (n_->unit->GetStatus() >= npsys::CControlUnit::Status::status_loaded) ? 0xFFFFFFFF : 0;
 		menu->AppendMenu(MF_STRING, _ID_UPLOAD_ALGORITHM_, L"Upload");
 		menu->AppendMenu(MF_STRING | (MF_DISABLED & ~loaded), _ID_UNLOAD_ALGORITHM_, L"Unload");
 		menu->AppendMenu(MF_STRING | (MF_DISABLED & ~loaded), ID_STOP_ALGORITHM, L"Stop Algorithm");
@@ -277,18 +277,18 @@ public:
 		{
 		case _ID_UPLOAD_ALGORITHM_:
 		{
-			if (!n_->alg.fetch()) {
+			if (!n_->unit.fetch()) {
 				std::cout << "Error: algorithm could not be found..." << std::endl;
 			}
-			n_->alg->UploadToDevice(true);
+			n_->unit->UploadToDevice(true);
 			break;
 		}
 		case _ID_UNLOAD_ALGORITHM_:
 		{
-			if (!n_->alg.fetch()) {
+			if (!n_->unit.fetch()) {
 				std::cout << "Error: algorithm could not be found..." << std::endl;
 			}
-			n_->alg->UnloadFromDevice();
+			n_->unit->UnloadFromDevice();
 			break;
 		}
 		case ID_STOP_ALGORITHM:
@@ -314,14 +314,14 @@ public:
 		}
 	}
 	virtual bool IsRemovable() {
-		bool ok = (n_->alg->GetStatus() == npsys::CAlgorithm::status_assigned);
+		bool ok = (n_->unit->GetStatus() == npsys::CControlUnit::Status::status_assigned);
 		if (!ok) MessageBoxA(g_hMainWnd, "Unable to delete assigned algorithm:\r\nUnload from controller first.",
 			"", MB_ICONINFORMATION);
 		return ok;
 	}
 	io::Status ConvertStatus() {
-		using Status = npsys::CAlgorithm::Status;
-		auto status = n_->alg->GetStatus();
+		using Status = npsys::CControlUnit::Status;
+		auto status = n_->unit->GetStatus();
 		switch (status)
 		{
 		case Status::status_not_assigned:
@@ -330,7 +330,7 @@ public:
 		case Status::status_assigned:
 		case Status::status_loaded:
 		case Status::status_not_actual:
-			return static_cast<io::Status>(status - 1);
+			return static_cast<io::Status>(static_cast<uint32_t>(status) - 1);
 		default:
 			ASSERT(FALSE);
 			return io::Status::assigned;
@@ -339,11 +339,11 @@ public:
 protected:
 	virtual void PostDelete(CContainer* parent) noexcept {
 		auto dev = n_->dev.fetch();
-		n_->alg->SetStatus(npsys::CAlgorithm::status_not_assigned);
-		n_->alg->assigned_alg = {};
-		n_->alg->assigned_dev = {};
-		n_->alg->HardwareSpecific_Clear();
-		n_->alg.store();
+		n_->unit->SetStatus(npsys::CControlUnit::Status::status_not_assigned);
+		n_->unit->assigned_alg = {};
+		n_->unit->assigned_dev = {};
+		n_->unit->HardwareSpecific_Clear();
+		n_->unit.store();
 		__super::PostDelete(parent);
 	}
 };
@@ -355,7 +355,7 @@ class CTreeAssignedAlgorithmCat :
 public:
 	CTreeAssignedAlgorithmCat(npsys::controller_n& ctrl)
 		: ctrl_(ctrl) {
-		SetIcon(AlphaIcon::Container);
+		SetIcon(NPSystemIcon::Container);
 		name_ = "ASSIGNED ALGORIHMS";
 		LoadChilds();
 	}
@@ -429,7 +429,7 @@ protected:
 
 CTreeController::CTreeController(npsys::controller_n& n, npsys::controllers_l& l)
 	: CTemplateItemHardwareStatus(n, l) {
-	SetIcon(AlphaIcon::Controller_nl);
+	SetIcon(NPSystemIcon::Controller_nl);
 	n_->item = this;
 	LoadChilds();
 }
@@ -467,10 +467,10 @@ CTreeAssignedI2CModulesCat* CTreeController::GetI2CModules() noexcept {
 	return i2c;
 }
 
-int	CTreeController::Move(CTreeAlgorithm* alg, int action) {
+int	CTreeController::Move(CTreeControlUnit* alg, int action) {
 	if (!action) return true;
 	auto linker = n_->CreateLinker();
-	auto ok = linker->AssignAlgorithm(alg->n_);
+	auto ok = linker->AssignControlUnit(alg->n_);
 	if (ok) {
 		auto last = *(n_->assigned_algs.end() - 1);
 		auto software = GetSoftware();

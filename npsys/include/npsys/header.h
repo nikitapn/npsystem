@@ -5,7 +5,8 @@
 
 #include <npdb/db.h>
 
-class CBlockComposition;
+class CFBDBlockComposition;
+class CSFCBlockComposition;
 class VirtualDevice;
 class VirtualController;
 class VirtualAvrPCLINK;
@@ -52,14 +53,10 @@ using controller_n_avr = controller_n_t<class CAVRController>;
 using controllers_l = odb::node_list<controller_n, CONTROLLERS_ID>;
 using avr_pin_n = odb::shared_node<class CAVRPin>;
 using avr_port_n = odb::shared_node<class CAVRPort>;
-
-#ifdef _CONFIGURATOR_
-	using algorithm_n = odb::shared_node<class CAlgorithmExt>;
-#else 
-	using algorithm_n = odb::shared_node<class CAlgorithm>;
-#endif
-
-using algorithm_l = odb::node_list<algorithm_n>;
+using control_unit_n = odb::shared_node<class CControlUnit>;
+using control_unit_l = odb::node_list<control_unit_n>;
+using fbd_control_unit_n = odb::shared_node<class CFBDControlUnit>;
+using sfc_control_unit_n = odb::shared_node<class CSFCControlUnit>;
 
 using assigned_algorithm_n = odb::shared_node<class CAssignedAlgorithm>;
 using avr_assigned_algorithm_n = odb::shared_node<class CAVRAssignedAlgorithm>;
@@ -67,7 +64,8 @@ using assigned_algorithms_l = odb::node_list<assigned_algorithm_n>;
 using avr_assigned_object_file_n = odb::shared_node<class CAVRAssignedObjectFile>;
 using avr_assigned_object_files_l = odb::node_list<avr_assigned_object_file_n>;
 
-using block_composition_n = odb::unique_node<CBlockComposition>;
+using block_composition_n = odb::unique_node<CFBDBlockComposition>;
+using sfc_block_composition_n = odb::unique_node<CSFCBlockComposition>;
 using fbd_block_n = odb::shared_node<class CFBDBlock, odb::INVALID_ID, odb::special_serialization>;
 using fbd_slot_n = odb::shared_node<class CFBDSlot, odb::INVALID_ID, odb::special_serialization>;
 using variable_n = odb::shared_node<class variable, odb::INVALID_ID, odb::special_serialization>;

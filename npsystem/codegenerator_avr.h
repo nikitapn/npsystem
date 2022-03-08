@@ -8,7 +8,7 @@
 #include "codegenerator.h"
 
 namespace npsys {
-class CAlgorithmExt;
+class CFBDControlUnit;
 }
 
 enum class OP_TYPE {
@@ -64,7 +64,7 @@ class CAVR5CodeGenerator
 	: public CCodeGenerator
 {
 protected:
-	npsys::algorithm_n& alg_;
+	npsys::fbd_control_unit_n& alg_;
 	const avrinfo::FirmwareInfo& info_;
 	size_t conv_bit_n_ = 0;
 
@@ -75,11 +75,11 @@ public:
 	std::unique_ptr<CGccWrapperAvr> gcc_;
 	std::unordered_set<std::string> libraries;
 	
-	CAVR5CodeGenerator(npsys::algorithm_n alg, const avrinfo::FirmwareInfo& info);
+	CAVR5CodeGenerator(npsys::fbd_control_unit_n alg, const avrinfo::FirmwareInfo& info);
 	void SaveToFile();
 	virtual void Reset();
 	void GenerateAlarmBlock(CBlock* block, bool high);
 #define AAF(x) virtual void Generate(x*);
-	ALPHA_BLOCKS()
+	NPSYSTEM_BLOCKS()
 #undef AAF
 };

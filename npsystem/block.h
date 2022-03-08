@@ -3,28 +3,23 @@
 
 #pragma once
 
-#include "color.h"
 #include "element.h"
+#include "line.h"
 #include "vartype.h"
 #include "visitorblocks.h"
 #include "constants.h"
+#include "cpp_deleter.h"
+
+#include <bitset>
 
 #include <npsys/variable.h>
-#include <nplib/utils/variant.h>
 #include <npsys/fbdblock.h>
 #include <npsys/other/remote.h>
 #include <npsys/other/online_value.h>
 #include <npsys/other/uploadable.h>
 #include <npdb/memento.h>
 
-#include "cpp_deleter.h"
-
-#include "propertygrid.h"
-#include <bitset>
-
-#include "serialization_atl_string.h"
-
-class CBlockFactory;
+class CFBDBlockFactory;
 
 enum DATABASE_ACTION {
 	DATABASE_ACTION_CONFIGURABLE_SLOT_REMOVED
@@ -82,95 +77,6 @@ private:
 	std::vector<std::unique_ptr<DatabaseAction>> actions_;
 };
 
-class BlockProperty {
-	friend boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive& ar, unsigned int file_version) {
-		if (file_version > 0) ar& name_;
-		else {
-			if constexpr (Archive::is_loading::value) {
-				CStringW str; ar& str;
-				name_ = narrow(str.GetString());
-			} else {
-				assert(false);
-			}
-		}
-		ar& key_;
-		ar& section_;
-	}
-protected:
-	std::string name_;
-	std::string key_;
-	PRB::Section section_;
-	std::bitset<16> dirty_;
-public:
-	BlockProperty() = default;
-	BlockProperty(PRB::Section section, const std::string& name, std::string_view key)
-		: section_(section)
-		, name_(name)
-		, key_(key)
-	{
-	}
-	virtual ~BlockProperty() = default;
-	const std::string& GetName() const noexcept {
-		return name_;
-	}
-	const std::string& GetKey() const noexcept {
-		return key_;
-	}
-	template<size_t Ix>
-	bool GetDirty() noexcept {
-		bool dirty = dirty_[Ix];
-		dirty_[Ix] = false;
-		return dirty;
-	}
-	virtual void FillPropertyGrid(CPropertyGrid* prop_grid) noexcept = 0;
-	virtual void OnPropertyChanged(const npsys::CMyVariant& var) noexcept = 0;
-	virtual std::string ToString() const noexcept = 0;
-};
-
-BOOST_CLASS_VERSION(BlockProperty, 1);
-
-template<typename T>
-class BlockPropertyT : public BlockProperty {
-	friend boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive& ar, unsigned int) {
-		ar& boost::serialization::base_object<BlockProperty>(*this);
-		ar& value_;
-	}
-	T value_;
-public:
-	BlockPropertyT() = default;
-	BlockPropertyT(PRB::Section section, const std::string& name, std::string_view key, T defVal = {})
-		: BlockProperty(section, name, key)
-		, value_(defVal)
-	{
-	}
-	void SetValue(const T& value) noexcept {
-		value_ = value;
-		dirty_.set();
-	}
-	void SetValue(const npsys::CMyVariant& value) {
-		value_ = value.as<T>;
-		dirty_.set();
-	}
-	const T& GetValue() const noexcept {
-		return value_;
-	}
-	virtual void FillPropertyGrid(CPropertyGrid* grid) noexcept {
-		grid->AddVariantItem(section_, name_, value_, (UINT_PTR)this);
-	}
-	virtual void OnPropertyChanged(const npsys::CMyVariant& var) noexcept {
-		value_ = var.as<T>();
-		dirty_.set();
-	}
-	virtual std::string ToString() const noexcept {
-		const npsys::CMyVariant var = value_;
-		return var.ToString();
-	}
-};
-
 namespace npsys {
 class CAssignedAlgorithm;
 class CI2CModuleSegmentValue;
@@ -192,185 +98,6 @@ enum SLOT_SIGNAL {
 	SIG_SLOT_PARENT_NAME_CHANGED
 };
 
-class CGeometryElement : public CElement {
-	friend boost::serialization::access;
-	template<class Archive>
-	void save(Archive& ar, const unsigned int /*file_version*/) const {}
-	template<class Archive>
-	void load(Archive& ar, const unsigned int /*file_version*/) {
-		CreateRgnShape();
-		UpdateTransformedGeometry();
-	}
-	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
-		ar& boost::serialization::base_object<CElement>(*this);
-		ar& m_matrixTransform;
-		boost::serialization::split_member(ar, *this, file_version);
-	}
-protected:
-	wrl::ComPtr<ID2D1Geometry> m_geometry;
-	wrl::ComPtr<ID2D1TransformedGeometry> m_geometryTransformed;
-	wrl::ComPtr<ID2D1GeometryRealization> m_geometryRealizationStroked;
-	wrl::ComPtr<ID2D1GeometryRealization> m_geometryRealizationFilled;
-	D2D1::Matrix3x2F m_matrixTransform;
-	
-	SolidColor m_colorFill = SolidColor::NoColor;
-	SolidColor m_colorStroke = SolidColor::NoColor;
-public:
-	CGeometryElement();
-	CGeometryElement(CGeometryElement&);
-	virtual bool HitTest(const D2D1_POINT_2F& pt, UINT& flags);
-	virtual	void Move(float x, float y);
-	virtual void MoveDxDy(float dx, float dy);
-	virtual void Transform(const D2D1::Matrix3x2F& matrix);
-	virtual void Draw(CGraphics* graphics);
-protected:
-	void UpdateTransformedGeometry();
-	virtual	void CreateRgnShape() noexcept = 0;
-};
-
-class CTextElement : public CElement {
-public:
-	enum ALIGMENT {
-		T_CENTER = 1,
-		T_LEFT = 2,
-		T_RIGHT = 4,
-		T_VCENTER = 8,
-	};
-
-	enum FONT_SIZE {
-		FONT_SIZE_8,
-		FONT_SIZE_12,
-	};
-private:
-	template<class Archive>
-	void save(Archive& ar, const unsigned int /*file_version*/) const {}
-
-	template<class Archive>
-	void load(Archive& ar, const unsigned int /*file_version*/) {
-		SetText(text_);
-	}
-
-	friend boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
-		ar& boost::serialization::base_object<CElement>(*this);
-		ar& m_align;
-
-		/////////
-		if (file_version > 0) ar& text_;
-		else {
-			if constexpr (Archive::is_loading::value) {
-				CStringW str; ar& str;
-				text_ = narrow(str);
-			} else {
-				assert(false);
-			}
-		}
-
-		if (file_version > 1) ar& font_size_;
-
-		boost::serialization::split_member(ar, *this, file_version);
-	}
-protected:
-	virtual void OnTextChanged();
-	void UpdatePosition();
-
-	int m_align;
-	FONT_SIZE font_size_ = FONT_SIZE_12;
-	std::string text_;
-	wrl::ComPtr<IDWriteTextLayout> textLayout_;
-	CElementManipulator _manipulator;
-public:
-	DECLARE_TYPE_NAME("TEXT")
-	DECLARE_VISITOR()
-
-	virtual void Draw(CGraphics* pGraphics);
-	virtual CManipulator* GetManipulator() { return &_manipulator; }
-
-	void SetPosition(float x, float y, int align);
-	void SetText(const std::string& text) {
-		text_ = text;
-		OnTextChanged();
-	}
-
-	CTextElement();
-	CTextElement(std::string&& text, float x, float y, int align = (T_CENTER | T_VCENTER), FONT_SIZE font_size = FONT_SIZE_12);
-};
-
-BOOST_CLASS_VERSION(CTextElement, 2);
-
-class CStaticTextElement : public CTextElement {
-	friend boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
-		ar& boost::serialization::base_object<CTextElement>(*this);
-	}
-
-	static std::map<std::string, wrl::ComPtr<IDWriteTextLayout>> m_layouts;
-protected:
-	virtual void OnTextChanged();
-public:
-	DECLARE_TYPE_NAME("TEXT_STATIC")
-	DECLARE_VISITOR()
-	
-	CStaticTextElement() = default;
-	~CStaticTextElement();
-};
-
-class CDxEdit : public CElement {
-	std::string text_;
-	wrl::ComPtr<IDWriteTextLayout> text_layout_;
-public:
-	DECLARE_TYPE_NAME("EDIT")
-	DECLARE_VISITOR()
-
-	void SetText(const std::string& text);
-	virtual void Draw(CGraphics* pGraphics);
-	virtual CManipulator* GetManipulator() { return nullptr; }
-
-	CDxEdit() {
-		SetZOrder(6);
-		SetHitAccess();
-	}
-};
-
-class CGroup : public CGeometryElement {
-	friend boost::serialization::access;
-	template<class Archive>
-	void save(Archive& ar, const unsigned int /*file_version*/) const {
-	}
-	template<class Archive>
-	void load(Archive& ar, const unsigned int /*file_version*/) {
-		CreateRgnShape();
-	}
-	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
-		ar& boost::serialization::base_object<CGeometryElement>(*this);
-		ar& elements_;
-		boost::serialization::split_member(ar, *this, file_version);
-	}
-protected:
-	virtual	void CreateRgnShape() noexcept;
-
-	std::vector<CElement*> elements_;
-	using iterator_element = std::vector<CElement*>::iterator;
-	Iter::StlContainerIterator<CElement*, std::vector> m_iterator;
-public:
-	virtual _Iterator* CreateIterator();
-	virtual	void Move(float x, float y);
-	virtual	void MoveDxDy(float dx, float dy);
-	
-	void AddGraphicElement(CElement* elem) {
-		elements_.push_back(elem);
-	}
-	bool RemoveElement(CElement* elem) {
-		return VectorFastErase(elements_, elem);
-	}
-
-	~CGroup();
-};
-
 class CFindElementsThatContainsDefinedVariables;
 class CFindInternalReferences;
 class CFindExternalReferences;
@@ -385,7 +112,8 @@ class CAssignedSegment;
 class CAssignedSegmentValue;
 
 namespace npsys {
-class CAlgorithmExt;
+class CFBDControlUnit;
+class CSFCControlUnit;
 }
 
 enum SlotType {
@@ -397,7 +125,7 @@ enum SlotType {
 };
 
 struct SlotInfo {
-	npsys::algorithm_n alg;
+	npsys::fbd_control_unit_n alg;
 	npsys::fbd_slot_n slot;
 	CSlotType* slot_type;
 	SlotType slot_type2;
@@ -444,7 +172,7 @@ public:
 		return false;
 	};
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted)
@@ -487,7 +215,7 @@ public:
 	virtual bool Equal(CSlotType* p) { return p->Equal(this); }
 	virtual void ReleaseMemory() noexcept override;
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted);
@@ -561,7 +289,7 @@ protected:
 	virtual bool LoadLinkImpl() noexcept = 0;
 public:
 	COutsideReference() = default;
-	COutsideReference(odb::weak_node<npsys::algorithm_n> alg)
+	COutsideReference(odb::weak_node<npsys::fbd_control_unit_n> alg)
 		: alg_(alg) {}
 	// called only once
 	bool LoadLink() noexcept {
@@ -574,7 +302,7 @@ public:
 		initialized_ = false;
 	}
 protected:
-	odb::weak_node<npsys::algorithm_n> alg_;
+	odb::weak_node<npsys::fbd_control_unit_n> alg_;
 };
 
 class CInternalRef : public CReference {
@@ -610,7 +338,7 @@ public:
 	virtual void ReleaseMemory() noexcept override;
 	virtual bool CheckCycle(color_m& color, void* slot_ptr);
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted);
@@ -659,7 +387,7 @@ public:
 	virtual npsys::variable_n* GetVariableAsNode();
 	virtual void ReleaseMemory() noexcept override;
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted);
@@ -675,7 +403,7 @@ public:
 	CAvrInternalPin(
 		npsys::avr_pin_n& pin,
 		npsys::remote::ExtLinkType dir,
-		odb::weak_node<npsys::algorithm_n> alg)
+		odb::weak_node<npsys::fbd_control_unit_n> alg)
 		: COutsideReference(alg)
 		, pin_(pin)
 		, dir_(dir)
@@ -720,7 +448,7 @@ public:
 	virtual npsys::variable_n* GetVariableAsNode();
 	virtual void ReleaseMemory() noexcept override;
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted);
@@ -775,7 +503,7 @@ public:
 		variable_.remove();
 	}
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted);
@@ -801,6 +529,9 @@ class CExternalReference
 		ar& type_;
 		serialize_if_not_special(loaded_, ar, false);
 		//	LoadLink(); recursive overflow if strong connected links exist
+		if constexpr (is_special_archive_v<Archive> && Archive::is_loading::value) {
+			LoadLink(); 
+		}
 	}
 public:
 	DECLARE_VISITOR()
@@ -816,16 +547,16 @@ public:
 		void serialize(Archive& ar, const unsigned int /*file_version*/) {
 			serialize_default_override(slot, ar);
 			ar& alg;
-			ar& loaded_variable;
+			serialize_if_not_special(loaded_variable, ar, {});
 		}
 
-		odb::weak_node<npsys::algorithm_n> alg;
+		odb::weak_node<npsys::fbd_control_unit_n> alg;
 		npsys::fbd_slot_n slot;
 		// previously loaded referenced variable
 		odb::weak_node<npsys::variable_n> loaded_variable;
 
 		LinkData() = default;
-		LinkData(npsys::fbd_slot_n& _slot, npsys::algorithm_n& _alg)
+		LinkData(npsys::fbd_slot_n& _slot, npsys::fbd_control_unit_n& _alg)
 			: slot(_slot)
 			, alg(_alg)
 		{
@@ -835,15 +566,15 @@ public:
 	CExternalReference() = default;
 	CExternalReference(
 		npsys::fbd_slot_n& ref_slot,
-		npsys::algorithm_n& ref_alg,
-		npsys::algorithm_n& alg);
+		npsys::fbd_control_unit_n& ref_alg,
+		npsys::fbd_control_unit_n& alg);
 	virtual int DefineTypeR();
 	virtual npsys::variable_n* GetVariableAsNode();
 	virtual bool Equal(CExternalReference* p);
 	virtual void ReleaseMemory() noexcept override;
 	virtual bool CheckCycle(color_m& color, void* slot_ptr);
 	virtual void TopoSort(
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		npsys::fbd_slot_n& slot,
 		color_m& color,
 		SortedLink& sorted);
@@ -869,15 +600,13 @@ protected:
 };
 
 // CSlot
-class CSlot : public CGeometryElement {
-public:
-	enum SLOT_DIRECTION {
-		INPUT_SLOT,
-		OUTPUT_SLOT
-	};
+class CSlot 
+	: public CGeometryElement 
+	, public CLineConnectableT<CLine>
+{
 private:
 	using base = CGeometryElement;
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class ChangeSlotTypeCommand;
 	friend class CSlotManipulator;
 	friend class CParameterUpdater;
@@ -901,7 +630,7 @@ protected:
 	boost::signals2::signal<void(SLOT_SIGNAL)> sig_state_chaged_;
 
 	void UpdateSlotPosition() noexcept;
-	virtual	void CreateRgnShape() noexcept;
+	virtual	void CreateRgnShape() noexcept {}
 
 	boost::container::small_vector<CLine*, 5> lines_;
 	CBlock* parent_ = nullptr;
@@ -920,20 +649,22 @@ protected:
 	bool activated_ = false;
 
 	class CSlotManipulator : public CManipulator {
+		CSlot* target_;
 	public:
-		CSlotManipulator(CSlot* slot) : _slot(slot) {}
+		void SetTarget(CSlot* target) { target_ = target; }
+
 		virtual S_CURSOR MouseButtonDown(CPoint point, CAlgorithmView* pWnd);
-		virtual void Drag(CPoint point, CAlgorithmView* pWnd);
+		virtual int Drag(CPoint point, CAlgorithmView* pWnd);
 		virtual void MouseButtonUP(CPoint point, CAlgorithmView* pWnd);
 		virtual void Draw(CGraphics* pGraphics);
 	private:
-		CSlot* _slot;
 		std::unique_ptr<CLine, cpp_line_delete> line_;
 		bool first_slot_no_error_;
-		CSlot* _tmp_slot = nullptr;
-		int begin_at_;
-		CFindSlots fs;
-	} manipulator_;
+		SlotDirection begin_at_;
+		CFBDFindConnectable fs_;
+	};
+
+	inline static CSlotManipulator manipulator_;
 
 	struct {
 		wrl::ComPtr<IDWriteTextLayout> text_layout;
@@ -945,7 +676,6 @@ protected:
 	} Online;
 
 	bool history_ = false;
-	int m_bHasLines = FALSE;
 	int id_;
 	size_t index_;
 	CStaticTextElement text_;
@@ -958,15 +688,20 @@ public:
 	using line_container = boost::container::small_vector<CLine*, 5>;
 	using line_iterator = line_container::iterator;
 
-	virtual SLOT_DIRECTION GetDirection() const = 0;
+	virtual SlotDirection GetDirection() const = 0;
 	//Editor's methods
 	virtual _Iterator* CreateIterator();
-	virtual AlphaCursor GetCursor() final { return AlphaCursor::Pen; };
+	virtual NPSystemCursor GetCursor() final { return NPSystemCursor::Pen; };
 	virtual	void Draw(CGraphics* pGraphics);
-	virtual CManipulator* GetManipulator() { return &manipulator_; }
-	virtual bool ConnectToLine(CLine* line) = 0;
-	virtual void AddLine(CLine*) = 0;
-	virtual void DisconnectLine(CLine* pLine) = 0;
+	virtual CManipulator* GetManipulator() { 
+		manipulator_.SetTarget(this);
+		return &manipulator_; 
+	}
+	
+	virtual bool HitTestWhileConnectingLine(const D2D1_POINT_2F& pt, UINT& flags) noexcept {
+		return CGeometryElement::HitTest(pt, flags);
+	}
+
 	virtual int DefineTypeR() = 0;
 	virtual bool IsNode() const noexcept final { return true; }
 	virtual int	IsConnected() = 0;
@@ -1103,7 +838,7 @@ protected:
 };
 
 class CInputSlot : public CSlot {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int file_version) {
@@ -1116,11 +851,12 @@ public:
 	DECLARE_TYPE_NAME("INPUT_SLOT")
 	DECLARE_VISITOR()
 	
-	virtual bool ConnectToLine(CLine* line);
-	virtual void AddLine(CLine* line);
+	void ConnectLine(CLine* line);
+	void DisconnectLine(CLine* line);
+
+	virtual bool ConnectToLine(CLine* line, bool checking);
 	virtual void AlignOnlineValue();
-	virtual void DisconnectLine(CLine* line);
-	virtual SLOT_DIRECTION GetDirection() const final { return CSlot::INPUT_SLOT; }
+	virtual SlotDirection GetDirection() const final { return SlotDirection::INPUT_SLOT; }
 	virtual int DefineTypeR();
 	virtual npsys::variable* GetSlotAssociateVariable();
 	virtual void AlignText();
@@ -1133,7 +869,7 @@ public:
 };
 
 class COutputSlot : public CSlot {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int file_version) {
@@ -1146,11 +882,12 @@ public:
 	DECLARE_TYPE_NAME("OUTPUT_SLOT")
 	DECLARE_VISITOR()
 	
-	virtual bool ConnectToLine(CLine* line);
-	virtual void AddLine(CLine*);
+	void ConnectLine(CLine*, bool recreate);
+	void DisconnectLine(CLine* line);
+
+	virtual bool ConnectToLine(CLine* line, bool checking);
 	virtual int IsConnected() { return !lines_.empty(); }
 	virtual int DefineTypeR() { return slot_type_->DefineTypeR(); }
-	virtual void DisconnectLine(CLine* pLine);
 	virtual void SetValue(const nps::server_value* value);
 	virtual void AlignOnlineValue();
 	virtual npsys::variable* GetSlotAssociateVariable() {
@@ -1158,11 +895,55 @@ public:
 		return var ? var->get() : nullptr;
 	}
 	virtual void AlignText();
-	virtual SLOT_DIRECTION GetDirection() const final { return CSlot::OUTPUT_SLOT; }
+	virtual SlotDirection GetDirection() const final { return SlotDirection::OUTPUT_SLOT; }
 
-	void CalcLinesOffset();
+	void CalcLinesPosition();
 
 	COutputSlot() = default;
+};
+
+class CLine 
+	: public CLineT<CSlot, CInputSlot, COutputSlot, CLine>
+	, public IRecreatable {
+	using inherited = CLineT<CSlot, CInputSlot, COutputSlot, CLine>;
+	friend boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int file_version) {
+		inherited::_serialize_(ar, file_version);
+	}
+	float dx_ = 0.0f;
+	float offset_midddle_x_ = 0.0f;
+	float offset_y1_ = 0.0f;
+public:
+	DECLARE_VISITOR()
+	DECLARE_TYPE_NAME("FBD_LINE");
+
+	virtual void ConnectSlots(bool recreate_dependencies, CBlockCompositionBase* blocks = nullptr, CElement::MyQuadrantNode* qtRoot = nullptr) final {
+		ASSERT(slot_in_ && slot_out_);
+		slot_in_->ConnectLine(this);
+		slot_out_->ConnectLine(this, recreate_dependencies);
+		dx_ = static_cast<float>(std::max(slot_in_->GetSlotIndex(), slot_out_->GetSlotIndex())) * 2.5f;
+	}
+
+	virtual void Disconnect(CBlockCompositionBase* blocks, CElement::MyQuadrantNode* qtRoot) final {
+		ASSERT(slot_in_ && slot_out_);
+		qtRoot;
+		slot_in_->DisconnectLine(this);
+		slot_out_->DisconnectLine(this);
+	}
+
+	void SetLineOffset(float offset_middle_x, float offset_y1) noexcept {
+		if (offset_midddle_x_ != offset_middle_x + dx_ || offset_y1_ != offset_y1) SetGeometryFlag(true);
+		offset_midddle_x_ = offset_middle_x + dx_;
+		offset_y1_ = offset_y1;
+	}
+
+	virtual void Recreate() { Create(); };
+	virtual CElement* GetBase() { return this; }
+
+	void Create();
+	void CreateBezierHorizontal(bool predraw);
+
 };
 
 class CInplaceBlockProperty : public CGroup {
@@ -1190,7 +971,7 @@ public:
 		D2D1_RECT_F rc;
 
 		auto text_elem = new CStaticTextElement;
-		text_elem->SetText(prop_.GetName());
+		text_elem->SetName(prop_.GetName());
 		text_elem->SetPosition(rect.left, rect.top, CTextElement::T_VCENTER | CTextElement::T_LEFT);
 		text_elem->GetRect(rc);
 		AddGraphicElement(text_elem);
@@ -1207,9 +988,11 @@ public:
 
 class CBlock
 	: public CGroup
-	, public CGraphElement 
+	, public CGraphElement
+	, public Properties
+	, public IConnectableToLine
 {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTreeBlock;
 	friend class npsys::CFBDBlock;
 	friend class CBlockManipulator;
@@ -1221,7 +1004,7 @@ class CBlock
 	void save(Archive& ar, const unsigned int /*file_version*/) const {
 		ar << elements_.size() - top->slots.i_size() - top->slots.o_size() - inplace_prop_count_;
 		for (auto& e : elements_) {
-			if (!e->IsNode() && e->IsSerializable()) ar << e;
+			if (e->IsSerializedByComposition()) ar << e;
 		}
 	}
 	template<class Archive>
@@ -1245,21 +1028,18 @@ class CBlock
 
 	class CBlockManipulator : public CElementManipulator {
 	public:
-		CBlockManipulator(CBlock* pBlock)
-			: CElementManipulator(reinterpret_cast<CElement*>(pBlock)) {
-		}
-		virtual void Drag(CPoint point, CAlgorithmView* pWnd);
+		virtual int Drag(CPoint point, CAlgorithmView* pWnd);
 		virtual void MouseButtonUP(CPoint point, CAlgorithmView* pWnd);
 		virtual void Draw(CGraphics* pGraphics);
 	protected:
 		std::vector<CLine*> m_lines;
-	} manipulator_;
+	};
+	inline static CBlockManipulator manipulator_;
 protected:
 	virtual	void CreateRgnShape() noexcept;
 	virtual void CreateInplaceProperties() noexcept {}
 
 	size_t inplace_prop_count_ = 0;
-	std::vector<std::unique_ptr<BlockProperty>> prop_list_;
 	int execute_order_ = -1;
 	bool fresh_ = false;
 	BlockColor m_colorIndex = BlockColor::Standart;
@@ -1269,16 +1049,19 @@ public:
 	npsys::CFBDBlock* top;
 
 	virtual void Translate(CCodeGenerator* pGenerator) = 0;
-	virtual Command* DeleteElement(CBlockComposition* pBlocks, CElement::MyQuadrantNode* qtRoot);
-	virtual AlphaCursor GetCursor() final { return IsSelected() ? AlphaCursor::Drag : AlphaCursor::Arrow; }
-	virtual AlphaCursor GetOnlineCursor() { return AlphaCursor::LinkSelect; }
+	virtual std::unique_ptr<Command> DeleteElement(CBlockComposition* blocks, MyQuadrantNode* qtRoot);
+	virtual NPSystemCursor GetCursor() final { return IsSelected() ? NPSystemCursor::Drag : NPSystemCursor::Arrow; }
+	virtual NPSystemCursor GetOnlineCursor() { return NPSystemCursor::LinkSelect; }
 	virtual void Check(CBlockVisitor& v) {}
 	virtual void Draw(CGraphics* pGraphics);
 	virtual void InsertToWrapper(CBlockCompositionWrapper* wrapper) noexcept final;
 	virtual	int	GetPriority() { return 0; }
 	virtual void DeletePermanent();
-	virtual	MoveCommand* CreateMoveCommand(const D2D1_POINT_2F& delta, CElement::MyQuadrantNode* qtRoot);
-	virtual CManipulator* GetManipulator() { return &manipulator_; }
+	virtual	std::unique_ptr<Command_MoveCommand> CreateMoveCommand(const D2D1_POINT_2F& delta, CElement::MyQuadrantNode* qtRoot);
+	virtual CManipulator* GetManipulator() { 
+		manipulator_.SetTarget(this);
+		return &manipulator_; 
+	}
 	virtual const std::string& GetName() const noexcept final { return top->get_name(); }
 	virtual void SetName(const std::string& name) noexcept;
 	virtual bool IsNode() const noexcept final { return true; }
@@ -1294,11 +1077,10 @@ public:
 		CGroup::AddGraphicElement(prop);
 		inplace_prop_count_++;
 	}
-	void Hardware_InitInternal(CSlot::SLOT_DIRECTION slot_dir, size_t slot_index, 
+	void Hardware_InitInternal(SlotDirection slot_dir, size_t slot_index, 
 		int var_type, uint16_t addr, odb::weak_node<npsys::device_n> dev);
 	size_t InputHasValidVariable() noexcept;
 	std::vector<CLine*> GetLines() const;
-	void CollectLines(std::vector<CLine*>& lines) const;
 	void SetExecuteOrder(int execute_order) { execute_order_ = execute_order; }
 	int GetExecuteOrder() const noexcept { return execute_order_; }
 	void MountSlot(npsys::fbd_slot_n&& slot);
@@ -1319,30 +1101,14 @@ public:
 		for (auto& slot : top->slots) slot->e_slot->OnSlotDeletedFromEditor();
 	};
 
-	template<typename T>
-	void AddProperty(PRB::Section section, const std::string& name, std::string_view key, T defValue = {}) {
-		prop_list_.push_back(std::move(
-			std::make_unique<BlockPropertyT<T>>(section, name, key, defValue)
-		));
-	}
-
-	template<typename T>
-	BlockPropertyT<T>* GetPropertyByKey(std::string_view key) {
-		for (auto& i : prop_list_) {
-			if (i->GetKey() == key) {
-				ASSERT(dynamic_cast<BlockPropertyT<T>*>(i.get()));
-				return static_cast<BlockPropertyT<T>*>(i.get());
-			}
-		}
-		throw std::runtime_error("Property with key \"" + std::string(key) + "\" does not exist.");
-		return nullptr;
-	}
+	// IConnectableToLine
+	virtual void CollectAffectedGeometries(std::unordered_set<IRecreatable*>& lines);
 
 	~CBlock();
 };
 
 class CDynamicBlock : public CBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int file_version) {
@@ -1350,15 +1116,12 @@ class CDynamicBlock : public CBlock {
 	}
 public:
 	virtual CMenuHandle GetContextMenu();
-	void ExpandReduceInputs(size_t new_count, CBlockFactory& factory);
+	void ExpandReduceInputs(size_t new_count, CFBDBlockFactory& factory);
 };
-
-#define DECLARE_TRANSLATE() \
-	virtual void Translate(class CCodeGenerator*);
 
 #define DECLARE_SIMPLE_BLOCK_CLASS(classname, blockname, colorIndex) \
 class classname : public CBlock { \
-	friend class CBlockFactory; \
+	friend class CFBDBlockFactory; \
 	friend boost::serialization::access; \
 	friend class CTypeDeterminant; \
 	friend class CTACGenerator; \
@@ -1378,7 +1141,7 @@ public:	\
 
 #define DECLARE_DYNAMIC_BLOCK_CLASS(classname, blockname, colorIndex) \
 class classname : public CDynamicBlock { \
-	friend class CBlockFactory; \
+	friend class CFBDBlockFactory; \
 	friend class CTypeDeterminant; \
 	friend class CTACGenerator; \
 	friend class CAVR5CodeGenerator; \
@@ -1413,7 +1176,7 @@ virtual void DeletePermanent() noexcept override { \
 }
 
 class CBinaryEncoder : public CBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1429,7 +1192,7 @@ public:
 };
 
 class CBinaryDecoder : public CBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1445,7 +1208,7 @@ public:
 };
 
 class CPositiveEdge : public CBlock, public COneVariable {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1463,7 +1226,7 @@ public:
 };
 
 class CCounter : public CBlock, public COneVariable {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1481,7 +1244,7 @@ public:
 };
 
 class CNegativeEdge : public CBlock, public COneVariable {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1509,7 +1272,7 @@ inline void load_construct_data(Archive& ar, CNegativeEdge* t, const unsigned in
 
 
 class CAnyEdge : public CBlock, public COneVariable {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1528,7 +1291,7 @@ public:
 
 
 class CDelay : public CBlock, public COneVariable {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1548,7 +1311,7 @@ public:
 };
 
 class CPID : public CBlock, public CVarContainer {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1592,7 +1355,7 @@ private:
 };
 
 class CAlarmHigh : public CBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1611,7 +1374,7 @@ public:
 };
 
 class CAlarmLow : public CBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1638,7 +1401,7 @@ public:
 class CTime
 	: public CBlock
 	, public CInternalBlockRef {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1657,6 +1420,36 @@ public:
 	
 	virtual void HardwareSpecific_Init(npsys::CNetworkDevice* device);
 	virtual void HardwareSpecific_Clear();
+};
+
+class CPulse : public CBlock, public CVarContainer {
+	friend class CFBDBlockFactory;
+	friend class CTypeDeterminant;
+	friend class CTACGenerator;
+	friend class CAVR5CodeGenerator;
+	template<class Archive>
+	void save(Archive& ar, const unsigned int /*file_version*/) const {
+	}
+	template<class Archive>
+	void load(Archive& ar, const unsigned int /*file_version*/) {
+	}
+	friend boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive& ar, const unsigned int file_version) {
+		ar& boost::serialization::base_object<CBlock>(*this);
+		ar& boost::serialization::base_object<CVarContainer>(*this);
+		boost::serialization::split_member(ar, *this, file_version);
+	}
+	CPulse() {
+		m_colorIndex = BlockColor::Standart;
+	}
+public:
+	DECLARE_TYPE_NAME("Pulse")
+	DECLARE_VISITOR()
+	DECLARE_TRANSLATE()
+	DB_DELETE(CVarContainer)
+
+	enum { IV_TMR_CUR_CNT, IV_EDGE_PREVIOUS_STATE };
 };
 
 class CConfigurableBlock : public CBlock {
@@ -1679,7 +1472,7 @@ public:
 };
 
 class CComparator : public CConfigurableBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1696,7 +1489,7 @@ public:
 
 
 class CBlockFunction : public CBlock {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1718,7 +1511,7 @@ public:
 };
 
 class CSliderThing : public CGeometryElement {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 
 	CSliderManipulator manipulator_;
 	CGroup* parent_ = nullptr;
@@ -1749,7 +1542,7 @@ protected:
 };
 
 class CScheduleSlider : public CGroup {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend boost::serialization::access;
 	template<class Archive>
 	void save(Archive& ar, const unsigned int /*file_version*/) const {}
@@ -1784,7 +1577,7 @@ public:
 };
 
 class CSliderTimeChart : public CGroup {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive& ar, const unsigned int file_version) {
@@ -1804,7 +1597,7 @@ class CBlockSchedule
 	: public CBlock
 	, public CVarContainer
 	, public CInternalBlockRef {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1865,8 +1658,8 @@ public:
 	virtual void Translate(std::string& prog) {}
 	virtual void Draw(CGraphics* pGraphics);
 	virtual void PrintDebugTooltip(std::stringstream& ss);
-	virtual bool ShowPropertiesDialog(CBlockComposition* blocks, npsys::algorithm_n& alg);
-	virtual bool ShowOnlineDialog(npsys::CAlgorithmExt* alg);
+	virtual bool ShowPropertiesDialog(CBlockComposition* blocks, npsys::control_unit_n& unit);
+	virtual bool ShowOnlineDialog(npsys::CControlUnit* unit);
 	PARAMETER_TYPE GetParamType();
 	PARAMETER_TYPE SetParamType(PARAMETER_TYPE);
 	virtual PARAM_SCOPE GetScope();
@@ -1885,7 +1678,7 @@ public:
 };
 
 class CInput : public CParameter {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1906,7 +1699,7 @@ public:
 };
 
 class COutput : public CParameter {
-	friend class CBlockFactory;
+	friend class CFBDBlockFactory;
 	friend class CTypeDeterminant;
 	friend class CTACGenerator;
 	friend class CAVR5CodeGenerator;
@@ -1926,11 +1719,7 @@ public:
 	virtual int	GetPriority() { return 1; }
 };
 
-
 BOOST_CLASS_VERSION(CParameter, 1)
-
-
-
 
 namespace npsys {
 template<typename Archive>
@@ -1938,7 +1727,7 @@ void CFBDSlot::serialize2(Archive& ar, const unsigned int file_version) {
 	ar & e_slot;
 	if constexpr (Archive::is_loading::value) {
 		e_slot->top = this;
-		e_slot->GetTextElement()->SetText(name_);
+		e_slot->GetTextElement()->SetName(name_);
 		e_slot->AlignText();
 	}
 }

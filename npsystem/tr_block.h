@@ -13,7 +13,7 @@ class CTreeBlockValue : public CTemplateItem<
 public:
 	CTreeBlockValue(npsys::fbd_slot_n& n) 
 	: CTemplateItem(n) {
-		SetIcon(AlphaIcon::Software);
+		SetIcon(NPSystemIcon::Software);
 	}
 
 	virtual void ConstructMenu(CMenu* menu) noexcept;
@@ -33,7 +33,7 @@ class CTreeBlock : public LazyItemListContainer<
 public:
 	CTreeBlock(npsys::fbd_block_n& n)
 		: LazyItemListContainer(n) {
-		SetIcon(AlphaIcon::Block);
+		SetIcon(NPSystemIcon::Block);
 		n->tree_block = this;
 	}
 protected:

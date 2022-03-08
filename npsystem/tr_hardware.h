@@ -20,7 +20,7 @@ class CTreeHardware : public CTemplateItemHardwareStatus<
 	CTreeHardware> {
 public:
 	CTreeHardware(npsys::controller_n& ctrl) : ctrl_(ctrl) {
-		SetIcon(AlphaIcon::Hardware);
+		SetIcon(NPSystemIcon::Hardware);
 		name_ = "HARDWARE";
 	}
 	virtual oid_t GetId() const noexcept final {

@@ -11,7 +11,7 @@ class CTreeNetwork :
 	void AppendController(const std::string& type);
 public:
 	CTreeNetwork() {
-		SetIcon(AlphaIcon::Network);
+		SetIcon(NPSystemIcon::Network);
 		name_ = "NETWORK";
 		LoadChilds();
 	}

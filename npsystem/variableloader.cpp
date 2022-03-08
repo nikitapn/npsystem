@@ -214,12 +214,12 @@ CSimpleVariableLoader::CSimpleVariableLoader(npsys::device_n& device)
 }
 
 // CAlgorithmVariableLoader
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "assignedalgorithm.h"
 
 CAlgorithmVariableLoader::CAlgorithmVariableLoader(
 	npsys::device_n& device,
-	npsys::algorithm_n& alg)
+	npsys::fbd_control_unit_n& alg)
 	: CVariableLoader(device)
 	, alg_(alg)
 {
@@ -243,7 +243,7 @@ void CAlgorithmVariableLoader::CollectAllOwnerReleasedVariables() noexcept {
 
 CAlgorithmVariableLoader::CAlgorithmVariableLoader(
 	npsys::device_n& device,
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	var_node_ptr_list& algVars,
 	var_raw_ptr_list& algRefs)
 	: CVariableLoader(device)

@@ -22,7 +22,7 @@ public:
 
 	class CTaskLoadOneAlgorithm : public CTask {
 	public:
-		CTaskLoadOneAlgorithm(npsys::device_n& dev, npsys::algorithm_n& alg)
+		CTaskLoadOneAlgorithm(npsys::device_n& dev, npsys::fbd_control_unit_n& alg)
 			: dev_(dev)
 			, alg_(alg) 
 		{
@@ -30,12 +30,12 @@ public:
 		virtual void Exec(CDlg_LoadingManager* dlg) noexcept final;
 	private:
 		npsys::device_n dev_;
-		npsys::algorithm_n alg_;
+		npsys::fbd_control_unit_n alg_;
 	};
 
 	class CTaskUnloadOneAlgorithm : public CTask {
 	public:
-		CTaskUnloadOneAlgorithm(npsys::device_n& dev, npsys::algorithm_n& alg)
+		CTaskUnloadOneAlgorithm(npsys::device_n& dev, npsys::fbd_control_unit_n& alg)
 			: dev_(dev)
 			, alg_(alg)
 		{
@@ -43,7 +43,7 @@ public:
 		virtual void Exec(CDlg_LoadingManager* dlg) noexcept final;
 	private:
 		npsys::device_n dev_;
-		npsys::algorithm_n alg_;
+		npsys::fbd_control_unit_n alg_;
 	};
 
 	class CTaskUploadOneI2CModule : public CTask {

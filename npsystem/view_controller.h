@@ -7,12 +7,22 @@
 #include "mytabview.h"
 #include "myonlinetreectrl.h"
 #include "myedit.h"
+#include "resource.h"
 
 class CTreeController;
 
 class CControllerView 
 	: public CViewItemDialogImpl<CControllerView> {
 	using base = CViewItemDialogImpl<CControllerView>;
+
+	CMyOnlineTreeView tree_;
+	CListViewCtrl m_listLibs;
+	CMyEdit m_editModel;
+	CMyEdit m_editAddress;
+	CMyEdit m_editVersion;
+	CButton m_cbAdvise;
+	CButton m_cbUpgradeFirmware;
+
 public:
 	enum { IDD = IDD_DLG_CONTROLLER };
 
@@ -22,8 +32,11 @@ public:
 //		MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
 //		MESSAGE_HANDLER(WM_SIZE, OnSize)
 		COMMAND_HANDLER(IDC_BUTTON1, BN_CLICKED, OnBnClickedButtonAdvise)
+		COMMAND_HANDLER(IDC_BUTTON_UPGRADE_FIRMWARE, BN_CLICKED, OnBnClickedUpgradeFirmware)
 		CHAIN_MSG_MAP(base)
 	END_MSG_MAP()
+
+	virtual HICON GetIcon() const noexcept;
 
 protected:
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -45,13 +58,8 @@ protected:
 //	virtual BOOL CanStopOnline();
 //	virtual BOOL CanUpload();
 	LRESULT OnBnClickedButtonAdvise(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnBnClickedUpgradeFirmware(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 public:
 	CControllerView(CTreeController* item, CMyTabView& tabview);
-	CMyOnlineTreeView tree_;
-	CListViewCtrl m_listLibs;
-	CMyEdit m_editModel;
-	CMyEdit m_editAddress;
-	CMyEdit m_editVersion;
-	CButton m_cbAdvise;
 };
 

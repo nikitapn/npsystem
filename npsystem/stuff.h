@@ -3,11 +3,6 @@
 
 #pragma once
 
-#define DECLARE_VISITOR() \
-public:	\
-	virtual void Visit(CBlockVisitor& v);
-#define IMPLEMENT_VISITOR(ClassName) \
-	void ClassName ## ::Visit(CBlockVisitor& v) { v.Accept(this); }
 /*
 #define DECLARE_BOOST_POOL_ALLOC() \
 static boost::pool<> pl; \

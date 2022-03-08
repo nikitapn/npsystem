@@ -171,7 +171,7 @@ uint16_t adc_task(void) {
 		case ADC_SET_CHANNEL:
 			if (index >= eeprcfg.adc_n)
 				index = 0;
-			ADMUX = eeprcfg.adc_channel[index];
+			ADMUX = eeprcfg.admux_value[index];
 			ADCSRA |= (1 << ADSC);
 			eeprcfg.adc_state = ADC_CONVERTING;
 			break;
@@ -179,7 +179,7 @@ uint16_t adc_task(void) {
 			if (ADCSRA & (1 << ADIF))  {
 				ADCSRA |= (1 << ADIF);
 				uint16_t value = ADCW;
-				adc_value[eeprcfg.adc_channel[index]] = value;
+				adc_value[eeprcfg.admux_value[index] & 0x07] = value;
 				eeprcfg.adc_state = ADC_DELAY;
 				index++;
 			}

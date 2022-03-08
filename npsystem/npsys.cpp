@@ -5,7 +5,7 @@
 #include "network_ext.h"
 
 #include "block.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include <npsys/algcat.h>
 #include <npsys/algsubcat.h>
 #include <npsys/fbdblock.h>

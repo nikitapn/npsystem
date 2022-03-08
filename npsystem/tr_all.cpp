@@ -6,7 +6,7 @@
 #include "tr_network.h"
 #include "tr_alg.h"
 #include "tr_block.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "view_algorithm.h"
 #include "dlgalgorithmproperties.h"
 #include "dlgstring.h"
@@ -23,16 +23,29 @@
 #include <npsys/strings.h>
 
 
-// CTreeAlgorithm
-CTreeAlgorithm::CTreeAlgorithm(npsys::algorithm_n& n, npsys::algorithm_l& l)
+CTreeItemAbstract* create_tr_item(npsys::control_unit_n& n, npsys::control_unit_l& l) {
+	return new CTreeControlUnit(n, l);
+}
+
+namespace npsys {
+INT_PTR CFBDControlUnit::ShowProperties(control_unit_n& self) {
+	auto n = self.cast<fbd_control_unit_n>();
+	CDlg_AlgorithmProperties dlg(n);
+	return dlg.DoModal(g_hMainWnd);
+}
+}
+
+// CTreeControlUnit
+
+CTreeControlUnit::CTreeControlUnit(npsys::control_unit_n& n, npsys::control_unit_l& l)
 	: LazyItemListContainer(n, l) {
-	SetIcon(AlphaIcon::Algorithm);
+	SetIcon(n_->GetIcon());
 	n_->tree_algorithm = this;
 }
 
-void CTreeAlgorithm::ConstructMenu(CMenu* menu) noexcept {
-	UINT assigned = (n_->GetStatus() >= npsys::CAlgorithm::status_assigned) ? 0xFFFFFFFF : 0;
-	UINT loaded = (n_->GetStatus() >= npsys::CAlgorithm::status_loaded) ? 0xFFFFFFFF : 0;
+void CTreeControlUnit::ConstructMenu(CMenu* menu) noexcept {
+	UINT assigned = (n_->GetStatus() >= npsys::CControlUnit::Status::status_assigned) ? 0xFFFFFFFF : 0;
+	UINT loaded = (n_->GetStatus() >= npsys::CControlUnit::Status::status_loaded) ? 0xFFFFFFFF : 0;
 
 	menu->AppendMenu(MF_STRING | (MF_DISABLED & ~assigned), _ID_UPLOAD_ALGORITHM_, L"Upload to controller");
 	menu->AppendMenu(MF_STRING | (MF_DISABLED & ~loaded), _ID_UNLOAD_ALGORITHM_, L"Unload");
@@ -45,15 +58,14 @@ void CTreeAlgorithm::ConstructMenu(CMenu* menu) noexcept {
 	menu->AppendMenu(MF_STRING, ID_ITEM_PROPERTIES, L"Properties");
 }
 
-INT_PTR CTreeAlgorithm::ShowProperties() {
-	CDlg_AlgorithmProperties dlg(n_);
-	return dlg.DoModal(g_hMainWnd);
+INT_PTR CTreeControlUnit::ShowProperties() {
+	return n_->ShowProperties(n_);
 }
 
-bool CTreeAlgorithm::ChangeName(const std::string& name) {
+bool CTreeControlUnit::ChangeName(const std::string& name) {
 	if (CTreeItemAbstract::ChangeName(name) == false) return false;
 	n_->set_name(name);
-	if (n_->GetStatus() >= npsys::CAlgorithm::status_assigned) {
+	if (n_->GetStatus() >= npsys::CControlUnit::Status::status_assigned) {
 		auto assigned = n_->assigned_alg.fetch();
 		ASSERT(assigned.loaded());
 		if (assigned->item) {
@@ -65,7 +77,7 @@ bool CTreeAlgorithm::ChangeName(const std::string& name) {
 	return true;
 }
 
-void CTreeAlgorithm::HandleRequest(REQUEST* req) noexcept {
+void CTreeControlUnit::HandleRequest(REQUEST* req) noexcept {
 	switch (req->ID_MENU) {
 	case _ID_UPLOAD_ALGORITHM_:
 		n_->UploadToDevice(true);
@@ -75,7 +87,7 @@ void CTreeAlgorithm::HandleRequest(REQUEST* req) noexcept {
 		break;
 #ifdef DEBUG
 	case ID_ALGORITHM_SHOW_BLOCKS:
-		n_->ShowBlocks();
+		// n_->ShowBlocks();
 		break;
 #endif // DEBUG
 	default:
@@ -83,83 +95,104 @@ void CTreeAlgorithm::HandleRequest(REQUEST* req) noexcept {
 	}
 }
 
-CItemView* CTreeAlgorithm::CreateView(CMyTabView& tabview) {
-	return CreateViewForItem<CAlgorithmView>(this, tabview);
+namespace npsys {
+CItemView* CFBDControlUnit::CreateView(CTreeControlUnit* tree, CMyTabView& tabview) {
+	return CreateViewForItem<CFBDView>(tree, tabview);
+}
+
+CItemView* CSFCControlUnit::CreateView(CTreeControlUnit* tree, CMyTabView& tabview) {
+	return CreateViewForItem<CSFCView>(tree, tabview);
+}
+
+} // namespace npsys
+
+
+CItemView* CTreeControlUnit::CreateView(CMyTabView& tabview) {
+	return n_->CreateView(this, tabview);
 };
 
-void CTreeAlgorithm::LoadChildsImpl() noexcept {
-	n_->fbd_blocks.fetch_all_nodes();
-	for (auto& i : n_->fbd_blocks) {
-		insert(new CTreeBlock(i));
+void CTreeControlUnit::LoadChildsImpl() noexcept {
+	if (n_->GetLanguageType() == npsys::CControlUnit::Language::FBD) {
+		auto n = n_.cast<npsys::fbd_control_unit_n>();
+		n->fbd_blocks.fetch_all_nodes();
+		for (auto& i : n->fbd_blocks) {
+			insert(new CTreeBlock(i));
+		}
 	}
 }
 
-int CTreeAlgorithm::Move(CTreeItemAbstract* item, int action) {
+int CTreeControlUnit::Move(CTreeItemAbstract* item, int action) {
 	int res = item->Move(this, action);
 	return res;
 }
 
-void CTreeAlgorithm::PostDelete(CContainer* parent) noexcept {
+void CTreeControlUnit::PostDelete(CContainer* parent) noexcept {
 	n_->DeletePermanent();
 	__super::PostDelete(parent);
 }
 
-bool CTreeAlgorithm::IsRemovable() {
-	bool removable = (n_->GetStatus() == npsys::CAlgorithm::status_not_assigned);
+bool CTreeControlUnit::IsRemovable() {
+	bool removable = (n_->GetStatus() == npsys::CControlUnit::Status::status_not_assigned);
 	if (!removable && n_->assigned_dev.is_invalid_id() != false) {
 		return true;
 	}
 	if (!removable) {
 		MessageBoxA(g_hMainWnd, ("Cannot remove " + GetName() + "\r\n"
-			"The algorithm is assigned").c_str(), "npsystem", MB_ICONEXCLAMATION);
+			"The unit is assigned").c_str(), "npsystem", MB_ICONEXCLAMATION);
 	}
 	return removable;
 }
 
 // CTreeAlgorithmCat
 class CTreeAlgorithmCat : public LazyItemListContainer<CTreeAlgorithmCat,
-	std::vector, CTreeAlgorithm, DatabaseElement<npsys::algorithm_category_n, npsys::algorithm_category_l>,
+	std::vector, CTreeControlUnit, DatabaseElement<npsys::algorithm_category_n, npsys::algorithm_category_l>,
 	TableChilds>
 {
 public:
 	CTreeAlgorithmCat(npsys::algorithm_category_n& n, npsys::algorithm_category_l& l)
 		: LazyItemListContainer(n, l) {
-		SetIcon(AlphaIcon::Container);
+		SetIcon(NPSystemIcon::Container);
+		npsys::fbd_control_unit_n::type_t::has_common_interface();
 	}
 	virtual void ConstructMenu(CMenu* menu) noexcept {
-		menu->AppendMenu(MF_STRING, ID_CREATE_ITEM, L"New Algorithm");
+		menu->AppendMenu(MF_STRING, ID_CREATE_FBD_UNIT, L"New FBD control unit");
+		menu->AppendMenu(MF_STRING, ID_CREATE_SFC_UNIT, L"New SFC control unit");
 		DefaultMenu(menu);
 	}
 
 	virtual void HandleRequest(REQUEST* req) noexcept {
 		switch (req->ID_MENU) {
-		case ID_CREATE_ITEM:
-			CreateNewItem(n_->algs, GetNextName("ALGORITHM_"), n_);
+		case ID_CREATE_FBD_UNIT:
+			CreateNewItem<npsys::CFBDControlUnit>(n_->units, GetNextName("FBD_CONTROL_UNIT_"), n_);
+			break;
+		case ID_CREATE_SFC_UNIT:
+			CreateNewItem<npsys::CSFCControlUnit>(n_->units, GetNextName("SFC_CONTROL_UNIT_"), n_);
 			break;
 		default:
 			__super::HandleRequest(req);
 		};
 	}
-	auto& childs_node_list() { return n_->algs; }
+	auto& childs_node_list() { return n_->units; }
 protected:
 	virtual bool IsRemovable() {
 		m_treeview.Expand(m_hTreeItem, TVE_EXPAND);
 		for (auto alg : m_items) {
-			if (alg->n_->GetStatus() > npsys::CAlgorithm::status_not_assigned) {
-				MessageBoxA(NULL, ("Cannot remove category \"" + GetName() + "\" algorithm \""
-					+ alg->GetName() + "\" is assigned").c_str(), "", MB_ICONWARNING);
-				return false;
-			}
+		//	if (alg->n_->GetStatus() > npsys::CControlUnit::status_not_assigned) {
+		//		MessageBoxA(NULL, ("Cannot remove category \"" + GetName() + "\" algorithm \""
+		//			+ alg->GetName() + "\" is assigned").c_str(), "", MB_ICONWARNING);
+			//	return false;
+		//	}
 		}
 		return true;
 	}
+
 	virtual void PostDelete(CContainer* parent) noexcept {
-		n_->algs.fetch_all_nodes();
-		for (auto& alg : n_->algs) {
+		n_->units.fetch_all_nodes();
+		for (auto& alg : n_->units) {
 			alg->DeletePermanent();
 			alg.remove();
 		}
-		n_->algs.remove();
+		n_->units.remove();
 		__super::PostDelete(parent);
 	};
 };
@@ -170,7 +203,7 @@ class CTreeAlgorithms
 {
 public:
 	CTreeAlgorithms() {
-		SetIcon(AlphaIcon::Container);
+		SetIcon(NPSystemIcon::Container);
 		name_ = "ALGORITHMS";
 		if (!algorithms_.fetch()) {
 			algorithms_.create();
@@ -179,7 +212,7 @@ public:
 	virtual void HandleRequest(REQUEST* req) noexcept final {
 		switch (req->ID_MENU) {
 		case ID_CREATE_ITEM:
-			CreateNewItem(algorithms_->alg_cats, GetNextName("ALGORITHM_CATEGORY_"));
+			CreateNewItem<npsys::CAlgorithmCat>(algorithms_->alg_cats, GetNextName("ALGORITHM_CATEGORY_"));
 			break;
 		default:
 			__super::HandleRequest(req);
@@ -208,7 +241,7 @@ class CTreeWebItem : public CTemplateItem<
 public:
 	CTreeWebItem(npsys::web_item_n& n, npsys::web_item_l& parent)
 		: CTemplateItem(n, parent) {
-		SetIcon(AlphaIcon::Library);
+		SetIcon(NPSystemIcon::Library);
 		UnsetUpperCase();
 	}
 
@@ -254,7 +287,7 @@ class CTreeWebCat
 public:
 	CTreeWebCat(npsys::web_cat_n& n, npsys::web_l& parent)
 		: LazyItemListContainer(n, parent) {
-		SetIcon(AlphaIcon::Library);
+		SetIcon(NPSystemIcon::Library);
 		UnsetUpperCase();
 	}
 
@@ -292,7 +325,7 @@ public:
 	virtual void HandleRequest(REQUEST* req) noexcept {
 		switch (req->ID_MENU) {
 		case ID_CREATE_ITEM:
-			CreateNewItem(n_->items, GetNextName("WEB_ITEM_"));
+			CreateNewItem<npsys::WebItem>(n_->items, GetNextName("WEB_ITEM_"));
 			break;
 		default:
 			__super::HandleRequest(req);
@@ -308,14 +341,14 @@ class CTreeWebRoot :
 	npsys::web_l lst_;
 public:
 	CTreeWebRoot() {
-		SetIcon(AlphaIcon::Network);
+		SetIcon(NPSystemIcon::Network);
 		name_ = "WEB";
 	}
 	virtual oid_t GetId() const noexcept final { return npsys::WEB; }
 	virtual void HandleRequest(REQUEST* req) noexcept final {
 		switch (req->ID_MENU) {
 		case ID_CREATE_ITEM:
-			CreateNewItem(lst_, GetNextName("CATEGORY_"));
+			CreateNewItem<npsys::WebCategory>(lst_, GetNextName("CATEGORY_"));
 			break;
 		default:
 			__super::HandleRequest(req);
@@ -339,6 +372,10 @@ public:
 		: parent_item_(parent_item)
 		, strings_(strings)
 		, number_(number) {}
+
+	virtual HICON GetIcon() const noexcept {
+		return global.GetIcon32x32(NPSystemIcon::Book);
+	}
 
 	virtual void ConstructMenu(CMenu* menu) noexcept {
 		DefaultMenu(menu);
@@ -377,7 +414,7 @@ class CTreeStrings : public CTemplateItem<
 public:
 	CTreeStrings(npsys::strings_n& n, npsys::strings_l& parent)
 		: CTemplateItem(n, parent) {
-		SetIcon(AlphaIcon::Library);
+		SetIcon(NPSystemIcon::Library);
 	}
 
 	virtual CItemView* CreateView(CMyTabView& tabview) final {
@@ -426,13 +463,13 @@ public:
 class CTreeStringsCat : public LazyItemListContainer<CTreeStringsCat, std::vector, CTreeStrings, FixedElement> {
 public:
 	CTreeStringsCat() {
-		SetIcon(AlphaIcon::Container);
+		SetIcon(NPSystemIcon::Container);
 		name_ = "Strings";
 	}
 	virtual void HandleRequest(REQUEST* req) noexcept final {
 		switch (req->ID_MENU) {
 		case ID_CREATE_ITEM:
-			CreateNewItem(strings_, GetNextName("STRINGS_COLLECTION_"));
+			CreateNewItem<npsys::Strings>(strings_, GetNextName("STRINGS_COLLECTION_"));
 			break;
 		default:
 			__super::HandleRequest(req);
@@ -456,7 +493,7 @@ CTreeSystem::CTreeSystem(npsys::system_n& n)
 	: ItemListContainer(n) {
 	LoadName();
 	LoadChilds();
-	SetIcon(AlphaIcon::Root);
+	SetIcon(NPSystemIcon::Root);
 	NPSystemCompileLibraries();
 }
 

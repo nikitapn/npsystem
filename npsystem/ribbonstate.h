@@ -5,8 +5,9 @@
 
 struct RibbonState {
 	bool cursor_selected = true;
-	WORD block_selected = 0;
-
+	int block_selected = -1;
+	bool fbd_ribbon_active = false;
+	bool sfc_ribbon_active = false;
 	void ResetBlockGallery();
 };
 

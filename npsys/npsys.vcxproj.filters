@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="include\npsys\access.h" />
-    <ClInclude Include="include\npsys\alg.h" />
+    <ClInclude Include="include\npsys\control_unit.h" />
     <ClInclude Include="include\npsys\algcat.h" />
     <ClInclude Include="include\npsys\algsubcat.h" />
     <ClInclude Include="include\npsys\fbdblock.h" />

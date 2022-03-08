@@ -134,7 +134,7 @@ bool CTreeItemAbstract::ChangeName(const std::string& name) {
 
 COnlineTreeItem* CTreeItemAbstract::CreateOnlineFromThis(std::vector<std::unique_ptr<COnlineTreeItem>>& nodes, CTreeViewCtrl tree, HTREEITEM hParent) {
 	nodes.push_back(std::move(
-		std::make_unique<COnlineTreeItem>(GetName(), m_hIcon)
+		std::make_unique<COnlineTreeItem>(GetName(), m_hIcon_24x24)
 	));
 	nodes.back()->Insert(tree, hParent);
 	online_item_ = nodes.back().get();
@@ -143,7 +143,7 @@ COnlineTreeItem* CTreeItemAbstract::CreateOnlineFromThis(std::vector<std::unique
 
 COnlineTreeItem* CContainer::CreateOnlineFromThis(std::vector<std::unique_ptr<COnlineTreeItem>>& nodes, CTreeViewCtrl tree, HTREEITEM hParent) {
 	nodes.push_back(std::move(
-		std::make_unique<COnlineTreeItem>(GetName(), m_hIcon, this)
+		std::make_unique<COnlineTreeItem>(GetName(), m_hIcon_24x24, this)
 	));
 	nodes.back()->Insert(tree, hParent);
 	online_item_ = nodes.back().get();

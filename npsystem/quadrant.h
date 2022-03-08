@@ -63,57 +63,44 @@ private:
 	QuadrantPoint _middle;
 	QuadrantAllocator& alloc_;
 
-	void __forceinline _InsertElement(_Ptr pElem) {
+	template<typename Func, typename... Args>
+	void __forceinline _locate(_Ptr pElem, Func&& fn, Args&&... args) {
 		const QuadrantRect& rc = _adapter::GetBounds(pElem);
+		
 		if (rc.top > _middle.y) {
 			if (rc.left > _middle.x) {
-				se->AddElement(pElem);
+				fn(se, pElem, std::forward<Args>(args)...);
 			} else {
-				sw->AddElement(pElem);
+				fn(sw, pElem, std::forward<Args>(args)...);
 				if (rc.right > _middle.x)
-					se->AddElement(pElem);
+					fn(se, pElem, std::forward<Args>(args)...);
 			}
 		} else {
 			if (rc.left > _middle.x) {
-				ne->AddElement(pElem);
+				fn(ne, pElem, std::forward<Args>(args)...);
 				if (rc.bottom > _middle.y)
-					se->AddElement(pElem);
+					fn(se, pElem, std::forward<Args>(args)...);
 			} else {
-				nw->AddElement(pElem);
+				fn(nw, pElem, std::forward<Args>(args)...);
 				if (rc.bottom > _middle.y)
-					sw->AddElement(pElem);
+					fn(sw, pElem, std::forward<Args>(args)...);
 				if (rc.right > _middle.x) {
-					ne->AddElement(pElem);
+					fn(ne, pElem, std::forward<Args>(args)...);
 					if (rc.bottom > _middle.y)
-						se->AddElement(pElem);
+						fn(se, pElem, std::forward<Args>(args)...);
 				}
 			}
 		}
 	}
 
-	void __forceinline _DeleteElement(_Ptr pElem) {
-		const QuadrantRect& rc = _adapter::GetBounds(pElem);
-		if (rc.top > _middle.y) {
-			if (rc.left > _middle.x) {
-				se->DeleteElement(pElem);
-			} else {
-				sw->DeleteElement(pElem);
-				if (rc.right > _middle.x)
-					se->DeleteElement(pElem);
-			}
+	void _HasElementR(_Ptr element, bool& founded) {
+		if (next_ix == -1) {
+			_locate(element, std::mem_fn(&Node::FindElement), std::ref(founded));
 		} else {
-			if (rc.left > _middle.x) {
-				ne->DeleteElement(pElem);
-				if (rc.bottom > _middle.y)
-					se->DeleteElement(pElem);
-			} else {
-				nw->DeleteElement(pElem);
-				if (rc.bottom > _middle.y)
-					sw->DeleteElement(pElem);
-				if (rc.right > _middle.x) {
-					ne->DeleteElement(pElem);
-					if (rc.bottom > _middle.y)
-						se->DeleteElement(pElem);
+			for (size_t i = 0; i < next_ix; ++i) {
+				if (element == items_[i]) {
+					founded = true;
+					return;
 				}
 			}
 		}
@@ -129,11 +116,19 @@ public:
 
 	void AddElement(_Ptr element) {
 		if (next_ix == -1) {
-			_InsertElement(element);
+			_locate(element, std::mem_fn(&Node::AddElement));
 		} else if (next_ix < MAX_ELEMENTS_IN_SQUARE) {
 			if (items_ == nullptr) {
 				items_ = static_cast<_Ptr*>(alloc_.pool_arrays.malloc());
 			}
+#ifdef _DEBUG
+			for (size_t i = 0; i < next_ix; ++i) {
+				if (items_[i] == element) {
+					const auto& pt = _adapter::GetPosition(element);
+					std::cerr << "Quad Error: Element at {" << pt.x << ',' << pt.y << "} is placed already\n";
+				}
+			}
+#endif
 			nplib::hlp::insert_sort_asc<MAX_ELEMENTS_IN_SQUARE>(&items_[0], &items_[0] + next_ix, element, [](auto a, auto b) {
 				return _adapter::GetZOrder(a) > _adapter::GetZOrder(b);
 				});
@@ -150,13 +145,19 @@ public:
 			se = new (alloc_.pool_nodes.malloc()) Node({ _middle.x, _middle.y, _area.right, _area.bottom}, alloc_);
 
 			for (size_t i = 0; i < MAX_ELEMENTS_IN_SQUARE; ++i) {
-				_InsertElement(items_[i]);
+				_locate(items_[i], std::mem_fn(&Node::AddElement));
 			}
-			_InsertElement(element);
+			_locate(element, std::mem_fn(&Node::AddElement));
 
 			alloc_.pool_arrays.free(items_);
 			items_ = nullptr;
 		}
+	}
+
+	bool HasElement(_Ptr element) {
+		bool founded = false;
+		_HasElementR(element, founded);
+		return founded;
 	}
 
 	template<typename... Args>
@@ -178,12 +179,12 @@ public:
 		return nullptr;
 	}
 
-	void DeleteElement(_Ptr pElem) {
+	void DeleteElement(_Ptr element) {
 		if (next_ix == -1) {
-			_DeleteElement(pElem);
+			_locate(element, std::mem_fn(&Node::DeleteElement));
 		} else {
 			for (size_t i = 0; i < next_ix; ++i) {
-				if (pElem == items_[i]) {
+				if (element == items_[i]) {
 					for (size_t j = i; j < next_ix - 1; ++j) items_[j] = items_[j + 1];
 					next_ix--;
 					break;

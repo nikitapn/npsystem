@@ -172,6 +172,8 @@
     <ClInclude Include="include\nplib\utils\value_parser.h" />
     <ClInclude Include="include\nplib\utils\variant.h" />
     <ClInclude Include="include\nplib\utils\win_service.h" />
+    <ClInclude Include="include\nplib\windows\console.hpp" />
+    <ClInclude Include="src\service_error.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

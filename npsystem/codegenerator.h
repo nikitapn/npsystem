@@ -12,7 +12,7 @@ protected:
 public:
 	virtual void Reset() = 0;
 	#define AAF(x) virtual void Generate(x*) = 0;
-		ALPHA_BLOCKS()
+		NPSYSTEM_BLOCKS()
 	#undef AAF
 };
 
@@ -21,6 +21,18 @@ class CTypeDeterminant : public CCodeGenerator {
 public:
 	virtual void Reset();
 	#define AAF(x) virtual void Generate(x*) ;
-		ALPHA_BLOCKS()
+		NPSYSTEM_BLOCKS()
+	#undef AAF
+};
+
+
+class CSFCCodeGenerator {
+	using variable = npsys::variable;
+protected:
+	std::stringstream m_code;
+public:
+	virtual void Reset() = 0;
+	#define AAF(x) virtual void Generate(x*) = 0;
+		NPSYSTEM_BLOCKS_SFC()
 	#undef AAF
 };

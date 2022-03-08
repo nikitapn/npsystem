@@ -4,8 +4,9 @@
 #pragma once
 
 #include "dockable.h"
+#include <array>
 
-enum class AlphaIcon {
+enum class NPSystemIcon {
 	Root,
 	Folder_Open,
 	Folder_Close,
@@ -49,10 +50,13 @@ enum class AlphaIcon {
 	UnPinned,
 	Question,
 
+	FBD,
+	SFC,
+
 	nIcons,
 };
 
-enum class AlphaCursor {
+enum class NPSystemCursor {
 	Arrow,
 	LinkSelect,
 	Block,
@@ -121,6 +125,20 @@ public:
 	void Default();
 };
 
+	struct Icons {
+		CIcon h24x24;
+		CIcon h32x32;
+
+		Icons() = default;
+		Icons(const Icons&) = delete;
+		Icons& operator=(const Icons&) = delete;
+
+		void Attach(std::tuple<HICON, HICON> handles) {
+			h24x24.Attach(std::get<0>(handles));
+			h32x32.Attach(std::get<1>(handles));
+		}
+	};
+
 	std::string app_roaming_dir_;
 	std::string controls_state_path_;
 	std::string config_path_;
@@ -128,8 +146,8 @@ public:
 	std::string alg_dir_;
 	std::string lib_dir_;
 	std::string build_dir_;
-	CIcon m_icons[static_cast<size_t>(AlphaIcon::nIcons)];
-	CCursor m_cursors[static_cast<size_t>(AlphaCursor::nCursors)];
+	std::array<Icons, static_cast<size_t>(NPSystemIcon::nIcons)> m_icons;
+	CCursor m_cursors[static_cast<size_t>(NPSystemCursor::nCursors)];
 public:
 	void init() noexcept;
 
@@ -141,17 +159,29 @@ public:
 	const std::string& GetLibrariesDir() const { return lib_dir_; }
 	const std::string& GetBuildDir() const { return build_dir_; }
 	
-	CIconHandle GetIcon(AlphaIcon icon) const noexcept { 
+	CIconHandle GetIcon24x24(NPSystemIcon icon) const noexcept { 
 		auto ix = static_cast<size_t>(icon);
-		assert(ix < static_cast<size_t>(AlphaIcon::nIcons));
-		return m_icons[ix].m_hIcon; 
+		assert(ix < static_cast<size_t>(NPSystemIcon::nIcons));
+		return m_icons[ix].h24x24.m_hIcon; 
 	}
 
-	CCursorHandle GetCursor(AlphaCursor cursor) const noexcept {
+	CIconHandle GetIcon32x32(NPSystemIcon icon) const noexcept { 
+		auto ix = static_cast<size_t>(icon);
+		assert(ix < static_cast<size_t>(NPSystemIcon::nIcons));
+		return m_icons[ix].h32x32.m_hIcon; 
+	}
+
+	CIconHandle GetCustomSizeIcon(NPSystemIcon icon) const noexcept { 
+		return GetIcon24x24(icon);
+	}
+
+	CCursorHandle GetCursor(NPSystemCursor cursor) const noexcept {
 		auto ix = static_cast<size_t>(cursor);
-		assert(ix < static_cast<size_t>(AlphaCursor::nCursors));
+		assert(ix < static_cast<size_t>(NPSystemCursor::nCursors));
 		return m_cursors[ix].m_hCursor;
 	}
+
+	
 
 	void ChangeCurrentDirectory(CurrentDirectory dir) const noexcept;
 	CControlsState controls;

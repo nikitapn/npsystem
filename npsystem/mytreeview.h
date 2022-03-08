@@ -104,7 +104,7 @@ private:
 	CBrush m_brButtonExpanded;
 	CBrush m_brButtonCollapsed;
 	CBrush m_brButtonHovered;
-	AlphaCursor m_MouseCursor;
+	NPSystemCursor m_MouseCursor;
 
 	CImageList m_imageList;
 	CFont m_itemFont;

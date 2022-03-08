@@ -93,7 +93,7 @@ public:
 		npsys::CI2CModuleSegment::list_t& list, npsys::CI2CModuleSegment& segment)
 		: base(data, list)
 		, segment_(segment) {
-		this->SetIcon(AlphaIcon::Fun);
+		this->SetIcon(NPSystemIcon::Fun);
 	}
 	virtual void ConstructMenu(CMenu* menu) noexcept {
 		base::DefaultMenu(menu);
@@ -117,7 +117,7 @@ class CTreeSegmentT : public T {
 public:
 	CTreeSegmentT(npsys::CI2CModuleSegment* data, npsys::CI2CModule::list_t& list)
 		: base(data, list) {
-		this->SetIcon(AlphaIcon::Fun);
+		this->SetIcon(NPSystemIcon::Fun);
 		this->LoadChilds();
 	}
 	void ConstructMenu(CMenu* menu) noexcept {
@@ -230,7 +230,7 @@ class CTreeI2CModule : public CTreeModuleT<CTreeI2CModule, CTreeSegment, npsys::
 public:
 	CTreeI2CModule(npsys::i2c_module_n& n, npsys::i2c_module_l& l)
 		: CTreeModuleT(n, l) {
-		SetIcon(AlphaIcon::Module);
+		SetIcon(NPSystemIcon::Module);
 	}
 	virtual int Move(CTreeItemAbstract* item, int action) {
 		int res = item->Move(this, action);
@@ -242,7 +242,7 @@ class CI2CModules
 	: public LazyItemListContainer<CI2CModules, std::vector, CTreeI2CModule, FixedElement> {
 public:
 	CI2CModules() {
-		SetIcon(AlphaIcon::I2C);
+		SetIcon(NPSystemIcon::I2C);
 		ForceSetName("I2C");
 	}
 	virtual oid_t GetId() const noexcept final {
@@ -257,7 +257,7 @@ public:
 		case ID_CREATE_ITEM:
 		{
 			odb::Batch batch;
-			CreateNewItem(list_, GetNextName("MODULE_"));
+			CreateNewItem<npsys::CI2CModule>(list_, GetNextName("MODULE_"));
 			UpdateListView();
 			batch.exec();
 			break;
@@ -282,7 +282,7 @@ class CTreeModules
 {
 public:
 	CTreeModules() {
-		SetIcon(AlphaIcon::Modules);
+		SetIcon(NPSystemIcon::Modules);
 		ForceSetName("MODULES");
 	}
 	virtual oid_t GetId() const noexcept final {

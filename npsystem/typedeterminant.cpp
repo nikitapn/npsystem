@@ -13,6 +13,7 @@ void CTypeDeterminant::Generate(CRsTrigger*) {}
 void CTypeDeterminant::Generate(CNot*) {}
 void CTypeDeterminant::Generate(CPositiveEdge*) {}
 void CTypeDeterminant::Generate(CCounter*) {}
+void CTypeDeterminant::Generate(CPulse *block) {}
 void CTypeDeterminant::Generate(CNegativeEdge*) {}
 void CTypeDeterminant::Generate(CAnyEdge*) {}
 void CTypeDeterminant::Generate(CDelay*) {}

@@ -49,11 +49,11 @@ public:
 		CreateGeneric(npsys::device_n dev, bool sram_only);
 	// can be used for allocating bit variables
 	static std::unique_ptr<CMemoryManager>
-		CreateForAlgorithm(npsys::device_n dev, npsys::algorithm_n alg, bool sram_only);
+		CreateForAlgorithm(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool sram_only);
 protected:
 	static std::unique_ptr<CMemoryManager>
-		Create(npsys::device_n dev, npsys::algorithm_n alg, bool sram_only);
-	CMemoryManager(npsys::device_n& dev, npsys::algorithm_n& alg)
+		Create(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool sram_only);
+	CMemoryManager(npsys::device_n& dev, npsys::fbd_control_unit_n& alg)
 		: dev_(dev)
 		, alg_(alg)
 		, last_count_(0)
@@ -63,7 +63,7 @@ protected:
 	void SetRam(int user_ram_begin, int user_ram_end, int ram_size);
 private:
 	void FindFreeSpace(
-		const odb::weak_node<npsys::algorithm_n>& alg, 
+		const odb::weak_node<npsys::fbd_control_unit_n>& alg, 
 		int var_size, 
 		int memBegin, 
 		int memEnd, 
@@ -82,13 +82,13 @@ private:
 	var_list allocated_vars_;
 protected:
 	npsys::device_n dev_;
-	npsys::algorithm_n alg_;
+	npsys::fbd_control_unit_n alg_;
 };
 
 
 class CAvrMemoryManager : public CMemoryManager {
 public:
-	CAvrMemoryManager(npsys::device_n dev, npsys::algorithm_n alg, bool sram_only);
+	CAvrMemoryManager(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool sram_only);
 	int AllocatePageMemory(int objectSize);
 private:
 	std::unique_ptr<uint8_t[]> flash_;

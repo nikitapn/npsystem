@@ -4,7 +4,13 @@
 #include "stdafx.h"
 #include "tr_item.h"
 #include "View.h"
+#include "global.h"
 
 void CItemView::PostDestroy() {
 	item_->view_ = nullptr;
+}
+
+
+HICON CView::GetIcon() const noexcept { 
+	return global.GetIcon32x32(NPSystemIcon::FBD); 
 }

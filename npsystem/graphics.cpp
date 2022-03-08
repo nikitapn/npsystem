@@ -57,6 +57,19 @@ dis::dis() {
 	text_centered[1]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 	text_centered[1]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
+	HR(pDWriteFactory->CreateTextFormat(msc_fontName,
+		NULL,
+		DWRITE_FONT_WEIGHT_NORMAL,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		18,
+		L"", //locale
+		&text_centered[2]));
+
+	// Center the text horizontally and vertically.
+	text_centered[2]->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	text_centered[2]->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
 	// Left Alignment
 	HR(pDWriteFactory->CreateTextFormat(
 		msc_fontName,
@@ -131,9 +144,7 @@ dis::dis() {
 	pTextFormatSlotRight->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
 	pTextFormatSlotRight->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
-	CreateCircle();
-	CreateSliderTimeChart();
-	CreateSliderThing();
+	CreateGeometries();
 
 	HR(pDWriteFactory->CreateTextLayout(L"unk", 3, pTextOnline, 100, 18, &text_layout_unknown));
 	HR(pDWriteFactory->CreateTextLayout(L"x", 1, pTextOnline, 100, 18, &text_layout_bad_quality));
@@ -169,7 +180,8 @@ D3D_FEATURE_LEVEL CGraphics::m_featureLevels[] =
 
 CGraphics::CGraphics(HWND hwnd) 
 	: m_hwnd(hwnd)
-	, m_dirty{ 0 } {
+	, m_dirty{ 0 }
+	, id_(++last_id_) {
 	// This flag adds support for surfaces with a different color channel ordering than the API default.
 	// You need it for compatibility with Direct2D.
 	UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
@@ -570,11 +582,19 @@ void CGraphics::CreateBrushes() {
 	gradientStops[1].color = D2D1::ColorF(D2D1::ColorF::SlateGray, 0.0f);
 	gradientStops[1].position = 1.0f;
 	create_radial_gradient_brush(m_RGBrushSlotActive, 2, constants::block::SLOT_SIZE / 2.f, constants::block::SLOT_SIZE / 2.f);
+
+	// SFC block
+	gradientStops[0].color = D2D1::ColorF(D2D1::ColorF::LightSteelBlue - 0x404040, 0.85f);
+	gradientStops[0].position = 0.0f;
+	gradientStops[1].color = D2D1::ColorF(D2D1::ColorF::LightSteelBlue, 0.85f);
+	gradientStops[1].position = 1.0f;
+	create_linear_gradient_brush(m_gradientBlockBrush[static_cast<size_t>(BlockColor::SfcBlockStep)], 2);
 }
 
 void CGraphics::FillRoundRect(const D2D1_ROUNDED_RECT& rect, SolidColor color) {
 	m_d2dContext->FillRoundedRectangle(rect, m_brushes[static_cast<size_t>(color)].Get());
 }
+
 void CGraphics::FillBlock(const D2D1_ROUNDED_RECT& rect, BlockColor colorIndex, bool draw_header) {
 	auto index = static_cast<size_t>(colorIndex);
 
@@ -611,6 +631,29 @@ void CGraphics::FillBlock(const D2D1_ROUNDED_RECT& rect, BlockColor colorIndex, 
 	center.y = rect.rect.top + constants::block::HEAD_HEIGHT / 2.0f;
 	m_gradientBlockHeaderBrush[index]->SetCenter(center);
 	m_d2dContext->FillRoundedRectangle(rect, m_gradientBlockHeaderBrush[index].Get());
+}
+
+void CGraphics::DrawBlockGeometry(const D2D1_RECT_F& rect, ID2D1GeometryRealization* geometry, BlockColor colorIndex) {
+	auto& brush = m_gradientBlockBrush[static_cast<size_t>(colorIndex)];
+
+	brush->SetStartPoint(D2D1::Point2F(rect.left, rect.top));
+	brush->SetEndPoint(D2D1::Point2F(rect.right, rect.bottom));
+	m_d2dContext->DrawGeometryRealization(geometry, brush.Get());
+
+
+	wrl::ComPtr<ID2D1Image> previous;
+	m_d2dContext->GetTarget(previous.GetAddressOf());
+	m_d2dContext->SetTarget(m_shadowBitmap.Get());
+
+	m_d2dContext->SetTransform(m_shadowMatrix);
+
+	brush->SetStartPoint(D2D1::Point2F(rect.left, rect.top));
+	brush->SetEndPoint(D2D1::Point2F(rect.right, rect.bottom));
+	m_d2dContext->DrawGeometryRealization(geometry, brush.Get());
+
+	m_d2dContext->SetTransform(m_Matrix);
+
+	m_d2dContext->SetTarget(previous.Get());
 }
 
 void CGraphics::DrawShadowGeometryRealization(ID2D1GeometryRealization* geometryRealization, SolidColor color) {
@@ -876,6 +919,159 @@ void dis::CreateSliderTimeChart() {
 	}
 
 	sink->Close();
+}
+
+void dis::CreateSizeTool() {
+	wrl::ComPtr<ID2D1GeometrySink> sink;
+	d2dFactory->CreatePathGeometry(size_tool.GetAddressOf());
+	size_tool->Open(sink.GetAddressOf());
+
+	constexpr auto spacer = constants::size_tool_spacer;
+
+	// top triangle
+	sink->BeginFigure({0, 0}, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddLine({ constants::size_tool_size - spacer, 0 });
+	sink->AddLine({ 0, constants::size_tool_size - spacer });
+	sink->AddLine({ 0, 0 });
+	sink->EndFigure(D2D1_FIGURE_END_OPEN);
+
+	// bottom triangle
+	sink->BeginFigure({spacer, constants::size_tool_size}, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddLine({ constants::size_tool_size, constants::size_tool_size });
+	sink->AddLine({ constants::size_tool_size, spacer });
+	sink->AddLine({spacer, constants::size_tool_size});
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+
+	sink->Close();
+}
+
+wrl::ComPtr<ID2D1PathGeometry> dis::CreateSFCBeginBlock(const D2D1::MySize2F& size) const {
+	wrl::ComPtr<ID2D1PathGeometry> geometry;
+	wrl::ComPtr<ID2D1GeometrySink> sink;
+
+	d2dFactory->CreatePathGeometry(geometry.GetAddressOf());
+	geometry->Open(sink.GetAddressOf());
+
+	constexpr auto corner_radius = constants::block::RADIUS_X2;
+	constexpr auto slot_radius = constants::block::SFC_SLOT_CIRCLE_RADIUS;
+	
+	const auto width = size.width;
+	const auto heigth = size.height;
+	const auto slot_arc_x1 = (width / 2.0f) - slot_radius;
+	const auto slot_arc_x2 = (width / 2.0f) + slot_radius;
+
+	sink->BeginFigure({0, corner_radius}, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddArc(D2D1::ArcSegment({corner_radius, 0}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({width - corner_radius, 0 });
+	sink->AddArc(D2D1::ArcSegment({width, corner_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({width, heigth - corner_radius - slot_radius });
+	sink->AddArc(D2D1::ArcSegment({width - corner_radius, heigth - slot_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({slot_arc_x2, heigth-slot_radius });
+	sink->AddArc(D2D1::ArcSegment({slot_arc_x1, heigth - slot_radius}, {slot_radius, slot_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({corner_radius, heigth - slot_radius });
+	sink->AddArc(D2D1::ArcSegment({0, heigth - corner_radius - slot_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({ 0, corner_radius });
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+
+	sink->Close();
+
+	return geometry;
+}
+
+wrl::ComPtr<ID2D1PathGeometry> dis::CreateSFCTermBlock(const D2D1::MySize2F& size) const {
+	wrl::ComPtr<ID2D1PathGeometry> geometry;
+	wrl::ComPtr<ID2D1GeometrySink> sink;
+
+	d2dFactory->CreatePathGeometry(geometry.GetAddressOf());
+	geometry->Open(sink.GetAddressOf());
+
+	constexpr auto corner_radius = constants::block::RADIUS_X2;
+	constexpr auto slot_radius = constants::block::SFC_SLOT_CIRCLE_RADIUS;
+	
+	const auto width = size.width;
+	const auto heigth = size.height;
+	const auto slot_arc_x1 = (width / 2.0f) - slot_radius;
+	const auto slot_arc_x2 = (width / 2.0f) + slot_radius;
+	const auto width2 = size.width / 2.0f;
+
+	const auto xh = (width - width2) / 2.0f;
+
+	const auto x2 = xh;
+	const auto x3 = x2 + width2;
+
+	sink->BeginFigure({0, corner_radius + slot_radius}, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddArc(D2D1::ArcSegment({corner_radius, slot_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({slot_arc_x1, slot_radius });
+	sink->AddArc(D2D1::ArcSegment({slot_arc_x2, slot_radius}, {slot_radius, slot_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({width - corner_radius, slot_radius });
+	sink->AddArc(D2D1::ArcSegment({width, slot_radius + corner_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	
+	sink->AddLine({x3, heigth - 3.0f });
+	sink->AddArc(D2D1::ArcSegment({x3 - 3.0f, heigth}, {3.0f, 4.0f}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({x2+3.0f, heigth });
+	sink->AddArc(D2D1::ArcSegment({x2, heigth - 3.0f}, {3.0f, 4.0f}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({ 0, corner_radius + slot_radius });
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+
+	sink->Close();
+
+	return geometry;
+}
+
+wrl::ComPtr<ID2D1PathGeometry> dis::CreateSFCStepBlock(const D2D1::MySize2F& size) const {
+	wrl::ComPtr<ID2D1PathGeometry> geometry;
+	wrl::ComPtr<ID2D1GeometrySink> sink;
+
+	d2dFactory->CreatePathGeometry(geometry.GetAddressOf());
+	geometry->Open(sink.GetAddressOf());
+
+	constexpr auto corner_radius = constants::block::RADIUS_X2;
+	constexpr auto slot_radius = constants::block::SFC_SLOT_CIRCLE_RADIUS;
+	
+	const auto width = size.width;
+	const auto heigth = size.height - slot_radius * 1.0f;
+	const auto slot_arc_x1 = (width / 2.0f) - slot_radius;
+	const auto slot_arc_x2 = (width / 2.0f) + slot_radius;
+
+	sink->BeginFigure({0, corner_radius + slot_radius}, D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddArc(D2D1::ArcSegment({corner_radius, slot_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({slot_arc_x1, slot_radius });
+	sink->AddArc(D2D1::ArcSegment({slot_arc_x2, slot_radius}, {slot_radius, slot_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({width - corner_radius, slot_radius });
+	sink->AddArc(D2D1::ArcSegment({width, corner_radius + slot_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({width, heigth - corner_radius });
+	sink->AddArc(D2D1::ArcSegment({width - corner_radius, heigth}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({slot_arc_x2, heigth });
+	sink->AddArc(D2D1::ArcSegment({slot_arc_x1, heigth}, {slot_radius, slot_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({corner_radius, heigth });
+	sink->AddArc(D2D1::ArcSegment({0, heigth - corner_radius}, {corner_radius, corner_radius}, 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE, D2D1_ARC_SIZE_SMALL));
+	sink->AddLine({ 0, corner_radius + slot_radius });
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+
+	sink->Close();
+
+	return geometry;
+}
+
+void dis::CreateSlot() {
+	d2dFactory->CreateRoundedRectangleGeometry(D2D1_ROUNDED_RECT{
+		D2D1_RECT_F{0, 0, constants::block::SLOT_SIZE, constants::block::SLOT_SIZE},
+			constants::block::SLOT_SIZE,
+			constants::block::SLOT_SIZE
+	}, (ID2D1RoundedRectangleGeometry**)geometry_slot.GetAddressOf());
+}
+
+void dis::CreateGeometries() {
+	CreateSlot();
+	CreateCircle();
+	CreateSliderTimeChart();
+	CreateSliderThing();
+	CreateSizeTool();
+	
+	sfc_begin_block = CreateSFCBeginBlock(constants::block::SFC_BLOCK_STEP_SIZE);
+	sfc_term_block = CreateSFCTermBlock(constants::block::SFC_BLOCK_TERM_SIZE);
+	sfc_step_block = CreateSFCStepBlock(constants::block::SFC_BLOCK_STEP_SIZE);
+	sfc_transition_block = CreateSFCStepBlock(constants::block::SFC_BLOCK_TRANSITION_SIZE);
 }
 
 void CGraphics::DrawWaitCircle(float angle) {

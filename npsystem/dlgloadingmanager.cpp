@@ -47,7 +47,7 @@ LRESULT CDlg_LoadingManager::OnOk(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 
 #include "avrconfigurator.h"
 #include "network_ext.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "module.h"
 
 static void DynamicTranslateResult(CDlg_LoadingManager* dlg, CDynamicLinker::Result code) noexcept {
@@ -84,7 +84,7 @@ void CDlg_LoadingManager::CTaskLoadOneAlgorithm::Exec(CDlg_LoadingManager* dlg) 
 		<< "\n>\ttarget: \"" << alg_->get_name() << '\"'
 		<< std::endl;
 	auto linker = dev_->CreateLinker();
-	auto result = linker->UploadAlgorithm(alg_);
+	auto result = linker->UploadFBDUnit(alg_);
 	if (result == CDynamicLinker::Result::R_OK) {
 		dev_->item->CalcAndUpdateHardwareStatus();
 		dev_->item->m_tabview->Invalidate();
@@ -98,7 +98,7 @@ void CDlg_LoadingManager::CTaskUnloadOneAlgorithm::Exec(CDlg_LoadingManager* dlg
 		<< "\n>\ttarget: \"" << alg_->get_name() << '\"'
 		<< std::endl;
 	auto linker = dev_->CreateLinker();
-	auto result = linker->UnloadAlgorithm(alg_);
+	auto result = linker->UnloadFBDUnit(alg_);
 	if (result == CDynamicLinker::Result::R_OK) {
 		dev_->item->CalcAndUpdateHardwareStatus();
 		dev_->item->m_tabview->Invalidate();

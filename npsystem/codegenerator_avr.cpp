@@ -4,8 +4,9 @@
 #include "stdafx.h"
 #include "memorymanager.h"
 #include "block.h"
+#include "sfc_block.hpp"
 #include "codegenerator_avr.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "library.h"
 #include "global.h"
 #include "genhelper.h"
@@ -166,7 +167,7 @@ std::stringstream& operator << (std::stringstream& ss, const AsmBlock& bl) {
 	return ss;
 }
 
-CAVR5CodeGenerator::CAVR5CodeGenerator(npsys::algorithm_n alg, const avrinfo::FirmwareInfo& info)
+CAVR5CodeGenerator::CAVR5CodeGenerator(npsys::fbd_control_unit_n alg, const avrinfo::FirmwareInfo& info)
 	: alg_(alg)
 	, info_(info)
 {
@@ -853,16 +854,18 @@ void CAVR5CodeGenerator::Generate(CDelay* block) {
 	bl.AddClobber(18);
 
 	// Body
-	bl.AddCmd("bst $in, ", in->GetQBit());
-	bl.AddCmd("bld $out, ", out->GetQBit());
-	bl.AddCmd("brtc ", block_id_str, "_end");
+	if (in->IsQuality()) {
+		bl.AddCmd("bst $in, ", in->GetQBit());
+		bl.AddCmd("bld $out, ", out->GetQBit());
+		bl.AddBranch("brtc", "_end");
+	}
 
 	bl.AddCmd("bst $in, ", in->GetBit());
 	bl.AddCmd("brts ", block_id_str, "_do_stuff");
 	bl.AddCmd("mov D$mycnt, r1");
 	bl.AddCmd("rjmp ", block_id_str, "_set_value");
 
-	// there is input signal
+	// there is an input signal
 	bl.AddLabel("_do_stuff");
 	bl.AddCmd("cli");
 	bl.AddCmd("lds r16,", cntAddr_a);
@@ -897,8 +900,9 @@ void CAVR5CodeGenerator::Generate(CDelay* block) {
 	bl.AddLabel("_set_value");
 	bl.AddCmd("bld $out, ", out->GetBit());
 	bl.AddCmd("bld D$mycnt, 1");
-	bl.AddLabel("_end");
-
+	if (in->IsQuality()) {
+		bl.AddLabel("_end");
+	}
 	m_code << bl;
 	BLOCK_END(block);
 }
@@ -971,6 +975,108 @@ void CAVR5CodeGenerator::Generate(CCounter* block) {
 	bl.AddLabel("_end");
 
 	m_code << bl;
+	BLOCK_END(block);
+}
+
+void CAVR5CodeGenerator::Generate(CPulse *block) {
+	BLOCK_BEGIN(block);
+
+	auto& slots = block->top->slots;
+
+	const auto in = i_at(0).GetInputVariable();
+	if (!in) return;
+
+	AsmBlock bl(block_id_str);
+
+	const auto tmr_cur_cnt = block->variables_[CPulse::IV_TMR_CUR_CNT].get();
+	const auto edge_prev_state = block->variables_[CPulse::IV_EDGE_PREVIOUS_STATE].get();
+
+	const auto out = o_at(0).GetVariable();
+	
+	auto internal_counter_addr = info_.rmem.info + offsetof(net::RuntimeInfoController, u32_time);
+
+	const auto fall = block->GetPropertyByKey<bool>("fall")->GetValue();
+	const auto dw = static_cast<unsigned short>(
+		static_cast<float>(block->GetPropertyByKey<unsigned short>("plsw")->GetValue()) / 1000.0f / info_.mccfg.one_tick_time);
+
+	const auto delay_a = dw & 0xFF;
+	const auto delay_b = (dw >> 8) & 0xFF;
+
+	gcc_->AddVariable(in);
+	gcc_->AddVariable(out);
+	gcc_->AddVariable(edge_prev_state);
+	gcc_->AddVariable(tmr_cur_cnt);
+
+	bl.AddOperand(OP_TYPE::GCC_OP_R, "$in", in);
+	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
+	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$edge_prev_state", edge_prev_state);
+	bl.AddOperand(OP_TYPE::GCC_OP_RW, "$tmr_cur_cnt", tmr_cur_cnt);
+	
+	bl.AddClobber(16);
+	bl.AddClobber(17);
+
+	if (in->IsQuality()) {
+		bl.AddCmd("bst $in, ", in->GetQBit());
+		bl.AddCmd("brtc ", block_id_str, "_set_quality");
+	}
+
+	bl.AddCmd("mov r16, $edge_prev_state");
+	bl.AddCmd("bst $in, ", in->GetBit());
+	bl.AddCmd("bld $edge_prev_state, ", edge_prev_state->GetBit());
+	
+	if (!fall) {
+		bl.AddCmd("brtc ", block_id_str, "_edge_out");
+		bl.AddCmd("com r16");
+		bl.AddCmd("bst r16, ", edge_prev_state->GetBit());
+		bl.AddCmd("brtc ", block_id_str, "_edge_out");
+		bl.AddCmd("set");
+		bl.AddLabel("_edge_out");
+	} else {
+		bl.AddCmd("brts ", block_id_str, "_edge_out_zero");
+		bl.AddCmd("bst r16, ", edge_prev_state->GetBit());
+		bl.AddCmd("brtc ", block_id_str, "_edge_out");
+		bl.AddBranch("rjmp", "_edge_out");
+		bl.AddLabel("_edge_out_zero");
+		bl.AddCmd("clt");
+		bl.AddLabel("_edge_out");
+	}
+
+	bl.AddCmd("cli");
+	bl.AddCmd("lds r16, ", internal_counter_addr + 0);
+	bl.AddCmd("lds r17, ", internal_counter_addr + 1);
+	bl.AddCmd("sei");
+
+	bl.AddCmd("brts ", block_id_str, "_reset_counter");
+
+	bl.AddCmd("bst $out, ", out->GetBit());
+	bl.AddCmd("brtc ", block_id_str, "_skip_set_out");
+
+	bl.AddCmd("sub r16, A$tmr_cur_cnt");
+	bl.AddCmd("sbc r17, B$tmr_cur_cnt");
+	bl.AddCmd("cpi r16, ", delay_a);
+	bl.AddCmd("sbci r17, ", delay_b);
+	bl.AddCmd("brcs ", block_id_str, "_skip_set_out");
+	
+	bl.AddCmd("clt");	
+	bl.AddCmd("rjmp ", block_id_str, "_set_out");
+
+	bl.AddLabel("_reset_counter");
+	bl.AddCmd("mov A$tmr_cur_cnt, r16");
+	bl.AddCmd("mov B$tmr_cur_cnt, r17");
+	bl.AddCmd("set");
+	
+	bl.AddLabel("_set_out");
+	bl.AddCmd("bld $out, ", out->GetBit());
+	bl.AddLabel("_skip_set_out");
+
+	if (in->IsQuality()) {
+		bl.AddCmd("set");
+		bl.AddLabel("_set_quality");
+		bl.AddCmd("bld $out, ", out->GetQBit());
+	}
+	
+	m_code << bl;
+
 	BLOCK_END(block);
 }
 
@@ -1463,3 +1569,4 @@ void CAVR5CodeGenerator::Generate(CMul*) {}
 void CAVR5CodeGenerator::Generate(CDiv*) {}
 void CAVR5CodeGenerator::Generate(CTime*) {}
 void CAVR5CodeGenerator::Generate(CPID*) {}
+

@@ -35,7 +35,7 @@ sub genFirmware {
 	chdir "..";
 }
 
-my $count = 5;
+my $count = 8;
 
 genFirmware("m8", $count);
 genFirmware("m8v", $count);

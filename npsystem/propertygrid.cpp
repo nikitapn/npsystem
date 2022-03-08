@@ -1015,7 +1015,7 @@ LRESULT CPropertyGrid::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 
 	// resizing gutter?
 	if (abs(point.x - m_gutter_width) < 3) {
-		::SetCursor(global.GetCursor(AlphaCursor::SizeWE));
+		::SetCursor(global.GetCursor(NPSystemCursor::SizeWE));
 		m_resizing_gutter = true;
 		m_user_has_resized_gutter = true;
 		m_ptLast = point;
@@ -1110,7 +1110,7 @@ LRESULT CPropertyGrid::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		m_button_depressed = m_rect_button.PtInRect(point) ? true : false;
 		Invalidate();
 	} else if (m_resizing_gutter) {
-		::SetCursor(global.GetCursor(AlphaCursor::SizeWE));
+		::SetCursor(global.GetCursor(NPSystemCursor::SizeWE));
 		m_gutter_width += point.x - m_ptLast.x;
 		CRect rc;
 		GetClientRect(&rc);
@@ -1122,9 +1122,9 @@ LRESULT CPropertyGrid::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 		Invalidate();
 	} else if (!m_control) {
 		if (abs(point.x - m_gutter_width) < 3) 
-			::SetCursor(global.GetCursor(AlphaCursor::SizeWE));
+			::SetCursor(global.GetCursor(NPSystemCursor::SizeWE));
 		else 
-			::SetCursor(global.GetCursor(AlphaCursor::Arrow));
+			::SetCursor(global.GetCursor(NPSystemCursor::Arrow));
 	}
 
 	return 0;
@@ -1244,7 +1244,7 @@ LRESULT CPropertyGrid::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	} else if (m_resizing_gutter) {
 		ReleaseCapture();
 		m_resizing_gutter = false;
-		::SetCursor(global.GetCursor(AlphaCursor::Arrow));
+		::SetCursor(global.GetCursor(NPSystemCursor::Arrow));
 	}
 
 	return 0;

@@ -1,0 +1,856 @@
+Grammar
+
+    0 $accept: script $end
+
+    1 script: stmt_list
+
+    2 stmt_list: %empty
+    3          | stmt_list stmt
+
+    4 stmt: assignment
+    5     | var_decl
+    6     | if_stmt
+    7     | ';'
+
+    8 assignment: IDENTIFIER ASSIGNMENT exp ';'
+
+    9 var_decl0: IDENTIFIER
+   10          | IDENTIFIER ASSIGNMENT exp
+
+   11 var_decl_seq: var_decl0
+   12             | var_decl_seq ',' var_decl0
+
+   13 var_decl: VAR var_decl_seq ';'
+
+   14 if_stmt: IF logical_exp THEN stmt_list else_clause
+
+   15 else_clause: ELSIF logical_exp THEN stmt_list else_clause
+   16            | ELSE stmt_list END_IF
+   17            | END_IF
+
+   18 number: NUMBER_DISCRETE
+   19       | NUMBER_INTEGER
+   20       | NUMBER_FLOAT
+
+   21 logical_exp: exp
+   22            | exp '<' exp
+   23            | exp LE exp
+   24            | exp '>' exp
+   25            | exp GE
+
+   26 exp: '(' exp ')'
+   27    | '-' exp
+   28    | '+' exp
+   29    | exp '+' exp
+   30    | exp '-' exp
+   31    | exp '*' exp
+   32    | exp '/' exp
+   33    | number
+   34    | IDENTIFIER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 26
+')' (41) 26
+'*' (42) 31
+'+' (43) 28 29
+',' (44) 12
+'-' (45) 27 30
+'/' (47) 32
+';' (59) 7 8 13
+'<' (60) 22
+'>' (62) 24
+error (256)
+IDENTIFIER <val_str> (258) 8 9 10 34
+GE (259) 25
+LE (260) 23
+ASSIGNMENT (261) 8 10
+IF (262) 14
+THEN (263) 14 15
+ELSIF (264) 15
+ELSE (265) 16
+END_IF (266) 16 17
+VAR (267) 13
+NUMBER_DISCRETE <val_discrete> (268) 18
+NUMBER_INTEGER <val_int> (269) 19
+NUMBER_FLOAT <val_float> (270) 20
+
+
+Nonterminals, with rules where they appear
+
+$accept (26)
+    on left: 0
+script (27)
+    on left: 1, on right: 0
+stmt_list <val_node> (28)
+    on left: 2 3, on right: 1 3 14 15 16
+stmt <val_node> (29)
+    on left: 4 5 6 7, on right: 3
+assignment <val_node> (30)
+    on left: 8, on right: 4
+var_decl0 <val_node> (31)
+    on left: 9 10, on right: 11 12
+var_decl_seq <val_node> (32)
+    on left: 11 12, on right: 12 13
+var_decl <val_node> (33)
+    on left: 13, on right: 5
+if_stmt <val_node> (34)
+    on left: 14, on right: 6
+else_clause (35)
+    on left: 15 16 17, on right: 14 15
+number <val_node> (36)
+    on left: 18 19 20, on right: 33
+logical_exp (37)
+    on left: 21 22 23 24 25, on right: 14 15
+exp <val_node> (38)
+    on left: 26 27 28 29 30 31 32 33 34, on right: 8 10 21 22 23 24
+    25 26 27 28 29 30 31 32
+
+
+State 0
+
+    0 $accept: . script $end
+
+    $default  reduce using rule 2 (stmt_list)
+
+    script     go to state 1
+    stmt_list  go to state 2
+
+
+State 1
+
+    0 $accept: script . $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    1 script: stmt_list .
+    3 stmt_list: stmt_list . stmt
+
+    IDENTIFIER  shift, and go to state 4
+    IF          shift, and go to state 5
+    VAR         shift, and go to state 6
+    ';'         shift, and go to state 7
+
+    $default  reduce using rule 1 (script)
+
+    stmt        go to state 8
+    assignment  go to state 9
+    var_decl    go to state 10
+    if_stmt     go to state 11
+
+
+State 3
+
+    0 $accept: script $end .
+
+    $default  accept
+
+
+State 4
+
+    8 assignment: IDENTIFIER . ASSIGNMENT exp ';'
+
+    ASSIGNMENT  shift, and go to state 12
+
+
+State 5
+
+   14 if_stmt: IF . logical_exp THEN stmt_list else_clause
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number       go to state 20
+    logical_exp  go to state 21
+    exp          go to state 22
+
+
+State 6
+
+   13 var_decl: VAR . var_decl_seq ';'
+
+    IDENTIFIER  shift, and go to state 23
+
+    var_decl0     go to state 24
+    var_decl_seq  go to state 25
+
+
+State 7
+
+    7 stmt: ';' .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 8
+
+    3 stmt_list: stmt_list stmt .
+
+    $default  reduce using rule 3 (stmt_list)
+
+
+State 9
+
+    4 stmt: assignment .
+
+    $default  reduce using rule 4 (stmt)
+
+
+State 10
+
+    5 stmt: var_decl .
+
+    $default  reduce using rule 5 (stmt)
+
+
+State 11
+
+    6 stmt: if_stmt .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 12
+
+    8 assignment: IDENTIFIER ASSIGNMENT . exp ';'
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 26
+
+
+State 13
+
+   34 exp: IDENTIFIER .
+
+    $default  reduce using rule 34 (exp)
+
+
+State 14
+
+   18 number: NUMBER_DISCRETE .
+
+    $default  reduce using rule 18 (number)
+
+
+State 15
+
+   19 number: NUMBER_INTEGER .
+
+    $default  reduce using rule 19 (number)
+
+
+State 16
+
+   20 number: NUMBER_FLOAT .
+
+    $default  reduce using rule 20 (number)
+
+
+State 17
+
+   28 exp: '+' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 27
+
+
+State 18
+
+   27 exp: '-' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 28
+
+
+State 19
+
+   26 exp: '(' . exp ')'
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 29
+
+
+State 20
+
+   33 exp: number .
+
+    $default  reduce using rule 33 (exp)
+
+
+State 21
+
+   14 if_stmt: IF logical_exp . THEN stmt_list else_clause
+
+    THEN  shift, and go to state 30
+
+
+State 22
+
+   21 logical_exp: exp .
+   22            | exp . '<' exp
+   23            | exp . LE exp
+   24            | exp . '>' exp
+   25            | exp . GE
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    GE   shift, and go to state 31
+    LE   shift, and go to state 32
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+    '<'  shift, and go to state 37
+    '>'  shift, and go to state 38
+
+    $default  reduce using rule 21 (logical_exp)
+
+
+State 23
+
+    9 var_decl0: IDENTIFIER .
+   10          | IDENTIFIER . ASSIGNMENT exp
+
+    ASSIGNMENT  shift, and go to state 39
+
+    $default  reduce using rule 9 (var_decl0)
+
+
+State 24
+
+   11 var_decl_seq: var_decl0 .
+
+    $default  reduce using rule 11 (var_decl_seq)
+
+
+State 25
+
+   12 var_decl_seq: var_decl_seq . ',' var_decl0
+   13 var_decl: VAR var_decl_seq . ';'
+
+    ','  shift, and go to state 40
+    ';'  shift, and go to state 41
+
+
+State 26
+
+    8 assignment: IDENTIFIER ASSIGNMENT exp . ';'
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+    ';'  shift, and go to state 42
+
+
+State 27
+
+   28 exp: '+' exp .
+   29    | exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 28 (exp)
+
+
+State 28
+
+   27 exp: '-' exp .
+   29    | exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 27 (exp)
+
+
+State 29
+
+   26 exp: '(' exp . ')'
+   29    | exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+    ')'  shift, and go to state 43
+
+
+State 30
+
+   14 if_stmt: IF logical_exp THEN . stmt_list else_clause
+
+    $default  reduce using rule 2 (stmt_list)
+
+    stmt_list  go to state 44
+
+
+State 31
+
+   25 logical_exp: exp GE .
+
+    $default  reduce using rule 25 (logical_exp)
+
+
+State 32
+
+   23 logical_exp: exp LE . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 45
+
+
+State 33
+
+   29 exp: exp '+' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 46
+
+
+State 34
+
+   30 exp: exp '-' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 47
+
+
+State 35
+
+   31 exp: exp '*' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 48
+
+
+State 36
+
+   32 exp: exp '/' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 49
+
+
+State 37
+
+   22 logical_exp: exp '<' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 50
+
+
+State 38
+
+   24 logical_exp: exp '>' . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 51
+
+
+State 39
+
+   10 var_decl0: IDENTIFIER ASSIGNMENT . exp
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number  go to state 20
+    exp     go to state 52
+
+
+State 40
+
+   12 var_decl_seq: var_decl_seq ',' . var_decl0
+
+    IDENTIFIER  shift, and go to state 23
+
+    var_decl0  go to state 53
+
+
+State 41
+
+   13 var_decl: VAR var_decl_seq ';' .
+
+    $default  reduce using rule 13 (var_decl)
+
+
+State 42
+
+    8 assignment: IDENTIFIER ASSIGNMENT exp ';' .
+
+    $default  reduce using rule 8 (assignment)
+
+
+State 43
+
+   26 exp: '(' exp ')' .
+
+    $default  reduce using rule 26 (exp)
+
+
+State 44
+
+    3 stmt_list: stmt_list . stmt
+   14 if_stmt: IF logical_exp THEN stmt_list . else_clause
+
+    IDENTIFIER  shift, and go to state 4
+    IF          shift, and go to state 5
+    ELSIF       shift, and go to state 54
+    ELSE        shift, and go to state 55
+    END_IF      shift, and go to state 56
+    VAR         shift, and go to state 6
+    ';'         shift, and go to state 7
+
+    stmt         go to state 8
+    assignment   go to state 9
+    var_decl     go to state 10
+    if_stmt      go to state 11
+    else_clause  go to state 57
+
+
+State 45
+
+   23 logical_exp: exp LE exp .
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 23 (logical_exp)
+
+
+State 46
+
+   29 exp: exp . '+' exp
+   29    | exp '+' exp .
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 29 (exp)
+
+
+State 47
+
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   30    | exp '-' exp .
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 30 (exp)
+
+
+State 48
+
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   31    | exp '*' exp .
+   32    | exp . '/' exp
+
+    $default  reduce using rule 31 (exp)
+
+
+State 49
+
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+   32    | exp '/' exp .
+
+    $default  reduce using rule 32 (exp)
+
+
+State 50
+
+   22 logical_exp: exp '<' exp .
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 22 (logical_exp)
+
+
+State 51
+
+   24 logical_exp: exp '>' exp .
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 24 (logical_exp)
+
+
+State 52
+
+   10 var_decl0: IDENTIFIER ASSIGNMENT exp .
+   29 exp: exp . '+' exp
+   30    | exp . '-' exp
+   31    | exp . '*' exp
+   32    | exp . '/' exp
+
+    '+'  shift, and go to state 33
+    '-'  shift, and go to state 34
+    '*'  shift, and go to state 35
+    '/'  shift, and go to state 36
+
+    $default  reduce using rule 10 (var_decl0)
+
+
+State 53
+
+   12 var_decl_seq: var_decl_seq ',' var_decl0 .
+
+    $default  reduce using rule 12 (var_decl_seq)
+
+
+State 54
+
+   15 else_clause: ELSIF . logical_exp THEN stmt_list else_clause
+
+    IDENTIFIER       shift, and go to state 13
+    NUMBER_DISCRETE  shift, and go to state 14
+    NUMBER_INTEGER   shift, and go to state 15
+    NUMBER_FLOAT     shift, and go to state 16
+    '+'              shift, and go to state 17
+    '-'              shift, and go to state 18
+    '('              shift, and go to state 19
+
+    number       go to state 20
+    logical_exp  go to state 58
+    exp          go to state 22
+
+
+State 55
+
+   16 else_clause: ELSE . stmt_list END_IF
+
+    $default  reduce using rule 2 (stmt_list)
+
+    stmt_list  go to state 59
+
+
+State 56
+
+   17 else_clause: END_IF .
+
+    $default  reduce using rule 17 (else_clause)
+
+
+State 57
+
+   14 if_stmt: IF logical_exp THEN stmt_list else_clause .
+
+    $default  reduce using rule 14 (if_stmt)
+
+
+State 58
+
+   15 else_clause: ELSIF logical_exp . THEN stmt_list else_clause
+
+    THEN  shift, and go to state 60
+
+
+State 59
+
+    3 stmt_list: stmt_list . stmt
+   16 else_clause: ELSE stmt_list . END_IF
+
+    IDENTIFIER  shift, and go to state 4
+    IF          shift, and go to state 5
+    END_IF      shift, and go to state 61
+    VAR         shift, and go to state 6
+    ';'         shift, and go to state 7
+
+    stmt        go to state 8
+    assignment  go to state 9
+    var_decl    go to state 10
+    if_stmt     go to state 11
+
+
+State 60
+
+   15 else_clause: ELSIF logical_exp THEN . stmt_list else_clause
+
+    $default  reduce using rule 2 (stmt_list)
+
+    stmt_list  go to state 62
+
+
+State 61
+
+   16 else_clause: ELSE stmt_list END_IF .
+
+    $default  reduce using rule 16 (else_clause)
+
+
+State 62
+
+    3 stmt_list: stmt_list . stmt
+   15 else_clause: ELSIF logical_exp THEN stmt_list . else_clause
+
+    IDENTIFIER  shift, and go to state 4
+    IF          shift, and go to state 5
+    ELSIF       shift, and go to state 54
+    ELSE        shift, and go to state 55
+    END_IF      shift, and go to state 56
+    VAR         shift, and go to state 6
+    ';'         shift, and go to state 7
+
+    stmt         go to state 8
+    assignment   go to state 9
+    var_decl     go to state 10
+    if_stmt      go to state 11
+    else_clause  go to state 63
+
+
+State 63
+
+   15 else_clause: ELSIF logical_exp THEN stmt_list else_clause .
+
+    $default  reduce using rule 15 (else_clause)

@@ -115,79 +115,91 @@ void Global::init() noexcept {
 	ChangeCurrentDirectory(CurrentDirectory::ROOT);
 	// GDI
 
-	ZeroMemory(m_icons, sizeof(m_icons));
 	ZeroMemory(m_cursors, sizeof(m_cursors));
 	
-	auto load_icon = [](int id, int cx = constants::treeview::icon_cx, int cy =  constants::treeview::icon_cy) {
-		auto hIcon = (HICON)LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(id), IMAGE_ICON, cx, cy,
-			LR_DEFAULTSIZE | LR_LOADTRANSPARENT);
-		ASSERT(hIcon);
-		return hIcon;
+	auto load_icon = [](int id) -> std::tuple<HICON, HICON> {
+		auto hIcon_24x24 = (HICON)LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(id), IMAGE_ICON, 
+			constants::treeview::icon_cx, constants::treeview::icon_cy, LR_DEFAULTCOLOR);
+		ASSERT(hIcon_24x24);
+
+		auto hIcon_32x32 = (HICON)LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(id), IMAGE_ICON, 
+			32, 32, LR_DEFAULTCOLOR);
+		ASSERT(hIcon_32x32);
+
+		return {hIcon_24x24, hIcon_32x32};
 	};
 
-	m_icons[static_cast<size_t>(AlphaIcon::Pinned)] = load_icon(IDI_PINNED, 9, 9);
-	m_icons[static_cast<size_t>(AlphaIcon::UnPinned)] = load_icon(IDI_UNPINNED, 9, 9);
+	auto load_icon_custom_size = [](int id, int cx, int cy) -> std::tuple<HICON, HICON> {
+		auto hIcon = (HICON)LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(id), IMAGE_ICON, 
+			cx, cy, LR_DEFAULTCOLOR);
+		ASSERT(hIcon);
+
+		return {hIcon, NULL};
+	};
+
+	m_icons[static_cast<size_t>(NPSystemIcon::Pinned)].Attach(load_icon_custom_size(IDI_PINNED, 9, 9));
+	m_icons[static_cast<size_t>(NPSystemIcon::UnPinned)].Attach(load_icon_custom_size(IDI_UNPINNED, 9, 9));
 	
 
-	m_icons[static_cast<size_t>(AlphaIcon::Exclam)] = load_icon(IDI_EXCLAM, 12, 12);
-	m_icons[static_cast<size_t>(AlphaIcon::Empty)] = load_icon(IDI_EMPTY, 12, 12);
-	m_icons[static_cast<size_t>(AlphaIcon::Question)] = load_icon(IDI_NP_QUESTION, 12, 12);
+	m_icons[static_cast<size_t>(NPSystemIcon::Exclam)].Attach(load_icon_custom_size(IDI_EXCLAM, 12, 12));
+	m_icons[static_cast<size_t>(NPSystemIcon::Empty)].Attach(load_icon_custom_size(IDI_EMPTY, 12, 12));
+	m_icons[static_cast<size_t>(NPSystemIcon::Question)].Attach(load_icon_custom_size(IDI_NP_QUESTION, 12, 12));
 
-	m_icons[static_cast<size_t>(AlphaIcon::Root)] = load_icon(IDI_SYSTEM);
-	m_icons[static_cast<size_t>(AlphaIcon::Modules)] = load_icon(IDI_MODULES);
-	m_icons[static_cast<size_t>(AlphaIcon::Module)] = load_icon(IDI_MODULE);
-	m_icons[static_cast<size_t>(AlphaIcon::I2C)] = load_icon(IDI_I2C);
-	m_icons[static_cast<size_t>(AlphaIcon::Container)] = load_icon(IDI_CONTAINER);
-	m_icons[static_cast<size_t>(AlphaIcon::Block)] = load_icon(IDI_BLOCK);
+	m_icons[static_cast<size_t>(NPSystemIcon::Root)].Attach(load_icon(IDI_SYSTEM));
+	m_icons[static_cast<size_t>(NPSystemIcon::Modules)].Attach(load_icon(IDI_MODULES));
+	m_icons[static_cast<size_t>(NPSystemIcon::Module)].Attach(load_icon(IDI_MODULE));
+	m_icons[static_cast<size_t>(NPSystemIcon::I2C)].Attach(load_icon(IDI_I2C));
+	m_icons[static_cast<size_t>(NPSystemIcon::Container)].Attach(load_icon(IDI_CONTAINER));
+	m_icons[static_cast<size_t>(NPSystemIcon::Block)].Attach(load_icon(IDI_BLOCK));
 
-	m_icons[static_cast<size_t>(AlphaIcon::Controller_nl)] = load_icon(IDI_CTRL_NL);
-	m_icons[static_cast<size_t>(AlphaIcon::Controller_good)] = load_icon(IDI_CTRL_GOOD);
-	m_icons[static_cast<size_t>(AlphaIcon::Controller_bad)] = load_icon(IDI_CTRL_BAD);
-	m_icons[static_cast<size_t>(AlphaIcon::Algorithm)] = load_icon(IDI_ALGORITHM);
+	m_icons[static_cast<size_t>(NPSystemIcon::Controller_nl)].Attach(load_icon(IDI_CTRL_NL));
+	m_icons[static_cast<size_t>(NPSystemIcon::Controller_good)].Attach(load_icon(IDI_CTRL_GOOD));
+	m_icons[static_cast<size_t>(NPSystemIcon::Controller_bad)].Attach(load_icon(IDI_CTRL_BAD));
+	m_icons[static_cast<size_t>(NPSystemIcon::Algorithm)].Attach(load_icon(IDI_ALGORITHM));
 
 
-	m_icons[static_cast<size_t>(AlphaIcon::Hardware)] = load_icon(IDI_HARDWARE);
-	m_icons[static_cast<size_t>(AlphaIcon::Software)] = load_icon(IDI_SOFTWARE);
-	m_icons[static_cast<size_t>(AlphaIcon::Io)] = load_icon(IDI_IO);
-	m_icons[static_cast<size_t>(AlphaIcon::Folder_Open)] = load_icon(IDI_FOLDER_OPEN);
-	m_icons[static_cast<size_t>(AlphaIcon::Folder_Close)] = load_icon(IDI_FOLDER_CLOSE);
+	m_icons[static_cast<size_t>(NPSystemIcon::Hardware)].Attach(load_icon(IDI_HARDWARE));
+	m_icons[static_cast<size_t>(NPSystemIcon::Software)].Attach(load_icon(IDI_SOFTWARE));
+	m_icons[static_cast<size_t>(NPSystemIcon::Io)].Attach(load_icon(IDI_IO));
+	m_icons[static_cast<size_t>(NPSystemIcon::Folder_Open)].Attach(load_icon(IDI_FOLDER_OPEN));
+	m_icons[static_cast<size_t>(NPSystemIcon::Folder_Close)].Attach(load_icon(IDI_FOLDER_CLOSE));
 	
-	m_icons[static_cast<size_t>(AlphaIcon::File_U)] = load_icon(IDI_FILE_ICON);
-	m_icons[static_cast<size_t>(AlphaIcon::File_C)] = load_icon(IDI_C_FILE);
-	m_icons[static_cast<size_t>(AlphaIcon::File_S)] = load_icon(IDI_S_FILE);
-	m_icons[static_cast<size_t>(AlphaIcon::File_H)] = load_icon(IDI_H_FILE);
-	m_icons[static_cast<size_t>(AlphaIcon::File_Delete)] = load_icon(IDI_FILE_DELETE);
-	m_icons[static_cast<size_t>(AlphaIcon::Di_Pin)] = load_icon(IDI_DI_PIN);
-	m_icons[static_cast<size_t>(AlphaIcon::Do_Pin)] = load_icon(IDI_DO_PIN);
-	m_icons[static_cast<size_t>(AlphaIcon::Ai_Pin)] = load_icon(IDI_AI_PIN);
-	m_icons[static_cast<size_t>(AlphaIcon::Ctrl_Dev)] = load_icon(IDI_CTRL_DEV);
-	m_icons[static_cast<size_t>(AlphaIcon::Library)] = load_icon(IDI_LIBRARY);
-	m_icons[static_cast<size_t>(AlphaIcon::Book)] = load_icon(IDI_BOOK);
-	m_icons[static_cast<size_t>(AlphaIcon::Fun)] = load_icon(IDI_FUN);
-	m_icons[static_cast<size_t>(AlphaIcon::Fun_cat)] = load_icon(IDI_FUNCTIONS);
-	m_icons[static_cast<size_t>(AlphaIcon::Source)] = load_icon(IDI_SOURCE);
-	m_icons[static_cast<size_t>(AlphaIcon::Object)] = load_icon(IDI_BINARY);
-	m_icons[static_cast<size_t>(AlphaIcon::PC)] = load_icon(IDI_PC);
-	m_icons[static_cast<size_t>(AlphaIcon::Network)] = load_icon(IDI_NETWORK);
-	m_icons[static_cast<size_t>(AlphaIcon::Var)] = load_icon(IDI_VAR);
-	m_icons[static_cast<size_t>(AlphaIcon::Binary)] = load_icon(IDI_BINARY);
+	m_icons[static_cast<size_t>(NPSystemIcon::File_U)].Attach(load_icon(IDI_FILE_ICON));
+	m_icons[static_cast<size_t>(NPSystemIcon::File_C)].Attach(load_icon(IDI_C_FILE));
+	m_icons[static_cast<size_t>(NPSystemIcon::File_S)].Attach(load_icon(IDI_S_FILE));
+	m_icons[static_cast<size_t>(NPSystemIcon::File_H)].Attach(load_icon(IDI_H_FILE));
+	m_icons[static_cast<size_t>(NPSystemIcon::File_Delete)].Attach(load_icon(IDI_FILE_DELETE));
+	m_icons[static_cast<size_t>(NPSystemIcon::Di_Pin)].Attach(load_icon(IDI_DI_PIN));
+	m_icons[static_cast<size_t>(NPSystemIcon::Do_Pin)].Attach(load_icon(IDI_DO_PIN));
+	m_icons[static_cast<size_t>(NPSystemIcon::Ai_Pin)].Attach(load_icon(IDI_AI_PIN));
+	m_icons[static_cast<size_t>(NPSystemIcon::Ctrl_Dev)].Attach(load_icon(IDI_CTRL_DEV));
+	m_icons[static_cast<size_t>(NPSystemIcon::Library)].Attach(load_icon(IDI_LIBRARY));
+	m_icons[static_cast<size_t>(NPSystemIcon::Book)].Attach(load_icon(IDI_BOOK));
+	m_icons[static_cast<size_t>(NPSystemIcon::Fun)].Attach(load_icon(IDI_FUN));
+	m_icons[static_cast<size_t>(NPSystemIcon::Fun_cat)].Attach(load_icon(IDI_FUNCTIONS));
+	m_icons[static_cast<size_t>(NPSystemIcon::Source)].Attach(load_icon(IDI_SOURCE));
+	m_icons[static_cast<size_t>(NPSystemIcon::Object)].Attach(load_icon(IDI_BINARY));
+	m_icons[static_cast<size_t>(NPSystemIcon::PC)].Attach(load_icon(IDI_PC));
+	m_icons[static_cast<size_t>(NPSystemIcon::Network)].Attach(load_icon(IDI_NETWORK));
+	m_icons[static_cast<size_t>(NPSystemIcon::Var)].Attach(load_icon(IDI_VAR));
+	m_icons[static_cast<size_t>(NPSystemIcon::Binary)].Attach(load_icon(IDI_BINARY));
+	m_icons[static_cast<size_t>(NPSystemIcon::FBD)].Attach(load_icon(IDI_FBD));
+	m_icons[static_cast<size_t>(NPSystemIcon::SFC)].Attach(load_icon(IDI_SFC));
 	
-
-	m_cursors[static_cast<size_t>(AlphaCursor::Arrow)].LoadSysCursor(IDC_ARROW);
-	m_cursors[static_cast<size_t>(AlphaCursor::Block)].LoadSysCursor(IDC_NO);
-	m_cursors[static_cast<size_t>(AlphaCursor::Drag)].LoadSysCursor(IDC_SIZEALL);
-	m_cursors[static_cast<size_t>(AlphaCursor::NoDrop)].LoadSysCursor(IDC_NO);
-	m_cursors[static_cast<size_t>(AlphaCursor::Hand)].LoadSysCursor(IDC_HAND);
-	m_cursors[static_cast<size_t>(AlphaCursor::SizeWE)].LoadSysCursor(IDC_SIZEWE);
-
-	m_cursors[static_cast<size_t>(AlphaCursor::Drop)].LoadCursor(IDC_DROP);
-	m_cursors[static_cast<size_t>(AlphaCursor::Pen)].LoadCursor(IDC_PEN);
-	m_cursors[static_cast<size_t>(AlphaCursor::LinkSelect)].LoadCursor(IDC_LINKSEL);
-
+	// cursors
+	m_cursors[static_cast<size_t>(NPSystemCursor::Arrow)].LoadSysCursor(IDC_ARROW);
+	m_cursors[static_cast<size_t>(NPSystemCursor::Block)].LoadSysCursor(IDC_NO);
+	m_cursors[static_cast<size_t>(NPSystemCursor::Drag)].LoadSysCursor(IDC_SIZEALL);
+	m_cursors[static_cast<size_t>(NPSystemCursor::NoDrop)].LoadSysCursor(IDC_NO);
+	m_cursors[static_cast<size_t>(NPSystemCursor::Hand)].LoadSysCursor(IDC_HAND);
+	m_cursors[static_cast<size_t>(NPSystemCursor::SizeWE)].LoadSysCursor(IDC_SIZEWE);
+	m_cursors[static_cast<size_t>(NPSystemCursor::Drop)].LoadCursor(IDC_DROP);
+	m_cursors[static_cast<size_t>(NPSystemCursor::Pen)].LoadCursor(IDC_PEN);
+	m_cursors[static_cast<size_t>(NPSystemCursor::LinkSelect)].LoadCursor(IDC_LINKSEL);
 
 //	auto handle = LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_ALGORITHM), IMAGE_ICON, 24, 24, 
 //		LR_DEFAULTSIZE | LR_LOADTRANSPARENT);
-//	m_icons[AlphaIcon::Algorithm] = (HICON)handle;
+//	m_icons[NPSystemIcon::Algorithm] = (HICON)handle;
 //	auto info = MyGetIconInfo((HICON)handle);
 //	int cx = GetSystemMetrics(SM_CXICON);
 //	int i = 0;

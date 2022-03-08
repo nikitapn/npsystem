@@ -22,7 +22,7 @@ public:
 	CTreeHardware* GetHardware() noexcept;
 	CTreeAssignedAlgorithmCat* GetSoftware() noexcept;
 	CTreeAssignedI2CModulesCat* GetI2CModules() noexcept;
-	virtual int	Move(CTreeAlgorithm* alg, int action);
+	virtual int	Move(CTreeControlUnit* alg, int action);
 	virtual int	Move(CTreeI2CModule* mod, int action);
 	virtual INT_PTR ShowProperties();
 	virtual COnlineTreeItem* CreateOnlineFromThis(std::vector<std::unique_ptr<COnlineTreeItem>>& nodes, CTreeViewCtrl tree, HTREEITEM hParent);

@@ -8,7 +8,7 @@
 #include "avrassigned.h"
 #include  <avr_info/avr_info.h>
 
-CAvrMemoryManager::CAvrMemoryManager(npsys::device_n dev, npsys::algorithm_n alg, bool sram_only)
+CAvrMemoryManager::CAvrMemoryManager(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool sram_only)
 	: CMemoryManager(dev, alg)
 	, sram_only_(sram_only) {
 	
@@ -69,7 +69,7 @@ int CAvrMemoryManager::AllocatePageMemory(int objectSize) {
 
 
 std::unique_ptr<CMemoryManager> 
-CMemoryManager::Create(npsys::device_n dev, npsys::algorithm_n alg, bool sram_only)
+CMemoryManager::Create(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool sram_only)
 {
 	// redo this
 	switch (dev.cast<npsys::controller_n>()->controller_model) {
@@ -90,7 +90,7 @@ CMemoryManager::CreateGeneric(npsys::device_n dev, bool sram_only) {
 }
 
 std::unique_ptr<CMemoryManager>
-CMemoryManager::CreateForAlgorithm(npsys::device_n dev, npsys::algorithm_n alg, bool sram_only) {
+CMemoryManager::CreateForAlgorithm(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool sram_only) {
 	return CMemoryManager::Create(dev, alg, sram_only);
 }
 
@@ -199,7 +199,7 @@ void CMemoryManager::AllocateMemory(CVarContainer* var_c) {
 }
 
 void CMemoryManager::FindFreeSpace(
-	const odb::weak_node<npsys::algorithm_n>& alg,
+	const odb::weak_node<npsys::fbd_control_unit_n>& alg,
 	int size,
 	int memBegin,
 	int memEnd,

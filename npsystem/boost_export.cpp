@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "network_ext.h"
+#include "control_unit_ext.h"
 #include <npsys/boost_export.h>
 
 #include "avrassigned.h"

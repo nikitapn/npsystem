@@ -50,10 +50,11 @@ typedef enum
 	ADC_DELAY,
 	ADC_DISABLE
 } ADC_STATE;
+
 typedef struct {
 	ADC_STATE adc_state;
 	uint8_t adc_n;
-	uint8_t adc_channel[8];
+	uint8_t admux_value[8];
 } eeprcfg_t;
 
 #ifdef NPSYSTEM_FIRMWARE_API_CPP

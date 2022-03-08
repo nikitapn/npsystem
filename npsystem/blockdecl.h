@@ -5,9 +5,11 @@
 
 class CElement;
 class CBlock;
+class CSFCBlock;
 class CConfigurableBlock;
 class CLogicElement;
-class CBlockComposition;
+class CFBDBlockComposition;
+class CSFCBlockComposition;
 class CBlockCompositionWrapper;
 // slots
 class CSlot;
@@ -15,7 +17,12 @@ class CInputSlot;
 class COutputSlot;
 class CSlotGroup;
 // line
+class CLineBase;
 class CLine;
+class CSFCLine;
+class CSFCBus;
+class CSFCBusIn;
+class CSFCBusOut;
 // Slot types
 class CBlockInput;
 class CValue;
@@ -35,8 +42,12 @@ class CInplaceBlockProperty;
 class CScheduleSlider;
 class CSliderThing;
 class CSliderTimeChart;
+class CSizeElement;
+class CSFCSlot;
+class CSFCInputSlot;
+class CSFCOutputSlot;
 
-#define ALPHA_BLOCKS() \
+#define NPSYSTEM_BLOCKS() \
 	AAF(CInput) \
 	AAF(COutput) \
 	/*logic*/ \
@@ -53,6 +64,7 @@ class CSliderTimeChart;
 	AAF(CTime) \
   AAF(CBlockSchedule) \
   AAF(CCounter) \
+  AAF(CPulse) \
 	/*Math*/ \
 	AAF(CAdd) \
 	AAF(CSub) \
@@ -65,8 +77,15 @@ class CSliderTimeChart;
 	AAF(CAlarmLow) \
 	/*control*/ \
 	AAF(CPID)
-	
+
+#define NPSYSTEM_BLOCKS_SFC() \
+	AAF(CSFCBlockBegin) \
+	AAF(CSFCBlockTerm) \
+	AAF(CSFCBlockStep) \
+	AAF(CSFCBlockTransition)
+
 
 #define AAF(x) class x;
-ALPHA_BLOCKS()
+NPSYSTEM_BLOCKS()
+NPSYSTEM_BLOCKS_SFC()
 #undef AAF

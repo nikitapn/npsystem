@@ -84,7 +84,7 @@ class CAVRAssignedAlgorithm :
 	}
 public:
 	CAVRAssignedAlgorithm() = default;
-	CAVRAssignedAlgorithm(algorithm_n& _alg, device_n& _avr)
+	CAVRAssignedAlgorithm(control_unit_n& _alg, device_n& _avr)
 		: CAssignedAlgorithm(_alg, _avr) 
 	{
 	}

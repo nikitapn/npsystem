@@ -2,7 +2,7 @@
 // This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
 
 #include "stdafx.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "avrconfigurator.h"
 #include "network_ext.h"
 #include "avrassigned.h"
@@ -218,8 +218,8 @@ CAVR5DynamicLinker::CAVR5DynamicLinker(npsys::controller_n_avr avr)
 	avr_.fetch();
 }
 
-bool CAVR5DynamicLinker::AssignAlgorithm(npsys::algorithm_n& alg) {
-	if (alg->GetStatus() > 0) {
+bool CAVR5DynamicLinker::AssignControlUnit(npsys::control_unit_n& alg) {
+	if (alg->GetStatus() > npsys::CControlUnit::Status::status_not_assigned) {
 		MessageBoxA(g_hMainWnd, ("Algorithm \"" + alg->get_name()
 			+ "\" is already assigned").c_str(), "", MB_ICONEXCLAMATION);
 		return false;
@@ -249,7 +249,7 @@ bool CAVR5DynamicLinker::AssignAlgorithm(npsys::algorithm_n& alg) {
 	avr_->assigned_algs.store();
 	alg->assigned_alg = assigned;
 	alg->assigned_dev = avr_;
-	alg->SetStatus(npsys::CAlgorithm::status_assigned);
+	alg->SetStatus(npsys::CControlUnit::Status::status_assigned);
 	alg->Save();
 
 	return batch.exec();
@@ -278,7 +278,7 @@ bool CAVR5DynamicLinker::AssignI2CModule(const npsys::i2c_module_n& mod, npsys::
 
 
 CDynamicLinker::Result
-CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
+CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 	using npsys::variable;
 	using vs = npsys::variable::Status;
 	using namespace std::string_literals;
@@ -317,7 +317,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 	}
 
 	std::unordered_map<int, std::unique_ptr<CMemoryManager>> mms;
-	auto get_memory_manager = [&mms](npsys::device_n& dev, npsys::algorithm_n& alg) {
+	auto get_memory_manager = [&mms](npsys::device_n& dev, npsys::fbd_control_unit_n& alg) {
 		auto founded = mms.find(dev->dev_addr);
 		if (founded != mms.end()) return founded->second.get();
 		auto ptr = CMemoryManager::CreateForAlgorithm(dev, alg, false);
@@ -344,7 +344,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 		odb::Batch batch;
 		global.ChangeCurrentDirectory(CurrentDirectory::ROOT);
 		auto assigned = static_cast<npsys::CAVRAssignedAlgorithm*>(assigned_alg.get());
-		auto const oldaddr = (alg->GetStatus() < npsys::CAlgorithm::status_loaded
+		auto const oldaddr = (alg->GetStatus() < npsys::CControlUnit::Status::status_loaded
 			? 0
 			: avr_->PageToWord(assigned->Start()));
 		if (oldaddr) {
@@ -372,7 +372,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 		CFindElementsThatContainsVariablesExcludeReferences standaloneVarElems;
 		CFindExternalReferences varExtRef;
 		//CFindInternalBlockRef intRefBlocks;
-		Traversal<CBlockVisitor>(blocks, { &standaloneVarElems, &varExtRef, &slots/*, &intRefBlocks*/});
+		Traversal<CBlockVisitor>(blocks, standaloneVarElems, varExtRef, slots/*, &intRefBlocks*/);
 
 		//for (auto block : intRefBlocks) {
 		//	block->Init(holder, avr_.get());
@@ -431,7 +431,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 			bool soft_error = false;
 
 			for (auto it = sorted.rbegin(); it != sorted.rend(); ++it) {
-				if ((*it).alg->GetStatus() == npsys::CAlgorithm::status_not_assigned) {
+				if ((*it).alg->GetStatus() == npsys::CControlUnit::Status::status_not_assigned) {
 					auto alg_name = (*it).alg->get_name();
 					std::cout << ">WARNING: The following parameters"
 						" will not be loaded. Algorithm \"" << alg_name << "\" is not assigned." << std::endl;
@@ -698,7 +698,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 								|| ref_var->GetStatus() == vs::allocated_from_another_algorithm
 								|| ref_var->GetStatus() == vs::good_allocated_from_another_algorithm);
 
-							auto link_type = slot->GetDirection() == CSlot::SLOT_DIRECTION::INPUT_SLOT
+							auto link_type = slot->GetDirection() == SlotDirection::INPUT_SLOT
 								? npsys::remote::ExtLinkType::Write
 								: npsys::remote::ExtLinkType::Read;
 
@@ -844,7 +844,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 		
 		bool changed =
 			(
-			(alg->GetStatus() == npsys::CAlgorithm::status_assigned) ||
+			(alg->GetStatus() == npsys::CControlUnit::Status::status_assigned) ||
 				(hash != assigned->GetHash())
 				);
 
@@ -920,7 +920,7 @@ CAVR5DynamicLinker::UploadAlgorithm(npsys::algorithm_n& alg) {
 			g_progress->OffsetPos(10);
 		}
 
-		alg->SetStatus(npsys::CAlgorithm::status_loaded);
+		alg->SetStatus(npsys::CControlUnit::Status::status_loaded);
 
 		// .....................SAVING..................... //
 		for (auto& i : mms) {
@@ -1183,7 +1183,7 @@ void CAVR5DynamicLinker::ParseObjectFunctions(
 }
 
 CDynamicLinker::Result
-CAVR5DynamicLinker::UnloadAlgorithm(npsys::algorithm_n& alg) {
+CAVR5DynamicLinker::UnloadFBDUnit(npsys::fbd_control_unit_n& alg) {
 	auto blocks = alg->GetBlocks();
 	auto assigned = alg->assigned_alg.fetch();
 	if (!assigned.loaded()) {
@@ -1206,7 +1206,7 @@ CAVR5DynamicLinker::UnloadAlgorithm(npsys::algorithm_n& alg) {
 		CReleaseVariables releaser;
 		CResetVariables cleaner(true);
 
-		Traversal<CBlockVisitor>(blocks, { &releaser, &cleaner }); // order matters
+		Traversal<CBlockVisitor>(blocks, releaser, cleaner); // order matters
 
 		g_progress->OffsetPos(2);
 		
@@ -1234,7 +1234,7 @@ CAVR5DynamicLinker::UnloadAlgorithm(npsys::algorithm_n& alg) {
 			block.store();
 		}
 
-		alg->SetStatus(npsys::CAlgorithm::status_assigned);
+		alg->SetStatus(npsys::CControlUnit::Status::status_assigned);
 		alg.store();
 
 		static_cast<npsys::CAVRAssignedAlgorithm*>(assigned.get())->SetUnloaded();

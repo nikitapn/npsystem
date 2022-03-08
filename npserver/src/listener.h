@@ -5,24 +5,13 @@
 
 #include <atomic>
 #include <vector>
+#include <nprpc/flat.hpp>
 #include <npc/server.hpp>
 #include <npsys/memtypes.h>
 #include "environment.h"
 #include "protocol.h"
 #include "thread_pool.h"
 #include <boost/asio/strand.hpp>
-
-template<typename T>
-struct Span {
-	T* begin_;
-	T* end_;
-	
-	const T* begin() const noexcept { return begin_; }
-	const T* end() const noexcept { return end_; }
-	T* begin() noexcept { return begin_; }
-	T* end() noexcept { return end_; }
-	size_t size() const noexcept { return end_ - begin_; }
-};
 
 namespace protocol {
 using updated_registers_t = std::vector<protocol::Register const*>;
@@ -38,7 +27,9 @@ class listener {
 
 	void process_registers(std::shared_ptr<updated_registers_t> registers); // !!!! only by value
 protected:
-	void advise(const Span<nps::flat::DataDef>& a, Span<nps::var_handle>& handles);
+	boost::asio::io_context::strand strand_;
+
+	void advise(const ::flat::Span<const nps::flat::DataDef>& a, ::flat::Span<nps::var_handle>& handles);
 	void release_one(protocol::client_handle handle);
 	void release_all();
 public:
@@ -51,7 +42,7 @@ public:
 
 	// wait only function
 	[[nodiscard]]
-	auto t_advise(const Span<nps::flat::DataDef>& a, Span<nps::var_handle>& handles) {
+	auto t_advise(const ::flat::Span<const nps::flat::DataDef>& a, ::flat::Span<nps::var_handle>& handles) {
 		task_count_++;
 		return nplib::async<true>(strand_, &listener::advise, this, std::cref(a), std::ref(handles)).get();
 	}
@@ -64,8 +55,6 @@ public:
 	auto task_count() const noexcept { return task_count_.load(std::memory_order_relaxed); }
 	
 	listener() : strand_(thread_pool::get_instance().ctx()) {}
-protected:
-	boost::asio::io_context::strand strand_;
 };
 
 }

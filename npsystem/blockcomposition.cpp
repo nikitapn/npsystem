@@ -4,13 +4,13 @@
 #include "stdafx.h"
 #include "block.h"
 #include "line.h"
-#include "command.h"
-#include "blockcomposition.h"
-#include "algext.h"
+#include "command_impl.h"
+#include "fbd_block_composition.hpp"
+#include "control_unit_ext.h"
 #include <npsys/guid.h>
 
-NP_BOOST_CLASS_EXPORT_GUID(CBlockComposition);
-IMPLEMENT_VISITOR(CBlockComposition);
+NP_BOOST_CLASS_EXPORT_GUID(CFBDBlockComposition);
+IMPLEMENT_VISITOR(CFBDBlockComposition);
 
 NP_BOOST_CLASS_EXPORT_GUID(CBlockCompositionWrapper);
 IMPLEMENT_VISITOR(CBlockCompositionWrapper);
@@ -21,36 +21,18 @@ CElement::_Iterator* CBlockCompositionBase::CreateIterator() {
 	return static_cast<CElement::_Iterator*>(&m_iterator);
 	//	return new Iter::StlContainerIterator<CElement*, std::vector>(_elements);
 }
-void CBlockCompositionBase::RestorePointers() {
+
+void CBlockCompositionBase::FBD_RestorePointers() {
 	CFindSlots slots;
 	CFindType<CLine, CBlockVisitor> lines;
 	CFindInternalReferences refSlots;
-	Traversal<CBlockVisitor>(this, { &slots, &lines, &refSlots });
+	
+	Traversal<CBlockVisitor>(this, slots, lines, refSlots);
 	// Restore lines
-	CSlot* founded[2];
-	for (auto& l : lines) {
-		int ix = 0;
-		for (auto& j : slots) {
-			int slotId = j->GetId();
-			if (l->GetInID() == slotId ||
-				l->GetOutID() == slotId) {
-				founded[ix++] = j;
-				if (ix == 2) break;
-			}
-		}
-		if (ix < 2) {
-			RemoveElement(l);
-			delete l;
-		} else {
-			l->SetSlot(founded[0]);
-			l->SetSlot(founded[1]);
-			l->Connect();
-		}
-	}
+	ConnectLinesToSlotsAfterDeserialization(lines.get(), slots.get());
 
-	for (auto& osl : slots.m_outSlots)
-		osl->CalcLinesOffset();
-
+	for (auto& osl : slots.m_outSlots) osl->CalcLinesPosition();
+	
 	// Restore Internal References pointers
 	for (auto& rs : refSlots) {
 		for (auto& s : slots) {
@@ -90,42 +72,15 @@ void CBlockCompositionBase::MoveDxDy(float dx, float dy) {
 	}
 }
 
-// CBlockComposition
-
-__declspec(noinline) void cpp_command_delete::operator()(Command* cmd) {
-	delete cmd;
-}
-
-CBlockComposition::~CBlockComposition() {
-	CFindSlots slots;
-	Traversal<CBlockVisitor>(this, slots);
-	for (auto slot : slots) slot->ClearReferences();
-	for (auto i : elements_) {
-		if (!i->IsNode()) delete i;
-	}
-#ifdef DEBUG
-	// std::cout << "~CBlockComposition()" << std::endl;
-#endif // DEBUG
-}
-
-CSlot* CBlockComposition::GetSlotById(int id) {
-	CFindSlots slots;
-	Traversal<CBlockVisitor>(this, slots);
-	for (auto& s : slots) {
-		if (s->GetId() == id) return s;
-	}
-	return nullptr;
-}
-
 std::string CBlockCompositionBase::CreateUniqueName(
 	ConstElementIterator begin, 
 	ConstElementIterator end, 
 	const std::string& pattern) {
 	std::string test = pattern + "_";
 	std::string tmp;
-	int i = 1;
+	int i = 0;
 	for (;;) {
-		tmp = test + std::to_string(i++);
+		tmp = test + std::to_string(++i);
 		if (std::find_if(begin, end, [&tmp](const CElement* e) {
 			return e->GetName() == tmp; } 
 		) == end) break;
@@ -139,24 +94,23 @@ std::string CBlockCompositionBase::CreateUniqueName(const std::string& pattern) 
 
 bool CBlockComposition::CheckName(const std::string& name, CElement* pElem) {
 	for (auto& el : *this) {
-		if (el == pElem)
-			continue;
-		if (el->GetName() == name)
-			return false;
+		if (el == pElem) continue;
+		if (el->GetName() == name) return false;
 	}
 	return true;
 }
 
-void CBlockComposition::AddCommand(Command* cmd, bool bExecute) {
+void CBlockComposition::AddCommand(std::unique_ptr<Command>&& cmd, bool bExecute) {
 	if (cc_ != commands_.size() - 1) {
 		auto it = commands_.begin();
 		std::advance(it, cc_ + 1);
 		commands_.erase(it, commands_.end());
 	}
-	commands_.push_back(std::unique_ptr<Command, cpp_command_delete>(cmd));
-	if (bExecute) cmd->Execute();
+	commands_.push_back(std::move(cmd));
+	if (bExecute) commands_.back()->Execute();
 	cc_ = (int)commands_.size() - 1;
 }
+
 int CBlockComposition::Undo() {
 	if (IsUndoCommands()) {
 		commands_[cc_--]->UnExecute();
@@ -190,25 +144,27 @@ void CBlockComposition::PermanentExecuteCommands() noexcept {
 	cc_ = -1;
 }
 
-void CBlockComposition::DeleteSelectedElements(MyQuadrantNode* qtRoot) {
-	CFindSelectedPlusLines sel;
-
-	for (auto i : elements_) i->Visit(sel); // only top elements
-	if (sel.empty() && sel.m_lines.empty()) return;
-
-	auto group_cmd = new GroupCommand<Command>;
-	
-	// lines must be deleted first
-	for (auto l : sel.m_lines) group_cmd->AddCommand(l->DeleteElement(this, qtRoot), true);
-	for (auto i : sel) group_cmd->AddCommand(i->DeleteElement(this, qtRoot), false);
-
-	AddCommand(group_cmd, true);
-}
-
 void CBlockComposition::SetSelect(bool select) noexcept {
 	for (auto& el : elements_)
 		el->SetSelect(select);
 }
+
+
+void CBlockComposition::DeleteSelectedElements(MyQuadrantNode* qtRoot) {
+	CFindSelectedPlusLines sel;
+
+	for (auto i : elements_) i->Visit(sel); // only top elements
+	if (sel.empty() && sel.lines.empty()) return;
+
+	auto group_cmd = std::make_unique<GroupCommand<Command>>();
+	
+	// lines must be deleted first
+	for (auto l : sel.lines) group_cmd->AddCommand(l->GetBase()->DeleteElement(this, qtRoot), true);
+	for (auto& i : sel) group_cmd->AddCommand(i.first->DeleteElement(this, qtRoot), false);
+
+	AddCommand(std::move(group_cmd), true);
+}
+
 // CBlockCompositionWrapper
 void CElement::InsertToWrapper(CBlockCompositionWrapper* wrapper) noexcept {
 	static_cast<CBlockCompositionBase*>(wrapper)->Push(this);
@@ -216,12 +172,15 @@ void CElement::InsertToWrapper(CBlockCompositionWrapper* wrapper) noexcept {
 void CBlock::InsertToWrapper(CBlockCompositionWrapper* wrapper) noexcept {
 	wrapper->PushBlock(this->top);
 }
+
 void CBlockCompositionWrapper::Push(CElement* element) noexcept {
 	element->InsertToWrapper(this);
 }
+
 void CBlockCompositionWrapper::PushBlock(npsys::CFBDBlock* block) {
 	blocks_.push_back(block->self_node.fetch());
 }
+
 void CBlockCompositionWrapper::ReplaceElement(CElement* old_element, npsys::fbd_block_n& new_block) {
 	int n = 0;
 	for (auto& ptr : elements_) {
@@ -241,8 +200,10 @@ void CBlockCompositionWrapper::ReplaceElement(CElement* old_element, npsys::fbd_
 
 	if (n != 2) assert(false);
 }
-void CBlockCompositionWrapper::Adapt(CBlockComposition* dest) {
-	auto dest_alg = dest->GetAlgorithm()->self_node.fetch();
+
+void CBlockCompositionWrapper::Adapt(CFBDBlockComposition* dest) {
+	auto dest_alg_i = dest->GetAlgorithm()->self_node.fetch();
+	auto dest_alg = dest_alg_i.cast<npsys::fbd_control_unit_n>();
 	auto factory = dest->GetBlockFactory();
 
 	CFindOutsideReferences outRef;
@@ -250,7 +211,7 @@ void CBlockCompositionWrapper::Adapt(CBlockComposition* dest) {
 	CFindSlots dest_slots;
 	CBlocksInspector new_blocks;
 
-	Traversal<CBlockVisitor>(this, { &intRef, &outRef, &new_blocks });
+	Traversal<CBlockVisitor>(this, intRef, outRef, new_blocks);
 	Traversal<CBlockVisitor>(dest, dest_slots);
 
 	for (auto& block : new_blocks) {
@@ -277,19 +238,18 @@ void CBlockCompositionWrapper::Adapt(CBlockComposition* dest) {
 		return false;
 	};
 
-	bool source_alg_valid = alg_.fetch();
+	bool source_alg_valid = fbd_unit_.fetch();
 
-	
 	auto convert_to_external_ref = [&](CSlot* slot, CInternalRef* ref) {
 		std::optional<npsys::fbd_slot_n> ref_slot;
-		if (source_alg_valid) ref_slot = alg_->FindSlot(ref->GetSlotID());
+		if (source_alg_valid) ref_slot = fbd_unit_->FindSlot(ref->GetSlotID());
 		if (!source_alg_valid || !ref_slot) {
 			static_cast<CParameter*>(slot->GetParentBlock())->SetParamType(PARAMETER_TYPE::P_VALUE);
 			slot->SetSlotType(new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY));
 			slot->CommitTypeChanges();
 			return true;
 		}
-		auto ext_ref = new CExternalReference(ref_slot.value(), alg_, dest_alg);
+		auto ext_ref = new CExternalReference(ref_slot.value(), fbd_unit_, dest_alg);
 		auto param = static_cast<CParameter*>(slot->GetParentBlock());
 		if (param->GetDirection() == CParameter::PARAMETER_DIRECTION::OUTPUT_PARAMETER) {
 			// always make external read links
@@ -307,7 +267,7 @@ void CBlockCompositionWrapper::Adapt(CBlockComposition* dest) {
 		return true;
 	};
 
-	bool same_alg = (dest_alg.id() == alg_.id());
+	bool same_alg = (dest_alg.id() == fbd_unit_.id());
 	for (auto[ref, ref_slot] : intRef) {
 		auto oldId = ref->GetSlotID();
 		if (

@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "network_ext.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "stuff.h"
 #include "error.h"
 #include "global.h"
@@ -76,7 +76,7 @@ public:
 private:
 	void CopyPinAsLink() {
 		auto type = n_->GetPinType();
-		auto factory = CBlockFactory();
+		auto factory = CFBDBlockFactory(nullptr);
 		npsys::fbd_block_n block;
 		if (type == io::PINTYPE::OUTPUT) {
 			factory.CreateOutput(block);
@@ -125,7 +125,7 @@ class CTreeAvrPort : public CTemplateItemHardwareStatus<
 public:
 	CTreeAvrPort(npsys::avr_port_n& n)
 		: CTemplateItemHardwareStatus(n) {
-		SetIcon(AlphaIcon::Io);
+		SetIcon(NPSystemIcon::Io);
 		LoadChilds();
 	}
 	virtual bool IsRemovable() { return false; }
@@ -145,7 +145,7 @@ class CTreeAvrIO : public CTemplateItemHardwareStatus<
 	ItemListContainer<CTreeAvrIO, std::vector, CTreeAvrPort, FixedElement, Manual>, CTreeAvrIO> {
 public:
 	CTreeAvrIO(npsys::controller_n& ctrl) : ctrl_(ctrl) {
-		SetIcon(AlphaIcon::Io);
+		SetIcon(NPSystemIcon::Io);
 		name_ = "IO";
 		LoadChilds();
 	}
@@ -778,10 +778,10 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 	const auto& info = GetFirmwareInfo();
 	const auto& pinfo = GetPeripheralInfo();
 
-	auto hIcon = global.GetIcon(AlphaIcon::Binary);
+	auto hIcon = global.GetIcon24x24(NPSystemIcon::Binary);
 
 	nodes.push_back(std::make_unique<COnlineTreeItem>(
-		"INTERNA",
+		"INTERNAL",
 		hIcon
 		));
 	auto hRoot = nodes.back()->Insert(tree, parent);
@@ -1055,6 +1055,14 @@ bool CAVRController::UploadIO() noexcept {
 	std::unique_ptr<uint16_t[]> buf(new uint16_t[info.pmem.pagesize / 2]);
 	uint16_t* ptr = buf.get();
 
+	constexpr auto REFS0 = 6;
+	constexpr auto REFS1 = 7;
+	constexpr int admux_table[] = {
+		(0 << REFS1) | (0 << REFS0), // AREF, Internal Vref turned off
+		(0 << REFS1) | (1 << REFS0), // AVCC with external capacitor at AREF pin
+		(1 << REFS1) | (1 << REFS0), // Internal 2.56V Voltage Reference with external capacitor at AREF pin
+	};
+
 	std::vector<int> adc;
 
 	for (auto& port : ports) {
@@ -1072,7 +1080,11 @@ bool CAVRController::UploadIO() noexcept {
 			port_val.ori |= val.ori;
 			port_val.andi |= val.andi;
 			if (pin->GetPinPurpose(!can_load) == avrinfo::PinPurpose::ANALOG_PIN) {
-				adc.push_back(pin->GetPinNum());
+				if (info.version < 2 && pin->adc_reference_voltage != avrinfo::AdcReferenceVoltage::AREF) {
+					std::cerr << "This firmware version does not support ADC reference voltage other than AREF.\n";
+					return false;
+				}
+				adc.push_back(pin->GetPinNum() | admux_table[static_cast<int>(pin->adc_reference_voltage)]);
 			}
 		}
 
@@ -1131,13 +1143,14 @@ bool CAVRController::UploadIO() noexcept {
 	try {
 		WritePage(info.pmem.io, static_cast<int>(size), reinterpret_cast<uint8_t*>(buf.get()));
 		ReinitIO();
-
+		//info.version;
 		eeprcfg_t eep;
 		if (!adc.empty()) {
 			eep.adc_state = ADC_INIT;
 			eep.adc_n = static_cast<uint8_t>(adc.size());
-			for (size_t i = 0; i < adc.size(); ++i)
-				eep.adc_channel[i] = adc[i];
+			for (size_t i = 0; i < adc.size(); ++i) {
+				eep.admux_value[i] = adc[i];
+			}
 		} else {
 			memset(&eep, 0, sizeof(eeprcfg_t));
 			eep.adc_state = ADC_DISABLE;
@@ -1170,7 +1183,7 @@ bool CAVRController::UploadIO() noexcept {
 }
 
 std::unique_ptr<COutsideReference> CAVRController::CreatePinReference(remote::ExtLinkType type, 
-	const std::string& port_name, const std::string& pin_name, odb::weak_node<algorithm_n> alg) {
+	const std::string& port_name, const std::string& pin_name, odb::weak_node<fbd_control_unit_n> alg) {
 	auto port = odb::utils::find_by_name(this->ports, port_name);
 	if (!port) throw std::runtime_error("Port: \"" + port_name + "\" does not exist in this controller");
 	

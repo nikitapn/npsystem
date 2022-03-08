@@ -4,76 +4,43 @@
 #pragma once
 
 #include "visitorbase.h"
-#include "blockdecl.h"
+#include "line_connectable.hpp"
 #include <npsys/variable.h>
 
-class CBlockVisitor {
+class CFBDBlockVisitor : public CBlockVisitor {
 protected:
 	CSlot* current_slot_;
-
 	void VisitSlotType(CSlot* slot) noexcept;
-public:
-	typedef CElement* InterfacePtr;
-
-	virtual ~CBlockVisitor() = default;
-
-	ACCEPT_NONE(CBlockComposition)
-	ACCEPT_NONE(CBlockCompositionWrapper)
-	// slots
-	ACCEPT_NONE(CInputSlot)
-	ACCEPT_NONE(COutputSlot)
-	ACCEPT_NONE(CSlotGroup)
-	// lines
-	ACCEPT_NONE(CLine)
-	// blocks
-	#define AAF(x) ACCEPT_NONE(x)
-		ALPHA_BLOCKS()
-	#undef AAF
-	// Slot types
-	ACCEPT_NONE(CBlockInput)
-	ACCEPT_NONE(CValue)
-	ACCEPT_NONE(CValueRef)
-	ACCEPT_NONE(CBitRef)
-	ACCEPT_NONE(CInternalRef)
-	ACCEPT_NONE(CExternalReference)
-	ACCEPT_NONE(CAvrInternalPin)
-	ACCEPT_NONE(CModuleValue)
-	ACCEPT_NONE(CTextElement)
-	ACCEPT_NONE(CStaticTextElement)
-	ACCEPT_NONE(CDxEdit)
-	ACCEPT_NONE(CInplaceBlockProperty)
-	ACCEPT_NONE(CFixedValue)
-	ACCEPT_NONE(CScheduleSlider)
-	ACCEPT_NONE(CSliderThing)
-	ACCEPT_NONE(CSliderTimeChart)
 };
 
+
 class CLinesInspector
-	: public CBlockVisitor
-	, public COneTypeContainer<CLine*> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<CLine*> 
 {
 public:
 	ACCEPT_DECL(CLine)
 };
 
 class CBlocksInspector 
-	: public CBlockVisitor
-	, public COneTypeContainer<CBlock*> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<CBlock*> 
 {
 public:
 	#define AAF(x) ACCEPT_DECL(x)
-		ALPHA_BLOCKS()
+		NPSYSTEM_BLOCKS()
 	#undef AAF
 };
 
 class CFindSelectedBlocks
 	: public CBlockVisitor
-	, public COneTypeContainer<CBlock*> 
+	, public COneTypeContainerSmallVector32<std::pair<CElement*, IConnectableToLine*>> 
 {
 public:
 	// blocks
 	#define AAF(x) ACCEPT_DECL(x)
-		ALPHA_BLOCKS()
+		NPSYSTEM_BLOCKS()
+		NPSYSTEM_BLOCKS_SFC()
 	#undef AAF
 };
 
@@ -81,15 +48,16 @@ class CFindSelectedPlusLines :
 	public CFindSelectedBlocks 
 {
 public:
-	std::vector<CLine*> m_lines;
+	std::vector<IRecreatable*> lines;
 	
 	ACCEPT_DECL(CLine);
+	ACCEPT_DECL(CSFCLine);
 };
 
 class CVariable;
 
 class CFindVariableVisitorAbstract
-	: public CBlockVisitor 
+	: public CFBDBlockVisitor 
 {
 public:
 	// Block
@@ -100,6 +68,7 @@ public:
 	ACCEPT_DECL(CPID)
 	ACCEPT_DECL(CBlockSchedule)
 	ACCEPT_DECL(CCounter)
+	ACCEPT_DECL(CPulse)
 	// Slots
 	ACCEPT_DECL(COutputSlot)
 	ACCEPT_DECL(CInputSlot)
@@ -112,14 +81,14 @@ public:
 
 class CFindVariableNodes
 	: public CFindVariableVisitorAbstract
-	, public COneTypeContainer<npsys::variable_n*> {
+	, public COneTypeContainerVector<npsys::variable_n*> {
 public:
 	virtual void ApplyAction(CVariable*) override;
 };
 
 class CFindElementsThatContainsVariablesExcludeReferences
 	: public CFindVariableVisitorAbstract
-	, public COneTypeContainer<CVariable*> 
+	, public COneTypeContainerSmallVector32<CVariable*> 
 {
 public:
 	// simplified variable list
@@ -156,8 +125,8 @@ public:
 };
 
 class CFindInternalReferences
-	: public CBlockVisitor
-	, public COneTypeContainer<std::pair<CInternalRef*, CSlot*>> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<std::pair<CInternalRef*, CSlot*>> 
 {
 public:
 	std::vector<CSlot*> other_slots;
@@ -169,8 +138,8 @@ public:
 };
 
 class CFindExternalReferences
-	: public CBlockVisitor
-	, public COneTypeContainer<std::pair<COutsideReference*, CSlot*>> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<std::pair<COutsideReference*, CSlot*>> 
 {
 public:
 	std::vector<std::pair<COutsideReference*, CSlot*>> m_invalidRef;
@@ -187,8 +156,8 @@ public:
 };
 
 class CFindOutsideReferences
-	: public CBlockVisitor
-	, public COneTypeContainer<COutsideReference*> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<COutsideReference*> 
 {
 public:
 	// Only param block can contain this type of slot
@@ -201,8 +170,8 @@ public:
 };
 
 class CFindSlots 
-	: public CBlockVisitor
-	, public COneTypeContainer<CSlot*> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerVector<CSlot*> 
 {
 	void AcceptConfigurableBlock(CConfigurableBlock*);
 public:
@@ -216,8 +185,8 @@ public:
 };
 
 class CFindLoadedSlots 
-	: public CBlockVisitor
-	, public COneTypeContainer<CSlot*> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<CSlot*> 
 {
 	template<class T>
 	void AcceptSlot(T* slot);
@@ -232,8 +201,8 @@ public:
 class CInternalBlockRef;
 
 class CFindInternalBlockRef
-	: public CBlockVisitor
-	, public COneTypeContainer<CInternalBlockRef*> 
+	: public CFBDBlockVisitor
+	, public COneTypeContainerSmallVector32<CInternalBlockRef*> 
 {
 public:
 	void InitInternalReferences(npsys::CNetworkDevice* device);
@@ -241,4 +210,14 @@ public:
 
 	ACCEPT_DECL(CTime)
 	ACCEPT_DECL(CBlockSchedule)
+};
+
+
+class CFBDFindConnectable
+	: public CBlockVisitor
+	, public COneTypeContainerSmallVector64<CLineConnectableT<CLine>*> 
+{
+public:
+	ACCEPT_DECL(CInputSlot)
+	ACCEPT_DECL(COutputSlot)
 };

@@ -47,7 +47,7 @@ class CFBDSlot
 			ar & flags_;
 		}
 		if (file_version >= 3) ar & strings;
-		if (file_version >= 4) ar & alg;
+		if (file_version >= 4) ar & fbd_unit;
 		//
 #ifdef _CONFIGURATOR_
 		serialize2(ar, file_version);
@@ -86,7 +86,7 @@ public:
 	odb::weak_node<fbd_block_n> block_parent;
 	online_value online;
 	odb::weak_node<strings_n> strings;
-	odb::weak_node<algorithm_n> alg;
+	odb::weak_node<fbd_control_unit_n> fbd_unit;
 #ifdef _CONFIGURATOR_
 	std::unique_ptr<CSlot> e_slot;
 #endif

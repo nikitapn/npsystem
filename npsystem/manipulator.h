@@ -19,17 +19,25 @@ class CManipulator {
 public:
 	virtual ~CManipulator() = default;
 	virtual S_CURSOR MouseButtonDown(CPoint point, CAlgorithmView* pWnd) = 0;
-	virtual void Drag(CPoint point, CAlgorithmView* pWnd) = 0;
+	// true - invalidate needed
+	virtual int Drag(CPoint point, CAlgorithmView* pWnd) = 0;
 	virtual void MouseButtonUP(CPoint point, CAlgorithmView* pWnd) = 0;
 	virtual void Draw(CGraphics* pGraphics) {}
-protected:
-	D2D1_POINT_2F _p1;
 };
+
+class CDefaultManipulator : public CManipulator {
+public:
+	virtual S_CURSOR MouseButtonDown(CPoint point, CAlgorithmView* pWnd) { return S_CURSOR::A_ONE_ELEM; }
+	virtual int Drag(CPoint point, CAlgorithmView* pWnd) { return false; }
+	virtual void MouseButtonUP(CPoint point, CAlgorithmView* pWnd) {}
+};
+
+inline static CDefaultManipulator g_default_manipulator;
 
 class CMultiManipulator : public CManipulator {
 public:
 	virtual S_CURSOR MouseButtonDown(CPoint point, CAlgorithmView* pWnd) = 0;
-	virtual void Drag(CPoint point, CAlgorithmView* pWnd) = 0;
+	virtual int Drag(CPoint point, CAlgorithmView* pWnd) = 0;
 	virtual void MouseButtonUP(CPoint point, CAlgorithmView* pWnd) = 0;
 	virtual void Draw(CGraphics* pGraphics) = 0;
 protected:

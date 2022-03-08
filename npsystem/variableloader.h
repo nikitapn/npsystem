@@ -38,16 +38,16 @@ public:
 	// unload algorihm constructor
 	CAlgorithmVariableLoader(
 		npsys::device_n& device,
-		npsys::algorithm_n& alg);
+		npsys::fbd_control_unit_n& alg);
 
 	// load algorihm constructor
 	CAlgorithmVariableLoader(
 		npsys::device_n& device,
-		npsys::algorithm_n& alg,
+		npsys::fbd_control_unit_n& alg,
 		var_node_ptr_list& alg_variables,
 		var_raw_ptr_list& alg_external_ref_variables);
 private:
-	npsys::algorithm_n& alg_;
+	npsys::fbd_control_unit_n& alg_;
 	std::vector<npsys::variable_n> owner_released_vars_;
 	std::vector<npsys::variable_n> new_allocated_vars_;
 	void CollectAllOwnerReleasedVariables() noexcept;

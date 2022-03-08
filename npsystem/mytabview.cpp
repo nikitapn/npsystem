@@ -7,6 +7,29 @@
 #include "MyTabView.h"
 #include "dlgdoclist.h"
 
+// distance beetween tab border and tab content
+static constexpr LONG c_dist_v = 2;
+static constexpr LONG c_dist_h = 2;
+//
+static constexpr LONG c_tab_icon_size = 32;
+static constexpr LONG c_tab_height = c_tab_icon_size + c_dist_h * 2;
+static constexpr LONG c_separator_height = 3;
+// distance beetween text and button
+static constexpr LONG c_dist_text_btn = 5;
+// distance beetween buttons
+static constexpr LONG c_dist_btns = 1;
+// reserved space width
+static constexpr LONG c_dist_reserved = 5;
+
+constexpr auto tab_text_offset() {
+	return  c_dist_v + c_tab_icon_size + c_dist_text_btn;
+}
+
+constexpr auto tab_static_width() {
+	return  tab_text_offset() + /* + dynamic text size + */ c_dist_text_btn + c_dist_btns
+		+ c_dist_reserved + c_dist_text_btn + c_tab_height + c_dist_btns + c_tab_height + c_dist_v;
+}
+
 CMyTabView::CMyTabView() {
 	m_lastIndexPlacedInTab = 0;
 	m_Lenght = 0;
@@ -26,13 +49,16 @@ CMyTabView::CMyTabView() {
 	m_btnPinFocused = false;
 	focus_ = false;
 }
+
 LRESULT CMyTabView::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	ReCalcContentHeight();
 	return 0;
 }
+
 LRESULT CMyTabView::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	return 0;
 }
+
 LRESULT CMyTabView::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	UINT cx = LOWORD(lParam), cy = HIWORD(lParam);
 	
@@ -50,14 +76,17 @@ LRESULT CMyTabView::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 
 	return 0;
 }
+
 void CMyTabView::ReCalcContentHeight() {
 	CClientDC dc(m_hWnd);
 	HFONT oldFont = dc.SelectFont(gdiGlobal.fntTreeView);
 	CRect rc;
 	dc.DrawText(L"NU", 2, &rc, DT_CALCRECT);
-	m_contentHeight = rc.bottom - rc.top;
+	m_text_height = rc.bottom - rc.top;
+	m_text_v_centered_offset = (c_tab_height - m_text_height) / 2 + c_dist_v;
 	dc.SelectFont(oldFont);
 }
+
 void CMyTabView::ReCalcLayout() {
 	LONG x = 0, y = 0;
 
@@ -70,16 +99,15 @@ void CMyTabView::ReCalcLayout() {
 	for (iterator it = m_tabs.begin(); it != m_tabs.end(); ++it) {
 		TBDATA& tab = *it;
 		tab.state.size_changed = true;
-		LONG tab_width = c_dist_h * 2 + tab.text_width + c_dist_text_btn + m_contentHeight * 2 + 7;
+		LONG tab_width = tab_static_width() + tab.text_width;
 		LONG tab_right = x + tab_width;
 		
-		if (tab.state.pinned)
-			m_pinnedBegin = it;
+		if (tab.state.pinned) m_pinnedBegin = it;
 		
 		bool over_the_boundary = (pos_in_line != 0 && m_rcWnd.right < tab_right);
 		
 		if (over_the_boundary || (!tab.state.pinned && last_pinned)) {
-			y += m_contentHeight + c_dist_h * 2; 
+			y += c_tab_height;
 			pos_in_line = 0; 
 			x = 0; 
 			tab_right = tab_width;
@@ -88,29 +116,32 @@ void CMyTabView::ReCalcLayout() {
 		tab.rcTab.left = x;
 		tab.rcTab.top = y;
 		tab.rcTab.right = tab_right;
-		tab.rcTab.bottom = y + m_contentHeight + c_dist_h * 2;
+		tab.rcTab.bottom = y + c_tab_height;
 			
-		tab.rcFreeSpace.left = tab.rcTab.left + c_dist_h + tab.text_width + c_dist_text_btn;
-		tab.rcFreeSpace.top = y + c_dist_v;
-		tab.rcFreeSpace.right = tab.rcFreeSpace.left + 5;
-		tab.rcFreeSpace.bottom = tab.rcFreeSpace.top + m_contentHeight;
+		auto const content_top = y + c_dist_v;
+		auto const content_bottom = content_top + c_tab_icon_size;
 
-		tab.rcBtnPin.left = tab.rcFreeSpace.right + 2;
-		tab.rcBtnPin.top = tab.rcFreeSpace.top;
-		tab.rcBtnPin.right = tab.rcBtnPin.left + m_contentHeight;
-		tab.rcBtnPin.bottom = tab.rcFreeSpace.bottom;
+		tab.rcFreeSpace.left = tab.rcTab.left + tab_text_offset() + tab.text_width + c_dist_text_btn;
+		tab.rcFreeSpace.top = content_top;
+		tab.rcFreeSpace.right = tab.rcFreeSpace.left + c_dist_reserved;
+		tab.rcFreeSpace.bottom = content_bottom;
 
-		tab.rcBtnClose.left = tab.rcBtnPin.right;
-		tab.rcBtnClose.top = tab.rcBtnPin.top;
-		tab.rcBtnClose.right = tab.rcBtnClose.left + m_contentHeight;
-		tab.rcBtnClose.bottom = tab.rcFreeSpace.bottom;
+		tab.rcBtnPin.left = tab.rcFreeSpace.right + c_dist_text_btn;
+		tab.rcBtnPin.top = content_top;
+		tab.rcBtnPin.right = tab.rcBtnPin.left + c_tab_height;
+		tab.rcBtnPin.bottom = content_bottom;
+
+		tab.rcBtnClose.left = tab.rcBtnPin.right + c_dist_btns;
+		tab.rcBtnClose.top = content_top;
+		tab.rcBtnClose.right = tab.rcBtnClose.left + c_tab_height;
+		tab.rcBtnClose.bottom = content_bottom;
 
 		x += tab_width;
 		pos_in_line++;
 		last_pinned = tab.state.pinned;
 	}
 
-	m_rcSeparator.top = y + m_contentHeight + c_dist_h * 2;;
+	m_rcSeparator.top = y + c_tab_height;
 	m_rcSeparator.bottom = m_rcSeparator.top + c_separator_height;
 	
 	m_rcView.top = m_rcSeparator.bottom;
@@ -118,9 +149,11 @@ void CMyTabView::ReCalcLayout() {
 
 	m_rcTab.bottom = m_rcSeparator.bottom;
 }
+
 LRESULT CMyTabView::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	return TRUE;
 }
+
 void CMyTabView::DrawCloseButton(CDCHandle dc, const CRect& rc) {
 	int x = rc.left + (rc.right - rc.left) / 2;
 	int y = rc.top + (rc.bottom - rc.top) / 2;
@@ -142,14 +175,16 @@ void CMyTabView::DrawCloseButton(CDCHandle dc, const CRect& rc) {
 	dc.SetPixel(x + 2, y - 2, gdiGlobal.clrButton);
 	dc.SetPixel(x + 2, y - 2, gdiGlobal.clrButton);
 }
+
 void CMyTabView::DrawPinButton(CDCHandle dc, const CRect& rc, bool pinned) {
 	int x = rc.left + (rc.right - rc.left - 9) / 2;
 	int y = rc.top + (rc.bottom - rc.top - 9) / 2;
 	if (pinned)
-		DrawIconEx(dc, x, y , global.GetIcon(AlphaIcon::Pinned), 9, 9, 0, NULL, DI_IMAGE | DI_MASK);
+		DrawIconEx(dc, x, y , global.GetCustomSizeIcon(NPSystemIcon::Pinned), 9, 9, 0, NULL, DI_IMAGE | DI_MASK);
 	else 
-		DrawIconEx(dc, x, y, global.GetIcon(AlphaIcon::UnPinned), 9, 9, 0, NULL, DI_IMAGE | DI_MASK);
+		DrawIconEx(dc, x, y, global.GetCustomSizeIcon(NPSystemIcon::UnPinned), 9, 9, 0, NULL, DI_IMAGE | DI_MASK);
 }
+
 LRESULT CMyTabView::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
 	CPaintDC _dc(m_hWnd);
 
@@ -164,7 +199,7 @@ LRESULT CMyTabView::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
 	HFONT oldFont = dc.SelectFont(gdiGlobal.fntTreeView);
 	dc.SetBkMode(TRANSPARENT);
-
+	
 	dc.FillRect(m_activeTab->rcTab, focus_? gdiGlobal.brActiveTab : gdiGlobal.brActiveTabNF);
 
 	if (m_focusedTab != m_tabs.end()) {
@@ -189,10 +224,14 @@ LRESULT CMyTabView::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 	}
 
 	for (auto& tab : m_tabs) {
+		auto icon = tab.view->GetIcon();
+		DrawIconEx(dc, tab.rcTab.left + c_dist_v, tab.rcTab.top + c_dist_h * 2, icon, c_tab_icon_size, c_tab_icon_size, 0, 
+			NULL, DI_IMAGE | DI_MASK);
+
 		auto custom_color = tab.view->CustomActiveColor();
 		if (custom_color) dc.FillRect(tab.rcFreeSpace, *custom_color);
 
-		dc.TextOut(tab.rcTab.left + c_dist_h, tab.rcTab.top + c_dist_h,
+		dc.TextOut(tab.rcTab.left + tab_text_offset(), tab.rcTab.top + m_text_v_centered_offset,
 			tab.text.c_str(), static_cast<int>(tab.text.length()));
 		
 		if (tab.state.pinned) DrawPinButton(dc.m_hDC, tab.rcBtnPin, true);
@@ -498,6 +537,7 @@ void CMyTabView::ActivateTab(iterator it) {
 	
 	InvalidateRect(m_rcTab, FALSE);
 }
+
 void CMyTabView::ActivateTab(CView* view) {
 	ATLASSERT(view);
 
@@ -507,6 +547,7 @@ void CMyTabView::ActivateTab(CView* view) {
 
 	ActivateTab(it);
 }
+
 LONG CMyTabView::GetTextWidth(const std::wstring& text) {
 	CRect rc;
 	CClientDC dc(m_hWnd);
@@ -516,6 +557,7 @@ LONG CMyTabView::GetTextWidth(const std::wstring& text) {
 	dc.SelectFont(oldFont);
 	return width;
 }
+
 void CMyTabView::AddView(CView* view, const std::string& title) {
 	ATLASSERT(view);
 	auto title_w = wide(title);
@@ -523,6 +565,7 @@ void CMyTabView::AddView(CView* view, const std::string& title) {
 	ReCalcLayout();
 	ActivateTab(std::prev(m_tabs.end()));
 }
+
 void CMyTabView::AddView(CItemView* view) {
 	ATLASSERT(view);
 	
@@ -530,6 +573,7 @@ void CMyTabView::AddView(CItemView* view) {
 	view->GetItem()->GetViewTitle(title);
 	AddView(view, title);
 }
+
 void CMyTabView::UpdateTitle(CView* view, const std::wstring& text) {
 	ATLASSERT(view);
 
@@ -553,6 +597,7 @@ void CMyTabView::DeleteView(CView* view) {
 	view->PostDestroy();
 	delete view;
 }
+
 void CMyTabView::RemoveTab(CView* view) {
 	ATLASSERT(view);
 
@@ -562,6 +607,7 @@ void CMyTabView::RemoveTab(CView* view) {
 	
 	RemoveTab(it);
 }
+
 void CMyTabView::RemoveTab(iterator it) {
 	ATLASSERT(it != m_tabs.end());
 	TBDATA& tab = *it;

@@ -5,7 +5,7 @@
 
 #include "block.h"
 #include "dlgbase.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "network_ext.h"
 #include <npsys/algcat.h>
 #include <npsys/algsubcat.h>
@@ -13,6 +13,7 @@
 #include <npdb/find.h>
 #include "exception.h"
 #include <npsys/strings.h>
+
 class CDlg_BlockParam
 	: public CMyDlgBase<CDlg_BlockParam>
 {
@@ -62,7 +63,7 @@ class CDlg_BlockParam
 	CParameter* param_;
 	CSlot* slot_;
 	CBlockComposition* blocks_;
-	npsys::algorithm_n& alg_;
+	npsys::fbd_control_unit_n& alg_;
 	Param prev;
 
 	std::string m_oldname;
@@ -73,7 +74,7 @@ class CDlg_BlockParam
 	int m_iRadio;
 
 public:
-	CDlg_BlockParam(CParameter* param, npsys::algorithm_n& alg)
+	CDlg_BlockParam(CParameter* param, npsys::fbd_control_unit_n& alg)
 		: alg_(alg)
 		, param_(param)
 		, m_iRadio(0)
@@ -352,9 +353,9 @@ protected:
 		auto cat = odb::utils::find_by_name(categories->alg_cats, cat_name);
 		if (!cat) return false;
 
-		auto alg_o = odb::utils::find_by_name((*cat)->algs, alg_name);
-		if (!alg_o) {
-			throw std::runtime_error("There is no such algoithm \"" + alg_name + '\"');
+		auto alg_o = odb::utils::find_by_name((*cat)->units, alg_name);
+		if (!alg_o || (*alg_o)->GetLanguageType() != npsys::CControlUnit::Language::FBD) {
+			throw std::runtime_error("There is no such fbd unit \"" + alg_name + '\"');
 		}
 
 		auto ix = slot_full_name.find(L'.', 0);
@@ -366,7 +367,7 @@ protected:
 		const auto block_name = slot_full_name.substr(0, ix);
 		const auto slot_name = slot_full_name.substr(ix + 1);
 
-		auto alg = std::move(alg_o.value());
+		auto alg = alg_o.value().cast<npsys::fbd_control_unit_n>();
 
 		if (alg == alg_) {
 			auto ref_slot = alg->FindSlot(block_name, slot_name);

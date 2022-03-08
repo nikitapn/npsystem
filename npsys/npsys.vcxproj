@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\npsys\access.h" />
-    <ClInclude Include="include\npsys\alg.h" />
+    <ClInclude Include="include\npsys\control_unit.h" />
     <ClInclude Include="include\npsys\algcat.h" />
     <ClInclude Include="include\npsys\algsubcat.h" />
     <ClInclude Include="include\npsys\boost_export.h" />

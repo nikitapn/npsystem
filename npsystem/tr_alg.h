@@ -5,18 +5,18 @@
 
 #include "tr_item.h"
 #include <npsys/header.h>
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "tr_block.h"
 
-class CTreeAlgorithm : public LazyItemListContainer<
-	CTreeAlgorithm,
+class CTreeControlUnit : public LazyItemListContainer<
+	CTreeControlUnit,
 	std::vector, 
-	CTreeBlock, 
-	DatabaseElement<npsys::algorithm_n, npsys::algorithm_l>,
+	CTreeItemAbstract,
+	DatabaseElement<npsys::control_unit_n, npsys::control_unit_l>,
 	Manual>
 {
 public:
-	CTreeAlgorithm(npsys::algorithm_n& n, npsys::algorithm_l& l);
+	CTreeControlUnit(npsys::control_unit_n& n, npsys::control_unit_l& l);
 	virtual void ConstructMenu(CMenu* menu) noexcept;
 	virtual void HandleRequest(REQUEST* req) noexcept;
 	virtual INT_PTR ShowProperties();

@@ -106,3 +106,7 @@ LRESULT CListControlView::OnListNotify(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 	
 	return 0;
 }
+
+HICON CListControlView::GetIcon() const noexcept { 
+	return GetItem()->GetIcon32x32(); 
+}

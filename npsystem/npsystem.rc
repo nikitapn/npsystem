@@ -122,6 +122,12 @@ ID_CREATE_BLOCK_CMP_BELOW BITMAP                  "res\\blocks\\cpb.bmp"
 
 ID_CREATE_BLOCK_COUNTER BITMAP                  "res\\blocks\\cnt.svg.bmp"
 
+ID_CREATE_BLOCK_PULSE   BITMAP                  "res\\blocks\\pulse.svg.bmp"
+ID_CREATE_SFC_BLOCK_STEP   BITMAP                  "res\\blocks\\sfc_step.bmp"
+ID_CREATE_SFC_BLOCK_TRANSITION   BITMAP                  "res\\blocks\\sfc_transition.bmp"
+ID_CREATE_SFC_BLOCK_TERM   BITMAP                  "res\\blocks\\sfc_term.bmp"
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
@@ -296,6 +302,8 @@ IDI_BLOCK               ICON                    "res\\block.ico"
 
 IDI_NP_QUESTION         ICON                    "res\\question.svg.ico"
 
+IDI_FBD         ICON                    "res\\FBD.svg.ico"
+IDI_SFC         ICON                    "res\\SFC.svg.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -358,9 +366,10 @@ BEGIN
     LTEXT           "Address:",IDC_STATIC,213,22,32,8
     LTEXT           "Model:",IDC_STATIC,45,22,23,8
     LTEXT           "Version:",IDC_STATIC,383,22,32,8
-    PUSHBUTTON      "Advise",IDC_BUTTON1,533,65,103,14
+    PUSHBUTTON      "Advise",IDC_BUTTON1,533,361,103,14
     CONTROL         "",IDC_TREE1,"SysTreeView32",NOT WS_VISIBLE | WS_BORDER | WS_HSCROLL | WS_TABSTOP,56,48,463,179
     CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,56,241,463,134
+    PUSHBUTTON      "Upgrade",IDC_BUTTON_UPGRADE_FIRMWARE,556,19,103,14,WS_DISABLED
 END
 
 IDD_DLG_PROGRAMMER DIALOGEX 0, 0, 155, 185
@@ -373,14 +382,15 @@ BEGIN
     COMBOBOX        IDC_COMBO1,34,23,89,84,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
 END
 
-IDD_DLG_PINCONFIG DIALOGEX 0, 0, 263, 72
+IDD_DLG_PINCONFIG DIALOGEX 0, 0, 263, 79
 STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Pin config"
 FONT 10, "Segoe UI", 400, 0, 0xCC
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,194,21,50,14
     COMBOBOX        IDC_COMBO1,18,22,150,45,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Inverted",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,18,48,43,10
+    CONTROL         "Inverted",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,18,47,43,10
+    COMBOBOX        IDC_COMBO2,18,46,150,45,CBS_DROPDOWN | NOT WS_VISIBLE | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_DLG_ONLINE DIALOGEX 0, 0, 283, 69
@@ -926,17 +936,23 @@ BEGIN
     ID_CREATE_BLOCK_BINARY_ENCODER "Binary Encoder"
     ID_CREATE_BLOCK_BINARY_DECODER "Binary Decoder"
     ID_CREATE_BLOCK_DELAY   "Delay"
-    ID_CREATE_BLOCK_ADD     "Addition"
+    ID_CREATE_BLOCK_TIME    "Time"
+    ID_CREATE_BLOCK_SCHEDULE "Schedule"
+    ID_CREATE_BLOCK_COUNTER "Counter"
 END
 
 STRINGTABLE
 BEGIN
+    ID_CREATE_BLOCK_PULSE   "Pulse"
+    ID_CREATE_BLOCK_ADD     "Addition"
     ID_CREATE_BLOCK_SUB     "Substraction"
     ID_CREATE_BLOCK_MUL     "Multiplication"
     ID_CREATE_BLOCK_DIV     "Division"
     ID_CREATE_BLOCK_CMP_ABOVE "Compare Above"
     ID_CREATE_BLOCK_CMP_BELOW "Compare Below"
     ID_CREATE_BLOCK_PID     "PID"
+    ID_CREATE_SFC_BLOCK_STEP "Step"
+    ID_CREATE_SFC_BLOCK_TRANSITION "Transition"
 END
 
 STRINGTABLE

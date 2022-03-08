@@ -68,7 +68,7 @@
     <Command Name="wtl_CONFIGURABLE_BLOCK_EQUATION" Symbol="ID_CONFIGURABLE_BLOCK_EQUATION" Id="0xA00C"/>
     <Command Name="wtl_RIBBON_COMMANDS_END" Symbol="ID_RIBBON_COMMANDS_END" Id="0xA00D"/>
 
-    <Command Name="Gallery" Symbol="ID_GALLERY_BLOCKS" Id="0xA300" LabelTitle ="Blocks" />
+    <Command Name="GalleryFBD" Symbol="ID_GALLERY_FBD_BLOCKS" Id="0xA300" LabelTitle ="FBD" />
     <!-- IO -->
     <Command Name="wtl_CREATE_BLOCK_INPUT" Symbol="ID_CREATE_BLOCK_INPUT" Id="0xA301"/>
     <Command Name="wtl_CREATE_BLOCK_OUTPUT" Symbol="ID_CREATE_BLOCK_OUTPUT" Id="0xA302"/>
@@ -86,28 +86,38 @@
     <Command Name="wtl_CREATE_BLOCK_TIME" Symbol="ID_CREATE_BLOCK_TIME" Id="0xA30D"/>
     <Command Name="wtl_CREATE_BLOCK_SCHEDULE" Symbol="ID_CREATE_BLOCK_SCHEDULE" Id="0xA30E"/>
     <Command Name="wtl_CREATE_BLOCK_COUNTER" Symbol="ID_CREATE_BLOCK_COUNTER" Id="0xA30F"/>
+    <Command Name="wtl_CREATE_BLOCK_PULSE" Symbol="ID_CREATE_BLOCK_PULSE" Id="0xA310"/>
     <!-- Math -->
-    <Command Name="wtl_CREATE_BLOCK_ADD" Symbol="ID_CREATE_BLOCK_ADD" Id="0xA310"/>
-    <Command Name="wtl_CREATE_BLOCK_SUB" Symbol="ID_CREATE_BLOCK_SUB" Id="0xA311"/>
-    <Command Name="wtl_CREATE_BLOCK_MU" Symbol="ID_CREATE_BLOCK_MUL" Id="0xA312"/>
-    <Command Name="wtl_CREATE_BLOCK_DIV" Symbol="ID_CREATE_BLOCK_DIV" Id="0xA313"/>
-    <Command Name="wtl_CREATE_BLOCK_COMPARATOR" Symbol="ID_CREATE_BLOCK_COMPARATOR" Id="0xA314"/>
-    <Command Name="wtl_CREATE_BLOCK_FUNCTION" Symbol="ID_CREATE_BLOCK_FUNCTION" Id="0xA315"/>
+    <Command Name="wtl_CREATE_BLOCK_ADD" Symbol="ID_CREATE_BLOCK_ADD" Id="0xA311"/>
+    <Command Name="wtl_CREATE_BLOCK_SUB" Symbol="ID_CREATE_BLOCK_SUB" Id="0xA312"/>
+    <Command Name="wtl_CREATE_BLOCK_MU" Symbol="ID_CREATE_BLOCK_MUL" Id="0xA313"/>
+    <Command Name="wtl_CREATE_BLOCK_DIV" Symbol="ID_CREATE_BLOCK_DIV" Id="0xA314"/>
+    <Command Name="wtl_CREATE_BLOCK_COMPARATOR" Symbol="ID_CREATE_BLOCK_COMPARATOR" Id="0xA315"/>
+    <Command Name="wtl_CREATE_BLOCK_FUNCTION" Symbol="ID_CREATE_BLOCK_FUNCTION" Id="0xA316"/>
     <!-- Alarms -->
-    <Command Name="wtl_CREATE_BLOCK_CMP_ABOVE" Symbol="ID_CREATE_BLOCK_CMP_ABOVE" Id="0xA316"/>
-    <Command Name="wtl_CREATE_BLOCK_CMP_BELOW" Symbol="ID_CREATE_BLOCK_CMP_BELOW" Id="0xA317"/>
+    <Command Name="wtl_CREATE_BLOCK_CMP_ABOVE" Symbol="ID_CREATE_BLOCK_CMP_ABOVE" Id="0xA317"/>
+    <Command Name="wtl_CREATE_BLOCK_CMP_BELOW" Symbol="ID_CREATE_BLOCK_CMP_BELOW" Id="0xA318"/>
     <!-- Control -->
-    <Command Name="wtl_CREATE_BLOCK_PID" Symbol="ID_CREATE_BLOCK_PID" Id="0xA318"/>
+    <Command Name="wtl_CREATE_BLOCK_PID" Symbol="ID_CREATE_BLOCK_PID" Id="0xA319"/>
     <!-- Last Block Id -->
-    <Command Name="wtl_CREATE_BLOCK_LAST" Symbol="ID_CREATE_BLOCK_LAST" Id="0xA319"/>
+    <Command Name="wtl_CREATE_BLOCK_LAST" Symbol="ID_CREATE_FBD_BLOCK_LAST" Id="0xA31A"/>
 
-    <Command Name="wtl_SELECT_CURSOR" Symbol="ID_SELECT_CURSOR" Id="0xA400"/>
-    
+    <Command Name="GallerySFC" Symbol="ID_GALLERY_SFC_BLOCKS" Id="0xA400" LabelTitle ="SFC" />
+    <Command Name="wtl_CREATE_SFC_BLOCK_STEP" Symbol="ID_CREATE_SFC_BLOCK_STEP" Id="0xA401"/>
+    <Command Name="wtl_CREATE_SFC_BLOCK_TRANSITION" Symbol="ID_CREATE_SFC_BLOCK_TRANSITION" Id="0xA402"/>
+    <Command Name="wtl_CREATE_SFC_BLOCK_TERM" Symbol="ID_CREATE_SFC_BLOCK_TERM" Id="0xA403"/>
+    <!-- Last Block Id -->
+    <Command Name="wtl_CREATE_BLOCK_LAST" Symbol="ID_CREATE_SFC_BLOCK_LAST" Id="0xA404"/>
+
+
+    <Command Name="wtl_SELECT_CURSOR" Symbol="ID_SELECT_CURSOR" Id="0xA500"/>
+
     <!-- Tabs -->
     <Command Name="TabHome" Symbol="ID_TAB_HOME" LabelTitle="Home" />
     <!-- Groups -->
     <Command Name="GroupRealTime" Symbol="ID_GROUP_REALTIME" LabelTitle="Realtime" />
-    <Command Name="GroupBlocks" Symbol="ID_GROUP_BLOCKS" LabelTitle="Blocks" />
+    <Command Name="GroupFBDBlocks" Symbol="ID_FBD_GROUP_BLOCKS" LabelTitle="FBD" />
+    <Command Name="GroupSFCBlocks" Symbol="ID_SFC_GROUP_BLOCKS" LabelTitle="SFC" />
     <Command Name="GroupView" Symbol="ID_GROUP_VIEW" LabelTitle="View" />
     <Command Name="GroupTools" Symbol="ID_GROUP_TOOLS" LabelTitle="Tools" />
     <!-- App Menu, MRU list, Help button and Quick Access Toolbar -->
@@ -154,12 +164,15 @@
          <Group CommandName = "GroupTools" SizeDefinition="OneButton" >
             <ToggleButton CommandName = "wtl_SELECT_CURSOR" />
           </Group>
-          <Group CommandName="GroupBlocks"  SizeDefinition="OneInRibbonGallery">
-            <InRibbonGallery CommandName="Gallery" 
-                             ItemHeight="56" ItemWidth="64"  
-                             MinColumnsLarge="12" TextPosition="Hide" />
-          </Group>
           
+          <Group CommandName="GroupFBDBlocks"  SizeDefinition="OneInRibbonGallery">
+            <InRibbonGallery CommandName="GalleryFBD" ItemHeight="56" ItemWidth="64" MinColumnsLarge="12" TextPosition="Hide" />
+          </Group>
+
+          <Group CommandName="GroupSFCBlocks"  SizeDefinition="OneInRibbonGallery">
+            <InRibbonGallery CommandName="GallerySFC" ItemHeight="56" ItemWidth="64" MinColumnsLarge="3" TextPosition="Hide" />
+          </Group>
+
           <Group CommandName="GroupView">
             <SizeDefinition>
               <ControlNameMap>

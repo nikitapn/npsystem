@@ -39,18 +39,18 @@ io_reg_addr CAVRPort::GetControlRegisters(const avrinfo::PeripheralInfo& info, b
 
 // CAVRPin
 
-AlphaIcon CAVRPin::GetIcon() const noexcept {
+NPSystemIcon CAVRPin::GetIcon() const noexcept {
 	switch (use_) {
 	case avrinfo::PinPurpose::INPUTPU_PIN:
-		return AlphaIcon::Di_Pin;
+		return NPSystemIcon::Di_Pin;
 	case avrinfo::PinPurpose::INPUT_PIN:
-		return AlphaIcon::Di_Pin;
+		return NPSystemIcon::Di_Pin;
 	case avrinfo::PinPurpose::OUTPUT_PIN:
-		return AlphaIcon::Do_Pin;
+		return NPSystemIcon::Do_Pin;
 	case avrinfo::PinPurpose::ANALOG_PIN:
-		return AlphaIcon::Ai_Pin;
+		return NPSystemIcon::Ai_Pin;
 	default:
-		return AlphaIcon::Object;
+		return NPSystemIcon::Object;
 		break;
 	}
 }

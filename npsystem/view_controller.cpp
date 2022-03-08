@@ -6,22 +6,22 @@
 #include "view_controller.h"
 #include "avrassigned.h"
 
-CControllerView::CControllerView(CTreeController* item, CMyTabView& tabview)
-	: base(item, tabview) {
-
-}
-
 LRESULT CControllerView::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled) {
+	auto item = static_cast<CTreeController*>(item_);
+	auto avr = item->n_.cast<npsys::controller_n_avr>();
+	
 	m_cbAdvise = GetDlgItem(IDC_BUTTON1);
+	m_cbUpgradeFirmware = GetDlgItem(IDC_BUTTON_UPGRADE_FIRMWARE);
+
+	auto const latest_firmware_number = avrinfo::AVRInfo::get_instance().GetLatestInfo(avr->controller_model).version;
+	if (latest_firmware_number != avr->version) m_cbUpgradeFirmware.EnableWindow(TRUE);
 
 	m_editAddress.SubclassWindow(GetDlgItem(IDC_EDIT1));
 	m_editModel.SubclassWindow(GetDlgItem(IDC_EDIT2));
 	m_editVersion.SubclassWindow(GetDlgItem(IDC_EDIT3));
 	m_listLibs = GetDlgItem(IDC_LIST1);
 
-	auto item = static_cast<CTreeController*>(item_);
 	
-	auto avr = item->n_.cast<npsys::controller_n_avr>();
 
 	::SetWindowTextA(m_editModel, avrinfo::controller_model_to_string(item->n_->controller_model).c_str());
 	::SetWindowTextA(m_editAddress, std::to_string(item->n_->dev_addr).c_str());
@@ -110,6 +110,7 @@ LRESULT CControllerView::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	return 0;
 }
 
+// 
 LRESULT CControllerView::OnBnClickedButtonAdvise(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/) {
 	if (tree_.IsAdvised()) {
 		tree_.UnAdvise();
@@ -123,10 +124,38 @@ LRESULT CControllerView::OnBnClickedButtonAdvise(WORD /*wNotifyCode*/, WORD /*wI
 	return 0;
 }
 
+LRESULT CControllerView::OnBnClickedUpgradeFirmware(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/) {
+	if (MessageBoxA(g_hMainWnd,
+		"Are you sure want to set the firmware version to the latest available?\r\n"
+		"All algorithms must be reloaded after this action.", "", MB_ICONWARNING | MB_YESNO) == IDNO) 
+		return 0;
+	
+	auto item = static_cast<CTreeController*>(item_);
+	auto avr = item->n_.cast<npsys::controller_n_avr>();
+
+	auto const& info = avrinfo::AVRInfo::get_instance().GetLatestInfo(avr->controller_model);
+	const_cast<int&>(avr->version) = info.version;
+
+	avr.store();
+
+	m_cbUpgradeFirmware.EnableWindow(FALSE);
+
+	return 0;
+}
+
 bool CControllerView::IsModified() {
 	return 0;
 }
 
 void CControllerView::Save() {
 
+}
+
+HICON CControllerView::GetIcon() const noexcept {
+	return GetItem()->GetIcon32x32();
+}
+
+CControllerView::CControllerView(CTreeController* item, CMyTabView& tabview)
+	: base(item, tabview)
+{
 }

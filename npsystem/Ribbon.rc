@@ -7,7 +7,12 @@
 
 STRINGTABLE 
 BEGIN
-    ID_GALLERY_BLOCKS_LabelTitle_RESID L"Blocks" /* LabelTitle ID_GALLERY_BLOCKS_LabelTitle_RESID: (null) */
+    ID_GALLERY_FBD_BLOCKS_LabelTitle_RESID L"FBD" /* LabelTitle ID_GALLERY_FBD_BLOCKS_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_GALLERY_SFC_BLOCKS_LabelTitle_RESID L"SFC" /* LabelTitle ID_GALLERY_SFC_BLOCKS_LabelTitle_RESID: (null) */
 END
 
 STRINGTABLE 
@@ -22,7 +27,12 @@ END
 
 STRINGTABLE 
 BEGIN
-    ID_GROUP_BLOCKS_LabelTitle_RESID L"Blocks" /* LabelTitle ID_GROUP_BLOCKS_LabelTitle_RESID: (null) */
+    ID_FBD_GROUP_BLOCKS_LabelTitle_RESID L"FBD" /* LabelTitle ID_FBD_GROUP_BLOCKS_LabelTitle_RESID: (null) */
+END
+
+STRINGTABLE 
+BEGIN
+    ID_SFC_GROUP_BLOCKS_LabelTitle_RESID L"SFC" /* LabelTitle ID_SFC_GROUP_BLOCKS_LabelTitle_RESID: (null) */
 END
 
 STRINGTABLE 

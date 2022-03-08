@@ -63,7 +63,6 @@ inline std::enable_if_t<T::is_dialog, CItemView*> CreateViewForItem(Item* item, 
 class InteractiveItem {
 public:
 	virtual void HandleRequest(REQUEST* req) noexcept = 0;
-
 	virtual void ConstructMenu(CMenu* menu) noexcept {}
 	virtual INT_PTR ShowProperties() { return IDCANCEL; }
 	void ShowMenu(CPoint& pt, CWindow* pWnd);
@@ -78,7 +77,8 @@ class CTreeItemAbstract : public InteractiveItem {
 		UpperCase = 0
 	};
 protected:
-	HICON m_hIcon = NULL;
+	HICON m_hIcon_24x24 = NULL;
+	HICON m_hIcon_32x32 = NULL;
 	HTREEITEM m_hTreeItem = NULL;
 	std::string name_;
 	COnlineTreeItem* online_item_ = nullptr;
@@ -104,7 +104,7 @@ public:
 	virtual void LoadName() {}
 	// double dispatch
 	virtual int Move(CTreeItemAbstract*, int) { return 0; }
-	virtual int	Move(class CTreeAlgorithm* alg, int) { return 0; }
+	virtual int	Move(class CTreeControlUnit* alg, int) { return 0; }
 	virtual int	Move(class CTreeI2CModule* mod, int) { return 0; }
 	virtual bool IsRemovable() { return true; }
 	// Window
@@ -112,8 +112,21 @@ public:
 	virtual CItemView* CreateView(CMyTabView& tabview) { return nullptr; };
 	virtual void CloseView();
 	virtual IIteratorPtr CreateIterator();
-	void SetIcon(AlphaIcon icon) noexcept { m_hIcon = global.GetIcon(icon); }
-	HICON GetIcon() const noexcept { return m_hIcon; }
+	
+	
+	void SetIcon(NPSystemIcon icon) noexcept {
+		m_hIcon_24x24 = global.GetIcon24x24(icon);
+		m_hIcon_32x32 = global.GetIcon32x32(icon); 
+	}
+
+	HICON GetIcon24x24() const noexcept { 
+		return m_hIcon_24x24; 
+	}	
+	
+	HICON GetIcon32x32() const noexcept { 
+		return m_hIcon_32x32; 
+	}
+	
 	HTREEITEM GetHTR() const { return m_hTreeItem; }
 	CContainer* GetParent() const {
 		auto htr = m_treeview.GetParentItem(m_hTreeItem);
@@ -151,9 +164,8 @@ public:
 	void UpdateTreeLabel();
 	static void InvalidateTree() { m_treeview.Invalidate(); }
 	virtual void DrawIcon(HDC hdc, int x, int y) {
-		constexpr auto cx = constants::treeview::icon_cx;
-		constexpr auto cy = constants::treeview::icon_cy;
-		DrawIconEx(hdc, x, y, m_hIcon, cx, cy, 0, NULL, DI_IMAGE | DI_MASK);
+		DrawIconEx(hdc, x, y, m_hIcon_24x24, constants::treeview::icon_cx, constants::treeview::icon_cy, 
+			0, NULL, DI_IMAGE | DI_MASK);
 	}
 	virtual void StoreItem() = 0;
 	static constexpr auto is_container() noexcept { return false; }
@@ -373,10 +385,10 @@ public:
 		return true;
 	};
 
-	template<typename L, typename... Args>
+	template<typename TDataType, typename L, typename... Args>
 	void CreateNewItem(L& lst, Args&&... args) requires (T::TT::ElementType::type == ELTYPE::DATABASE) {
 		this->m_treeview.Expand(this->m_hTreeItem, TVE_EXPAND);
-		auto n = lst.add_value(new typename T::TT::ElementType::node_t::type_t(std::forward<Args>(args)...));
+		auto n = lst.add_value(new TDataType(std::forward<Args>(args)...));
 		if (n) {
 			AddItem(new T((*n), lst));
 			lst.store();
@@ -390,6 +402,7 @@ protected:
 			if constexpr (T::TT::ElementType::type == ELTYPE::DATABASE) {
 				if constexpr (has_childs_node_list<MostDerrived>) {
 					auto& lst = static_cast<MostDerrived*>(this)->childs_node_list();
+					using list_t = std::remove_reference_t<decltype(lst)>;
 					lst.fetch_all_nodes();
 					for (auto& n : lst) {
 						this->insert(new T(n, lst));
@@ -502,7 +515,7 @@ struct ListWrapper {
 		: list(_list) {}
 	
 	void Remove(Node& n) {
-		list.fast_erase(n);
+		list.fast_erase(n.id());
 		list.store();
 		n.remove();
 	}
@@ -718,7 +731,7 @@ public:
 		constexpr auto cx = constants::treeview::icon_cx;
 		constexpr auto cy = constants::treeview::icon_cy;
 		
-		DrawIconEx(hdc, x, y, base::m_hIcon, cx, cy, 0, NULL, DI_IMAGE | DI_MASK);
+		DrawIconEx(hdc, x, y, this->m_hIcon_24x24, cx, cy, 0, NULL, DI_IMAGE | DI_MASK);
 
 		constexpr auto status_cx = constants::treeview::status_icon_cx;
 		constexpr auto status_cy = constants::treeview::status_icon_cy;
@@ -731,13 +744,13 @@ public:
 			CIconHandle icon;
 			switch (status_) {
 			case io::Status::assigned: 
-				icon = global.GetIcon(AlphaIcon::Empty);
+				icon = global.GetCustomSizeIcon(NPSystemIcon::Empty);
 				break;
 			case io::Status::not_relevant: 
-				icon = global.GetIcon(AlphaIcon::Exclam);
+				icon = global.GetCustomSizeIcon(NPSystemIcon::Exclam);
 				break;
 			case io::Status::unknown: 
-				icon = global.GetIcon(AlphaIcon::Question);
+				icon = global.GetCustomSizeIcon(NPSystemIcon::Question);
 				break;
 			}
 			ASSERT(icon);

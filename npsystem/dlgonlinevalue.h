@@ -5,7 +5,7 @@
 
 #include "memorymanager.h"
 #include "mybutton.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "error.h"
 #include "dlgbase.h"
 #include <npsys/memtypes.h>
@@ -15,7 +15,7 @@ class CDlg_OnlineValue : public CMyDlgBase<CDlg_OnlineValue> {
 public:
 	enum { IDD = IDD_DLG_ONLINE };
 
-	CDlg_OnlineValue(CParameter* parameter, npsys::CAlgorithmExt* alg)
+	CDlg_OnlineValue(CParameter* parameter, npsys::CFBDControlUnit* alg)
 		: parameter_(parameter)
 		, alg_(alg) {
 		var_ = parameter_->GetSlot()->GetVariable();
@@ -255,7 +255,7 @@ protected:
 	}
 	
 	CParameter* parameter_;
-	npsys::CAlgorithmExt* alg_;
+	npsys::CFBDControlUnit* alg_;
 	npsys::variable* var_;
 	CBrush m_brush_dialog;
 

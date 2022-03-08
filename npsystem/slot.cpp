@@ -8,7 +8,7 @@
 #include "codegenerator.h"
 #include "graphics.h"
 #include "constants.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 #include "assignedalgorithm.h"
 #include <npsys/algsubcat.h>
 #include <npsys/fbdblock.h>
@@ -62,27 +62,29 @@ IMPLEMENT_VISITOR(CExternalReference);
 
 // CSlot
 
-CSlot::CSlot()
-	: manipulator_(this) {
+CSlot::CSlot() 
+{
 	SetZOrder(2);
 	SetHitAccess();
+	m_geometry = dis::Get().geometry_slot;
 }
 
-CSlot::CSlot(CSlot& slot)
-	: CGeometryElement(slot)
-	, manipulator_(this) {
+CSlot::CSlot(CSlot& slot) 
+	: CGeometryElement(slot) 
+{
 	SetHitAccess();
+	m_geometry = dis::Get().geometry_slot;
 }
 
 CSlot::CSlot(int id, CSlotType* slot_type)
-	: manipulator_(this)
-	, id_(id)
+	: id_(id)
 	, slot_type_(slot_type)
 	, parent_(nullptr)
 	, slot_type_saved_(nullptr)
 {
 	SetZOrder(2);
 	SetHitAccess();
+	m_geometry = dis::Get().geometry_slot;
 }
 
 CSlot::~CSlot() {
@@ -114,7 +116,7 @@ void CSlot::Draw(CGraphics* graphics) {
 		graphics->FillSlotActivated(el);
 	} else if (IsHover()) {
 		graphics->FillSlotFocused(el);
-	} else if (m_bHasLines) {
+	} else if (!lines_.empty()) {
 		graphics->FillSlotConnected(el);
 	} else {
 		graphics->FillSlot(el);
@@ -124,11 +126,6 @@ void CSlot::Draw(CGraphics* graphics) {
 void CSlot::PrintDebugTooltip(std::stringstream& ss) {
 	ss << "slot_id: " << top->self_node.id() << ", parent_block_id: " << top->block_parent.id() << '\n';
 	GetSlotType()->PrintDebugTooltip(ss);
-}
-
-void CSlot::CreateRgnShape() noexcept {
-	dis::Get().d2dFactory->CreateRectangleGeometry(D2D1::RectF(0, 0, constants::block::SLOT_SIZE, constants::block::SLOT_SIZE),
-		(ID2D1RectangleGeometry**)m_geometry.GetAddressOf());
 }
 
 void CSlot::SetSlotType(CSlotType* slot_type) {
@@ -156,6 +153,7 @@ void CSlot::BeforeStartOnline() {
 	}
 	SetValue(nullptr);
 }
+
 void CSlot::AfterStopOnline() {
 	Online.string = {};
 	SetValue(nullptr);
@@ -229,7 +227,6 @@ std::string CSlot::GetFullName() {
 }
 
 void CSlot::UpdateSlotPosition() noexcept {
-	CreateRgnShape();
 	m_matrixTransform = D2D1::Matrix3x2F::Translation(rect_.left, rect_.top);
 	AlignText();
 	dis::Get().d2dFactory->CreateTransformedGeometry(m_geometry.Get(), m_matrixTransform,
@@ -257,7 +254,7 @@ void CSlot::SetSlotPosition(size_t index, float x, float y, float block_width) n
 		);
 	};
 
-	rect_ = (GetDirection() == INPUT_SLOT)
+	rect_ = (GetDirection() == SlotDirection::INPUT_SLOT)
 		? input_slot_rect(static_cast<int>(index), x, y)
 		: output_slot_rect(static_cast<int>(index), x, y);
 
@@ -288,22 +285,20 @@ void CSlot::SetOutputSlotPosition(const D2D1_RECT_F& block_rect) noexcept {
 
 // CInputSlot
 
-bool CInputSlot::ConnectToLine(CLine* line) {
+bool CInputSlot::ConnectToLine(CLine* line, bool checking) {
 	ATLASSERT(line);
-	return lines_.size() != 0 ? false : line->SetInputSlot(this);
+	return lines_.size() != 0 ? false : line->SetSlot(this);
 }
 
-void CInputSlot::AddLine(CLine* line) {
+void CInputSlot::ConnectLine(CLine* line) {
 	ATLASSERT(line);
 	ATLASSUME(lines_.size() == 0);
 	lines_.push_back(line);
-	m_bHasLines = TRUE;
 }
 
 void CInputSlot::DisconnectLine(CLine* line) {
 	ASSERT(lines_.size() == 1);
 	lines_.clear();
-	m_bHasLines = FALSE;
 }
 
 int CInputSlot::IsConnected() {
@@ -351,53 +346,53 @@ void CInputSlot::AlignText() {
 
 // COutputSlot
 
-bool COutputSlot::ConnectToLine(CLine* line) {
+bool COutputSlot::ConnectToLine(CLine* line, bool checking) {
 	ATLASSERT(line);
-	return line->SetOutputSlot(this);
+	return line->SetSlot(this);
 }
 
-void COutputSlot::CalcLinesOffset() {
+void COutputSlot::CalcLinesPosition() {
 	constexpr size_t max_n = 4;
 	constexpr float dy = 2.6f;
 	constexpr float max_y = -(float)(max_n / 2) * dy + ((float)max_n - 0.5f) * dy;
 	constexpr float min_y = -(float)(max_n / 2) * dy + 0.5f * dy;
 
-	size_t n = lines_.size();
-	if (!n) return;
+	if (lines_.empty()) return;
 
-	if (n > 4)
-		n = max_n;
+	int n = static_cast<int>(lines_.size());
+	if (n > 4) n = max_n;
 
 	int x = 1;
 
 	int even = n % 2 ? 0 : 1;
 	float b = -(float)(n / 2) * dy;
 
-	for (line_iterator it = lines_.begin(); it != lines_.end(); it++) {
-		auto line = (*it);
+	for (auto line : lines_) {
 		if (x > max_n) {
-			if (line->GetP1().y < line->GetP2().y) line->SetLinePosition(dy * x, max_y);
-			else line->SetLinePosition(dy * x, min_y);
+			if (line->GetP1().y < line->GetP2().y) line->SetLineOffset(dy * x, max_y);
+			else line->SetLineOffset(dy * x, min_y);
 		} else {
-			auto y = (even ? b + ((float)x - 0.5f) * dy : b + ((float)x - 1.0f) * dy);
-			line->SetLinePosition(dy * x, y);
+			auto y = even 
+				? b + ((float)x - 0.5f) * dy 
+				: b + ((float)x - 1.0f) * dy
+				;
+			line->SetLineOffset(dy * x, y);
 		}
 		line->Create();
 		x++;
 	}
 }
 
-void COutputSlot::AddLine(CLine* p_line) {
-	m_bHasLines = TRUE;
-	lines_.push_back(p_line);
+void COutputSlot::ConnectLine(CLine* line, bool recreate) {
+	lines_.push_back(line);
+	if (recreate) CalcLinesPosition();
 }
 
 void COutputSlot::DisconnectLine(CLine* pLine) {
 	auto it = std::find(lines_.begin(), lines_.end(), pLine);
 	ASSERT(it != lines_.end());
 	lines_.erase(it);
-	CalcLinesOffset();
-	if (lines_.empty()) m_bHasLines = FALSE;
+	CalcLinesPosition();
 }
 
 void COutputSlot::SetValue(const nps::server_value* value) {
@@ -547,7 +542,7 @@ void CValue::ReleaseMemory() noexcept {
 }
 
 void CValue::TopoSort(
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	npsys::fbd_slot_n& slot,
 	color_m& color,
 	SortedLink& sorted)
@@ -557,7 +552,7 @@ void CValue::TopoSort(
 }
 
 void CFixedValue::TopoSort(
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	npsys::fbd_slot_n& slot,
 	color_m& color,
 	SortedLink& sorted)
@@ -759,7 +754,7 @@ bool CInternalRef::CheckCycle(color_m& color, void* slot_ptr) {
 }
 
 void CInternalRef::TopoSort(
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	npsys::fbd_slot_n& slot,
 	color_m& color,
 	SortedLink& sorted)
@@ -793,7 +788,7 @@ int CAvrInternalPin::DefineTypeR() {
 }
 
 void CAvrInternalPin::TopoSort(
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	npsys::fbd_slot_n& slot,
 	color_m& color,
 	SortedLink& sorted)
@@ -901,7 +896,7 @@ void CModuleValue::ReleaseMemory() noexcept {
 }
 
 void CModuleValue::TopoSort(
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	npsys::fbd_slot_n& slot,
 	color_m& color,
 	SortedLink& sorted)
@@ -1010,8 +1005,8 @@ void CModuleValue::PrintDebugTooltip(std::stringstream& ss) {
 
 CExternalReference::CExternalReference(
 	npsys::fbd_slot_n& ref_slot,
-	npsys::algorithm_n& ref_alg,
-	npsys::algorithm_n& alg)
+	npsys::fbd_control_unit_n& ref_alg,
+	npsys::fbd_control_unit_n& alg)
 	: COutsideReference(alg)
 	, loaded_(false) {
 	link_ = LinkData(ref_slot, ref_alg);
@@ -1078,7 +1073,7 @@ bool CExternalReference::CheckCycle(color_m& color, void* slot_ptr) {
 }
 
 void CExternalReference::TopoSort(
-	npsys::algorithm_n& alg,
+	npsys::fbd_control_unit_n& alg,
 	npsys::fbd_slot_n& slot,
 	color_m& color,
 	SortedLink& sorted)
@@ -1175,7 +1170,7 @@ bool CExternalReference::IsRefAlgorithmAssigned() noexcept {
 	if (link_.alg.is_invalid_id()) return false;
 	auto ref_alg = link_.alg.fetch();
 	if (!ref_alg.loaded()) return false;
-	return (ref_alg->GetStatus() >= npsys::CAlgorithm::status_assigned);
+	return (ref_alg->GetStatus() >= npsys::CControlUnit::Status::status_assigned);
 }
 
 void CExternalReference::PrintDebugTooltip(std::stringstream& ss) {
@@ -1194,56 +1189,38 @@ void CExternalReference::PrintDebugTooltip(std::stringstream& ss) {
 
 // CSlotManipulator
 
-S_CURSOR CSlot::CSlotManipulator::MouseButtonDown(CPoint point, CAlgorithmView* pWnd) {
+S_CURSOR CSlot::CSlotManipulator::MouseButtonDown(CPoint point, CAlgorithmView* wnd) {
 	line_.reset(new CLine);
 
-	auto middle = _slot->GetMiddle();
-	begin_at_ = _slot->GetDirection();
+	auto middle = target_->GetMiddle();
+	begin_at_ = target_->GetDirection();
 
 	line_->SetP1(middle);
 	line_->SetP2(middle);
 
-	first_slot_no_error_ = line_->SetSlot(_slot);
+	first_slot_no_error_ = line_->SetSlot(target_, true);
 
-	auto parent = _slot->GetParentBlock();
+	fs_.clear();
+	TraversalExclude<CBlockVisitor>(wnd->unit->GetBlocks(), target_->GetParentBlock()->top->e_block.get(), fs_);
 
-	fs.clear();
-	auto blocks = pWnd->alg_->GetBlocks();
-	auto begin = parent->top->slots.begin();
-	auto end = parent->top->slots.end();
-	Iter::PostorderIterator<CElement*> it(blocks);
-	for (; !it.IsDone(); it.Next()) {
-		auto slot = *it;
-		if (slot == _slot) continue;
-		if (std::find_if(begin, end,
-			[slot](auto& slot_n) {
-			return slot == slot_n->e_slot.get();
-		}) != end) {
-			continue;
-		}
-		(*it)->Visit(fs);
-	}
 	return S_CURSOR::A_LINE;
 }
 
-void CSlot::CSlotManipulator::Drag(CPoint point, CAlgorithmView* pWnd) {
+int CSlot::CSlotManipulator::Drag(CPoint point, CAlgorithmView* pWnd) {
 	CGraphics* pGraphics = pWnd->GetGraphics();
 	const D2D1_MATRIX_3X2_F& invM = pGraphics->GetInverseMatrix();
 	const D2D1::Matrix3x2F& matrix = pGraphics->GetMatrix();
 
 	D2D1::MyPoint2F pt = D2D1::MyPoint2F((float)point.x, (float)point.y) * invM;
 
-	if (begin_at_ == CSlot::INPUT_SLOT) line_->SetP1(pt);
+	if (begin_at_ == SlotDirection::INPUT_SLOT) line_->SetP1(pt);
 	else line_->SetP2(pt);
 
-	for (auto slot : fs) {
+	for (auto slot : fs_) {
 		UINT elflags;
-		if (slot->HitTest(pt, elflags)) {
-			_tmp_slot = slot;
-			break;
-		}
+		if (slot->HitTestWhileConnectingLine(pt, elflags)) break;
 	}
-	pWnd->Invalidate();
+	return 2;
 }
 
 void CSlot::CSlotManipulator::MouseButtonUP(CPoint point, CAlgorithmView* pWnd) {
@@ -1251,14 +1228,14 @@ void CSlot::CSlotManipulator::MouseButtonUP(CPoint point, CAlgorithmView* pWnd) 
 	const D2D1_MATRIX_3X2_F& invM = pGraphics->GetInverseMatrix();
 	const D2D1::Matrix3x2F& matrix = pGraphics->GetMatrix();
 
-	_slot->SetHover(false);
+	target_->SetHover(false);
 
 	D2D1::MyPoint2F pt = D2D1::MyPoint2F((float)point.x, (float)point.y) * invM;
-	for (auto& i : fs) {
+	for (auto& i : fs_) {
 		UINT elflags;
-		if (i->HitTest(pt, elflags)) {
-			if (first_slot_no_error_ && line_->SetSlot(i)) {
-				pWnd->SetCursor(AlphaCursor::Arrow);
+		if (i->HitTestWhileConnectingLine(pt, elflags)) {
+			if (first_slot_no_error_ && line_->SetSlot(i, true)) {
+				pWnd->SetCursor(NPSystemCursor::Arrow);
 				pWnd->Insert(line_.release());
 				return;
 			}
@@ -1269,10 +1246,12 @@ void CSlot::CSlotManipulator::MouseButtonUP(CPoint point, CAlgorithmView* pWnd) 
 
 	line_.reset();
 
-	pWnd->SetCursor(AlphaCursor::Arrow);
+	pWnd->SetCursor(NPSystemCursor::Arrow);
 	pWnd->Invalidate();
 }
 
 void CSlot::CSlotManipulator::Draw(CGraphics* pGraphics) {
+	line_->CreateBezierHorizontal(true);
 	line_->PreDraw(pGraphics);
 }
+

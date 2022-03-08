@@ -178,7 +178,7 @@ public:
 	virtual void IoConstructMenu(CMenu* menu) noexcept = 0;
 	virtual bool IoHandleRequest(REQUEST* req) noexcept = 0;
 	virtual std::unique_ptr<COutsideReference> CreatePinReference(remote::ExtLinkType type, 
-	const std::string& port, const std::string& pin, odb::weak_node<algorithm_n> alg) = 0;
+	const std::string& port, const std::string& pin, odb::weak_node<fbd_control_unit_n> alg) = 0;
 	virtual std::optional<npsys::i2c_assigned_module_l> GetAssignedModules() noexcept { return {}; }
 #endif // _CONFIGURATOR_F
 	CController() = default;
@@ -252,7 +252,7 @@ public:
 	virtual const std::vector<std::tuple<int, uint16_t>>& InitInternalBlock(CBlockSchedule*);
 
 	virtual std::unique_ptr<COutsideReference> CreatePinReference(remote::ExtLinkType type, 
-		const std::string& port, const std::string& pin, odb::weak_node<algorithm_n> alg);
+		const std::string& port, const std::string& pin, odb::weak_node<fbd_control_unit_n> alg);
 	virtual std::optional<npsys::i2c_assigned_module_l> GetAssignedModules() noexcept { return assigned_modules; }
 #ifdef DEBUG
 	void ShowInternalData();
@@ -270,7 +270,7 @@ public:
 	bool AssignObject(const * object) override;
 	virtual void AddToNetwork() override;
 	virtual void AssignModule(CModule* pModule) override;
-	virtual void AssignAlgorithm(CAlgorithm* pAlg) override;
+	virtual void AssignAlgorithm(CControlUnit* pAlg) override;
 	*/
 	std::unique_ptr<Dlg_AVRMemoryViewer> flash_viewer_;
 

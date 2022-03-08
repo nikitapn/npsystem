@@ -3,12 +3,13 @@
 
 #include "stdafx.h"
 #include "visitorblocks.h"
-#include "Block.h"
+#include "block.h"
+#include "sfc_block.hpp"
 #include "Line.h"
-#include "algext.h"
+#include "control_unit_ext.h"
 
-// CBlockVisitor
-void CBlockVisitor::VisitSlotType(CSlot* slot) noexcept {
+// CFBDBlockVisitor
+void CFBDBlockVisitor::VisitSlotType(CSlot* slot) noexcept {
 	current_slot_ = slot;
 	auto slot_type = slot->GetSlotType();
 	ASSERT(slot_type);
@@ -23,23 +24,29 @@ void CBlockVisitor::VisitSlotType(CSlot* slot) noexcept {
 FINDSPECIFICTYPE_IMPL(CLinesInspector, CLine)
 //
 #define AAF(x) FINDSPECIFICTYPE_IMPL(CBlocksInspector, x)
-	ALPHA_BLOCKS()
+	NPSYSTEM_BLOCKS()
 #undef AAF
 //
 
 #define FINDSELECTED_IMPL(Visitor, BlockClassName) \
-	void Visitor ## ::Accept(BlockClassName* pBlock) { \
-		if ( pBlock->IsSelected() ) \
-			elems_.push_back(pBlock); \
+	void Visitor ## ::Accept(BlockClassName* block) { \
+		if ( block->IsSelected() ) \
+			elems_.emplace_back(block, block); \
 	}
 
 #define AAF(x) FINDSELECTED_IMPL(CFindSelectedBlocks, x)
-	ALPHA_BLOCKS()
+	NPSYSTEM_BLOCKS()
+	NPSYSTEM_BLOCKS_SFC()
 #undef AAF
 //
-void CFindSelectedPlusLines::Accept(CLine* pLine) {
-	if (pLine->IsSelected())
-		m_lines.push_back(pLine);
+void CFindSelectedPlusLines::Accept(CLine* line) {
+	if (line->IsSelected())
+		lines.push_back(line);
+}
+
+void CFindSelectedPlusLines::Accept(CSFCLine* line) {
+	if (line->IsSelected())
+		lines.push_back(line);
 }
 
 // CFindElementsThatContainsVariables
@@ -68,6 +75,7 @@ ACCEPT_APPLY_ACTION(CFindVariableVisitorAbstract, CValue)
 ACCEPT_APPLY_ACTION(CFindVariableVisitorAbstract, CExternalReference)
 ACCEPT_APPLY_ACTION(CFindVariableVisitorAbstract, CBlockSchedule)
 ACCEPT_APPLY_ACTION(CFindVariableVisitorAbstract, CCounter)
+ACCEPT_APPLY_ACTION(CFindVariableVisitorAbstract, CPulse)
 
 // CFindElementsThatContainsVariablesExludeExternalReferences
 void CFindElementsThatContainsVariablesExcludeReferences::ApplyAction(CVariable* var) {
@@ -238,3 +246,13 @@ void CFindInternalBlockRef::InitInternalReferences(npsys::CNetworkDevice* device
 void CFindInternalBlockRef::Clear() {
 	for (auto block : elems_) block->HardwareSpecific_Clear();
 }
+
+// CFindSlots
+
+void CFBDFindConnectable::Accept(COutputSlot* pSlot) {
+	elems_.push_back(pSlot);
+}
+void CFBDFindConnectable::Accept(CInputSlot* pSlot) {
+	elems_.push_back(pSlot);
+}
+

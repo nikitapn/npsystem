@@ -9,7 +9,7 @@ namespace npsys {
 
 std::string CFBDSlot::path() const noexcept {
 	do {
-		auto a = alg.fetch();
+		auto a = fbd_unit.fetch();
 		if (!a.loaded()) break;
 
 		auto c = a->cat.fetch();
@@ -61,11 +61,12 @@ fbd_slot_n CFBDSlot::get_by_path(const std::vector<std::string>& tok) {
 		throw std::runtime_error("There is no such category \"" + cat_name + '\"');
 	}
 
-	auto alg = odb::utils::find_by_name((*cat)->algs, alg_name);
-
-	if (!alg) {
-		throw std::runtime_error("There is no such algoithm \"" + alg_name + '\"');
+	auto control_unit = odb::utils::find_by_name((*cat)->units, alg_name);
+	if (!control_unit || (*control_unit)->GetLanguageType() != npsys::CControlUnit::Language::FBD) {
+		throw std::runtime_error("There is no such FBD unit \"" + alg_name + '\"');
 	}
+
+	auto fbd_unit = (*control_unit).cast<fbd_control_unit_n>();
 
 	auto ix = slot_full_name.find(L'.', 0);
 
@@ -76,7 +77,7 @@ fbd_slot_n CFBDSlot::get_by_path(const std::vector<std::string>& tok) {
 	const auto block_name = slot_full_name.substr(0, ix);
 	const auto slot_name = slot_full_name.substr(ix + 1);
 
-	auto& blocks = (*alg)->fbd_blocks;
+	auto& blocks = fbd_unit->fbd_blocks;
 	blocks.fetch_all_nodes();
 
 	for (auto& block : blocks) {

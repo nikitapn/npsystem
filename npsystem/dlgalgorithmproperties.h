@@ -9,7 +9,7 @@
 class CDlg_AlgorithmProperties : public CDialogImpl<CDlg_AlgorithmProperties>
 {
 public:
-	CDlg_AlgorithmProperties(npsys::algorithm_n& alg) :
+	CDlg_AlgorithmProperties(npsys::fbd_control_unit_n& alg) :
 		alg_(alg) {}
 
 	enum { IDD = IDD_DLG_ALGORITHM_PROPERTIES };
@@ -51,7 +51,7 @@ protected:
 		return 0;
 	}
 
-	npsys::algorithm_n& alg_;
+	npsys::fbd_control_unit_n& alg_;
 	CMyButton m_buttonOk;
 	CMyEditNumber m_editScanPeriod_;
 };

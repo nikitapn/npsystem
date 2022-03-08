@@ -63,9 +63,9 @@ class CAVR5DynamicLinker : public CDynamicLinker {
 		ObjFile* obj);
 public:
 	CAVR5DynamicLinker(npsys::controller_n_avr avr);
-	virtual bool AssignAlgorithm(npsys::algorithm_n& alg);
-	virtual Result UploadAlgorithm(npsys::algorithm_n& alg);
-	virtual Result UnloadAlgorithm(npsys::algorithm_n& alg);
+	virtual bool AssignControlUnit(npsys::control_unit_n& alg);
+	virtual Result UploadFBDUnit(npsys::fbd_control_unit_n& alg);
+	virtual Result UnloadFBDUnit(npsys::fbd_control_unit_n& alg);
 	virtual bool AssignI2CModule(const npsys::i2c_module_n& mod, npsys::i2c_assigned_module_n& assigned);
 	virtual Result UploadI2CModule(npsys::i2c_assigned_module_n& mod);
 	virtual bool UnloadModule(npsys::i2c_assigned_module_n& mod);

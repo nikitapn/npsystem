@@ -91,7 +91,7 @@ private:
 	bool def_value_modified_;
 
 	mutable odb::weak_node<device_n> dev_;
-	mutable odb::weak_node<algorithm_n> alg_;
+	mutable odb::weak_node<control_unit_n> alg_;
 
 	friend boost::serialization::access;
 	template<class Archive>
@@ -148,8 +148,8 @@ public:
 	void SetType(int type) noexcept;
 	void SetBit(int bit) noexcept;
 	void SetAddr(int addr) noexcept;
-	const odb::weak_node<algorithm_n>& GetAlg() const noexcept;
-	void SetAlg(npsys::algorithm_n& alg) noexcept;
+	const odb::weak_node<control_unit_n>& GetAlg() const noexcept;
+	void SetAlg(odb::weak_node<control_unit_n> alg) noexcept;
 	const odb::weak_node<device_n>& GetDev() const noexcept;
 	void SetDev(odb::weak_node<device_n> dev) noexcept;
 	void SetStatus(Status status) noexcept;

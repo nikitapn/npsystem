@@ -24,6 +24,8 @@
 #define ID_ITEM_DELETE						0xC008
 #define ID_ITEM_PROPERTIES				0xC009
 #define ID_SHOW_ID								0xC00A
+#define ID_CREATE_FBD_UNIT				0xC00B
+#define ID_CREATE_SFC_UNIT				0xC00C
 // controller
 #define ID_SHOW_TT								0xC200
 #define ID_SHOW_INTERNAL_DATA			0xC202

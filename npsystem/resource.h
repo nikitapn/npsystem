@@ -101,6 +101,8 @@
 #define IDI_CONTAINER                   515
 #define IDI_NETWORK                     516
 #define IDI_BLOCK                       517
+#define IDI_FBD                       518
+#define IDI_SFC                       519
 #define IDD_DLG_AVR_MEMORY_VIEWER       606
 #define IDD_DLG_CONFIGURABLE_BLOCK      607
 #define IDD_DLG_STRING                  608
@@ -114,6 +116,7 @@
 #define IDC_RADIO_BT_6                  1005
 #define IDC_CUSTOM1                     1005
 #define IDC_RADIO_BT_7                  1006
+#define IDC_BUTTON_UPGRADE_FIRMWARE     1006
 #define IDC_RADIO_BT_8                  1007
 #define IDC_RADIO_BT_9                  1008
 #define IDC_RADIO_BT_10                 1009
@@ -173,7 +176,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        220
 #define _APS_NEXT_COMMAND_VALUE         32778
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

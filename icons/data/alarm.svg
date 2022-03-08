@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="alarm.svg"
+   id="svg31"
+   version="1.1"
+   width="640"
+   viewBox="0 0 640 560"
+   height="560">
+  <metadata
+     id="metadata37">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs35" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg31"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:cy="1015.1376"
+     inkscape:cx="795.7203"
+     inkscape:zoom="0.34802912"
+     width="640mm"
+     units="px"
+     showgrid="false"
+     id="namedview33"
+     inkscape:window-height="1417"
+     inkscape:window-width="2498"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <g
+     transform="translate(70.086424,24.986582)"
+     data-name="Filled Outline"
+     id="Filled_Outline">
+    <circle
+       id="circle2"
+       r="40"
+       fill="#ff9800"
+       cy="448"
+       cx="256" />
+    <path
+       id="path4"
+       fill="#ff9800"
+       d="m 256,24 a 24,24 0 0 1 24,24 V 72 H 232 V 48 a 24,24 0 0 1 24,-24 z" />
+    <path
+       id="path6"
+       fill="#ffb74d"
+       d="M 432,440 H 80 V 427.813 A 104.575,104.575 0 0 1 100.246,366.154 184.675,184.675 0 0 0 136,257.266 V 171.2 C 136,107.577 189.726,56 256,56 c 66.274,0 120,51.577 120,115.2 v 86.066 A 184.675,184.675 0 0 0 411.754,366.154 104.575,104.575 0 0 1 432,427.813 Z" />
+    <circle
+       id="circle8"
+       r="88"
+       fill="#42a5f5"
+       cy="176"
+       cx="256" />
+    <path
+       id="path10"
+       d="m 256,272 a 96,96 0 1 0 -96,-96 96.108,96.108 0 0 0 96,96 z m 0,-176 a 80,80 0 1 1 -80,80 80.091,80.091 0 0 1 80,-80 z" />
+    <path
+       id="path12"
+       d="M 261,182.247 A 8,8 0 0 0 264,176 v -64 h -16 v 60.155 l -37,29.6 10,12.494 z" />
+    <path
+       id="path14"
+       d="M 384,257.267 V 171.2 C 384,113.9 343.145,65.609 288,51.9 V 48 a 32,32 0 0 0 -64,0 v 3.9 c -55.145,13.711 -96,62 -96,119.3 v 86.067 A 175.838,175.838 0 0 1 93.782,361.441 112.018,112.018 0 0 0 72,427.812 V 440 a 8,8 0 0 0 8,8 h 128 a 48,48 0 0 0 96,0 h 128 a 8,8 0 0 0 8,-8 V 427.812 A 112.018,112.018 0 0 0 418.218,361.441 175.838,175.838 0 0 1 384,257.267 Z M 240,48 a 16,16 0 0 1 32,0 v 0.961 a 133.675,133.675 0 0 0 -32,0 z m 16,432 a 32.036,32.036 0 0 1 -32,-32 h 64 a 32.036,32.036 0 0 1 -32,32 z M 424,432 H 88 v -4.188 A 96.126,96.126 0 0 1 106.71,370.867 191.739,191.739 0 0 0 144,257.267 V 171.2 C 144,112.09 194.243,64 256,64 c 61.757,0 112,48.09 112,107.2 v 86.067 a 191.739,191.739 0 0 0 37.29,113.6 96.126,96.126 0 0 1 18.71,56.945 z" />
+    <path
+       id="path16"
+       d="m 16,168 h 96 v 16 H 16 Z" />
+    <path
+       id="path18"
+       transform="matrix(0.5,-0.866,0.866,0.5,-64.129,110.926)"
+       d="m 56,63 h 16 v 96 H 56 Z" />
+    <path
+       id="path20"
+       transform="matrix(0.866,-0.5,0.5,0.866,-111.426,64.154)"
+       d="m 16,232 h 96 v 16 H 16 Z" />
+    <path
+       id="path22"
+       d="m 400,168 h 96 v 16 h -96 z" />
+    <path
+       id="path24"
+       transform="matrix(0.866,-0.5,0.5,0.866,4.52,238.871)"
+       d="m 400,103 h 96 v 16 h -96 z" />
+    <path
+       id="path26"
+       transform="matrix(0.5,-0.866,0.866,0.5,16.155,507.982)"
+       d="m 440,192 h 16 v 96 h -16 z" />
+    <path
+       id="path28"
+       d="m 112,400 h 288 v 16 H 112 Z" />
+  </g>
+</svg>

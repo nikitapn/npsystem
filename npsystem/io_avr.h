@@ -72,7 +72,7 @@ class CAVRPin
 	friend class CBlockCompositionWrapper;
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int /*file_version*/) {
+	void serialize(Archive & ar, const unsigned int file_version) {
 		ar & name_;
 		ar & ctrl;
 		ar & port;
@@ -83,6 +83,12 @@ class CAVRPin
 		ar & type_;
 		ar & inverted_;
 		ar & status_;
+
+		if (file_version > 0) {
+			ar & adc_reference_voltage;
+		} else {
+			adc_reference_voltage = avrinfo::AdcReferenceVoltage::AREF;
+		}
 	}
 public:
 	CAVRPin() = default;
@@ -101,14 +107,17 @@ public:
 		, last_loaded_use_(avrinfo::PinPurpose::UNKNOWN_PIN)
 		, type_(io::INPUT)
 		, inverted_(false)
-		, status_(io::Status::assigned) {}
+		, status_(io::Status::assigned)
+		, adc_reference_voltage(avrinfo::AdcReferenceVoltage::AVCC)
+	{
+	}
 public:
 	virtual bool ChangeName(const std::string& name) { return false; };
 	void SetPinPurpose(avrinfo::PinPurpose use) noexcept;
 	avrinfo::PinPurpose GetPinPurpose(bool loaded = false) const noexcept { 
 		return loaded ? last_loaded_use_ : use_; 
 	}
-	AlphaIcon GetIcon() const noexcept;
+	NPSystemIcon GetIcon() const noexcept;
 	oriandival GetDDRVal(bool loaded) const noexcept;
 	oriandival GetPORTVal(bool loaded) const noexcept;
 	
@@ -130,10 +139,10 @@ public:
 	odb::weak_node<controller_n_avr> ctrl;
 	odb::weak_node<avr_port_n> port;
 	CTreeItemAbstract* item = nullptr;
+	avrinfo::AdcReferenceVoltage adc_reference_voltage;
 private:
 	static oriandival GetDDRValImpl(avrinfo::PinPurpose use, int bit) noexcept;
 	static oriandival GetPORTValImpl(avrinfo::PinPurpose use, int bit, bool inverted) noexcept;
-
 
 	variable_n var_;
 	int bit_;
@@ -144,8 +153,6 @@ private:
 	io::Status status_;
 };
 
-
-
-
-
 } // namespace npsys
+
+BOOST_CLASS_VERSION(npsys::CAVRPin, 1);

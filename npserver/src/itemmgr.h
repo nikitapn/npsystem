@@ -20,8 +20,9 @@ class ItemManagerImpl
 	nprpc::ObjectPtr<nps::DataCallBack> pd_client_;
 	boost::asio::deadline_timer timer_;
 	int death_counter_ = 0;
+	bool processing_on_data_changed_ = false;
 
-	//void destroy_from_strand() noexcept;
+	void destroy_from_strand() noexcept;
 	void fire_keep_alive();
 	void keep_alive_timer(std::shared_ptr<std::atomic_bool> del);
 public:

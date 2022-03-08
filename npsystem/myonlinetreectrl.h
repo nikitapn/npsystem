@@ -114,7 +114,7 @@ public:
 		LRESULT OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 		LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-		AlphaCursor cursor_ = AlphaCursor::Arrow;
+		NPSystemCursor cursor_ = NPSystemCursor::Arrow;
 
 		size_t GetSelected(CPoint& pt) const noexcept;
 

@@ -17,6 +17,7 @@ public:
 	virtual void Save() = 0;
 	virtual bool IsFocused() const noexcept = 0;
 	virtual std::optional<HBRUSH> CustomActiveColor() const noexcept { return {}; }
+	virtual HICON GetIcon() const noexcept;
 
 	virtual BOOL CanUndo() { return FALSE; }
 	virtual BOOL CanRedo() { return FALSE; }
@@ -34,6 +35,7 @@ public:
 	{
 	}
 	CTreeItemAbstract* GetItem() noexcept { return item_; }
+	const CTreeItemAbstract* GetItem() const noexcept { return item_; }
 	virtual void PostDestroy() final;
 protected:
 	CTreeItemAbstract* item_;

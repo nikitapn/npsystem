@@ -4,6 +4,7 @@
 #pragma once
 
 #include <d2d1helper.h>
+#include "math2d.h"
 
 #define CXA constexpr auto 
 
@@ -15,6 +16,10 @@ CXA GRIDSZ_F = 16.0f;
 // Block parameters
 CXA RADIUS_X = 16.f;
 CXA RADIUS_Y = 16.f;
+
+CXA RADIUS_X2 = 4.f;
+CXA RADIUS_Y2 = 4.f;
+
 CXA BLOCK_WIDTH = 140.f;
 CXA PARAM_WIDTH = 170.f;
 CXA PARAM_HEIGHT = 28.f;
@@ -24,6 +29,12 @@ CXA SLOT_TEXT = 60.f;
 CXA BETWEEN_SLOTS = 16.0f;
 CXA HEAD_HEIGHT = 16.0f;
 CXA FOOTER_HEIGHT = 10.0f;
+
+CXA SFC_BLOCK_STEP_SIZE = D2D1::MySize2F(GRIDSZ_F * 18.0f, GRIDSZ_F * 5.0f);
+CXA SFC_BLOCK_TERM_SIZE = D2D1::MySize2F(GRIDSZ_F * 4.0f, GRIDSZ_F * 4.0f);
+CXA SFC_BLOCK_TRANSITION_SIZE = D2D1::MySize2F(GRIDSZ_F * 8.0f, GRIDSZ_F * 2.0f);
+
+CXA SFC_SLOT_CIRCLE_RADIUS = constants::block::GRIDSZ_F / 2.0f;
 
 CXA y_pos(const int position) noexcept {
 	return HEAD_HEIGHT + 8.0f + 2.0f * BETWEEN_SLOTS * static_cast<float>(position);
@@ -37,6 +48,10 @@ CXA SCHEDULE_BLOCK_HEIGHT = y_pos(4) + 60;
 CXA SCHEDULE_BLOCK_WIDTH = 400.0f;
 
 } // namespace block
+
+
+CXA size_tool_size  = 10.0f;
+CXA size_tool_spacer = 2.5f;
 
 namespace slider {
 namespace thing {
@@ -68,7 +83,7 @@ CXA icon_cy = 19;
 CXA icon_y_offset = 2;
 CXA label_cy = icon_cy + icon_y_offset * 2 ;
 
-CXA font_height = 18;
+CXA font_height = 16;
 
 CXA status_icon_cx = 12;
 CXA status_icon_cy = 12;

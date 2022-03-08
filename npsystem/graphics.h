@@ -3,28 +3,24 @@
 
 #pragma once
 
-#include "Color.h"
 #include <array>
+#include "color.h"
 
 class dis {
 	dis();
 	dis(const dis&) = delete;
 	dis& operator = (const dis&) = delete;
+	void CreateSlot();
 	void CreateCircle();
 	void CreateSliderThing();
 	void CreateSliderTimeChart();
+	void CreateSizeTool();
+	void CreateGeometries();
 public:
-	~dis();
-
-	static const dis& Get() {
-		static dis m_instance;
-		return m_instance; 
-	}
-
 	ID2D1Factory2* d2dFactory;
 	IDWriteFactory* pDWriteFactory;
 
-	std::array<IDWriteTextFormat*, 2> text_centered;
+	std::array<IDWriteTextFormat*, 3> text_centered;
 
 	IDWriteTextFormat* pTextFormatLeft;
 	IDWriteTextFormat* pTextFormatRight;
@@ -39,13 +35,36 @@ public:
 	wrl::ComPtr<ID2D1PathGeometry> circle_i2;
 	wrl::ComPtr<ID2D1PathGeometry> slider_thing;
 	wrl::ComPtr<ID2D1PathGeometry> slider_time_chart;
+	wrl::ComPtr<ID2D1PathGeometry> size_tool;
+	wrl::ComPtr<ID2D1PathGeometry> sfc_begin_block;
+	wrl::ComPtr<ID2D1PathGeometry> sfc_term_block;
+	wrl::ComPtr<ID2D1PathGeometry> sfc_step_block;
+	wrl::ComPtr<ID2D1PathGeometry> sfc_transition_block;
 	wrl::ComPtr<IDWriteTextLayout> text_layout_unknown;
 	wrl::ComPtr<IDWriteTextLayout> text_layout_bad_quality;
+	wrl::ComPtr<ID2D1Geometry> geometry_slot;
 	
+	[[nodiscard]] wrl::ComPtr<ID2D1PathGeometry> 
+		CreateSFCBeginBlock(const D2D1::MySize2F& size) const;
+	[[nodiscard]] wrl::ComPtr<ID2D1PathGeometry> 
+		CreateSFCTermBlock(const D2D1::MySize2F& size) const;
+	[[nodiscard]] wrl::ComPtr<ID2D1PathGeometry> 
+		CreateSFCStepBlock(const D2D1::MySize2F& size) const;
+	
+	static const dis& Get() {
+		static dis m_instance;
+		return m_instance; 
+	}
+
+	~dis();
 };
 
 class CGraphics {
 	HWND m_hwnd;
+
+	inline static int last_id_ = 0;
+
+	int id_;
 
 	static constexpr size_t nSolidBrushes = 20;
 
@@ -114,6 +133,8 @@ public:
 	wrl::ComPtr<ID2D1DeviceContext1> m_d2dContext;
 	wrl::ComPtr<ID2D1LinearGradientBrush> m_gradientBlockBrush[BlockColorCount];
 
+
+	int GetId() const noexcept { return id_; };
 	void BeginNewBufferedDraw();
 	void BeginDraw();
 	void RestoreSurface();
@@ -124,6 +145,7 @@ public:
 	void FillRoundRect(const D2D1_ROUNDED_RECT& rect, SolidColor color);
 	void FillBlock(const D2D1_ROUNDED_RECT& rect, BlockColor colorIndex, bool draw_header = true);
 	void FillBlock_2(const D2D1_ROUNDED_RECT& rect);
+	void DrawBlockGeometry(const D2D1_RECT_F& rect, ID2D1GeometryRealization* geometry, BlockColor colorIndex);
 	void FillSlotConnected(const D2D1_ELLIPSE& ellipse);
 	void FillSlotFocused(const D2D1_ELLIPSE& ellipse);
 	void FillSlot(const D2D1_ELLIPSE& ellipse);

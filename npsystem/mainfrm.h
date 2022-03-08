@@ -48,8 +48,11 @@ class CMainFrame :
 	public CRibbonFrameWindowImpl<CMainFrame>,
 	public CMessageFilter, public CIdleHandler
 {
-	static constexpr auto blockCount = (ID_CREATE_BLOCK_LAST - ID_CREATE_BLOCK_INPUT);
-	static constexpr auto blockCatCount = 5;
+	static constexpr auto fbd_blockCount = (ID_CREATE_FBD_BLOCK_LAST - ID_GALLERY_FBD_BLOCKS - 1);
+	static constexpr auto fbd_blockCatCount = 5;
+
+	static constexpr auto sfc_blockCount = (ID_CREATE_SFC_BLOCK_LAST - ID_GALLERY_SFC_BLOCKS - 1);
+	static constexpr auto sfc_blockCatCount = 1;
 
 	enum TimerId {
 		TMR_1S
@@ -75,12 +78,14 @@ public:
 	CMyTabContainer& m_tabContainerBottom = m_tabContainerList[1];
 	CMyTabContainer& m_tabContainerRight = m_tabContainerList[2];
 	COutputEdit m_wndOutput;
-	CRibbonItemGalleryCtrl<ID_GALLERY_BLOCKS, blockCount, blockCatCount> m_ribbonBlocks;
-	// TODO: Declare ribbon controls
+	
+	CRibbonItemGalleryCtrl<ID_GALLERY_FBD_BLOCKS, fbd_blockCount, fbd_blockCatCount> m_ribbonFBDBlocks;
+	CRibbonItemGalleryCtrl<ID_GALLERY_SFC_BLOCKS, sfc_blockCount, sfc_blockCatCount> m_ribbonSFCBlocks;
 
 	// Ribbon control map
 	BEGIN_RIBBON_CONTROL_MAP(CMainFrame)
-		RIBBON_CONTROL(m_ribbonBlocks)
+		RIBBON_CONTROL(m_ribbonFBDBlocks)
+		RIBBON_CONTROL(m_ribbonSFCBlocks)
 	END_RIBBON_CONTROL_MAP()
 
 	virtual BOOL PreTranslateMessage(MSG* pMsg) final {
@@ -95,21 +100,29 @@ public:
 		: m_tabContainerList{ Dock::Left, Dock::Bottom, Dock::Right }
 		, m_wndClient { m_tabContainerList[0] }
 	{
-		UINT uItem = 0, uCat = 0;;
-		auto set_cat = [this, &uItem, &uCat](const char* text, UINT nItems) {
-			m_ribbonBlocks.SetCategoryText(uCat, wide(text).c_str());
-			for (auto begin = uItem; uItem < begin + nItems; uItem++) {
-				m_ribbonBlocks.SetItemCategory(uItem, uCat);
-			}
-			uCat++;
-		};
-		set_cat("Input/Output", 2);
-		set_cat("Logic", 13);
-		set_cat("Math", 6);
-		set_cat("Comparators", 2);
-		set_cat("Control", 1);
-		m_ribbonBlocks.Select(-1);
-		m_ribbonBlocks.SetItemCategory(0, 0);
+		{
+			UINT uItem = 0, uCat = 0;;
+			auto set_cat = [this, &uItem, &uCat](const char* text, UINT nItems) {
+				m_ribbonFBDBlocks.SetCategoryText(uCat, wide(text).c_str());
+				for (auto begin = uItem; uItem < begin + nItems; uItem++) {
+					m_ribbonFBDBlocks.SetItemCategory(uItem, uCat);
+				}
+				uCat++;
+			};
+			set_cat("Input/Output", 2);
+			set_cat("Logic", 14);
+			set_cat("Math", 6);
+			set_cat("Comparators", 2);
+			set_cat("Control", 1);
+
+			m_ribbonFBDBlocks.Select(-1);
+			m_ribbonFBDBlocks.SetItemCategory(0, 0);
+		}
+
+		m_ribbonSFCBlocks.SetCategoryText(0, L"Basic SFC Blocks");
+		//m_ribbonSFCBlocks.SetItemCategory(0, 0);
+		m_ribbonSFCBlocks.Select(-1);
+		m_ribbonSFCBlocks.SetItemCategory(0, 0);
 	}
 
 	CMyTabContainer* GetTabContainer(Dock dock) noexcept {
@@ -153,7 +166,8 @@ public:
 		//		COMMAND_ID_HANDLER(ID_VIEW_TREEPANE, OnViewTreePane)
 		//		COMMAND_ID_HANDLER(ID_PANE_CLOSE, OnTreePaneClose)
 		COMMAND_ID_HANDLER(ID_SELECT_CURSOR, OnSelectCursor)
-		RIBBON_GALLERY_CONTROL_HANDLER(ID_GALLERY_BLOCKS, OnGalleryBlocks)
+		RIBBON_GALLERY_CONTROL_HANDLER(ID_GALLERY_FBD_BLOCKS, OnGalleryBlocks)
+		RIBBON_GALLERY_CONTROL_HANDLER(ID_GALLERY_SFC_BLOCKS, OnGallerySFCBlocks)
 		CHAIN_COMMANDS_MEMBER(m_tabview)
 		CHAIN_MSG_MAP(CRibbonFrameWindowImpl<CMainFrame>)
 	END_MSG_MAP()
@@ -188,14 +202,27 @@ public:
 		if (verb == UI_EXECUTIONVERB_EXECUTE) {
 			g_ribbonState.cursor_selected = false;
 			g_ribbonState.block_selected = id;
-			m_ribbonBlocks.SetImage(
+			m_ribbonFBDBlocks.SetImage(
 				UI_PKEY_LargeImage, OnRibbonQueryItemImage(wID, uSel), true);
-			m_ribbonBlocks.Select(uSel, true);
-			auto view = m_tabview.GetActiveView();
-			if (view) {
-				view->SendMessage(WM_COMMAND, id, 0);
-			}
+			m_ribbonFBDBlocks.Select(uSel, true);
 		}
+
+		return 0;
+	}
+
+	LRESULT OnGallerySFCBlocks(UI_EXECUTIONVERB verb, WORD wID, UINT uSel, BOOL& bHandled) {
+		WORD id = wID + static_cast<WORD>(uSel) + 1;
+
+		// UISetText(ID_DEFAULT_PANE, LPCWSTR(MAKEINTRESOURCE(id)));
+
+		if (verb == UI_EXECUTIONVERB_EXECUTE) {
+			g_ribbonState.cursor_selected = false;
+			g_ribbonState.block_selected = id;
+			m_ribbonSFCBlocks.SetImage(
+				UI_PKEY_LargeImage, OnRibbonQueryItemImage(wID, uSel), true);
+			m_ribbonSFCBlocks.Select(uSel, true);
+		}
+
 		return 0;
 	}
 
@@ -308,6 +335,8 @@ public:
 		*/
 
 		//		SetTimer(TMR_1S, 1000);
+
+		m_tabview.SetFocus(true);
 
 		std::cout.flush();
 
@@ -455,8 +484,9 @@ public:
 
 	LRESULT OnSelectCursor(WORD /*wNotifyCode*/, WORD /*wID*/, HWND hWndCtl, BOOL& /*bHandled*/) {
 		g_ribbonState.cursor_selected = true;
-		g_ribbonState.block_selected = 0;
-		m_ribbonBlocks.Select(-1, true);
+		g_ribbonState.block_selected = -1;
+		m_ribbonFBDBlocks.Select(-1, true);
+		m_ribbonSFCBlocks.Select(-1, true);
 		return 0;
 	}
 
@@ -504,8 +534,10 @@ public:
 			UIEnable(ID_UPLOAD_ALGORITHM, view->CanUpload());
 		}
 
+		SetProperty(ID_GALLERY_FBD_BLOCKS, UI_PKEY_Enabled, g_ribbonState.fbd_ribbon_active ? m_propertyTrue : m_propertyFalse);
+		SetProperty(ID_GALLERY_SFC_BLOCKS, UI_PKEY_Enabled, g_ribbonState.sfc_ribbon_active ? m_propertyTrue : m_propertyFalse);
+		
 		SetProperty(ID_SELECT_CURSOR, UI_PKEY_BooleanValue, g_ribbonState.cursor_selected ? m_propertyTrue : m_propertyFalse);
-
 		SetProperty(ID_VIEW_SYSTEM_TREE, UI_PKEY_BooleanValue, m_treeview ? m_propertyTrue : m_propertyFalse);
 		SetProperty(ID_VIEW_OUTPUT, UI_PKEY_BooleanValue, m_wndOutput ? m_propertyTrue : m_propertyFalse);
 		SetProperty(ID_VIEW_PROPERTY_GRID, UI_PKEY_BooleanValue, m_propertyGrid ? m_propertyTrue : m_propertyFalse);

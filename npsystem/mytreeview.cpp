@@ -67,7 +67,7 @@ HWND CMyTreeView::Create(_In_opt_ HWND hWndParent,
 	m_hLast = NULL;
 	m_labelEdit = FALSE;
 
-	m_MouseCursor = AlphaCursor::Arrow;
+	m_MouseCursor = NPSystemCursor::Arrow;
 
 	m_hBackBrush = ::CreateSolidBrush(RGB(100, 100, 100));
 
@@ -451,7 +451,7 @@ LRESULT CMyTreeView::OnLButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		m_hDragItemOld = NULL;
 		m_bDrag = 0;
 
-		m_MouseCursor = AlphaCursor::Arrow;
+		m_MouseCursor = NPSystemCursor::Arrow;
 		SetCursor(global.GetCursor(m_MouseCursor));
 
 		return 0;
@@ -540,10 +540,10 @@ LRESULT CMyTreeView::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 					break;
 			}
 			if (m_bDragResult) {
-				m_MouseCursor = AlphaCursor::Drop;
+				m_MouseCursor = NPSystemCursor::Drop;
 				SetItemState(hItem, MY_TVIS_DROP_OK, TVIS_USERMASK);
 			} else {
-				m_MouseCursor = AlphaCursor::Block;
+				m_MouseCursor = NPSystemCursor::Block;
 				SetItemState(hItem, MY_TVIS_DROP_BAD, TVIS_USERMASK);
 			}
 		} else {
@@ -551,7 +551,7 @@ LRESULT CMyTreeView::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 			m_bDragResult = 0;
 		}
 	} else {
-		m_MouseCursor = AlphaCursor::Arrow;
+		m_MouseCursor = NPSystemCursor::Arrow;
 
 		if (hItem == NULL) {
 			if (m_buttonHovered != NULL) {

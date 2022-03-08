@@ -18,6 +18,15 @@
       <UniqueIdentifier>{92456eba-95e5-431f-bcb8-ba1b400eae12}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
     </Filter>
+    <Filter Include="src\control_unit">
+      <UniqueIdentifier>{b3b2fc2e-44fa-45ad-a6db-8d6d9b92b238}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\sfc">
+      <UniqueIdentifier>{6c90496a-156c-4c69-a21b-8139fbc9e3e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\fbd">
+      <UniqueIdentifier>{b2390f0b-06c8-4168-b919-d6a544696ee6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -50,19 +59,10 @@
     <ClCompile Include="view_controller.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="blockcomposition.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="command.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="line.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="slot.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="avrconfigurator.cpp">
@@ -140,9 +140,6 @@
     <ClCompile Include="scintillawindow.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="algext.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="assigned.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -170,11 +167,32 @@
     <ClCompile Include="tr_item.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="visitorblocks.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="npsys.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="fbd_control_unit.cpp">
+      <Filter>src\control_unit</Filter>
+    </ClCompile>
+    <ClCompile Include="sfc_control_unit.cpp">
+      <Filter>src\control_unit</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>src\fbd</Filter>
+    </ClCompile>
+    <ClCompile Include="slot.cpp">
+      <Filter>src\fbd</Filter>
+    </ClCompile>
+    <ClCompile Include="sfc_block.cpp">
+      <Filter>src\sfc</Filter>
+    </ClCompile>
+    <ClCompile Include="blockcomposition.cpp">
+      <Filter>src\control_unit</Filter>
+    </ClCompile>
+    <ClCompile Include="sfc_block_visitor.cpp">
+      <Filter>src\sfc</Filter>
+    </ClCompile>
+    <ClCompile Include="visitorblocks.cpp">
+      <Filter>src\fbd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,19 +235,13 @@
     <ClInclude Include="view_algorithm.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="block.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="blockcomposition.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="blockdecl.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="blockpropertyid.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="command.h">
+    <ClInclude Include="command_impl.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="element.h">
@@ -439,9 +451,6 @@
     <ClInclude Include="scintillawindow.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="algext.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="assignedalgorithm.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -484,7 +493,46 @@
     <ClInclude Include="visitorbase.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="control_unit_ext.h">
+      <Filter>src\control_unit</Filter>
+    </ClInclude>
+    <ClInclude Include="sfc_block.hpp">
+      <Filter>src\sfc</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>src\fbd</Filter>
+    </ClInclude>
+    <ClInclude Include="block_factory.hpp">
+      <Filter>src\control_unit</Filter>
+    </ClInclude>
+    <ClInclude Include="fbd_block_factory.hpp">
+      <Filter>src\fbd</Filter>
+    </ClInclude>
+    <ClInclude Include="sfc_block_factory.hpp">
+      <Filter>src\sfc</Filter>
+    </ClInclude>
+    <ClInclude Include="blockcomposition.hpp">
+      <Filter>src\control_unit</Filter>
+    </ClInclude>
+    <ClInclude Include="fbd_block_composition.hpp">
+      <Filter>src\fbd</Filter>
+    </ClInclude>
+    <ClInclude Include="sfc_block_composition.hpp">
+      <Filter>src\sfc</Filter>
+    </ClInclude>
+    <ClInclude Include="sfc_block_visitor.hpp">
+      <Filter>src\sfc</Filter>
+    </ClInclude>
     <ClInclude Include="visitorblocks.h">
+      <Filter>src\fbd</Filter>
+    </ClInclude>
+    <ClInclude Include="line_connectable.hpp">
+      <Filter>src\control_unit</Filter>
+    </ClInclude>
+    <ClInclude Include="command_i.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="serialization_atl_string.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -784,6 +832,15 @@
       <Filter>Resource Files\Other</Filter>
     </Image>
     <Image Include="res\var_ico.ico">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="res\FBD.svg.ico">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="res\blocks\pulse.svg.bmp">
+      <Filter>Resource Files\Other</Filter>
+    </Image>
+    <Image Include="res\blocks\cnt.svg.bmp">
       <Filter>Resource Files\Other</Filter>
     </Image>
   </ItemGroup>

@@ -367,7 +367,10 @@ int protocol_service::read_advised() noexcept {
 		for (auto ptr : listeners_) {
 			ptr->t_process_registers(updated_registers);
 		}
-//		hist->t_process_registers(updated_registers);
+		auto history_listener = g_hist->get_listener();
+		if (history_listener) {
+			history_listener->t_process_registers(updated_registers);
+		}
 	}
 
 	return result;

@@ -10,6 +10,8 @@
 #include <array>
 #include <assert.h>
 
+#include <boost/container/small_vector.hpp>
+
 namespace Iter
 {
 	template <class T>
@@ -201,7 +203,7 @@ namespace Iter
 	{
 	private:
 		T _root;
-		std::stack<Iterator<T>*, std::vector<Iterator<T>*>> iterators_;
+		std::stack<Iterator<T>*, boost::container::small_vector<Iterator<T>*, 32>> iterators_;
 		void First();
 	public:
 		PreorderIterator(T root);
@@ -291,7 +293,7 @@ namespace Iter
 	{
 	private:
 		T _root;
-		std::stack<Iterator<T>*, std::vector<Iterator<T>*>> iterators_;
+		std::stack<Iterator<T>*, boost::container::small_vector<Iterator<T>*, 32>> iterators_;
 		void First();
 	public:
 		PostorderIterator(T root);

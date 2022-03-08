@@ -975,9 +975,9 @@ void CMyPaneContainer::OnFinalMessage(_In_ HWND /*hWnd*/) {
 
 void CMyPaneContainer::DrawButton_Pin(CDCHandle dc, const CRect& rcImage) {
 	if (m_tabContainer.IsPinned()) {
-		DrawIconEx(dc, rcImage.left, rcImage.top, global.GetIcon(AlphaIcon::Pinned), 9, 9, 0, NULL, DI_IMAGE | DI_MASK);
+		DrawIconEx(dc, rcImage.left, rcImage.top, global.GetCustomSizeIcon(NPSystemIcon::Pinned), 9, 9, 0, NULL, DI_IMAGE | DI_MASK);
 	} else {
-		DrawIconEx(dc, rcImage.left, rcImage.top, global.GetIcon(AlphaIcon::UnPinned),
+		DrawIconEx(dc, rcImage.left, rcImage.top, global.GetCustomSizeIcon(NPSystemIcon::UnPinned),
 			rcImage.Width(), rcImage.Height(), 0, NULL, DI_IMAGE | DI_MASK);
 	}
 }

@@ -6,12 +6,12 @@
 #include <memory>
 
 class CLine;
-class Command;
-
-struct cpp_command_delete {
-	__declspec(noinline) void operator()(Command*);
-};
+class CSFCLine;
 
 struct cpp_line_delete {
 	__declspec(noinline) void operator()(CLine*);
+};
+
+struct cpp_sfc_line_delete {
+	__declspec(noinline) void operator()(CSFCLine*);
 };

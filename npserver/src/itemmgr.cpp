@@ -31,7 +31,7 @@ ItemManagerImpl::ItemManagerImpl() noexcept
 // nprpc thread
 void ItemManagerImpl::Advise(::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/::flat::Vector_Direct1<uint64_t> h) {
 	h.length(a.size());
-	auto span = Span<nps::var_handle>{ h().begin(), h().end() };
+	auto span = h();
 	t_advise({(nps::flat::DataDef*)a.data(), (nps::flat::DataDef*)a.data_end()}, span);
 }
 
@@ -67,27 +67,29 @@ void ItemManagerImpl::destroy() noexcept {
 //	boost::system::error_code ec;
 //	timer_.cancel(ec);
 
-	pd_client_.reset();
-	delete this;
-
-//	nplib::async<false>(strand_, [this]() {
-//		this->destroy_from_strand();
-//	});
+	nplib::async<false>(strand_, [this]() { destroy_from_strand(); }); // last job in this strand
 }
 
 // strand context
-//void ItemManagerImpl::destroy_from_strand() noexcept {
-//	if (g_cfg.log_level > 1) {
-//		std::cout <<
-//			"ItemManagerImpl::destroy_from_strand() " << "task_count: " << task_count() << std::endl;
-//	}
-//	pd_client_.reset();
-//	delete this;
-//}
+void ItemManagerImpl::destroy_from_strand() noexcept {
+	if (processing_on_data_changed_) {
+		std::cerr << "ItemManagerImpl::destroy_from_strand().should not happen - processing_on_data_changed_ = true\n";
+		nplib::async<false>(strand_, [this]() { destroy_from_strand(); });
+		return;
+	}
+	if (g_cfg.log_level > 1) {
+		std::cout <<
+			"ItemManagerImpl::destroy_from_strand() " << "task_count: " << task_count() << std::endl;
+	}
+	pd_client_.reset();
+	delete this;
+}
 
 // strand context
 void ItemManagerImpl::OnDataChanged(const std::vector<nps::server_value>& ar) {
 	if (is_deleted()) return;
+	
+	processing_on_data_changed_ = true;
 
 //	boost::system::error_code ec;
 //	timer_.expires_from_now(boost::posix_time::seconds(g_cfg.client_keep_alive_time), ec);
@@ -110,6 +112,8 @@ void ItemManagerImpl::OnDataChanged(const std::vector<nps::server_value>& ar) {
 	//	deactivate
 		}
 	}
+
+	processing_on_data_changed_ = false;
 }
 
 // strand context

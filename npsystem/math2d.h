@@ -93,6 +93,55 @@ namespace D2D1
 	inline MyPoint2F::operator CPoint() { 
 		return CPoint((LONG)x, (LONG)y); 
 	}
+
+
+	class MySize2F : public D2D1_SIZE_F
+	{
+		friend MySize2F operator+(const MySize2F& p1, const MySize2F& p2);
+		friend MySize2F operator-(const MySize2F& p1, const MySize2F& p2);
+	public:
+		MySize2F();
+		constexpr MySize2F(float width, float heigth);
+		MySize2F(const D2D1_SIZE_F& size);
+
+		void operator=(const D2D1_SIZE_F& size);
+		MySize2F& operator=(const MySize2F& size);
+		bool operator==(const MySize2F& size) const;
+	};
+
+	inline MySize2F::MySize2F() {
+
+	}
+
+	constexpr inline MySize2F::MySize2F(float _width, float _height) 
+		: D2D1_SIZE_F{_width, _height} 
+	{
+	}
+
+	inline MySize2F::MySize2F(const D2D1_SIZE_F& size) {
+		this->width = size.width;
+		this->height = size.height;
+	}
+	inline MySize2F& MySize2F::operator=(const MySize2F& size) {
+		this->width = size.width;
+		this->height = size.height;
+		return *this;
+	}
+	inline void MySize2F::operator=(const D2D1_SIZE_F& size) {
+		this->width = size.width;
+		this->height = size.height;
+	}
+	inline bool MySize2F::operator==(const MySize2F& size) const {
+		return this->width == size.width && this->height == size.height;
+	}
+
+	inline MySize2F operator+(const MySize2F& s1, const MySize2F& s2) {
+		return MySize2F(s1.width + s2.width, s1.height + s2.height);
+	}
+
+	inline MySize2F operator-(const MySize2F& s1, const MySize2F& s2) {
+		return MySize2F(s1.width - s2.width, s1.height - s2.height);
+	}
 }
 
 /*

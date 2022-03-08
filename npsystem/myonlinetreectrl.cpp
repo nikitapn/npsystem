@@ -283,11 +283,11 @@ LRESULT CMyOnlineTreeView::CHeaderView::OnMouseMove(UINT uMsg, WPARAM wParam, LP
 	} else {
 		bool cursor_set = false;
 		if (GetSelected(pt) != -1) {
-			cursor_ = AlphaCursor::SizeWE;
-			SetCursor(global.GetCursor(AlphaCursor::SizeWE));
-		} else if (cursor_ != AlphaCursor::Arrow) {
-			cursor_ = AlphaCursor::Arrow;
-			SetCursor(global.GetCursor(AlphaCursor::Arrow));
+			cursor_ = NPSystemCursor::SizeWE;
+			SetCursor(global.GetCursor(NPSystemCursor::SizeWE));
+		} else if (cursor_ != NPSystemCursor::Arrow) {
+			cursor_ = NPSystemCursor::Arrow;
+			SetCursor(global.GetCursor(NPSystemCursor::Arrow));
 		}
 	}
 
