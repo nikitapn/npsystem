@@ -1,2 +1,0 @@
-# npsystem
-Distributed control system
