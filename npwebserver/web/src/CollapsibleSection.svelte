@@ -3,6 +3,10 @@
 	// Inclusive Components by Heydon Pickering https://inclusive-components.design/collapsible-sections/
 	export let headerText;
 	export let expanded = false
+
+	import { slide } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+
 </script>
 
 <div class="collapsible">
@@ -14,9 +18,11 @@
 			</svg>
 		</button>
 	</h3>
-	<div class='contents' hidden={!expanded}>
+	{#if expanded}
+	<div class='contents' transition:slide="{{delay: 0, duration: 250, easing: quintOut }}" >
 		<slot></slot>
 	</div>
+	{/if}
 </div>
 
 <style>
@@ -38,6 +44,10 @@ button {
 	margin: 0;
 	padding: 1em 0.5em;
 	background-color: beige;
+	cursor: pointer;
+}
+button:hover {
+	background-color: rgb(246, 217, 184);
 }
 
 button[aria-expanded="true"] {

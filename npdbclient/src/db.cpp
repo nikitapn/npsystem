@@ -224,7 +224,7 @@ public:
 		} else {
 			read_key_file();
 			if (db_->last_oid() < free_id_end_) {
-				std::cerr << "cached last id greater than id in current database.\n";
+				std::cerr << "cached last id is greater than last id in the current database.\n";
 				alloc_key_range();
 			}
 		}

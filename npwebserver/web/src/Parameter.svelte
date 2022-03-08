@@ -16,6 +16,7 @@
 	li { 
 		display: flex; 
 		background-color: rgba(127, 219, 228, 0.342);
+		margin: 5px;
 	}
 	
 	.name {
@@ -35,6 +36,6 @@
 	.value {
 		text-align: right;
 		padding: 1em;
-		
 	}
+	
 </style>

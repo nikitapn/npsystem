@@ -31,7 +31,7 @@ SLIBS = \
 	/usr/lib/libboost_system.a \
 	/usr/lib/libboost_thread.a \
 	/usr/lib/libboost_serialization.a \
-	../build/lib/nprpcst.o
+	../build/lib/nprpcst.a
 
 $(TARGET): $(OBJS) 
 	$(CXX) $(OBJS) $(LIB_DIR) $(LIBS) $(SLIBS) -o $(TARGET)

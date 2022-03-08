@@ -35,6 +35,9 @@ static const ControllerPinsConfig pins[] =
 	{ 'A', 6, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN | PinPurpose::ANALOG_PIN },
 	{ 'A', 7, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN | PinPurpose::ANALOG_PIN },
 
+	{ 'B', 0, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
+	{ 'B', 1, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
+	{ 'B', 2, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 	{ 'B', 3, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 	{ 'B', 4, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 	{ 'B', 5, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
@@ -48,8 +51,6 @@ static const ControllerPinsConfig pins[] =
 	{ 'C', 6, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 	{ 'C', 7, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 
-	{ 'D', 4, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
-	{ 'D', 5, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 	{ 'D', 6, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 	{ 'D', 7, PinPurpose::INPUTPU_PIN | PinPurpose::INPUT_PIN | PinPurpose::OUTPUT_PIN },
 

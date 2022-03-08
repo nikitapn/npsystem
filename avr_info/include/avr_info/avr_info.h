@@ -36,6 +36,8 @@ enum PinPurpose {
 	UNKNOWN_PIN = 128
 };
 
+enum class AdcReferenceVoltage { AREF, AVCC, Internal };
+
 struct ControllerPinsConfig {
 	const char port_letter;
 	const unsigned char pin_n;

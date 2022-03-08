@@ -482,9 +482,9 @@ public:
 		return data_ ? data_->e : tmp_e_;
 	}
 
-	template<typename U = T>
-	bool create() noexcept {
-		auto ptr = new U();
+	template<typename U = T, typename... Args>
+	bool create(Args&&... args) noexcept {
+		auto ptr = new U(std::forward<Args>(args)...);
 		bool ok = create_impl(ptr, base::is_static_id() ? Default_Id : NEW_NODE_ID);
 		if (!ok) delete ptr;
 		return ok;
@@ -901,14 +901,17 @@ public:
 	auto rend() noexcept { return data_.rend(); }
 	auto cbegin() const noexcept { return data_.cbegin(); }
 	auto cend() const noexcept { return data_.cend(); }
+	
 	void push_back_node(node_t& n) noexcept {
 		data_.push_back(n);
 		changed_ = true;
 	}
+
 	void pop_back() {
 		data_.pop_back();
 		changed_ = true;
 	}
+
 	bool push_back_value(type_t* value) noexcept {
 		node_t new_node;
 		if (!new_node.create(value)) return false;
@@ -916,17 +919,21 @@ public:
 		changed_ = true;
 		return true;
 	}
+
 	node_t back() noexcept {
 		return data_.back();
 	}
+
 	void clear() noexcept {
 		changed_ = true;
 		data_.clear();
 	}
+
 	iterator erase(iterator it) {
 		changed_ = true;
 		return data_.erase(it);
 	}
+
 	bool erase(node_t& n) {
 		assert(n.id() != INVALID_ID);
 		if (auto founded = find(n); founded != data_.end()) {
@@ -936,14 +943,22 @@ public:
 		}
 		return false;
 	}
+
 	bool fast_erase(node_t& n) noexcept {
 		changed_ = true;
 		return VectorFastErase(data_, n);
 	}
+
+	bool fast_erase(oid_t id) noexcept {
+		node_t tmp(id);
+		return fast_erase(tmp);
+	}
+
 	auto insert(iterator it, const node_t& n) noexcept {
 		changed_ = true;
 		return data_.insert(it, n);
 	}
+
 	bool is_changed() const noexcept { return changed_; }
 	virtual std::unique_ptr<IMemento> CreateMemento_Common() noexcept {
 		return MakeMemento(*this, data_);
@@ -1073,6 +1088,12 @@ public:
 		assert(n.id() != INVALID_ID);
 		if (!init()) return false;
 		return n_->fast_erase(n);
+	}
+
+	bool fast_erase(oid_t id) noexcept {
+		assert(id != INVALID_ID);
+		if (!init()) return false;
+		return n_->fast_erase(id);
 	}
 
 	bool pop_back() noexcept {

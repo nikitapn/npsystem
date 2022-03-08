@@ -1,5 +1,5 @@
 
-#include <npsys/alg.h>
+#include <npsys/control_unit.h>
 #include <npsys/algsubcat.h>
 #include <npsys/algcat.h>
 #include <npsys/network.h>
