@@ -172,8 +172,7 @@ void CFBDControlUnit::ClearVariables() noexcept {
 }
 
 std::optional<npsys::fbd_slot_n>
-CFBDControlUnit::FindSlot(
-	const std::string& block_name, const std::string& slot_name) {
+CFBDControlUnit::FindSlot(std::string_view block_name, std::string_view slot_name) {
 	fbd_blocks.fetch_all_nodes();
 	for (auto& b : fbd_blocks) {
 		if (b->e_block->GetName() != block_name) continue;

@@ -25,6 +25,7 @@
     </ClCompile>
     <ClCompile Include="src\builder_llvm.cpp" />
     <ClCompile Include="src\npcompiler.cpp" />
+    <ClCompile Include="src\ast.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\builder_llvm.hpp" />
@@ -49,5 +50,6 @@
     <None Include="src\generated\lang.output">
       <Filter>generated</Filter>
     </None>
+    <None Include="Makefile" />
   </ItemGroup>
 </Project>

@@ -25,22 +25,22 @@ uint8_t PeripheralInfo::GetIoAddr(const char* name) const {
 	return 0xff;
 }
 
-Model string_to_controller_model(const std::string& s) {
+npsys::hardware::Model string_to_controller_model(const std::string& s) {
 	if (s == "atmega8") {
-		return Model::ATMEGA8;
+		return npsys::hardware::Model::ATMEGA8;
 	} else if (s == "atmega8_virtual") {
-		return Model::ATMEGA8_VIRTUAL;
+		return npsys::hardware::Model::ATMEGA8_VIRTUAL;
 	} else if (s == "atmega16") {
-		return Model::ATMEGA16;
+		return npsys::hardware::Model::ATMEGA16;
 	} else if (s == "atmega16_virtual") {
-		return Model::ATMEGA16_VIRTUAL;
+		return npsys::hardware::Model::ATMEGA16_VIRTUAL;
 	} else {
 		assert(false);
-		return Model::UNKNOWN_MODEL;
+		return npsys::hardware::Model::UNKNOWN_MODEL;
 	}
 }
 
-const std::string& controller_model_to_string(Model model) noexcept {
+const std::string& controller_model_to_string(npsys::hardware::Model model) noexcept {
 	static const std::array<std::string, MODELS_MAX + 1> strs = {
 		std::string("ATMEGA8"),
 		std::string("VIRTUAL ATMEGA8"),
@@ -108,15 +108,15 @@ AVRInfo::AVRInfo() {
 	}
 }
 
-const PeripheralInfo& AVRInfo::GetPeripheralInfo(Model model) noexcept {
+const PeripheralInfo& AVRInfo::GetPeripheralInfo(npsys::hardware::Model model) noexcept {
 	return *pinfo_lst_[static_cast<size_t>(model)];
 }
 
-const FirmwareInfo& AVRInfo::GetLatestInfo(Model model) noexcept {
+const FirmwareInfo& AVRInfo::GetLatestInfo(npsys::hardware::Model model) noexcept {
 	return avrlst_[avrlst_.size() - 1][static_cast<size_t>(model)];
 }
 
-const FirmwareInfo& AVRInfo::GetInfo(Model model, int version) {
+const FirmwareInfo& AVRInfo::GetInfo(npsys::hardware::Model model, int version) {
 	if (version >= static_cast<int>(avrlst_.size())) throw std::runtime_error("unknown avr firmware version");
 	return avrlst_[version][static_cast<size_t>(model)];
 }

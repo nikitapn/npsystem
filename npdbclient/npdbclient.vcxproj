@@ -179,6 +179,7 @@
     <ClInclude Include="include\import_export.h" />
     <ClInclude Include="include\npdb\nodebuilder.h" />
     <ClInclude Include="include\npdb\observable.h" />
+    <ClInclude Include="include\npdb\stream.h" />
     <ClInclude Include="include\npdb\traits.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

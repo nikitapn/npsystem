@@ -5,6 +5,7 @@
 #include "avr_virtual.h"
 #include "server.h"
 #include <npsys/network.h>
+#include <npsys/avr_controller.h>
 #include <sim/medium.h>
 #include <nplib/utils/config.h>
 
@@ -19,12 +20,12 @@ void ExecutableVirtualAvrController::stop() {
 VirtualAvrController::VirtualAvrController(npsys::controller_n_avr _ctrl)
 	: ctrl(_ctrl) {
 	switch (ctrl->controller_model) {
-	case avrinfo::Model::ATMEGA8_VIRTUAL:
+	case npsys::hardware::Model::ATMEGA8_VIRTUAL:
 		avr_ = std::make_unique<Microcontroller<Atmega8>>(frequency, ctrl->dev_addr);
 		avr_->LoadFlash((nplib::config::GetExecutableRootPath() /=
 			std::filesystem::path("firmware/atmega8_virtual_" + std::to_string(ctrl->dev_addr) + ".hex")).string());
 		break;
-	case avrinfo::Model::ATMEGA16_VIRTUAL:
+	case npsys::hardware::Model::ATMEGA16_VIRTUAL:
 		avr_ = std::make_unique<Microcontroller<Atmega8>>(frequency, ctrl->dev_addr);
 		avr_->LoadFlash((nplib::config::GetExecutableRootPath() /= 
 			std::filesystem::path("firmware/atmega16_virtual_" + std::to_string(ctrl->dev_addr) + ".hex")).string());

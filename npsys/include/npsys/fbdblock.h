@@ -5,7 +5,10 @@
 
 #include "header.h"
 #include <vector>
+
+#if defined(_CONFIGURATOR_) || defined(_NPSYS_) || defined(_NPSERVER_) || defined(_NPWEBSERVER_)
 #include "other/online_value.h"
+#endif
 
 #ifdef _CONFIGURATOR_
 class CTreeBlock;
@@ -77,14 +80,15 @@ public:
 	}
 
 	std::string path() const noexcept;
-	static fbd_slot_n get_by_path(const std::string& path);
-	static fbd_slot_n get_by_path(const std::vector<std::string>& tok);
-	static std::vector<std::string> split_path(const std::string& str);
+	static fbd_slot_n get_by_path(std::string_view path);
+	static std::vector<std::string_view> split_path(std::string_view str);
 
 	// public members
 	variable_n var;
 	odb::weak_node<fbd_block_n> block_parent;
+#if defined(_CONFIGURATOR_) || defined(_NPSYS_) || defined(_NPSERVER_) || defined(_NPWEBSERVER_)
 	online_value online;
+#endif
 	odb::weak_node<strings_n> strings;
 	odb::weak_node<fbd_control_unit_n> fbd_unit;
 #ifdef _CONFIGURATOR_

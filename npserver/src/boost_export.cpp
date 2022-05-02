@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "avr_virtual.h"
 #include <npsys/network.h>
+#include <npsys/avr_controller.h>
 #include <npsys/control_unit.h>
 #include <npsys/boost_export.h>
 #include <sim/boost_export.h>

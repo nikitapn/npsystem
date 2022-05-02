@@ -1,5 +1,5 @@
-import App from './App.svelte';
-import { rpc_init } from './data'
+import App from './gui/App.svelte';
+import { rpc_init } from './callback'
 
 let app: App;
 

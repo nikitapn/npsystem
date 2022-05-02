@@ -48,7 +48,7 @@ using tok = yy::parser::token;
 		yylval->val_float = static_cast<float>(std::atof(yytext)); 
 		return tok::NUMBER_FLOAT; 
 	}
-[\(\)\+\-\*\/\>\<\,\;]	{ loc->step(); loc->columns(); return *yytext; }
+[\(\)\+\-\*\/\>\<\,\;\:]	{ loc->step(); loc->columns(); return *yytext; }
 "<="     	{ loc->step(); loc->columns(2); return tok::LE; }
 ">="     	{ loc->step(); loc->columns(2); return tok::GE; }
 ":="     	{ loc->step(); loc->columns(2); return tok::ASSIGNMENT; }
@@ -57,8 +57,24 @@ using tok = yy::parser::token;
 "ELSIF"  	{ loc->step(); loc->columns(5); return tok::ELSIF; }
 "ELSE"  	{ loc->step(); loc->columns(4); return tok::ELSE; }
 "END_IF" 	{ loc->step(); loc->columns(6); return tok::END_IF; }
-"var"    	{ loc->step(); loc->columns(3); return tok::VAR; }
+"PROGRAM"    	{ loc->step(); loc->columns(7); return tok::PROGRAM; }
+"END_PROGRAM" { loc->step(); loc->columns(11); return tok::END_PROGRAM; }
+"FUNCTION"    	{ loc->step(); loc->columns(8); return tok::FUNCTION; }
+"END_FUNCTION" { loc->step(); loc->columns(12); return tok::END_FUNCTION; }
+"FUNCTION_BLOCK"    	{ loc->step(); loc->columns(14); return tok::FUNCTION_BLOCK; }
+"END_FUNCTION_BLOCK" { loc->step(); loc->columns(18); return tok::END_FUNCTION_BLOCK; }
+"VAR"    	{ loc->step(); loc->columns(3); return tok::VAR; }
+"VAR_GLOBAL" { loc->step(); loc->columns(10); return tok::VAR_GLOBAL; }
+"END_VAR" { loc->step(); loc->columns(7); return tok::END_VAR; }
 "//".* 		{ loc->lines(); }
+"I8" 			{ loc->step(); loc->columns(2); return tok::VT_I8; }
+"U8"  		{ loc->step(); loc->columns(2); return tok::VT_U8; }
+"I16" 		{ loc->step(); loc->columns(3); return tok::VT_I16; }
+"U16" 		{ loc->step(); loc->columns(3); return tok::VT_U16; } 
+"I32" 		{ loc->step(); loc->columns(3); return tok::VT_I32; } 
+"U32" 		{ loc->step(); loc->columns(3); return tok::VT_U32; }
+"REAL" 		{ loc->step(); loc->columns(4); return tok::VT_REAL; }
+"BOOL" 		{ loc->step(); loc->columns(4); return tok::VT_BOOL; }
 
 [\/][A-Z_]+[0-9_]?[\/][A-Z_]+[A-Z0-9_]?[\.][A-Z]+ { 
 		loc->step();
@@ -66,18 +82,21 @@ using tok = yy::parser::token;
 		yylval->val_str = { yytext, yyleng }; 
 		return tok::IDENTIFIER; 
 	}
+
 [\'][A-Z_]+[A-Z0-9_]?[\.][A-Z]+ { 
 		loc->step();
 		loc->columns(static_cast<int>(yyleng)); 
 		yylval->val_str = { yytext, yyleng }; 
-		return tok::IDENTIFIER; 
+		return tok::EXTERNAL_IDENTIFIER; 
 	}
+
 [_a-zA-Z]+[0-9]? { 
 		loc->step();
 		loc->columns(static_cast<int>(yyleng)); 
 		yylval->val_str = { yytext, yyleng }; 
 		return tok::IDENTIFIER; 
 	}
+
 .	{ 
 		loc->step();
 		loc->columns(static_cast<int>(yyleng)); 

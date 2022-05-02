@@ -23,6 +23,7 @@
     <Text Include="test\example1.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ast.cpp" />
     <ClCompile Include="src\builder_llvm.cpp" />
     <ClCompile Include="src\generated\lang.tab.cc" />
     <ClCompile Include="src\generated\lex.yy.cc" />
@@ -38,6 +39,7 @@
     <ClInclude Include="src\builder_llvm.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Makefile" />
     <None Include="src\generated\lang.output" />
     <None Include="src\lang.l" />
     <None Include="src\lang.y" />
@@ -96,7 +98,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(BOOST_DIR);$(LLVM_INCLUDE);d:\opt\llvm-project\build\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\npsys\include;..\nplib\include;..\npdbclient\include;$(BOOST_DIR);$(LLVM_INCLUDE);d:\opt\llvm-project\build\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(BOOST_DIR)\stage_x64\lib;$(LLVM_LIB_DEBUG);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -107,7 +109,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(BOOST_DIR);$(LLVM_INCLUDE);d:\opt\llvm-project\build\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\npsys\include;..\nplib\include;..\npdbclient\include;$(BOOST_DIR);$(LLVM_INCLUDE);d:\opt\llvm-project\build\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>$(BOOST_DIR)\stage_x64\lib;$(LLVM_LIB_DEBUG);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,17 +118,19 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NPCOMPILER_EXPORTS;__STDC_VERSION__=_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NPCOMPILER_EXPORTS;WIN32;_WINDOWS;_HAS_EXCEPTIONS=0;GTEST_HAS_RTTI=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;__STDC_VERSION__=_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4146;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4141;4146;4244;4267;4291;4351;4456;4457;4458;4459;4503;4624;4722;4100;4127;4512;4505;4610;4510;4702;4245;4706;4310;4701;4703;4389;4611;4805;4204;4577;4091;4592;4319;4709;4324</DisableSpecificWarnings>
       <UndefineAllPreprocessorDefinitions />
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/experimental:module %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>LLVMCore.lib;LLVMMC.lib;LLVMMCJIT.lib;LLVMExecutionEngine.lib;LLVMObject.lib;LLVMOrcJIT.lib;LLVMSupport.lib;LLVMX86CodeGen.lib;LLVMX86AsmParser.lib;LLVMX86Desc.lib;LLVMX86Disassembler.lib;LLVMX86Info.lib;LLVMRuntimeDyld.lib;LLVMPasses.lib;LLVMCoroutines.lib;LLVMipo.lib;LLVMFrontendOpenMP.lib;LLVMIRReader.lib;LLVMAsmParser.lib;LLVMLinker.lib;LLVMObjCARCOpts.lib;LLVMVectorize.lib;LLVMJITLink.lib;LLVMOrcTargetProcess.lib;LLVMOrcShared.lib;LLVMAsmPrinter.lib;LLVMDebugInfoMSF.lib;LLVMInstrumentation.lib;LLVMGlobalISel.lib;LLVMSelectionDAG.lib;LLVMCodeGen.lib;LLVMTarget.lib;LLVMBitWriter.lib;LLVMScalarOpts.lib;LLVMAggressiveInstCombine.lib;LLVMInstCombine.lib;LLVMTransformUtils.lib;LLVMAnalysis.lib;LLVMProfileData.lib;LLVMDebugInfoDWARF.lib;LLVMBitReader.lib;LLVMTextAPI.lib;LLVMCFGuard.lib;LLVMRemarks.lib;LLVMBitstreamReader.lib;LLVMMCParser.lib;LLVMMCDisassembler.lib;LLVMBinaryFormat.lib;LLVMDebugInfoCodeView.lib;LLVMAVRAsmParser.lib;LLVMAVRCodeGen.lib;LLVMAVRDesc.lib;LLVMAVRDisassembler.lib;LLVMAVRInfo.lib;LLVMARMAsmParser.lib;LLVMARMCodeGen.lib;LLVMARMDesc.lib;LLVMARMDisassembler.lib;LLVMARMInfo.lib;LLVMARMUtils.lib;LLVMDemangle.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -169,19 +173,21 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NPCOMPILER_EXPORTS;__STDC_VERSION__=NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NPCOMPILER_EXPORTS;WIN32;_WINDOWS;_HAS_EXCEPTIONS=0;GTEST_HAS_RTTI=0;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NONSTDC_NO_WARNINGS;_SCL_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;__STDC_VERSION__=NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <DisableSpecificWarnings>4146;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4141;4146;4244;4267;4291;4351;4456;4457;4458;4459;4503;4624;4722;4100;4127;4512;4505;4610;4510;4702;4245;4706;4310;4701;4703;4389;4611;4805;4204;4577;4091;4592;4319;4709;4324</DisableSpecificWarnings>
       <UndefineAllPreprocessorDefinitions />
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/experimental:module %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>LLVMCore.lib;LLVMMC.lib;LLVMMCJIT.lib;LLVMExecutionEngine.lib;LLVMObject.lib;LLVMOrcJIT.lib;LLVMSupport.lib;LLVMX86CodeGen.lib;LLVMX86AsmParser.lib;LLVMX86Desc.lib;LLVMX86Disassembler.lib;LLVMX86Info.lib;LLVMRuntimeDyld.lib;LLVMPasses.lib;LLVMCoroutines.lib;LLVMipo.lib;LLVMFrontendOpenMP.lib;LLVMIRReader.lib;LLVMAsmParser.lib;LLVMLinker.lib;LLVMObjCARCOpts.lib;LLVMVectorize.lib;LLVMJITLink.lib;LLVMOrcTargetProcess.lib;LLVMOrcShared.lib;LLVMAsmPrinter.lib;LLVMDebugInfoMSF.lib;LLVMInstrumentation.lib;LLVMGlobalISel.lib;LLVMSelectionDAG.lib;LLVMCodeGen.lib;LLVMTarget.lib;LLVMBitWriter.lib;LLVMScalarOpts.lib;LLVMAggressiveInstCombine.lib;LLVMInstCombine.lib;LLVMTransformUtils.lib;LLVMAnalysis.lib;LLVMProfileData.lib;LLVMDebugInfoDWARF.lib;LLVMBitReader.lib;LLVMTextAPI.lib;LLVMCFGuard.lib;LLVMRemarks.lib;LLVMBitstreamReader.lib;LLVMMCParser.lib;LLVMMCDisassembler.lib;LLVMBinaryFormat.lib;LLVMDebugInfoCodeView.lib;LLVMAVRAsmParser.lib;LLVMAVRCodeGen.lib;LLVMAVRDesc.lib;LLVMAVRDisassembler.lib;LLVMAVRInfo.lib;LLVMARMAsmParser.lib;LLVMARMCodeGen.lib;LLVMARMDesc.lib;LLVMARMDisassembler.lib;LLVMARMInfo.lib;LLVMARMUtils.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

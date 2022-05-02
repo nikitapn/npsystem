@@ -163,7 +163,7 @@ public:
 	int TryExecuteNext(CBlock*, int, char*);
 	void ClearVariables() noexcept;
 	void DetermineTypes(npsys::fbd_control_unit_n& self);
-	std::optional<npsys::fbd_slot_n> FindSlot(const std::string& block_name, const std::string& slot_name);
+	std::optional<npsys::fbd_slot_n> FindSlot(std::string_view block_name, std::string_view slot_name);
 	std::optional<npsys::fbd_slot_n> FindSlot(int slotId);
 	void ShowBlocks();
 	//

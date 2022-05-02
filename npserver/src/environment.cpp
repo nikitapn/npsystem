@@ -10,6 +10,7 @@
 #include "config.h"
 #include "avr_info/avr_info.h"
 #include <npsys/network.h>
+#include <npsys/avr_controller.h>
 #include <nplib/utils/colored_cout.h>
 #include "thread_pool.h"
 
@@ -187,16 +188,16 @@ bool CServer::AddToNetwork(npsys::device_n device) {
 
 bool CAVRController::AddToNetwork(npsys::device_n device) {
 	switch (controller_model) {
-	//case avrinfo::Model::PC_LINK_VIRTUAL:
+	//case npsys::hardware::Model::PC_LINK_VIRTUAL:
 	//	environment::get_instance().br_map_[dev_addr] = br_udp.get();
 	//	break;
-	case avrinfo::Model::ATMEGA8:
-	case avrinfo::Model::ATMEGA16:
+	case npsys::hardware::Model::ATMEGA8:
+	case npsys::hardware::Model::ATMEGA16:
 		environment::get_instance().br_map_[dev_addr] = br_udp.get();
 		if (g_cfg.log_level > 2) std::cout << "avr device \"" << name_ << "\" added" << std::endl;
 		break;
-	case avrinfo::Model::ATMEGA8_VIRTUAL:
-	case avrinfo::Model::ATMEGA16_VIRTUAL: {
+	case npsys::hardware::Model::ATMEGA8_VIRTUAL:
+	case npsys::hardware::Model::ATMEGA16_VIRTUAL: {
 		auto ptr = environment::get_instance().find_virtual_controller_by_id(device.id());
 		if (!ptr) {
 			ptr = new VirtualAvrController(device.cast<npsys::controller_n_avr>());

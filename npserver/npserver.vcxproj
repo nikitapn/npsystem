@@ -145,7 +145,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;BOOST_ASIO_DISABLE_CONCEPTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;WINVER=0x0A00;_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;BOOST_ASIO_DISABLE_CONCEPTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;WINVER=0x0A00;_WIN32_WINNT=0x0A00;_NPSERVER_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -182,7 +182,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;BOOST_ASIO_DISABLE_CONCEPTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;WINVER=0x0A00;_WIN32_WINNT=0x0A00;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;BOOST_ASIO_DISABLE_CONCEPTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;WINVER=0x0A00;_WIN32_WINNT=0x0A00;_NPSERVER_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\nplib\include;..\avr_firmware\include;..\avr_info\include;..\npdbclient\include;..\npsys\include;..\sim\include;..\npc\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>

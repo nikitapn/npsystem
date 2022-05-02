@@ -25,7 +25,7 @@ static npsys::controller_n CreateAvrController(
 	npsys::controllers_l& controllers,
 	oid_t controller_id,
 	const std::string& type,
-	const avrinfo::Model model,
+	const npsys::hardware::Model model,
 	bool virt);
 
 extern UINT g_clf_blocks;
@@ -579,15 +579,15 @@ void CTreeNetwork::AppendController(const std::string& type) {
 	odb::Batch batch;
 	controller_n ctrl;
 	if (type == "atmega8") {
-		ctrl = CreateAvrController(controllers_, id, type, avrinfo::Model::ATMEGA8, false);
+		ctrl = CreateAvrController(controllers_, id, type, npsys::hardware::Model::ATMEGA8, false);
 	} else if (type == "atmega16") {
-		ctrl = CreateAvrController(controllers_,id, type, avrinfo::Model::ATMEGA16, false);
+		ctrl = CreateAvrController(controllers_,id, type, npsys::hardware::Model::ATMEGA16, false);
 	} else if (type == "atmega64") {
 
 	} else if (type == "atmega8_virtual") {
-		ctrl = CreateAvrController(controllers_,id, type, avrinfo::Model::ATMEGA8_VIRTUAL, true);
+		ctrl = CreateAvrController(controllers_,id, type, npsys::hardware::Model::ATMEGA8_VIRTUAL, true);
 	} else if (type == "atmega16_virtual") {
-		ctrl = CreateAvrController(controllers_,id, type, avrinfo::Model::ATMEGA16_VIRTUAL, true);
+		ctrl = CreateAvrController(controllers_,id, type, npsys::hardware::Model::ATMEGA16_VIRTUAL, true);
 	} else if (type == "atmega64_virtual") {
 
 	} else {
@@ -609,7 +609,7 @@ npsys::controller_n CreateAvrController(
 	npsys::controllers_l& controllers,
 	oid_t controller_id,
 	const std::string& type,
-	const avrinfo::Model model,
+	const npsys::hardware::Model model,
 	bool virt)
 {
 	using npsys::CController;

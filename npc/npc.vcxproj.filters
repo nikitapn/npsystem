@@ -22,7 +22,8 @@
     <ClInclude Include="include\npc\server_m.hpp" />
     <ClInclude Include="include\npc\db_m.hpp" />
     <ClInclude Include="include\npc\db.hpp" />
-    <ClInclude Include="include\npc\stream.h" />
+    <ClInclude Include="include\npc\npsystem_constants_m.hpp" />
+    <ClInclude Include="include\npc\npsystem_constants.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
@@ -31,6 +32,9 @@
     </None>
     <None Include="idl\server.npidl" />
     <None Include="idl\db.npidl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="idl\npsystem_constants.npidl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

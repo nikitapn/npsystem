@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Category from './Category.svelte';
 	import CollapsibleSection from './CollapsibleSection.svelte';
-	import {cats} from './data'
-	
+	import {cats} from '../callback'
 </script>
 
 <main>

@@ -12,21 +12,14 @@
 #include <vector>
 #include <array>
 #include <nplib/utils/singleton.hpp>
+#include <npsys/cmodels.h>
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/version.hpp>
 
 namespace avrinfo {
 
-enum class Model : int {
-	ATMEGA8,
-	ATMEGA8_VIRTUAL,
-	ATMEGA16,
-	ATMEGA16_VIRTUAL,
-	UNKNOWN_MODEL
-};
-
-constexpr auto MODELS_MAX = static_cast<size_t>(Model::UNKNOWN_MODEL);
+constexpr auto MODELS_MAX = static_cast<size_t>(npsys::hardware::Model::AVR_MODEL_LAST) + 1;
 
 enum PinPurpose {
 	INPUTPU_PIN = 1, // never changes
@@ -215,17 +208,17 @@ class AVRInfo : public nplib::singleton<AVRInfo> {
 public:
 	AVRInfo();
 
-	const PeripheralInfo& GetPeripheralInfo(Model model) noexcept;
-	const FirmwareInfo& GetLatestInfo(Model model) noexcept;
-	const FirmwareInfo& GetInfo(Model model, int version);
+	const PeripheralInfo& GetPeripheralInfo(npsys::hardware::Model model) noexcept;
+	const FirmwareInfo& GetLatestInfo(npsys::hardware::Model model) noexcept;
+	const FirmwareInfo& GetInfo(npsys::hardware::Model model, int version);
 	const PCLinkInfo& GetPCLinkInfo() const noexcept { return pclink_info_; }
 	const VirtualPCLinkInfo& GetVirtualPCLinkInfo() const noexcept { return virtual_pclink_info_; }
 
 	static void SetDataPath(const std::filesystem::path& path);
 };
 
-Model string_to_controller_model(const std::string& s);
-const std::string& controller_model_to_string(Model model) noexcept;
+npsys::hardware::Model string_to_controller_model(const std::string& s);
+const std::string& controller_model_to_string(npsys::hardware::Model model) noexcept;
 
 }// namespace avrinfo
 

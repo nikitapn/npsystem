@@ -340,12 +340,12 @@ protected:
 		return i != std::string::npos && i != len - 1 && stLink.find("//") == std::string::npos;
 	}
 
-	bool CheckExternalLink(const std::vector<std::string>& tok) {
+	bool CheckExternalLink(const std::vector<std::string_view>& tok) {
 		if (tok.size() < 3) throw std::runtime_error("Invalid link");
 
-		const std::string& cat_name = tok[0];
-		const std::string& alg_name = tok[1];
-		const std::string& slot_full_name = tok[2];
+		const std::string_view& cat_name = tok[0];
+		const std::string_view& alg_name = tok[1];
+		const std::string_view& slot_full_name = tok[2];
 
 		npsys::categories_n categories;
 		ASSERT_FETCH(categories);
@@ -355,13 +355,13 @@ protected:
 
 		auto alg_o = odb::utils::find_by_name((*cat)->units, alg_name);
 		if (!alg_o || (*alg_o)->GetLanguageType() != npsys::CControlUnit::Language::FBD) {
-			throw std::runtime_error("There is no such fbd unit \"" + alg_name + '\"');
+			throw std::runtime_error("There is no such fbd unit \"" + std::string(alg_name) + '\"');
 		}
 
 		auto ix = slot_full_name.find(L'.', 0);
 
 		if (ix == std::string::npos) {
-			throw std::runtime_error("Expected . after \"" + slot_full_name + '\"');
+			throw std::runtime_error("Expected . after \"" + std::string(slot_full_name) + '\"');
 		}
 
 		const auto block_name = slot_full_name.substr(0, ix);
@@ -372,14 +372,14 @@ protected:
 		if (alg == alg_) {
 			auto ref_slot = alg->FindSlot(block_name, slot_name);
 			if (!ref_slot) {
-				throw std::runtime_error("There is no such parameter \"" + slot_full_name + '\"' + " in \"" + alg_name + '\"');
+				throw std::runtime_error("There is no such parameter \"" + std::string(slot_full_name) + '\"' + " in \"" + std::string(alg_name) + '\"');
 			}
 			SetInternalRef((*ref_slot)->e_slot.get());
 		} else {
 			auto ref_slot = alg->FindSlot(block_name, slot_name);
 
 			if (!ref_slot) {
-				throw std::runtime_error("There is no such parameter \"" + slot_full_name + '\"' + " in \"" + alg_name + '\"');
+				throw std::runtime_error("There is no such parameter \"" + std::string(slot_full_name) + '\"' + " in \"" + std::string(alg_name) + '\"');
 			}
 
 			auto ext_ref = new CExternalReference(ref_slot.value(), alg, alg_);
@@ -396,7 +396,7 @@ protected:
 		return true;
 	}
 
-	bool CheckPeripheralLink(const std::vector<std::string>& tok) {
+	bool CheckPeripheralLink(const std::vector<std::string_view>& tok) {
 		if (tok.size() < 4) throw std::runtime_error("Invalid link"); 
 
 		const auto& ctrl_name = tok[0];
@@ -451,7 +451,7 @@ protected:
 			ref->LoadLink();
 			SetSlotType(ref, PARAMETER_TYPE::P_EXTERNAL_REF);
 		} else {
-			throw std::runtime_error("Unknown token \"" + l1 + "\". Valid tokens: IO, I2C");
+			throw std::runtime_error("Unknown token \"" + std::string(l1) + "\". Valid tokens: IO, I2C");
 		}
 
 		return true;

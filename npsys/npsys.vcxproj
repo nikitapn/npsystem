@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\npsys\access.h" />
+    <ClInclude Include="include\npsys\avr_controller.h" />
+    <ClInclude Include="include\npsys\cmodels.h" />
     <ClInclude Include="include\npsys\control_unit.h" />
     <ClInclude Include="include\npsys\algcat.h" />
     <ClInclude Include="include\npsys\algsubcat.h" />
@@ -131,7 +133,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NPSYS_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NPSYS_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_NPSYS_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>include\;..\nplib\include;..\npc\include;..\npdbclient\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -167,7 +169,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NPSYS_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NPSYS_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_NPSYS_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>include\;..\nplib\include;..\npc\include;..\npdbclient\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>

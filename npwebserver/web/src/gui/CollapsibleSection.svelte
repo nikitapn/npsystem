@@ -36,7 +36,7 @@ h3 {
 
 button {
 	background-color: var(--background, #fff);
-	color: var(--gray-darkest, #282828);
+	color: var(--gray-darkest, #6ca6a8);
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
@@ -47,7 +47,7 @@ button {
 	cursor: pointer;
 }
 button:hover {
-	background-color: rgb(246, 217, 184);
+	background-color: rgb(167, 241, 124);
 }
 
 button[aria-expanded="true"] {

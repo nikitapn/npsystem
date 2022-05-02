@@ -19,13 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="idl\npsystem_constants.npidl">
+      <FileType>Document</FileType>
+    </None>
     <ClCompile Include="src\db.cpp" />
     <ClCompile Include="src\server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\npc\db.hpp" />
     <ClInclude Include="include\npc\db_m.hpp" />
-    <ClInclude Include="include\npc\stream.h" />
+    <ClInclude Include="include\npc\npsystem_constants.hpp" />
+    <ClInclude Include="include\npc\npsystem_constants_m.hpp" />
     <ClInclude Include="include\npc\server.hpp" />
     <ClInclude Include="include\npc\server_m.hpp" />
   </ItemGroup>

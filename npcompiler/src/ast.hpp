@@ -8,6 +8,7 @@
 #include <vector>
 #include <stack>
 #include <array>
+#include <map>
 #include <string>
 #include <string_view>
 #include <cassert>
@@ -16,10 +17,13 @@
 #include <memory>
 #include <variant>
 #include <functional>
-#include <boost/pool/pool.hpp>
 #include <optional>
 #include <coroutine>
 #include <experimental/generator>
+
+#include <boost/pool/object_pool.hpp>
+#include <boost/container/small_vector.hpp>
+
 
 using std::experimental::generator;
 
@@ -27,14 +31,20 @@ template<class... Ts> struct overloaded : Ts... {};
 template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
 #define AST_NODE_TYPES() \
-	AST_TYPE(Script), \
+	AST_TYPE(Module), \
+	AST_TYPE(Program), \
+	AST_TYPE(Program_End), \
+	AST_TYPE(Function), \
+	AST_TYPE(Function_End), \
+	AST_TYPE(FunctionBlock), \
 	AST_TYPE(StmtList), \
-	AST_TYPE(Identifier), \
-	AST_TYPE(Number), \
 	AST_TYPE(StringLiteral), \
-	AST_TYPE(VarDeclSeq), \
+	AST_TYPE(LocalVarDeclSeq), \
+	AST_TYPE(GlobalVarDeclSeq), \
 	AST_TYPE(Assignment), \
 	AST_TYPE(If), \
+	AST_TYPE(Number), \
+	AST_TYPE(Identifier), \
 	AST_TYPE(Add), \
 	AST_TYPE(Mul), \
 	AST_TYPE(Div), \
@@ -70,121 +80,104 @@ static constexpr size_t ast_nodes_size = static_cast<size_t>(AstType::_size);
 static constexpr std::string_view a_node_type_str[] = { AST_NODE_TYPES() };
 #undef AST_TYPE
 
-
-enum class IdentType {
-	Variable, Function
-};
-
 struct Identifier {
-	IdentType type;
-	std::string_view name;
+	std::string name;
+	int type;
+	llvm::Value* ptr;
 };
 
-struct Identifier0 : Identifier {
-	bool negate;
+struct Number {
+	bool as_floating_point;
+
+	union {
+		int value_int;
+		float value_float;
+	};
+
+	template<typename BinOperator>
+	static Number perform_binary_op(const Number& lhs, const Number& rhs, BinOperator&& op) {
+		Number res;
+
+		res.as_floating_point = lhs.as_floating_point || rhs.as_floating_point;
+
+		if (res.as_floating_point) {
+			float a, b;
+			if (lhs.as_floating_point) a = lhs.value_float;
+			else a = static_cast<float>(lhs.value_int);
+			if (rhs.as_floating_point) b = rhs.value_float;
+			else b = static_cast<float>(rhs.value_int);
+			res.value_float = op(a, b);
+		} else {
+			res.value_int = op(lhs.value_int, rhs.value_int);
+		}
+
+		return res;
+	}
+
+	template<typename UnOperator>
+	static Number perform_unary_op(const Number& num, UnOperator&& op) {
+		Number res;
+		res.as_floating_point = num.as_floating_point;
+		if (res.as_floating_point) res.value_float = op(num.value_float);
+		else res.value_int = op(num.value_int);
+		return res;
+	}
+
+	Number operator-() {
+		return perform_unary_op(*this, std::negate{});
+	}
+
+	Number& operator+=(int value) {
+		if (as_floating_point) {
+			value_float += static_cast<float>(value);
+		} else {
+			value_int += value;
+		}
+		return *this;
+	}
+
+	Number& operator+=(const Number& other) {
+		*this = perform_binary_op(*this, other, std::plus{});
+		return *this;
+	}
+
+	Number() = default;
+
+	Number(int x)
+		: as_floating_point{ false }
+		, value_int{ x } {}
+
+	Number(float x)
+		: as_floating_point{ true }
+		, value_float{ x } {}
 };
 
 struct AstNode;
 
-class ParserContext {
-	std::vector<std::pair<std::string_view, Identifier>> symbols_;
-	std::vector<size_t> scope_;
-public:
-	void push_scope() {
-		scope_.emplace_back();
-	}
+using symbols_t = std::map<std::string, AstNode*, std::less<>>;
 
-	void pop_scope() {
-		assert(scope_.empty() == false);
-		symbols_.erase(symbols_.end() - scope_.back(), symbols_.end());
-		scope_.pop_back();
-	}
+struct ParserContext {
+	bool error = false;
+	bool global;
+	symbols_t symbols_global;
+	symbols_t symbols_local;
 
-	Identifier& ident_get(std::string_view str) {
-		if (auto it = std::find_if(symbols_.rbegin(), symbols_.rend(), [str](auto& p) { return p.first == str; }); it != symbols_.rend()) {
-			return it->second;
-		}
-		throw std::runtime_error("unknown identifier \"" + std::string(str) + "\"");
-	}
+	[[nodiscard]]
+	AstNode* ident_create(std::string_view name, int type);
+	AstNode* ident_get(std::string_view str);
+	AstNode* ext_ident_get(std::string_view str);
 
-	void ident_put(const Identifier& ident);
-
-	ParserContext();
 };
 
 struct non_term_t {};
 constexpr non_term_t non_term{};
 
 struct AstNode {
-	struct number_t {
-		bool as_floating_point;
-		union {
-			int value_int;
-			float value_float;
-		};
-
-		template<typename BinOperator>
-		static number_t perform_binary_op(const number_t& lhs, const number_t& rhs, BinOperator&& op) {
-			number_t res;
-
-			res.as_floating_point = lhs.as_floating_point || rhs.as_floating_point;
-
-			if (res.as_floating_point) {
-				float a, b;
-				if (lhs.as_floating_point) a = lhs.value_float;
-				else a = static_cast<float>(lhs.value_int);
-				if (rhs.as_floating_point) b = rhs.value_float;
-				else b = static_cast<float>(rhs.value_int);
-				res.value_float = op(a, b);
-			} else {
-				res.value_int = op(lhs.value_int, rhs.value_int);
-			}
-
-			return res;
-		}
-
-		template<typename UnOperator>
-		static number_t perform_unary_op(const number_t& num, UnOperator&& op) {
-			number_t res;
-			res.as_floating_point = num.as_floating_point;
-			if (res.as_floating_point) res.value_float = op(num.value_float);
-			else res.value_int = op(num.value_int);
-			return res;
-		}
-
-		number_t operator-() {
-			return perform_unary_op(*this, std::negate{});
-		}
-
-		number_t& operator+=(int value) {
-			if (as_floating_point) {
-				value_float += static_cast<float>(value);
-			} else {
-				value_int += value;
-			}
-			return *this;
-		}
-
-		number_t& operator+=(const number_t& other) {
-			*this = perform_binary_op(*this, other, std::plus{});
-			return *this;
-		}
-
-		number_t() = default;
-
-		number_t(int x) 
-			: as_floating_point{false}
-			, value_int{x} {}
-		
-		number_t(float x) 
-			: as_floating_point{true}
-			, value_float{x} {}
-	};
-
-	using children_t = std::vector<AstNode*>;
+	using pool_t = boost::object_pool<AstNode>;
+	using children_t = boost::container::small_vector<AstNode*, 2>;
 	
 	AstType type;
-	std::variant<std::string, number_t, Identifier0, children_t> value;
+	std::variant<std::string, Number, Identifier, children_t> value;
 	
 	union {
 		llvm::Value* llvm_value = nullptr;
@@ -195,7 +188,11 @@ struct AstNode {
 		assert (idx < ast_nodes_size); 
 		return a_node_type_str[idx]; 
 	}
-	
+
+	bool is_expression() const noexcept {
+		return type >= AstType::Number;
+	}
+
 	bool is_non_teminal() const noexcept { return std::holds_alternative<children_t>(value); }
 
 	template<typename... Rest>
@@ -205,30 +202,30 @@ struct AstNode {
 		(std::invoke([&children](auto x) { if (x) children.push_back(x); }, rest), ...);
 	}
 
-	AstNode& operator=(const number_t& number) {
+	AstNode& operator=(const Number& number) {
 		type = AstType::Number;
 		value = number;
 		return *this;
 	}
 
-	number_t& as_number() { 
+	Number& as_number() { 
 		assert(type == AstType::Number);
-		return std::get<number_t>(value); 
+		return std::get<Number>(value); 
 	}
 
-	const number_t& as_number() const { 
+	const Number& as_number() const { 
 		assert(type == AstType::Number);
-		return std::get<number_t>(value); 
+		return std::get<Number>(value); 
 	}
 
-	Identifier0& as_ident() { 
+	Identifier& as_ident() { 
 		assert(type == AstType::Identifier);
-		return std::get<Identifier0>(value); 
+		return std::get<Identifier>(value); 
 	}
 
-	const Identifier0& as_ident() const { 
+	const Identifier& as_ident() const { 
 		assert(type == AstType::Identifier);
-		return std::get<Identifier0>(value); 
+		return std::get<Identifier>(value); 
 	}
 
 	auto begin() { return std::get<children_t>(value).begin(); }
@@ -260,24 +257,27 @@ struct AstNode {
 	}
 
 
-	static boost::pool<> pool_;
+	inline static pool_t* pool_;
 
 	static void* operator new(size_t) {
-		return pool_.malloc();
+		return pool_->malloc();
 	}
 
 	static void operator delete(void* ptr) {
-		pool_.free(ptr);
+		assert(false);
 	}
 
 	template<typename... Rest>
 	AstNode(non_term_t, AstType _type, Rest&&... rest) 
 		: type(_type)
-		, value(std::vector<AstNode*>{})
+		, value(children_t{})
 	{ 
 		push(rest...);
 	}
 
+	AstNode(AstType _type)
+		: type(_type) {}
+	
 	AstNode(AstType _type, const char* value_str) 
 		: type(_type)
 		, value(std::string(value_str)) {}
@@ -288,19 +288,15 @@ struct AstNode {
 
 	AstNode(int value_int) 
 		: type(AstType::Number)
-		, value(number_t{value_int}) {}
+		, value(Number{value_int}) {}
 	
 	AstNode(float value_float) 
 		: type(AstType::Number)
-		, value(number_t{value_float}) {}
+		, value(Number{value_float}) {}
 	
-	AstNode(Identifier0&& ident)
+	AstNode(Identifier&& ident)
 		: type(AstType::Identifier)
 		, value(std::move(ident)) {}
-
-	AstNode(const Identifier& ident)
-		: type(AstType::Identifier)
-		, value(std::move(Identifier0{ident})) {}
 
 	AstNode(const AstNode&) = default;
 	AstNode(AstNode&&) = default;
@@ -309,20 +305,19 @@ struct AstNode {
 	AstNode& operator =(AstNode&&) = default;
 };
 
-inline std::ostream& operator<<(std::ostream& os, const AstNode::number_t& num) {
+inline std::ostream& operator<<(std::ostream& os, const Number& num) {
 	if (num.as_floating_point) os << num.value_float;
 	else os << num.value_int;
 	return os;
 }
 
-inline std::ostream& operator<<(std::ostream& os, const Identifier0& ident) {
-	if (ident.negate) os << '-';
+inline std::ostream& operator<<(std::ostream& os, const Identifier& ident) {
+	//if (ident.negate) os << '-';
 	os << ident.name;
 	return os;
 }
 
 inline std::ostream& operator<<(std::ostream& os, const AstNode& n) {
-	
 	switch (n.type) {
 	case AstType::Add:
 		os << '+';
@@ -343,14 +338,12 @@ inline std::ostream& operator<<(std::ostream& os, const AstNode& n) {
 }
 
 
-inline boost::pool<> AstNode::pool_{sizeof(AstNode), 256};
-
-inline AstNode::number_t operator+(const AstNode::number_t& lhs, const AstNode::number_t& rhs) {
-	return AstNode::number_t::perform_binary_op(lhs, rhs, std::plus{});
+inline Number operator+(const Number& lhs, const Number& rhs) {
+	return Number::perform_binary_op(lhs, rhs, std::plus{});
 }
 
-inline AstNode::number_t operator*(const AstNode::number_t& lhs, const AstNode::number_t& rhs) {
-	return AstNode::number_t::perform_binary_op(lhs, rhs, std::multiplies{});
+inline Number operator*(const Number& lhs, const Number& rhs) {
+	return Number::perform_binary_op(lhs, rhs, std::multiplies{});
 }
 
 template<typename... Func>
@@ -474,21 +467,33 @@ generator<std::pair<AstNode*, size_t>> bfs_preorder(AstNode& n) {
 		co_yield cur;
 		que.pop();
 	} while (!que.empty());
-
-
 }
 
 
-inline void ParserContext::ident_put(const Identifier& ident) {
-	auto rbegin = symbols_.rend() - scope_.back();
-	auto it = std::find_if(rbegin, symbols_.rend(), [&ident](auto& p) { return p.first == ident.name; });
-	if (it != symbols_.rend()) throw std::runtime_error("duplicated indentifier \"" + std::string(ident.name) + "\"");
-	symbols_.emplace_back(ident.name, ident);
-	++scope_.back();
+inline AstNode* ParserContext::ident_create(std::string_view name, int type) {
+	auto n = std::make_unique<AstNode>(Identifier{ std::string(name), type });
+	
+	if (!global) [[likely]] {
+		if (symbols_local.find(name) != symbols_local.end()) {
+			throw std::runtime_error("duplicated identifier \"" + std::string(name) + "\"");
+		}
+		symbols_local.emplace(name, n.get());
+	} else {
+		if (symbols_global.find(name) != symbols_global.end()) {
+			throw std::runtime_error("duplicated identifier \"" + std::string(name) + "\"");
+		}
+		symbols_global.emplace(name, n.get());
+	}
+	
+	return n.release();
 }
 
-inline ParserContext::ParserContext() {
-	push_scope();
+inline AstNode* ParserContext::ident_get(std::string_view str) {
+	if (auto it = symbols_local.find(str); it != symbols_local.end()) {
+		return it->second;
+	}
+	throw std::runtime_error("unknown identifier \"" + std::string(str) + "\"");
+	return nullptr;
 }
 
 inline bool is_number(const AstNode& n) {

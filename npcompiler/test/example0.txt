@@ -1,2 +1,14 @@
-var x := 1000;
-var y;
+PROGRAM test 
+
+VAR
+	x: I16;
+	y: I16;
+	z: U16;
+END_VAR
+
+x := 0;
+y := 5;
+
+z := x + y;
+
+END_PROGRAM

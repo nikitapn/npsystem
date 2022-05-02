@@ -3,8 +3,8 @@
 
 #pragma once
 
-#ifndef __NPDB_H__
-#define __NPDB_H__
+#ifndef NPDB_HPP_
+#define NPDB_HPP_
 
 #include <iostream>
 #include <optional>
@@ -13,8 +13,8 @@
 #include <assert.h>
 #include <sstream>
 #include <type_traits>
-
-#include <npc/stream.h>
+#include <filesystem>
+#include <span>
 
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
@@ -26,7 +26,6 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/unordered_map.hpp>
 #include <boost/signals2/signal.hpp>
-#include <filesystem>
 
 #include "../import_export.h"
 #include "constants.h"
@@ -34,7 +33,8 @@
 #include "db_serialization.h"
 #include "nodebuilder.h"
 #include "memento.h"
-#include <span>
+#include "stream.h"
+
 
 #ifdef DEBUG
 #	define ASSERT_FETCH(node) ASSERT(node.fetch())
@@ -1649,5 +1649,5 @@ struct hash<odb::detail::shared_node_t<T, share_policy, Default_Id, S>> {
 
 } // namespace std
 
-#endif // __NPDB_H__
+#endif // NPDB_HPP_
 

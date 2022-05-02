@@ -12,7 +12,7 @@
 namespace odb::utils {
 
 template<typename T>
-auto find_by_name(T& list, const std::string& name) {
+auto find_by_name(T& list, std::string_view name) {
 	static_assert(is_node_list<T>::value, "T is not a node list");
 	static_assert(is_sys_tree_item<typename T::type_t>::value, "Node is not a system tree item");
 

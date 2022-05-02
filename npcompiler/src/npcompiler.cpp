@@ -3,6 +3,10 @@
 
 #include "../include/npcompiler/npcompiler.hpp"
 
+#include <llvm/Support/Host.h>
+#include <llvm/Support/TargetSelect.h>
+#include "llvm/ExecutionEngine/ExecutionEngine.h"
+
 #include "ast.hpp"
 #include "generated/lang.tab.hh"
 #include "builder_llvm.hpp"
@@ -10,29 +14,36 @@
 namespace npcompiler {
 
 bool Compilation::compile() noexcept {
-	ast::AstNode script(ast::non_term, ast::AstType::Script);
+	ast::AstNode::pool_t pool{ 256 };
+	ast::AstNode::pool_ = &pool;
+
+	ast::AstNode script(ast::non_term, ast::AstType::Module);
 	ast::ParserContext parser_ctx;
 
 	yy::set_buffer(buffer_.data(), buffer_.size());
 	yy::parser parser(parser_ctx, script);
 	
+	bool ok = false;
 	try {
-		if (parser.parse() != 0) return false;
-		
-		BuilderLLVM builder;
+		if (parser.parse() != 0 || parser_ctx.error) return false;
 
-		for (auto node : ast::dfs_preorder(script)) {
-			//std::cerr << node->node_type_str() << "\n";
+		BuilderLLVM builder(file_name_);
+
+		for (auto node : ast::filter_dfs_preorder(script,
+			[](ast::AstNode& n, size_t, bool) { return !n.is_expression(); })
+			) {
 			builder.emit(*node);
 		}
-		
 
-		return true;
+		builder.print_debug();
+		builder.avr_create_object();
+
+		ok = true;
 	} catch (std::exception& ex) {
 		std::cerr << ex.what();
 	}
 
-	return false;
+	return ok;
 }
 
 } // namespace npcompiler

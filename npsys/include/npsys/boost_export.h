@@ -3,7 +3,10 @@
 
 #include <boost/serialization/export.hpp>
 
+
+#if defined(_CONFIGURATOR_) || defined(_NPSERVER_)
 BOOST_CLASS_EXPORT_GUID(npsys::CServer, "server");
-BOOST_CLASS_EXPORT_GUID(npsys::CAVRController, "avrcontroller");
 BOOST_CLASS_EXPORT_GUID(npsys::CFBDControlUnit, "fbdpou");
 BOOST_CLASS_EXPORT_GUID(npsys::CSFCControlUnit, "sfcpou");
+BOOST_CLASS_EXPORT_GUID(npsys::CAVRController, "avrcontroller");
+#endif

@@ -11,6 +11,7 @@
 #include "thread_pool.h"
 #include <npdb/db.h>
 #include <npsys/network.h>
+#include <npsys/avr_controller.h>
 
 #ifdef _WIN32
 #	include "windows.h"

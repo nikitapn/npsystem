@@ -342,10 +342,10 @@ bool CAVRController::LoadFirmware() noexcept {
 	std::string fuses;
 	
 	switch (controller_model) {
-	case avrinfo::Model::ATMEGA8:
+	case npsys::hardware::Model::ATMEGA8:
 		fuses = " -U lfuse:w:0x2f:m -U hfuse:w:0xc9:m";
 		break;
-	case avrinfo::Model::ATMEGA16:
+	case npsys::hardware::Model::ATMEGA16:
 		fuses = " -U lfuse:w:0x2f:m -U hfuse:w:0xc9:m";
 		break;
 	default:
@@ -1183,12 +1183,12 @@ bool CAVRController::UploadIO() noexcept {
 }
 
 std::unique_ptr<COutsideReference> CAVRController::CreatePinReference(remote::ExtLinkType type, 
-	const std::string& port_name, const std::string& pin_name, odb::weak_node<fbd_control_unit_n> alg) {
+	std::string_view port_name, std::string_view pin_name, odb::weak_node<fbd_control_unit_n> alg) {
 	auto port = odb::utils::find_by_name(this->ports, port_name);
-	if (!port) throw std::runtime_error("Port: \"" + port_name + "\" does not exist in this controller");
+	if (!port) throw std::runtime_error("Port: \"" + std::string(port_name) + "\" does not exist in this controller");
 	
 	auto pin = odb::utils::find_by_name((*port)->pins_, pin_name);
-	if (!pin) throw std::runtime_error("Pin: \"" + pin_name + "\" does not exist in this port");
+	if (!pin) throw std::runtime_error("Pin: \"" + std::string(pin_name) + "\" does not exist in this port");
 
 	auto pin_type = (*pin)->GetPinType();
 	if ((pin_type == io::PINTYPE::INPUT && type == remote::ExtLinkType::Read) ||

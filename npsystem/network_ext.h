@@ -18,5 +18,6 @@ class COutputEdit;
 #include "dlgavrmemoryviewer.h"
 #include "tr_hardware.h"
 #include <npsys/network.h>
+#include <npsys/avr_controller.h>
 
 #endif // __NETWORK_EXT_H__

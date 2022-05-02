@@ -21,6 +21,7 @@ namespace npcompiler {
 
 class Compilation {
 	std::string buffer_;
+	std::string file_name_;
 public:
 	NPCOMPILER_IMPORT_EXPORT bool compile() noexcept;
 	
@@ -38,6 +39,8 @@ public:
 		buffer_.assign(std::istreambuf_iterator<char>(ifs), {});
 		buffer_.append(1, '\0'); 
 		buffer_.append(1, '\0');
+
+		file_name_ = (char*)file.u8string().c_str();
 	}
 };
 

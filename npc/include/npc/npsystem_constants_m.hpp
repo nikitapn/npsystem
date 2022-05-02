@@ -1,0 +1,5 @@
+#ifndef NPSYSTEM_CONSTANTS_M_
+#define NPSYSTEM_CONSTANTS_M_
+
+
+#endif

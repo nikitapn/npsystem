@@ -44,8 +44,10 @@
 #ifndef YY_YY_SRC_GENERATED_LANG_TAB_HH_INCLUDED
 # define YY_YY_SRC_GENERATED_LANG_TAB_HH_INCLUDED
 // //                    "%code requires" blocks.
-#line 12 "src/lang.y" // lalr1.cc:401
+#line 16 "src/lang.y" // lalr1.cc:401
 
+
+#include <npsys/variable.h>
 #include "../ast.hpp"
 
 namespace yy {
@@ -53,7 +55,7 @@ void set_buffer(char* buf, size_t size);
 }
 
 
-#line 57 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 59 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 # include <cstdlib> // std::abort
@@ -159,12 +161,12 @@ void set_buffer(char* buf, size_t size);
 
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 
 
 namespace yy {
-#line 168 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 170 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 
@@ -176,7 +178,7 @@ namespace yy {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 46 "src/lang.y" // lalr1.cc:401
+    #line 55 "src/lang.y" // lalr1.cc:401
 
 	struct {	
 		char* ptr;
@@ -187,7 +189,7 @@ namespace yy {
 	float val_float;
 	npcompiler::ast::AstNode* val_node;
 
-#line 191 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 193 "src/generated/lang.tab.hh" // lalr1.cc:401
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -218,19 +220,36 @@ namespace yy {
     {
       enum yytokentype
       {
-        IDENTIFIER = 258,
-        GE = 259,
-        LE = 260,
-        ASSIGNMENT = 261,
-        IF = 262,
-        THEN = 263,
-        ELSIF = 264,
-        ELSE = 265,
-        END_IF = 266,
-        VAR = 267,
-        NUMBER_DISCRETE = 268,
-        NUMBER_INTEGER = 269,
-        NUMBER_FLOAT = 270
+        PROGRAM = 258,
+        END_PROGRAM = 259,
+        FUNCTION = 260,
+        END_FUNCTION = 261,
+        FUNCTION_BLOCK = 262,
+        END_FUNCTION_BLOCK = 263,
+        VAR = 264,
+        VAR_GLOBAL = 265,
+        END_VAR = 266,
+        IDENTIFIER = 267,
+        EXTERNAL_IDENTIFIER = 268,
+        GE = 269,
+        LE = 270,
+        ASSIGNMENT = 271,
+        IF = 272,
+        THEN = 273,
+        ELSIF = 274,
+        ELSE = 275,
+        END_IF = 276,
+        NUMBER_DISCRETE = 277,
+        NUMBER_INTEGER = 278,
+        NUMBER_FLOAT = 279,
+        VT_I8 = 280,
+        VT_U8 = 281,
+        VT_I16 = 282,
+        VT_U16 = 283,
+        VT_I32 = 284,
+        VT_U32 = 285,
+        VT_REAL = 286,
+        VT_BOOL = 287
       };
     };
 
@@ -457,10 +476,13 @@ namespace yy {
   static const unsigned char yyr2_[];
 
 
-#if YYDEBUG
+    /// Convert the symbol name \a n to a form suitable for a diagnostic.
+    static std::string yytnamerr_ (const char *n);
+
+
     /// For a symbol, its name in clear.
     static const char* const yytname_[];
-
+#if YYDEBUG
   // YYRLINE[YYN] -- Source line where rule number YYN was defined.
   static const unsigned char yyrline_[];
     /// Report on the debug stream that the rule \a r is going to be reduced.
@@ -691,12 +713,12 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 74,     ///< Last index in yytable_.
-      yynnts_ = 13,  ///< Number of nonterminal symbols.
-      yyfinal_ = 3, ///< Termination state number.
+      yylast_ = 103,     ///< Last index in yytable_.
+      yynnts_ = 26,  ///< Number of nonterminal symbols.
+      yyfinal_ = 9, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 26  ///< Number of tokens.
+      yyntokens_ = 44  ///< Number of tokens.
     };
 
 
@@ -708,7 +730,7 @@ namespace yy {
 
 
 } // yy
-#line 712 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 734 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 

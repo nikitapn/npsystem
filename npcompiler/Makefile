@@ -1,5 +1,3 @@
-.PHONY: lexer parser flex-bison clean veryclean
-
 #calc: lex.yy.cc lang.tab.hh lang.tab.cc ast.hpp
 #	g++ -std=c++17 $^ -o $(TARGET)
 
@@ -10,7 +8,7 @@ flex-bison: lexer parser
 parser: src/generated/lang.tab.hh src/generated/lang.tab.cc
 
 src/generated/lang.tab.hh generated/lang.tab.cc: src/lang.y
-	bison -Wempty-rule -d -v -b src/generated/lang $^
+	bison -r all -t -Wempty-rule -d -v -b src/generated/lang $^
 
 lexer: src/generated/lex.yy.cc
 
@@ -26,3 +24,4 @@ clean:
 veryclean: clean
 	rm -f src/generated/*
 
+.PHONY: lexer parser flex-bison clean veryclean

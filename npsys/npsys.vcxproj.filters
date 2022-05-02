@@ -23,6 +23,8 @@
     <ClInclude Include="include\npsys\corba.h" />
     <ClInclude Include="include\npsys\fat_data_callback.h" />
     <ClInclude Include="include\npsys\web.h" />
+    <ClInclude Include="include\npsys\cmodels.h" />
+    <ClInclude Include="include\npsys\avr_controller.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\alg.cpp" />

@@ -73,10 +73,10 @@ CMemoryManager::Create(npsys::device_n dev, npsys::fbd_control_unit_n alg, bool 
 {
 	// redo this
 	switch (dev.cast<npsys::controller_n>()->controller_model) {
-	case avrinfo::Model::ATMEGA8:
-	case avrinfo::Model::ATMEGA8_VIRTUAL:
-	case avrinfo::Model::ATMEGA16:
-	case avrinfo::Model::ATMEGA16_VIRTUAL:
+	case npsys::hardware::Model::ATMEGA8:
+	case npsys::hardware::Model::ATMEGA8_VIRTUAL:
+	case npsys::hardware::Model::ATMEGA16:
+	case npsys::hardware::Model::ATMEGA16_VIRTUAL:
 		return std::make_unique<CAvrMemoryManager>(dev, alg, sram_only);
 	default:
 		ASSERT(FALSE);
