@@ -501,7 +501,6 @@ size_t CFBDControlUnit::AdviseImpl() {
 		assert(item_manager_);
 		assert(item_manager_->policy_lifespan() == nprpc::Policy_Lifespan::Transient);
 		if (!item_manager_) return 0;
-		item_manager_->add_ref();
 	}
 
 	//m_mr->_setTimeout(g_cfg.server_timeout_sec+3, 0);
@@ -530,7 +529,7 @@ size_t CFBDControlUnit::AdviseImpl() {
 	}
 
 	std::vector<nps::var_handle> handles;
-	item_manager_->Advise(flat::make_read_only_span(a), handles);
+	item_manager_->Advise(nprpc::flat::make_read_only_span(a), handles);
 
 	for (size_t i = 0; i < size; ++i) {
 		ref_[handles[i]].push_back(m_loadedSlots[i]);
@@ -563,7 +562,7 @@ void CFBDControlUnit::UpdateData(std::vector<nps::server_value>* upd) {
 }
 
 // called from CORBA thread
-void CFBDControlUnit::OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) {
+void CFBDControlUnit::OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) {
 	auto const len = a.size();
 	auto upd = new std::vector<nps::server_value>(len);
 	memcpy(&(*upd)[0], a.data(), len * sizeof(nps::server_value));

@@ -49,8 +49,8 @@ protected:
 
 	template<typename TLineContainer, typename TSlotContainer>
 	void ConnectLinesToSlotsAfterDeserialization(TLineContainer& lines, TSlotContainer& slots) {
-		static_assert(std::is_pointer_v<TLineContainer::value_type>);
-		static_assert(std::is_pointer_v<TSlotContainer::value_type>);
+		//static_assert(std::is_pointer_v<TLineContainer::value_type>);
+		//static_assert(std::is_pointer_v<TSlotContainer::value_type>);
 
 		typename TSlotContainer::value_type founded[2];
 		for (auto l : lines) {

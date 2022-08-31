@@ -119,9 +119,6 @@
     <ClCompile Include="npsystem.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="boost_export.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="error.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -193,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="visitorblocks.cpp">
       <Filter>src\fbd</Filter>
+    </ClCompile>
+    <ClCompile Include="boost_export.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -32,7 +32,6 @@ void transit_send(void);
 void transit_answer(void);
 void transit_timeout(void);
 
-// при посылке 128 байт - выходит из синхронизации
 void udp_packet(eth_frame_t *eth_frame, uint16_t len) {
 	ip_packet_t *ip = (void*)(eth_frame->data);
 	udp_packet_t *udp = (void*)(ip->data);

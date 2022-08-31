@@ -1,1 +1,1 @@
-export * from '/home/png/projects/nprpc/web/nprpc'
+export * from '/home/png/projects/nprpc/web/dist'

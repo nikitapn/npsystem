@@ -1,5 +1,6 @@
-import type * as NPSYSC from './npsystem_constants'
+import * as NPSYSC from './npsystem_constants'
 import * as SRV from './server'
+import * as NPRPC from './nprpc'
 import { writable, Writable } from 'svelte/store'
 
 const VQUALITY = 0x00002000;

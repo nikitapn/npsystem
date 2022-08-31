@@ -38,7 +38,7 @@ std::string string_format(std::string_view format, Args ... args) {
 
 template<typename T>
 inline std::string to_bit(T val) noexcept {
-	static_assert(std::is_arithmetic_v<T>, "T is not arithmetic type");
+	static_assert(std::is_arithmetic_v<T>, "T is not an arithmetic type");
 	constexpr size_t length = sizeof(T) * 8;
 	
 	std::string res(length, ' ');

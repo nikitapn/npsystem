@@ -6,12 +6,12 @@
 #include <npsys/header.h>
 
 class Configurator {
+	npsys::controller_n ctrl_;
 public:
+	void UploadAllAlgoritms() noexcept;
+	
 	Configurator(npsys::controller_n& ctrl)
 		: ctrl_(ctrl)
 	{
 	}
-	void UploadAllAlgoritms() noexcept;
-private:
-	npsys::controller_n ctrl_;
 };

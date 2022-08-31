@@ -69,6 +69,9 @@
     <ClCompile Include="boost_export.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_storage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="asm_sample.asm">

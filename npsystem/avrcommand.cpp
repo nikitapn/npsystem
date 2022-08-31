@@ -66,17 +66,17 @@ std::string_view CWritePageCmd::msg_error() const noexcept {
 }
 
 void CWritePageCmd::execute() const {
-	npsys_rpc->server->AVR_SendPage(m_dev_addr, m_pageNum, flat::make_read_only_span(m_data, m_dataSizeAligned));
+	npsys_rpc->server->AVR_SendPage(m_dev_addr, m_pageNum, nprpc::flat::make_read_only_span(m_data, m_dataSizeAligned));
 }
 
 // CWriteRemoteData
 void CWriteRemoteData::execute() const {
-	npsys_rpc->server->AVR_SendRemoteData(m_dev_addr, m_pageNum, flat::make_read_only_span(m_data, m_dataSizeAligned));
+	npsys_rpc->server->AVR_SendRemoteData(m_dev_addr, m_pageNum, nprpc::flat::make_read_only_span(m_data, m_dataSizeAligned));
 }
 
 // CWriteTwiTable
 void CWriteTwiTable::execute() const {
-	npsys_rpc->server->AVR_WriteTwiTable(m_dev_addr, m_pageNum, flat::make_read_only_span(m_data, m_dataSizeAligned));
+	npsys_rpc->server->AVR_WriteTwiTable(m_dev_addr, m_pageNum, nprpc::flat::make_read_only_span(m_data, m_dataSizeAligned));
 }
 
 // CReplaceAlgCmd
@@ -153,5 +153,5 @@ std::string_view CWriteEepromCmd::msg_error() const noexcept {
 }
 
 void CWriteEepromCmd::execute() const {
-	npsys_rpc->server->AVR_WriteEeprom(m_dev_addr, m_addr, flat::make_read_only_span(m_data, m_len));
+	npsys_rpc->server->AVR_WriteEeprom(m_dev_addr, m_addr, nprpc::flat::make_read_only_span(m_data, m_len));
 }

@@ -17,13 +17,15 @@
 #	define NPDB_IMPORT_EXPORT
 #endif
 
+#include "resolver.hpp"
+
 namespace npcompiler {
 
 class Compilation {
 	std::string buffer_;
 	std::string file_name_;
 public:
-	NPCOMPILER_IMPORT_EXPORT bool compile() noexcept;
+	NPCOMPILER_IMPORT_EXPORT bool compile(globals_resolver_cb_t glr) noexcept;
 	
 	Compilation(std::string_view source) noexcept {
 		buffer_.assign(source);

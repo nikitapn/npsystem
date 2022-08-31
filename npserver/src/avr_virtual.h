@@ -88,5 +88,3 @@ public:
 	VirtualAvrController(npsys::controller_n_avr _ctrl);
 	virtual oid_t id() { return ctrl.id(); }
 };
-
-

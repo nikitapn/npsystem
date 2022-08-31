@@ -16,20 +16,21 @@
     <ClCompile Include="src\db.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\npsystem_constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\npwebserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\npc\server.hpp" />
-    <ClInclude Include="include\npc\server_m.hpp" />
-    <ClInclude Include="include\npc\db_m.hpp" />
     <ClInclude Include="include\npc\db.hpp" />
-    <ClInclude Include="include\npc\npsystem_constants_m.hpp" />
     <ClInclude Include="include\npc\npsystem_constants.hpp" />
+    <ClInclude Include="include\npc\npwebserver.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
-    <None Include="idl.bat">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="idl\server.npidl" />
     <None Include="idl\db.npidl">
       <Filter>Source Files</Filter>
@@ -37,5 +38,9 @@
     <None Include="idl\npsystem_constants.npidl">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="idl\make.bat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="idl\npwebserver.npidl" />
   </ItemGroup>
 </Project>

@@ -47,15 +47,16 @@
 #line 16 "src/lang.y" // lalr1.cc:401
 
 
-#include <npsys/variable.h>
+#include "../number.hpp"
 #include "../ast.hpp"
+#include "../utils.hpp"
 
 namespace yy {
 void set_buffer(char* buf, size_t size);	
 }
 
 
-#line 59 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 60 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 # include <cstdlib> // std::abort
@@ -166,7 +167,7 @@ void set_buffer(char* buf, size_t size);
 
 
 namespace yy {
-#line 170 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 171 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 
@@ -178,7 +179,7 @@ namespace yy {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 55 "src/lang.y" // lalr1.cc:401
+    #line 57 "src/lang.y" // lalr1.cc:401
 
 	struct {	
 		char* ptr;
@@ -189,7 +190,7 @@ namespace yy {
 	float val_float;
 	npcompiler::ast::AstNode* val_node;
 
-#line 193 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 194 "src/generated/lang.tab.hh" // lalr1.cc:401
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -463,7 +464,7 @@ namespace yy {
   // number is the opposite.  If YYTABLE_NINF, syntax error.
   static const unsigned char yytable_[];
 
-  static const signed char yycheck_[];
+  static const unsigned char yycheck_[];
 
   // YYSTOS[STATE-NUM] -- The (internal number of the) accessing
   // symbol of state STATE-NUM.
@@ -713,8 +714,8 @@ namespace yy {
     enum
     {
       yyeof_ = 0,
-      yylast_ = 103,     ///< Last index in yytable_.
-      yynnts_ = 26,  ///< Number of nonterminal symbols.
+      yylast_ = 111,     ///< Last index in yytable_.
+      yynnts_ = 28,  ///< Number of nonterminal symbols.
       yyfinal_ = 9, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
@@ -730,7 +731,7 @@ namespace yy {
 
 
 } // yy
-#line 734 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 735 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 

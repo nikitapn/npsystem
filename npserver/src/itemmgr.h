@@ -30,8 +30,8 @@ public:
 	virtual void Ping() override {}
 	// IItemManager_Servant
 	virtual void Activate(nprpc::Object* client) override;
-	virtual void Advise(::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/::flat::Vector_Direct1<uint64_t> h) override;
-	virtual void UnAdvise(::flat::Span<uint64_t> a) override;
+	virtual void Advise(nprpc::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/nprpc::flat::Vector_Direct1<uint64_t> h) override;
+	virtual void UnAdvise(nprpc::flat::Span<uint64_t> a) override;
 	// nprpc::ObjectServant
 	virtual void destroy() noexcept override;
 	// protocol::listener

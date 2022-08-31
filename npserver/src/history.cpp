@@ -323,8 +323,8 @@ public:
 
 		std::vector<nps::var_handle> handles(size);
 		{
-			auto span = ::flat::make_span(handles);
-			t_advise(::flat::make_read_only_span(ar), span);
+			auto span = nprpc::flat::make_span(handles);
+			t_advise(nprpc::flat::make_read_only_span(ar), span);
 		}
 
 		for (size_t ix = 0; ix < size; ++ix) {

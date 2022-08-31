@@ -131,7 +131,7 @@ void net_init(void) {
 	M_UCSRB = RX_ENABLED;
 	// External interrupt
 
-	// Нужно захватывать именно начало байта т.к. прерывание по приему байта будет с опозданием.
+	// capturing starting point of receiving a byte
 	MCUCR = (1 << ISC00); //Any logical change on INT0 generates an interrupt request
 //	MCUCR = (1 << ISC00) | (1 << ISC01); //The rising edge of INT0 generates an interrupt request
 	GIFR = (1 << INTF0);
@@ -167,7 +167,7 @@ void net_poll(void) {
 	if (!ibbpc_ev) return;
 
 	if (ibbpc_ev > 1) {
-		// Выход из синхронизированного состояния
+		// Leaving a sync state, bad...
 		info.com.synclost++;
 		M_OCR = IBBPC_40;
 		ptf = idle_40;
@@ -189,7 +189,7 @@ call_fun:
 
 static uint8_t inc_ac(void) {
 	ac = ac + 1;
-	//	if (ac > nomm) ac = 1; // этот счетчик очиститься автоматичеси после синхрофрейма
+	//	if (ac > nomm) ac = 1; // the counter get cleared after the sync frame
 	if (ac == MY_ADDRESS) {
 		//	M_OCR = IBBPC_3 - M_TCNT;
 		ptf = &access_time;
@@ -286,7 +286,7 @@ static void access_time(void) {
 }
 
 static void timeout_for_answer(void) {
-	// Защита от запаздалого ответа
+	// protection agains slow response
 	cli();
 	status &= ~MASTER_MODE;
 	sei();
@@ -336,7 +336,7 @@ static void send_answer(void) {
 }
 
 static void start_transmit(void) {
-	// Выключаеться контроль за шиной на время передачи
+	// turn off bus control while message being transmitted
 	M_TCCR = TIMER_OFF;
 	M_TIFR |= 1 << M_OCF;
 	M_TCNT = 0;
@@ -412,9 +412,9 @@ ISR(INT0_vect) {
 	M_TCCR = TIMER_ON;
 	ptf = &idle_40;
 
-	// Возможно, одно из устройств передало синхронизирующий фрейм
+	// possibly, some device sended a sync frame 
 	if (rx_len == 1 && *((uint8_t*)&frame) & 0x80) {
-		// Синхронизируемся...
+		// Synchronizing...
 		ac = 0;
 		status &= ~(LAST_MASTER | MASTER_MODE);
 		status |= SYNC;
@@ -436,20 +436,19 @@ ISR(INT0_vect) {
 	}
 #endif
 	else if (get_crc((void*)&frame, rx_len - 2) == *((uint16_t*)(pCurBufPtr - 2))) {
-		// Синхронизируемся каждый раз
+		// Synchronize every time
 		status |= SYNC;
-		// Если устройство - мастер ставим флаг "данные получены", выходим
+		// If a device is a master, set flag DATA_RECEIVED and exit;
 		if (status & MASTER_MODE && frame.h.m_addr == MY_ADDRESS) {
 			status |= DATA_RECIVED;
 			ptf = &answer_has_been_recived;
 			goto Rx_set;
 		} else {
 			ac = frame.h.m_addr;
-			// устанавливаем счетчик
-			// если устройство не участвует в обмене он установаиться 2 раза
-			// если адресуемое устройство ответит
+			// setting up the counter
+			// If a device is not participationg in message excange, It will set up 2 times if the addressing device answers. 
 		}
-		// Если устройство не мастер сброс флага предыдущего мастера
+		// If a device is not a master, clear flag LAST_MASTER in case It was previously a master 
 		status &= ~LAST_MASTER;
 		if (frame.h.sl_addr == MY_ADDRESS) {
 			//	if(M_TCNT >= IBBPC_8)
@@ -494,8 +493,9 @@ static uint8_t write_twi(void) {
 #endif // PC_LINK
 
 uint8_t r_data_cnt;
-// Возвращает 1 если запрос был сформирован
-// 0 в другом случае
+
+// 1 - the request has been prepared
+// 0 - otherwise
 static uint8_t send_request(void) {
 	uint8_t size;
 	uint16_t pr_addr;
@@ -598,7 +598,7 @@ uint8_t prepare_answer(void) {
 	// Send Bytes
 	case REQ_READ_BYTES:
 	case REQ_READ_BITS: {
-		// RD сгрупированы и отсортированы по адресу в слейве
+		// RD grouped and sorted by the slave address
 		void* begin_addr = (void*)frame.r_read_bytes.addr_begin;
 		memcpy(frame.a_read_bytes.data, begin_addr, frame.r_read_bytes.nbytes);
 		frame.h.len = sizeof(frame_h) + sizeof(ans_read_bytes) + frame.r_read_bytes.nbytes + 2;

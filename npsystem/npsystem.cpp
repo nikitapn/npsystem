@@ -64,7 +64,7 @@ static void init_log() {
 }
 */
 
-using thread_pool = nplib::thread_pool_2;
+using thread_pool = nplib::thread_pool<0, 2, 0>;
 
 CAppModule _Module;
 std::unique_ptr<CMainFrame> wndMain;

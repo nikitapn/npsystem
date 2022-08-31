@@ -16,6 +16,6 @@
 #define TT_FLASH                 0x3e00
 #define RD_FLASH                 0x3e80
 #define IO_CONFIG                0x3f00
-#define TWI_FLASH                0x1200
-#define USER_FLASH_START         0x1280
+#define TWI_FLASH                0x1280
+#define USER_FLASH_START         0x1300
 #define USER_FLASH_END           0x3c00

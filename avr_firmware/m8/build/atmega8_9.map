@@ -66,7 +66,7 @@ LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a
 LOAD /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a
 END GROUP
 
-.text           0x0000000000000000     0x1150
+.text           0x0000000000000000     0x1162
  *(.vectors)
  .vectors       0x0000000000000000       0x26 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
                 0x0000000000000000                __vectors
@@ -207,80 +207,80 @@ END GROUP
  .text.reset    0x0000000000000d44       0x22 obj/core_c.o
                 0x0000000000000d44                reset
  .text.startup.main
-                0x0000000000000d66       0x10 obj/core_c.o
+                0x0000000000000d66       0x20 obj/core_c.o
                 0x0000000000000d66                main
  .text.twi_init
-                0x0000000000000d76        0xc obj/twi.o
-                0x0000000000000d76                twi_init
+                0x0000000000000d86        0xc obj/twi.o
+                0x0000000000000d86                twi_init
  .text.twi_write
-                0x0000000000000d82       0x2a obj/twi.o
-                0x0000000000000d82                twi_write
+                0x0000000000000d92       0x2a obj/twi.o
+                0x0000000000000d92                twi_write
  .text.twi_write_bytes
-                0x0000000000000dac       0x50 obj/twi.o
-                0x0000000000000dac                twi_write_bytes
+                0x0000000000000dbc       0x50 obj/twi.o
+                0x0000000000000dbc                twi_write_bytes
  .text.twi_read
-                0x0000000000000dfc       0x28 obj/twi.o
-                0x0000000000000dfc                twi_read
+                0x0000000000000e0c       0x28 obj/twi.o
+                0x0000000000000e0c                twi_read
  .text.twi_read_bytes
-                0x0000000000000e24       0x40 obj/twi.o
-                0x0000000000000e24                twi_read_bytes
+                0x0000000000000e34       0x40 obj/twi.o
+                0x0000000000000e34                twi_read_bytes
  .text.__vector_17
-                0x0000000000000e64      0x134 obj/twi.o
-                0x0000000000000e64                __vector_17
- .text.core     0x0000000000000f98      0x148 obj/core_s.o
-                0x0000000000000f98                load_flash
-                0x0000000000000fac                load_tt
-                0x0000000000000fe2                append_alg_to_end
-                0x0000000000001004                core_run
-                0x0000000000001062                __vector_9
+                0x0000000000000e74      0x134 obj/twi.o
+                0x0000000000000e74                __vector_17
+ .text.core     0x0000000000000fa8      0x14a obj/core_s.o
+                0x0000000000000fa8                load_flash
+                0x0000000000000fbc                load_tt
+                0x0000000000000ff2                append_alg_to_end
+                0x0000000000001014                core_run
+                0x0000000000001074                __vector_9
  .text.libgcc.mul
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.div
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
- .text.libgcc   0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .text.libgcc   0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.prologue
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.builtins
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.fmul
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.fixed
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  .text.libgcc.mul
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.div
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
- .text.libgcc   0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+ .text.libgcc   0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.prologue
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.builtins
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.fmul
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
  .text.libgcc.fixed
-                0x00000000000010e0        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
+                0x00000000000010f2        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_clear_bss.o)
  .text.avr-libc
-                0x00000000000010e0       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
-                0x00000000000010e0                memcpy
+                0x00000000000010f2       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memcpy.o)
+                0x00000000000010f2                memcpy
  .text.avr-libc
-                0x00000000000010f2        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
-                0x00000000000010f2                memset
+                0x0000000000001104        0xe /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libc.a(memset.o)
+                0x0000000000001104                memset
  .text.avr-libc
-                0x0000000000001100       0x20 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a(eerd_block.o)
-                0x0000000000001100                eeprom_read_block
-                0x0000000000001104                eeprom_read_blraw
+                0x0000000000001112       0x20 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a(eerd_block.o)
+                0x0000000000001112                eeprom_read_block
+                0x0000000000001116                eeprom_read_blraw
  .text.avr-libc
-                0x0000000000001120       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a(eewr_block.o)
-                0x0000000000001120                eeprom_write_block
+                0x0000000000001132       0x12 /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a(eewr_block.o)
+                0x0000000000001132                eeprom_write_block
  .text.avr-libc
-                0x0000000000001132       0x1a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a(eewr_byte.o)
-                0x0000000000001132                eeprom_write_byte
-                0x0000000000001134                eeprom_write_r18
-                0x000000000000114c                . = ALIGN (0x2)
+                0x0000000000001144       0x1a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/libatmega8.a(eewr_byte.o)
+                0x0000000000001144                eeprom_write_byte
+                0x0000000000001146                eeprom_write_r18
+                0x000000000000115e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000000000114c        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
-                0x000000000000114c                exit
-                0x000000000000114c                _exit
+ .fini9         0x000000000000115e        0x0 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+                0x000000000000115e                exit
+                0x000000000000115e                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -299,9 +299,9 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000000000114c        0x4 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
+ .fini0         0x000000000000115e        0x4 /usr/lib/gcc/avr/5.4.0/avr4/libgcc.a(_exit.o)
  *(.fini0)
-                0x0000000000001150                _etext = .
+                0x0000000000001162                _etext = .
 
 .nrww           0x0000000000001c00      0x33e
                 0x0000000000001c00                _nrww_start = .
@@ -328,7 +328,7 @@ END GROUP
                 0x0000000000001ec0                write_page
                 0x0000000000001f3e                . = ALIGN (0x2)
 
-.data           0x0000000000800062        0x0 load address 0x0000000000001150
+.data           0x0000000000800062        0x0 load address 0x0000000000001162
                 0x0000000000800062                _sys_ram_start = .
                 [!provide]                        PROVIDE (__data_start, .)
  *(.data)
@@ -428,12 +428,12 @@ END GROUP
                 0x0000000000800209                twi_buf
                 0x000000000080022c                twi_result
                 0x000000000080022d                PROVIDE (__bss_end, .)
-                0x0000000000001150                __data_load_start = LOADADDR (.data)
-                0x0000000000001150                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000001162                __data_load_start = LOADADDR (.data)
+                0x0000000000001162                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.tab            0x0000000000001150       0x70
+.tab            0x0000000000001162       0x5e
                 0x0000000000001180                . = ALIGN (__PAZESIZE__)
- *fill*         0x0000000000001150       0x30 
+ *fill*         0x0000000000001162       0x1e 
  *(.tab)
  *(.tab*)
  .tab.twi       0x0000000000001180        0x1 obj/tables.o
@@ -488,11 +488,11 @@ LOAD linker stubs
 .debug_str      0x0000000000000000      0x17a
  .debug_str     0x0000000000000000      0x17a /usr/lib/gcc/avr/5.4.0/../../../avr/lib/avr4/crtatmega8.o
 
-.stab           0x0000000000000000     0x2af0
+.stab           0x0000000000000000     0x2b14
  .stab          0x0000000000000000     0x1680 obj/net_c.o
- .stab          0x0000000000001680      0xdb0 obj/core_c.o
-                                       0x117c (size before relaxing)
- .stab          0x0000000000002430      0x6c0 obj/twi.o
+ .stab          0x0000000000001680      0xdd4 obj/core_c.o
+                                       0x11a0 (size before relaxing)
+ .stab          0x0000000000002454      0x6c0 obj/twi.o
                                         0x8e8 (size before relaxing)
 
 .stabstr        0x0000000000000000     0x24c1

@@ -8,6 +8,10 @@
 #include <npdb/memento.h>
 #include <npsys/other/uploadable.h>
 
+#ifdef _CONFIGURATOR_
+#	include <npsys/fat_data_callback.h>
+#endif
+
 namespace npsys {
 
 struct CAlgorithmViewPosition 
@@ -154,7 +158,7 @@ protected:
 protected:
 	// CORBA
 	virtual size_t AdviseImpl();
-	virtual void OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a);
+	virtual void OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a);
 	virtual void OnConnectionLost() noexcept;
 public:
 	void Translate(CCodeGenerator*);
@@ -211,7 +215,7 @@ protected:
 protected:
 	// CORBA
 	virtual size_t AdviseImpl();
-	virtual void OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a);
+	virtual void OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a);
 	virtual void OnConnectionLost() noexcept;
 public:
 	//

@@ -112,7 +112,7 @@ namespace npsys {
 			ar& npsys::access::rw(timeout);
 		}
 
-		virtual void boost_serialization_always_abstact_base() {}
+		virtual void boost_serialization_always_abstact_base() { std::abort(); }
 #ifdef _CONFIGURATOR_
 		virtual std::unique_ptr<CDynamicLinker> CreateLinker() {
 			ASSERT(FALSE);

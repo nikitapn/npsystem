@@ -9,7 +9,7 @@
 
 namespace protocol {
 // strand context
-void listener::advise(const ::flat::Span<const nps::flat::DataDef>& a, ::flat::Span<nps::var_handle>& handles) {
+void listener::advise(const nprpc::flat::Span<const nps::flat::DataDef>& a, nprpc::flat::Span<nps::var_handle>& handles) {
 	assert(a.size() == handles.size());
 
 	for (auto const& i: a) {

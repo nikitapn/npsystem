@@ -40,9 +40,9 @@ private:
 
 class t_read_memory : public t_one_time {
 	uint8_t len_to_read_;
-	::flat::Vector_Direct1<uint8_t>& vd_;
+	nprpc::flat::Vector_Direct1<uint8_t>& vd_;
 public:
-	t_read_memory(uint8_t devAddr, uint16_t mem_addr, uint8_t len_to_read, ::flat::Vector_Direct1<uint8_t>& vd) :
+	t_read_memory(uint8_t devAddr, uint16_t mem_addr, uint8_t len_to_read, nprpc::flat::Vector_Direct1<uint8_t>& vd) :
 		t_one_time(devAddr), len_to_read_(len_to_read), vd_(vd)
 	{
 		f_ = std::make_shared<frame>();

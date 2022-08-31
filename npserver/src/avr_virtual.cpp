@@ -6,8 +6,11 @@
 #include "server.h"
 #include <npsys/network.h>
 #include <npsys/avr_controller.h>
-#include <sim/medium.h>
 #include <nplib/utils/config.h>
+#include <sim/medium.h>
+
+BOOST_CLASS_EXPORT_GUID(VirtualAvrController, "virtualavrcontroller");
+BOOST_CLASS_EXPORT_GUID(VirtualAvrPCLINK, "virtualavrpclink");
 
 void ExecutableVirtualAvrController::run() {
 	Medium::get_mutable_instance().AddController(avr_.get());

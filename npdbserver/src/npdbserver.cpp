@@ -201,11 +201,11 @@ public:
 		return last_id_;
 	}
 
-	virtual cbt1::oid_t create(::flat::Span<uint8_t> data, bool sync) {
+	virtual cbt1::oid_t create(nprpc::flat::Span<uint8_t> data, ::nprpc::flat::Boolean sync) {
 		oid_t id = next_oid_impl(1);
 		BOOST_LOG_TRIVIAL(trace) << "created new id: " << id;
 		auto options = leveldb::WriteOptions();
-		options.sync = sync;
+		options.sync = sync.get();
 
 		auto s = db_->Put(options, create_slice(&id), leveldb::Slice((const char*)data.data(), data.size()));
 
@@ -214,9 +214,9 @@ public:
 		return id;
 	}
 
-	virtual cbt1::oid_t put(cbt1::oid_t id, ::flat::Span<uint8_t> data, bool sync) {
+	virtual cbt1::oid_t put(cbt1::oid_t id, nprpc::flat::Span<uint8_t> data, ::nprpc::flat::Boolean sync) {
 		auto options = leveldb::WriteOptions();
-		options.sync = sync;
+		options.sync = sync.get();
 
 		auto s = db_->Put(options, create_slice(&id), leveldb::Slice((const char*)data.data(), data.size()));
 
@@ -224,13 +224,13 @@ public:
 
 		for (auto& client : advised_clients_) {
 			if (client.nodes.find(id) != client.nodes.end()) {
-				client.client->OnNodeChanged(id, flat::make_read_only_span(data));
+				client.client->OnNodeChanged(id, nprpc::flat::make_read_only_span(data));
 			};
 		}
 		return id;
 	}
 
-	virtual bool exec_batch(::flat::Span_ref<npd::flat::BatchOperation, npd::flat::BatchOperation_Direct> data) {
+	virtual bool exec_batch(nprpc::flat::Span_ref<npd::flat::BatchOperation, npd::flat::BatchOperation_Direct> data) {
 		leveldb::WriteBatch batch;
 		std::string upd_nodes, del_nodes;
 
@@ -278,7 +278,7 @@ public:
 		return true;
 	}
 
-	virtual bool get(cbt1::oid_t id, /*out*/ ::flat::Vector_Direct1<uint8_t> data) {
+	virtual bool get(cbt1::oid_t id, /*out*/ nprpc::flat::Vector_Direct1<uint8_t> data) {
 		std::string tmp;
 		auto s = db_->Get(leveldb::ReadOptions(), create_slice(&id), &tmp);
 		level_db_throw_if_error(s);
@@ -289,7 +289,7 @@ public:
 		return true;
 	}
 
-	virtual uint64_t get_n(::flat::Span<uint64_t> ids, /*out*/ ::flat::Vector_Direct1<uint8_t> data) {
+	virtual uint64_t get_n(nprpc::flat::Span<uint64_t> ids, /*out*/ nprpc::flat::Vector_Direct1<uint8_t> data) {
 		//	auto now = std::chrono::high_resolution_clock::now();
 		size_t size = 0;
 		omembuf buf(1024);
@@ -333,7 +333,6 @@ public:
 			});
 
 		if (it == advised_clients_.end()) {
-			client->add_ref();
 			advised_clients_.emplace_back(nprpc::narrow<npd::NodeCallback>(client));
 			it = std::prev(advised_clients_.end());
 		} else {
@@ -420,8 +419,6 @@ int start(int argc, char** argv) {
 
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
 		nameserver->Bind(poa->activate_object(&db_impl), "npsystem_database");
-
-		rpc->start();
 
 #ifdef _WIN32
 		if (ready) (*ready)();

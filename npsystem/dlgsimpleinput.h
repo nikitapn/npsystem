@@ -226,7 +226,7 @@ protected:
 
 			base::EndDialog(wID);
 		} catch (input_error& e) {
-			e.msg_box(this->m_hWnd);
+			MessageBoxA(this->m_hWnd, e.what(), "Input Error", MB_ICONERROR);
 		} catch (std::exception& e) {
 			MessageBoxA(this->m_hWnd, e.what(), "Error", MB_ICONERROR);
 		}

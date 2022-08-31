@@ -22,11 +22,11 @@ protected:
 	nprpc::ObjectPtr<nps::ItemManager> item_manager_;
 
 	virtual size_t AdviseImpl() = 0;
-	virtual void OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) = 0;
+	virtual void OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) = 0;
 	virtual void OnConnectionLost() noexcept = 0;
 public:
 	virtual void Ping() final { }
-	virtual void OnDataChanged(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) final;
+	virtual void OnDataChanged(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) final;
 
 	bool Advise() noexcept;
 	void UnAdvise() noexcept;

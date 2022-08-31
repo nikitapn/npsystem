@@ -8,6 +8,8 @@
 #include <npsys/variable.h>
 #include "io_avr.h"
 
+BOOST_CLASS_EXPORT_GUID(npsys::CAVRAssignedAlgorithm, "avr_assigned_alg");
+
 namespace npsys {
 
 // CAVRFlashObject

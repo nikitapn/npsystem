@@ -63,7 +63,7 @@ public:
 	}
 	EventList ev_list_;
 protected:
-	int DecodeInstruction(uint16_t& instruction) const;
+	int DecodeInstruction(uint16_t instruction) const;
 	uint32_t do_spm();
 	uint32_t write_eeprom();
 	uint32_t read_eeprom();

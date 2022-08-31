@@ -58,7 +58,7 @@ std::unordered_map<std::string, LibDesc> ParseLibFile(std::string_view file) {
 			return is_letter(c) || is_digit(c) || (c == '.') || (c == '_') || (c == '-');
 		}
 	public:
-		Lexer(std::string_view file) : line_(1), col_(0), token_readed_(false) {
+		Lexer(std::filesystem::path file) : line_(1), col_(0), token_readed_(false) {
 			std::ifstream is(file);
 			is.seekg(0, is.end);
 			size_t length = is.tellg();

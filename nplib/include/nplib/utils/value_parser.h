@@ -3,34 +3,17 @@
 
 #pragma once
 
-#ifdef _MSC_VER
-# define NOMINMAX
-# include <windows.h>
-#endif
-
 #include <charconv>
 #include <limits>
 #include <stdexcept>
-
-#pragma push_macro("min")
-#pragma push_macro("max")
-
-#undef min
-#undef max
-
 
 class input_error : public std::runtime_error {
 public:
 	explicit input_error(const char* s) 
 		: std::runtime_error(s) {}
+
 	explicit input_error(const std::string& s) 
 		: std::runtime_error(s) {}
-
-#ifdef _MSC_VER
-	void msg_box(HWND hWnd) const noexcept {
-		MessageBoxA(hWnd, this->what(), "Input Error", MB_ICONERROR);
-	}
-#endif
 };
 
 inline bool IsNumber(const char* lpsz, size_t len) noexcept {
@@ -154,6 +137,3 @@ inline void ParseTextValue(const char* lpsz, size_t len, double& value) {
 #endif
 	throw input_error("The data have incorrect format");
 }
-
-#pragma pop_macro("max")
-#pragma pop_macro("min")

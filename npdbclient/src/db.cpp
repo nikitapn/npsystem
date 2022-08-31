@@ -48,7 +48,7 @@ class DatabaseImpl
 
 	// POA_npd::INodeCallback
 	NPDB_IMPORT_EXPORT
-		virtual void OnNodeChanged(::cbt1::oid_t id, ::flat::Span<uint8_t> data) override {
+		virtual void OnNodeChanged(cbt1::oid_t id, ::nprpc::flat::Span<uint8_t> data) override {
 		auto it = callbacks_.find(id);
 		if (it != callbacks_.end()) {
 			it->second(id, NodeEvent::CHANGED, {data.begin(), data.end()});
@@ -145,7 +145,7 @@ public:
 
 	NPDB_IMPORT_EXPORT
 		virtual uint32_t get_n(const std::vector<oid_t>& ids, bytestream& data) {
-		return db_->get_n(flat::make_read_only_span(ids), data);
+		return db_->get_n(nprpc::flat::make_read_only_span(ids), data);
 	}
 
 	NPDB_IMPORT_EXPORT
@@ -203,7 +203,6 @@ public:
 			throw std::runtime_error("could not get npsystem database");
 		}
 
-		db_->add_ref();
 		db_->set_timeout(5000);
 
 		this_oid_ = poa->activate_object(this);
@@ -273,7 +272,7 @@ protected:
 		if (data.size() == 0) return true;
 		
 		try  {
-			if (db_->exec_batch(flat::make_read_only_span(data))) {
+			if (db_->exec_batch(nprpc::flat::make_read_only_span(data))) {
 				for (auto& n : b.write_batch_nodes_) {
 					if (n.second.second.use_count() != 1) n.second.second->after_put();
 				}

@@ -3,35 +3,35 @@ build/atmega16_virtual_8.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000011f8  00000000  00000000  000000f4  2**1
+  0 .text         0000120a  00000000  00000000  000000f4  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .nrww         000003fa  00003c00  00003c00  00001374  2**0
+  1 .nrww         000003fa  00003c00  00003c00  000013f4  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .data         00000000  00800062  000011f8  00001374  2**0
+  2 .data         00000000  00800062  0000120a  000013f4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  3 .bss          00000211  00800062  00800062  0000176e  2**0
+  3 .bss          00000211  00800062  00800062  000017ee  2**0
                   ALLOC
-  4 .tab          00000088  000011f8  000011f8  000012ec  2**0
+  4 .tab          000000f6  0000120a  0000120a  000012fe  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  5 .noinit       0000000a  00800273  00800273  0000176e  2**0
+  5 .noinit       0000000a  00800273  00800273  000017ee  2**0
                   ALLOC
-  6 .eeprom       000000d2  00810000  00810000  0000176e  2**0
+  6 .eeprom       000000d2  00810000  00810000  000017ee  2**0
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  7 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00001840  2**2
+  7 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000018c0  2**2
                   CONTENTS, READONLY
-  8 .comment      00000011  00000000  00000000  0000187c  2**0
+  8 .comment      00000011  00000000  00000000  000018fc  2**0
                   CONTENTS, READONLY
-  9 .debug_abbrev 000004e7  00000000  00000000  0000188d  2**0
+  9 .debug_abbrev 000004e7  00000000  00000000  0000190d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_info   0000052e  00000000  00000000  00001d74  2**0
+ 10 .debug_info   0000052e  00000000  00000000  00001df4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   0000001a  00000000  00000000  000022a2  2**0
+ 11 .debug_line   0000001a  00000000  00000000  00002322  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    000001af  00000000  00000000  000022bc  2**0
+ 12 .debug_str    000001af  00000000  00000000  0000233c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .stab         00002b14  00000000  00000000  0000246c  2**2
+ 13 .stab         00002b38  00000000  00000000  000024ec  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .stabstr      000024c2  00000000  00000000  00004f80  2**0
+ 14 .stabstr      000024c2  00000000  00000000  00005024  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -46,7 +46,7 @@ Disassembly of section .text:
       18:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       1c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       20:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
-      24:	0c 94 84 08 	jmp	0x1108	; 0x1108 <__vector_9>
+      24:	0c 94 8d 08 	jmp	0x111a	; 0x111a <__vector_9>
       28:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       2c:	0c 94 12 03 	jmp	0x624	; 0x624 <__vector_11>
       30:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
@@ -54,7 +54,7 @@ Disassembly of section .text:
       38:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       3c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       40:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
-      44:	0c 94 85 07 	jmp	0xf0a	; 0xf0a <__vector_17>
+      44:	0c 94 8d 07 	jmp	0xf1a	; 0xf1a <__vector_17>
       48:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       4c:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
       50:	0c 94 43 00 	jmp	0x86	; 0x86 <__bad_interrupt>
@@ -90,7 +90,7 @@ Disassembly of section .text:
       7a:	b2 07       	cpc	r27, r18
       7c:	e1 f7       	brne	.-8      	; 0x76 <.do_clear_bss_loop>
       7e:	0e 94 01 07 	call	0xe02	; 0xe02 <main>
-      82:	0c 94 fa 08 	jmp	0x11f4	; 0x11f4 <_exit>
+      82:	0c 94 03 09 	jmp	0x1206	; 0x1206 <_exit>
 
 00000086 <__bad_interrupt>:
       86:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -1599,7 +1599,7 @@ static uint8_t write_rd(void) {
      8ba:	70 e0       	ldi	r23, 0x00	; 0
      8bc:	80 91 f1 00 	lds	r24, 0x00F1	; 0x8000f1 <frame+0x5>
      8c0:	90 91 f2 00 	lds	r25, 0x00F2	; 0x8000f2 <frame+0x6>
-     8c4:	0e 94 c3 08 	call	0x1186	; 0x1186 <memcpy>
+     8c4:	0e 94 cc 08 	call	0x1198	; 0x1198 <memcpy>
 		return IMMEDIATE_ANSWER;
      8c8:	8f c0       	rjmp	.+286    	; 0x9e8 <prepare_answer+0x1ee>
 	}
@@ -1666,7 +1666,7 @@ static uint8_t write_rd(void) {
      920:	70 91 f2 00 	lds	r23, 0x00F2	; 0x8000f2 <frame+0x6>
      924:	81 ef       	ldi	r24, 0xF1	; 241
      926:	90 e0       	ldi	r25, 0x00	; 0
-     928:	0e 94 c3 08 	call	0x1186	; 0x1186 <memcpy>
+     928:	0e 94 cc 08 	call	0x1198	; 0x1198 <memcpy>
 		frame.h.len = sizeof(frame_h) + sizeof(ans_read_bytes) + frame.r_read_bytes.nbytes + 2;
      92c:	c9 5f       	subi	r28, 0xF9	; 249
      92e:	c0 93 ef 00 	sts	0x00EF, r28	; 0x8000ef <frame+0x3>
@@ -1735,7 +1735,7 @@ static uint8_t write_rd(void) {
      98c:	70 91 f1 00 	lds	r23, 0x00F1	; 0x8000f1 <frame+0x5>
      990:	84 ef       	ldi	r24, 0xF4	; 244
      992:	90 e0       	ldi	r25, 0x00	; 0
-     994:	0e 94 e3 08 	call	0x11c6	; 0x11c6 <eeprom_write_block>
+     994:	0e 94 ec 08 	call	0x11d8	; 0x11d8 <eeprom_write_block>
 		info.com.result = 0x00;
      998:	10 92 7d 00 	sts	0x007D, r1	; 0x80007d <info>
      99c:	12 c0       	rjmp	.+36     	; 0x9c2 <prepare_answer+0x1c8>
@@ -1762,7 +1762,7 @@ static uint8_t write_twi(void) {
      9b0:	70 e0       	ldi	r23, 0x00	; 0
      9b2:	84 e7       	ldi	r24, 0x74	; 116
      9b4:	91 e0       	ldi	r25, 0x01	; 1
-     9b6:	0e 94 c3 08 	call	0x1186	; 0x1186 <memcpy>
+     9b6:	0e 94 cc 08 	call	0x1198	; 0x1198 <memcpy>
 	return write_page();
      9ba:	0e 94 c0 1f 	call	0x3f80	; 0x3f80 <write_page>
 		info.com.result = write_rd();
@@ -1959,26 +1959,26 @@ void core_init(void) {
      a8c:	70 e0       	ldi	r23, 0x00	; 0
      a8e:	83 e7       	ldi	r24, 0x73	; 115
      a90:	92 e0       	ldi	r25, 0x02	; 2
-     a92:	0e 94 d3 08 	call	0x11a6	; 0x11a6 <eeprom_read_block>
+     a92:	0e 94 dc 08 	call	0x11b8	; 0x11b8 <eeprom_read_block>
 	
 	twi_init();
-     a96:	0e 94 0d 07 	call	0xe1a	; 0xe1a <twi_init>
+     a96:	0e 94 15 07 	call	0xe2a	; 0xe2a <twi_init>
 	load_flash(&FLASH_RD, &rdata, sizeof(rdata));
      a9a:	44 e6       	ldi	r20, 0x64	; 100
      a9c:	67 e8       	ldi	r22, 0x87	; 135
      a9e:	70 e0       	ldi	r23, 0x00	; 0
      aa0:	80 e8       	ldi	r24, 0x80	; 128
      aa2:	9e e3       	ldi	r25, 0x3E	; 62
-     aa4:	0e 94 1f 08 	call	0x103e	; 0x103e <load_flash>
+     aa4:	0e 94 27 08 	call	0x104e	; 0x104e <load_flash>
 	load_flash(&FLASH_TWI, &twi_table, sizeof(twi_table));
      aa8:	4a e3       	ldi	r20, 0x3A	; 58
      aaa:	64 e7       	ldi	r22, 0x74	; 116
      aac:	71 e0       	ldi	r23, 0x01	; 1
-     aae:	80 e0       	ldi	r24, 0x00	; 0
+     aae:	80 e8       	ldi	r24, 0x80	; 128
      ab0:	92 e1       	ldi	r25, 0x12	; 18
-     ab2:	0e 94 1f 08 	call	0x103e	; 0x103e <load_flash>
+     ab2:	0e 94 27 08 	call	0x104e	; 0x104e <load_flash>
 	load_tt();
-     ab6:	0e 94 29 08 	call	0x1052	; 0x1052 <load_tt>
+     ab6:	0e 94 31 08 	call	0x1062	; 0x1062 <load_tt>
 	TCCR0 = (1 << CS02) | (1 << CS00); // div 1024
      aba:	85 e0       	ldi	r24, 0x05	; 5
      abc:	83 bf       	out	0x33, r24	; 51
@@ -2179,13 +2179,13 @@ uint16_t twi_task(void) {
 				memcpy(cur->data, r_buf, cur->len);
      bd0:	62 e5       	ldi	r22, 0x52	; 82
      bd2:	72 e0       	ldi	r23, 0x02	; 2
-     bd4:	0e 94 c3 08 	call	0x1186	; 0x1186 <memcpy>
+     bd4:	0e 94 cc 08 	call	0x1198	; 0x1198 <memcpy>
      bd8:	04 c0       	rjmp	.+8      	; 0xbe2 <twi_task+0x6e>
 			} else {
 				memset(cur->data, 0, cur->len);
      bda:	60 e0       	ldi	r22, 0x00	; 0
      bdc:	70 e0       	ldi	r23, 0x00	; 0
-     bde:	0e 94 cc 08 	call	0x1198	; 0x1198 <memset>
+     bde:	0e 94 d5 08 	call	0x11aa	; 0x11aa <memset>
 			}
 		}
 	}
@@ -2226,7 +2226,7 @@ uint16_t twi_task(void) {
 		break;
 	case TWI_REQ_READ_BLOCK:
 		twi_read_bytes(next);
-     c20:	0e 94 65 07 	call	0xeca	; 0xeca <twi_read_bytes>
+     c20:	0e 94 6d 07 	call	0xeda	; 0xeda <twi_read_bytes>
 		break;
      c24:	0b c0       	rjmp	.+22     	; 0xc3c <twi_task+0xc8>
 	
@@ -2235,7 +2235,7 @@ uint16_t twi_task(void) {
 	switch (next->fn) {
 	case TWI_REQ_READ:
 		twi_read(next);
-     c26:	0e 94 51 07 	call	0xea2	; 0xea2 <twi_read>
+     c26:	0e 94 59 07 	call	0xeb2	; 0xeb2 <twi_read>
 		break;
      c2a:	08 c0       	rjmp	.+16     	; 0xc3c <twi_task+0xc8>
 	case TWI_REQ_READ_BLOCK:
@@ -2243,12 +2243,12 @@ uint16_t twi_task(void) {
 		break;
 	case TWI_REQ_WRITE:
 		twi_write(next);
-     c2c:	0e 94 13 07 	call	0xe26	; 0xe26 <twi_write>
+     c2c:	0e 94 1b 07 	call	0xe36	; 0xe36 <twi_write>
 		break;
      c30:	05 c0       	rjmp	.+10     	; 0xc3c <twi_task+0xc8>
 	case TWI_REQ_WRITE_BLOCK:
 		twi_write_bytes(next);
-     c32:	0e 94 28 07 	call	0xe50	; 0xe50 <twi_write_bytes>
+     c32:	0e 94 30 07 	call	0xe60	; 0xe60 <twi_write_bytes>
 		break;
      c36:	02 c0       	rjmp	.+4      	; 0xc3c <twi_task+0xc8>
 	default:
@@ -2281,7 +2281,7 @@ uint8_t replace_alg(void) {
      c58:	21 f4       	brne	.+8      	; 0xc62 <replace_alg+0x20>
 		append_alg_to_end(frame.r_rep_alg.addr_new);
      c5a:	ce 01       	movw	r24, r28
-     c5c:	0e 94 44 08 	call	0x1088	; 0x1088 <append_alg_to_end>
+     c5c:	0e 94 4c 08 	call	0x1098	; 0x1098 <append_alg_to_end>
      c60:	17 c0       	rjmp	.+46     	; 0xc90 <replace_alg+0x4e>
 	} else {
 		int8_t index = find_task_index(frame.r_rep_alg.addr_old);
@@ -2581,635 +2581,646 @@ int main(void) {
 	
 	sei();
      e0e:	78 94       	sei
-	core_run();
-     e10:	0e 94 55 08 	call	0x10aa	; 0x10aa <core_run>
-}
-     e14:	80 e0       	ldi	r24, 0x00	; 0
-     e16:	90 e0       	ldi	r25, 0x00	; 0
-     e18:	08 95       	ret
+     e10:	9f e0       	ldi	r25, 0x0F	; 15
+     e12:	88 e1       	ldi	r24, 0x18	; 24
+     e14:	0f b6       	in	r0, 0x3f	; 63
+     e16:	f8 94       	cli
+     e18:	a8 95       	wdr
+     e1a:	81 bd       	out	0x21, r24	; 33
+     e1c:	0f be       	out	0x3f, r0	; 63
+     e1e:	91 bd       	out	0x21, r25	; 33
 
-00000e1a <twi_init>:
+	wdt_enable(WDTO_2S);
+	core_run();
+     e20:	0e 94 5d 08 	call	0x10ba	; 0x10ba <core_run>
+}
+     e24:	80 e0       	ldi	r24, 0x00	; 0
+     e26:	90 e0       	ldi	r25, 0x00	; 0
+     e28:	08 95       	ret
+
+00000e2a <twi_init>:
 #define TWI_S_WRITE_ADDR				1
 #define TWI_S_WRITE_DATA				2
 #define TWI_S_WRITE_NO_ADDRESS	3
 
 void twi_init(void) {
 	TWBR = 72; // 100 khz
-     e1a:	88 e4       	ldi	r24, 0x48	; 72
-     e1c:	80 b9       	out	0x00, r24	; 0
+     e2a:	88 e4       	ldi	r24, 0x48	; 72
+     e2c:	80 b9       	out	0x00, r24	; 0
 	TWSR = 0;
-     e1e:	11 b8       	out	0x01, r1	; 1
+     e2e:	11 b8       	out	0x01, r1	; 1
 	TWAR = _TWI_ADDR;
-     e20:	80 e1       	ldi	r24, 0x10	; 16
-     e22:	82 b9       	out	0x02, r24	; 2
-     e24:	08 95       	ret
+     e30:	80 e1       	ldi	r24, 0x10	; 16
+     e32:	82 b9       	out	0x02, r24	; 2
+     e34:	08 95       	ret
 
-00000e26 <twi_write>:
+00000e36 <twi_write>:
 #ifndef TWI_MASTER_ONLY
 	TWCR = TWI_ENABLE | (1 << TWEA);
 #endif // MASTER_ONLY
 }
 
 void twi_write(twi_req_t* req) {
-     e26:	dc 01       	movw	r26, r24
+     e36:	dc 01       	movw	r26, r24
 	twi_result = TWI_BUSY;
-     e28:	92 e0       	ldi	r25, 0x02	; 2
-     e2a:	90 93 72 02 	sts	0x0272, r25	; 0x800272 <twi_result>
+     e38:	92 e0       	ldi	r25, 0x02	; 2
+     e3a:	90 93 72 02 	sts	0x0272, r25	; 0x800272 <twi_result>
 
 	twi_buf[0] = req->dev_addr | TW_WRITE;
-     e2e:	ef e4       	ldi	r30, 0x4F	; 79
-     e30:	f2 e0       	ldi	r31, 0x02	; 2
-     e32:	11 96       	adiw	r26, 0x01	; 1
-     e34:	8c 91       	ld	r24, X
-     e36:	11 97       	sbiw	r26, 0x01	; 1
-     e38:	80 83       	st	Z, r24
+     e3e:	ef e4       	ldi	r30, 0x4F	; 79
+     e40:	f2 e0       	ldi	r31, 0x02	; 2
+     e42:	11 96       	adiw	r26, 0x01	; 1
+     e44:	8c 91       	ld	r24, X
+     e46:	11 97       	sbiw	r26, 0x01	; 1
+     e48:	80 83       	st	Z, r24
 	twi_buf[1] = req->wr_value;
-     e3a:	14 96       	adiw	r26, 0x04	; 4
-     e3c:	8c 91       	ld	r24, X
-     e3e:	81 83       	std	Z+1, r24	; 0x01
+     e4a:	14 96       	adiw	r26, 0x04	; 4
+     e4c:	8c 91       	ld	r24, X
+     e4e:	81 83       	std	Z+1, r24	; 0x01
 	t_len = 2;
-     e40:	90 93 7c 00 	sts	0x007C, r25	; 0x80007c <t_len>
+     e50:	90 93 7c 00 	sts	0x007C, r25	; 0x80007c <t_len>
 	twi_master_state = TWI_S_WRITE_NO_ADDRESS;
-     e44:	83 e0       	ldi	r24, 0x03	; 3
-     e46:	80 93 77 00 	sts	0x0077, r24	; 0x800077 <twi_master_state>
+     e54:	83 e0       	ldi	r24, 0x03	; 3
+     e56:	80 93 77 00 	sts	0x0077, r24	; 0x800077 <twi_master_state>
 
 	TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA);
-     e4a:	85 ea       	ldi	r24, 0xA5	; 165
-     e4c:	86 bf       	out	0x36, r24	; 54
-     e4e:	08 95       	ret
+     e5a:	85 ea       	ldi	r24, 0xA5	; 165
+     e5c:	86 bf       	out	0x36, r24	; 54
+     e5e:	08 95       	ret
 
-00000e50 <twi_write_bytes>:
+00000e60 <twi_write_bytes>:
 }
 
 void twi_write_bytes(twi_req_t* req) {
-     e50:	fc 01       	movw	r30, r24
+     e60:	fc 01       	movw	r30, r24
 	t_header_len = (req->_addrh & 0x80) ? 3 : 2;
-     e52:	83 81       	ldd	r24, Z+3	; 0x03
-     e54:	28 2f       	mov	r18, r24
-     e56:	22 1f       	adc	r18, r18
-     e58:	22 27       	eor	r18, r18
-     e5a:	22 1f       	adc	r18, r18
-     e5c:	2e 5f       	subi	r18, 0xFE	; 254
-     e5e:	20 93 7b 00 	sts	0x007B, r18	; 0x80007b <t_header_len>
+     e62:	83 81       	ldd	r24, Z+3	; 0x03
+     e64:	28 2f       	mov	r18, r24
+     e66:	22 1f       	adc	r18, r18
+     e68:	22 27       	eor	r18, r18
+     e6a:	22 1f       	adc	r18, r18
+     e6c:	2e 5f       	subi	r18, 0xFE	; 254
+     e6e:	20 93 7b 00 	sts	0x007B, r18	; 0x80007b <t_header_len>
 
 	twi_result = TWI_BUSY;
-     e62:	92 e0       	ldi	r25, 0x02	; 2
-     e64:	90 93 72 02 	sts	0x0272, r25	; 0x800272 <twi_result>
+     e72:	92 e0       	ldi	r25, 0x02	; 2
+     e74:	90 93 72 02 	sts	0x0272, r25	; 0x800272 <twi_result>
 
 	twi_buf[0] = req->dev_addr | TW_WRITE;
-     e68:	91 81       	ldd	r25, Z+1	; 0x01
-     e6a:	90 93 4f 02 	sts	0x024F, r25	; 0x80024f <twi_buf>
+     e78:	91 81       	ldd	r25, Z+1	; 0x01
+     e7a:	90 93 4f 02 	sts	0x024F, r25	; 0x80024f <twi_buf>
 	twi_buf[1] = req->_addrl;
-     e6e:	92 81       	ldd	r25, Z+2	; 0x02
-     e70:	90 93 50 02 	sts	0x0250, r25	; 0x800250 <twi_buf+0x1>
+     e7e:	92 81       	ldd	r25, Z+2	; 0x02
+     e80:	90 93 50 02 	sts	0x0250, r25	; 0x800250 <twi_buf+0x1>
 	twi_buf[2] = req->_addrh & 0x7F;
-     e74:	8f 77       	andi	r24, 0x7F	; 127
-     e76:	80 93 51 02 	sts	0x0251, r24	; 0x800251 <twi_buf+0x2>
+     e84:	8f 77       	andi	r24, 0x7F	; 127
+     e86:	80 93 51 02 	sts	0x0251, r24	; 0x800251 <twi_buf+0x2>
 
 	t_len = req->len + t_header_len;
-     e7a:	46 81       	ldd	r20, Z+6	; 0x06
-     e7c:	82 2f       	mov	r24, r18
-     e7e:	84 0f       	add	r24, r20
-     e80:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <t_len>
+     e8a:	46 81       	ldd	r20, Z+6	; 0x06
+     e8c:	82 2f       	mov	r24, r18
+     e8e:	84 0f       	add	r24, r20
+     e90:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <t_len>
 
 	twi_master_state = TWI_S_WRITE_ADDR;
-     e84:	81 e0       	ldi	r24, 0x01	; 1
-     e86:	80 93 77 00 	sts	0x0077, r24	; 0x800077 <twi_master_state>
+     e94:	81 e0       	ldi	r24, 0x01	; 1
+     e96:	80 93 77 00 	sts	0x0077, r24	; 0x800077 <twi_master_state>
 
 	memcpy(twi_buf + t_header_len, req->data, req->len);
-     e8a:	82 2f       	mov	r24, r18
-     e8c:	90 e0       	ldi	r25, 0x00	; 0
-     e8e:	50 e0       	ldi	r21, 0x00	; 0
-     e90:	64 81       	ldd	r22, Z+4	; 0x04
-     e92:	75 81       	ldd	r23, Z+5	; 0x05
-     e94:	81 5b       	subi	r24, 0xB1	; 177
-     e96:	9d 4f       	sbci	r25, 0xFD	; 253
-     e98:	0e 94 c3 08 	call	0x1186	; 0x1186 <memcpy>
+     e9a:	82 2f       	mov	r24, r18
+     e9c:	90 e0       	ldi	r25, 0x00	; 0
+     e9e:	50 e0       	ldi	r21, 0x00	; 0
+     ea0:	64 81       	ldd	r22, Z+4	; 0x04
+     ea2:	75 81       	ldd	r23, Z+5	; 0x05
+     ea4:	81 5b       	subi	r24, 0xB1	; 177
+     ea6:	9d 4f       	sbci	r25, 0xFD	; 253
+     ea8:	0e 94 cc 08 	call	0x1198	; 0x1198 <memcpy>
 
 	TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA);
-     e9c:	85 ea       	ldi	r24, 0xA5	; 165
-     e9e:	86 bf       	out	0x36, r24	; 54
-     ea0:	08 95       	ret
+     eac:	85 ea       	ldi	r24, 0xA5	; 165
+     eae:	86 bf       	out	0x36, r24	; 54
+     eb0:	08 95       	ret
 
-00000ea2 <twi_read>:
+00000eb2 <twi_read>:
 }
 
 void twi_read(twi_req_t* req) {
-     ea2:	fc 01       	movw	r30, r24
+     eb2:	fc 01       	movw	r30, r24
 	twi_result = TWI_BUSY;
-     ea4:	82 e0       	ldi	r24, 0x02	; 2
-     ea6:	80 93 72 02 	sts	0x0272, r24	; 0x800272 <twi_result>
+     eb4:	82 e0       	ldi	r24, 0x02	; 2
+     eb6:	80 93 72 02 	sts	0x0272, r24	; 0x800272 <twi_result>
 
 	twi_buf[0] = req->dev_addr | TW_READ;
-     eaa:	91 81       	ldd	r25, Z+1	; 0x01
-     eac:	91 60       	ori	r25, 0x01	; 1
-     eae:	90 93 4f 02 	sts	0x024F, r25	; 0x80024f <twi_buf>
+     eba:	91 81       	ldd	r25, Z+1	; 0x01
+     ebc:	91 60       	ori	r25, 0x01	; 1
+     ebe:	90 93 4f 02 	sts	0x024F, r25	; 0x80024f <twi_buf>
 	t_len = 1;
-     eb2:	81 e0       	ldi	r24, 0x01	; 1
-     eb4:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <t_len>
+     ec2:	81 e0       	ldi	r24, 0x01	; 1
+     ec4:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <t_len>
 
 	r_last_index = req->len + 2;
-     eb8:	86 81       	ldd	r24, Z+6	; 0x06
-     eba:	8e 5f       	subi	r24, 0xFE	; 254
-     ebc:	80 93 79 00 	sts	0x0079, r24	; 0x800079 <r_last_index>
+     ec8:	86 81       	ldd	r24, Z+6	; 0x06
+     eca:	8e 5f       	subi	r24, 0xFE	; 254
+     ecc:	80 93 79 00 	sts	0x0079, r24	; 0x800079 <r_last_index>
 
 	twi_master_state = TWI_S_READ;
-     ec0:	10 92 77 00 	sts	0x0077, r1	; 0x800077 <twi_master_state>
+     ed0:	10 92 77 00 	sts	0x0077, r1	; 0x800077 <twi_master_state>
 
 	TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA);
-     ec4:	85 ea       	ldi	r24, 0xA5	; 165
-     ec6:	86 bf       	out	0x36, r24	; 54
-     ec8:	08 95       	ret
+     ed4:	85 ea       	ldi	r24, 0xA5	; 165
+     ed6:	86 bf       	out	0x36, r24	; 54
+     ed8:	08 95       	ret
 
-00000eca <twi_read_bytes>:
+00000eda <twi_read_bytes>:
 }
 
 void twi_read_bytes(twi_req_t* req) {
-     eca:	fc 01       	movw	r30, r24
+     eda:	fc 01       	movw	r30, r24
 	t_header_len = (req->_addrh & 0x80) ? 3 : 2;
-     ecc:	93 81       	ldd	r25, Z+3	; 0x03
-     ece:	89 2f       	mov	r24, r25
-     ed0:	88 1f       	adc	r24, r24
-     ed2:	88 27       	eor	r24, r24
-     ed4:	88 1f       	adc	r24, r24
-     ed6:	8e 5f       	subi	r24, 0xFE	; 254
-     ed8:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <t_header_len>
+     edc:	93 81       	ldd	r25, Z+3	; 0x03
+     ede:	89 2f       	mov	r24, r25
+     ee0:	88 1f       	adc	r24, r24
+     ee2:	88 27       	eor	r24, r24
+     ee4:	88 1f       	adc	r24, r24
+     ee6:	8e 5f       	subi	r24, 0xFE	; 254
+     ee8:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <t_header_len>
 	twi_result = TWI_BUSY;
-     edc:	22 e0       	ldi	r18, 0x02	; 2
-     ede:	20 93 72 02 	sts	0x0272, r18	; 0x800272 <twi_result>
+     eec:	22 e0       	ldi	r18, 0x02	; 2
+     eee:	20 93 72 02 	sts	0x0272, r18	; 0x800272 <twi_result>
 
 	twi_buf[0] = req->dev_addr | TW_WRITE;
-     ee2:	21 81       	ldd	r18, Z+1	; 0x01
-     ee4:	20 93 4f 02 	sts	0x024F, r18	; 0x80024f <twi_buf>
+     ef2:	21 81       	ldd	r18, Z+1	; 0x01
+     ef4:	20 93 4f 02 	sts	0x024F, r18	; 0x80024f <twi_buf>
 	twi_buf[1] = req->_addrl;
-     ee8:	22 81       	ldd	r18, Z+2	; 0x02
-     eea:	20 93 50 02 	sts	0x0250, r18	; 0x800250 <twi_buf+0x1>
+     ef8:	22 81       	ldd	r18, Z+2	; 0x02
+     efa:	20 93 50 02 	sts	0x0250, r18	; 0x800250 <twi_buf+0x1>
 	twi_buf[2] = req->_addrh & 0x7F;
-     eee:	9f 77       	andi	r25, 0x7F	; 127
-     ef0:	90 93 51 02 	sts	0x0251, r25	; 0x800251 <twi_buf+0x2>
+     efe:	9f 77       	andi	r25, 0x7F	; 127
+     f00:	90 93 51 02 	sts	0x0251, r25	; 0x800251 <twi_buf+0x2>
 
 	t_len = t_header_len;
-     ef4:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <t_len>
+     f04:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <t_len>
 	r_last_index = req->len + 2;
-     ef8:	86 81       	ldd	r24, Z+6	; 0x06
-     efa:	8e 5f       	subi	r24, 0xFE	; 254
-     efc:	80 93 79 00 	sts	0x0079, r24	; 0x800079 <r_last_index>
+     f08:	86 81       	ldd	r24, Z+6	; 0x06
+     f0a:	8e 5f       	subi	r24, 0xFE	; 254
+     f0c:	80 93 79 00 	sts	0x0079, r24	; 0x800079 <r_last_index>
 
 	twi_master_state = TWI_S_READ;
-     f00:	10 92 77 00 	sts	0x0077, r1	; 0x800077 <twi_master_state>
+     f10:	10 92 77 00 	sts	0x0077, r1	; 0x800077 <twi_master_state>
 
 	TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA);
-     f04:	85 ea       	ldi	r24, 0xA5	; 165
-     f06:	86 bf       	out	0x36, r24	; 54
-     f08:	08 95       	ret
+     f14:	85 ea       	ldi	r24, 0xA5	; 165
+     f16:	86 bf       	out	0x36, r24	; 54
+     f18:	08 95       	ret
 
-00000f0a <__vector_17>:
+00000f1a <__vector_17>:
 }
 
 ISR(TWI_vect)
 {
-     f0a:	1f 92       	push	r1
-     f0c:	0f 92       	push	r0
-     f0e:	0f b6       	in	r0, 0x3f	; 63
-     f10:	0f 92       	push	r0
-     f12:	11 24       	eor	r1, r1
-     f14:	8f 93       	push	r24
-     f16:	9f 93       	push	r25
-     f18:	ef 93       	push	r30
-     f1a:	ff 93       	push	r31
+     f1a:	1f 92       	push	r1
+     f1c:	0f 92       	push	r0
+     f1e:	0f b6       	in	r0, 0x3f	; 63
+     f20:	0f 92       	push	r0
+     f22:	11 24       	eor	r1, r1
+     f24:	8f 93       	push	r24
+     f26:	9f 93       	push	r25
+     f28:	ef 93       	push	r30
+     f2a:	ff 93       	push	r31
 	switch (TWSR & 0xF8)
-     f1c:	81 b1       	in	r24, 0x01	; 1
-     f1e:	88 7f       	andi	r24, 0xF8	; 248
-     f20:	88 32       	cpi	r24, 0x28	; 40
-     f22:	91 f1       	breq	.+100    	; 0xf88 <__vector_17+0x7e>
-     f24:	78 f4       	brcc	.+30     	; 0xf44 <__vector_17+0x3a>
-     f26:	80 31       	cpi	r24, 0x10	; 16
-     f28:	11 f1       	breq	.+68     	; 0xf6e <__vector_17+0x64>
-     f2a:	30 f4       	brcc	.+12     	; 0xf38 <__vector_17+0x2e>
-     f2c:	88 23       	and	r24, r24
-     f2e:	09 f4       	brne	.+2      	; 0xf32 <__vector_17+0x28>
-     f30:	78 c0       	rjmp	.+240    	; 0x1022 <__vector_17+0x118>
-     f32:	88 30       	cpi	r24, 0x08	; 8
-     f34:	e1 f0       	breq	.+56     	; 0xf6e <__vector_17+0x64>
-     f36:	7a c0       	rjmp	.+244    	; 0x102c <__vector_17+0x122>
-     f38:	88 31       	cpi	r24, 0x18	; 24
-     f3a:	31 f1       	breq	.+76     	; 0xf88 <__vector_17+0x7e>
-     f3c:	80 32       	cpi	r24, 0x20	; 32
-     f3e:	09 f4       	brne	.+2      	; 0xf42 <__vector_17+0x38>
-     f40:	70 c0       	rjmp	.+224    	; 0x1022 <__vector_17+0x118>
-     f42:	74 c0       	rjmp	.+232    	; 0x102c <__vector_17+0x122>
-     f44:	80 34       	cpi	r24, 0x40	; 64
-     f46:	09 f4       	brne	.+2      	; 0xf4a <__vector_17+0x40>
-     f48:	56 c0       	rjmp	.+172    	; 0xff6 <__vector_17+0xec>
-     f4a:	38 f4       	brcc	.+14     	; 0xf5a <__vector_17+0x50>
-     f4c:	80 33       	cpi	r24, 0x30	; 48
-     f4e:	09 f4       	brne	.+2      	; 0xf52 <__vector_17+0x48>
-     f50:	68 c0       	rjmp	.+208    	; 0x1022 <__vector_17+0x118>
-     f52:	88 33       	cpi	r24, 0x38	; 56
-     f54:	09 f4       	brne	.+2      	; 0xf58 <__vector_17+0x4e>
-     f56:	42 c0       	rjmp	.+132    	; 0xfdc <__vector_17+0xd2>
-     f58:	69 c0       	rjmp	.+210    	; 0x102c <__vector_17+0x122>
-     f5a:	80 35       	cpi	r24, 0x50	; 80
-     f5c:	09 f4       	brne	.+2      	; 0xf60 <__vector_17+0x56>
-     f5e:	40 c0       	rjmp	.+128    	; 0xfe0 <__vector_17+0xd6>
-     f60:	88 35       	cpi	r24, 0x58	; 88
-     f62:	09 f4       	brne	.+2      	; 0xf66 <__vector_17+0x5c>
-     f64:	53 c0       	rjmp	.+166    	; 0x100c <__vector_17+0x102>
-     f66:	88 34       	cpi	r24, 0x48	; 72
-     f68:	09 f0       	breq	.+2      	; 0xf6c <__vector_17+0x62>
-     f6a:	60 c0       	rjmp	.+192    	; 0x102c <__vector_17+0x122>
-     f6c:	5a c0       	rjmp	.+180    	; 0x1022 <__vector_17+0x118>
+     f2c:	81 b1       	in	r24, 0x01	; 1
+     f2e:	88 7f       	andi	r24, 0xF8	; 248
+     f30:	88 32       	cpi	r24, 0x28	; 40
+     f32:	91 f1       	breq	.+100    	; 0xf98 <__vector_17+0x7e>
+     f34:	78 f4       	brcc	.+30     	; 0xf54 <__vector_17+0x3a>
+     f36:	80 31       	cpi	r24, 0x10	; 16
+     f38:	11 f1       	breq	.+68     	; 0xf7e <__vector_17+0x64>
+     f3a:	30 f4       	brcc	.+12     	; 0xf48 <__vector_17+0x2e>
+     f3c:	88 23       	and	r24, r24
+     f3e:	09 f4       	brne	.+2      	; 0xf42 <__vector_17+0x28>
+     f40:	78 c0       	rjmp	.+240    	; 0x1032 <__vector_17+0x118>
+     f42:	88 30       	cpi	r24, 0x08	; 8
+     f44:	e1 f0       	breq	.+56     	; 0xf7e <__vector_17+0x64>
+     f46:	7a c0       	rjmp	.+244    	; 0x103c <__vector_17+0x122>
+     f48:	88 31       	cpi	r24, 0x18	; 24
+     f4a:	31 f1       	breq	.+76     	; 0xf98 <__vector_17+0x7e>
+     f4c:	80 32       	cpi	r24, 0x20	; 32
+     f4e:	09 f4       	brne	.+2      	; 0xf52 <__vector_17+0x38>
+     f50:	70 c0       	rjmp	.+224    	; 0x1032 <__vector_17+0x118>
+     f52:	74 c0       	rjmp	.+232    	; 0x103c <__vector_17+0x122>
+     f54:	80 34       	cpi	r24, 0x40	; 64
+     f56:	09 f4       	brne	.+2      	; 0xf5a <__vector_17+0x40>
+     f58:	56 c0       	rjmp	.+172    	; 0x1006 <__vector_17+0xec>
+     f5a:	38 f4       	brcc	.+14     	; 0xf6a <__vector_17+0x50>
+     f5c:	80 33       	cpi	r24, 0x30	; 48
+     f5e:	09 f4       	brne	.+2      	; 0xf62 <__vector_17+0x48>
+     f60:	68 c0       	rjmp	.+208    	; 0x1032 <__vector_17+0x118>
+     f62:	88 33       	cpi	r24, 0x38	; 56
+     f64:	09 f4       	brne	.+2      	; 0xf68 <__vector_17+0x4e>
+     f66:	42 c0       	rjmp	.+132    	; 0xfec <__vector_17+0xd2>
+     f68:	69 c0       	rjmp	.+210    	; 0x103c <__vector_17+0x122>
+     f6a:	80 35       	cpi	r24, 0x50	; 80
+     f6c:	09 f4       	brne	.+2      	; 0xf70 <__vector_17+0x56>
+     f6e:	40 c0       	rjmp	.+128    	; 0xff0 <__vector_17+0xd6>
+     f70:	88 35       	cpi	r24, 0x58	; 88
+     f72:	09 f4       	brne	.+2      	; 0xf76 <__vector_17+0x5c>
+     f74:	53 c0       	rjmp	.+166    	; 0x101c <__vector_17+0x102>
+     f76:	88 34       	cpi	r24, 0x48	; 72
+     f78:	09 f0       	breq	.+2      	; 0xf7c <__vector_17+0x62>
+     f7a:	60 c0       	rjmp	.+192    	; 0x103c <__vector_17+0x122>
+     f7c:	5a c0       	rjmp	.+180    	; 0x1032 <__vector_17+0x118>
 	case TW_MT_ARB_LOST: // Arbitration lost in SLA+R or NOT ACK bit
 		TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA); // A START condition will be transmitted when the bus becomes free
 		break;
 	case TW_START:
 	case TW_REP_START:
 		if (twi_master_state == TWI_S_WRITE_DATA) {
-     f6e:	80 91 77 00 	lds	r24, 0x0077	; 0x800077 <twi_master_state>
-     f72:	82 30       	cpi	r24, 0x02	; 2
-     f74:	21 f4       	brne	.+8      	; 0xf7e <__vector_17+0x74>
+     f7e:	80 91 77 00 	lds	r24, 0x0077	; 0x800077 <twi_master_state>
+     f82:	82 30       	cpi	r24, 0x02	; 2
+     f84:	21 f4       	brne	.+8      	; 0xf8e <__vector_17+0x74>
 			TWDR = twi_buf[0];
-     f76:	80 91 4f 02 	lds	r24, 0x024F	; 0x80024f <twi_buf>
-     f7a:	83 b9       	out	0x03, r24	; 3
-     f7c:	44 c0       	rjmp	.+136    	; 0x1006 <__vector_17+0xfc>
+     f86:	80 91 4f 02 	lds	r24, 0x024F	; 0x80024f <twi_buf>
+     f8a:	83 b9       	out	0x03, r24	; 3
+     f8c:	44 c0       	rjmp	.+136    	; 0x1016 <__vector_17+0xfc>
 			TWCR = TWI_ENABLE | (1 << TWINT);
 			break;
 		}
 		w_ix = 0;
-     f7e:	10 92 7a 00 	sts	0x007A, r1	; 0x80007a <w_ix>
+     f8e:	10 92 7a 00 	sts	0x007A, r1	; 0x80007a <w_ix>
 		r_ix = 3;
-     f82:	83 e0       	ldi	r24, 0x03	; 3
-     f84:	80 93 78 00 	sts	0x0078, r24	; 0x800078 <r_ix>
+     f92:	83 e0       	ldi	r24, 0x03	; 3
+     f94:	80 93 78 00 	sts	0x0078, r24	; 0x800078 <r_ix>
 		// Master Transmitter Mode
 	case TW_MT_SLA_ACK:
 	case TW_MT_DATA_ACK:
 		if (w_ix < t_len) {
-     f88:	e0 91 7a 00 	lds	r30, 0x007A	; 0x80007a <w_ix>
-     f8c:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <t_len>
-     f90:	e8 17       	cp	r30, r24
-     f92:	c8 f4       	brcc	.+50     	; 0xfc6 <__vector_17+0xbc>
+     f98:	e0 91 7a 00 	lds	r30, 0x007A	; 0x80007a <w_ix>
+     f9c:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <t_len>
+     fa0:	e8 17       	cp	r30, r24
+     fa2:	c8 f4       	brcc	.+50     	; 0xfd6 <__vector_17+0xbc>
 			TWDR = twi_buf[w_ix++];
-     f94:	81 e0       	ldi	r24, 0x01	; 1
-     f96:	8e 0f       	add	r24, r30
-     f98:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <w_ix>
-     f9c:	f0 e0       	ldi	r31, 0x00	; 0
-     f9e:	e1 5b       	subi	r30, 0xB1	; 177
-     fa0:	fd 4f       	sbci	r31, 0xFD	; 253
-     fa2:	80 81       	ld	r24, Z
-     fa4:	83 b9       	out	0x03, r24	; 3
+     fa4:	81 e0       	ldi	r24, 0x01	; 1
+     fa6:	8e 0f       	add	r24, r30
+     fa8:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <w_ix>
+     fac:	f0 e0       	ldi	r31, 0x00	; 0
+     fae:	e1 5b       	subi	r30, 0xB1	; 177
+     fb0:	fd 4f       	sbci	r31, 0xFD	; 253
+     fb2:	80 81       	ld	r24, Z
+     fb4:	83 b9       	out	0x03, r24	; 3
 			if (twi_master_state == TWI_S_WRITE_ADDR && w_ix == t_header_len) {
-     fa6:	80 91 77 00 	lds	r24, 0x0077	; 0x800077 <twi_master_state>
-     faa:	81 30       	cpi	r24, 0x01	; 1
-     fac:	61 f5       	brne	.+88     	; 0x1006 <__vector_17+0xfc>
-     fae:	90 91 7a 00 	lds	r25, 0x007A	; 0x80007a <w_ix>
-     fb2:	80 91 7b 00 	lds	r24, 0x007B	; 0x80007b <t_header_len>
-     fb6:	98 13       	cpse	r25, r24
-     fb8:	26 c0       	rjmp	.+76     	; 0x1006 <__vector_17+0xfc>
+     fb6:	80 91 77 00 	lds	r24, 0x0077	; 0x800077 <twi_master_state>
+     fba:	81 30       	cpi	r24, 0x01	; 1
+     fbc:	61 f5       	brne	.+88     	; 0x1016 <__vector_17+0xfc>
+     fbe:	90 91 7a 00 	lds	r25, 0x007A	; 0x80007a <w_ix>
+     fc2:	80 91 7b 00 	lds	r24, 0x007B	; 0x80007b <t_header_len>
+     fc6:	98 13       	cpse	r25, r24
+     fc8:	26 c0       	rjmp	.+76     	; 0x1016 <__vector_17+0xfc>
 				TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA);
-     fba:	85 ea       	ldi	r24, 0xA5	; 165
-     fbc:	86 bf       	out	0x36, r24	; 54
+     fca:	85 ea       	ldi	r24, 0xA5	; 165
+     fcc:	86 bf       	out	0x36, r24	; 54
 				twi_master_state = TWI_S_WRITE_DATA;
-     fbe:	82 e0       	ldi	r24, 0x02	; 2
-     fc0:	80 93 77 00 	sts	0x0077, r24	; 0x800077 <twi_master_state>
+     fce:	82 e0       	ldi	r24, 0x02	; 2
+     fd0:	80 93 77 00 	sts	0x0077, r24	; 0x800077 <twi_master_state>
 				break;
-     fc4:	33 c0       	rjmp	.+102    	; 0x102c <__vector_17+0x122>
+     fd4:	33 c0       	rjmp	.+102    	; 0x103c <__vector_17+0x122>
 			}
 			TWCR = TWI_ENABLE | (1 << TWINT);
 		} else if (twi_master_state == TWI_S_WRITE_DATA) {
-     fc6:	80 91 77 00 	lds	r24, 0x0077	; 0x800077 <twi_master_state>
-     fca:	82 30       	cpi	r24, 0x02	; 2
-     fcc:	11 f4       	brne	.+4      	; 0xfd2 <__vector_17+0xc8>
+     fd6:	80 91 77 00 	lds	r24, 0x0077	; 0x800077 <twi_master_state>
+     fda:	82 30       	cpi	r24, 0x02	; 2
+     fdc:	11 f4       	brne	.+4      	; 0xfe2 <__vector_17+0xc8>
 			TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTO) | (1 << TWEA);
-     fce:	85 ed       	ldi	r24, 0xD5	; 213
-     fd0:	25 c0       	rjmp	.+74     	; 0x101c <__vector_17+0x112>
+     fde:	85 ed       	ldi	r24, 0xD5	; 213
+     fe0:	25 c0       	rjmp	.+74     	; 0x102c <__vector_17+0x112>
 			twi_result = TWI_SUCCESS;
 		} else {
 			twi_buf[0] |= TW_READ;
-     fd2:	80 91 4f 02 	lds	r24, 0x024F	; 0x80024f <twi_buf>
-     fd6:	81 60       	ori	r24, 0x01	; 1
-     fd8:	80 93 4f 02 	sts	0x024F, r24	; 0x80024f <twi_buf>
+     fe2:	80 91 4f 02 	lds	r24, 0x024F	; 0x80024f <twi_buf>
+     fe6:	81 60       	ori	r24, 0x01	; 1
+     fe8:	80 93 4f 02 	sts	0x024F, r24	; 0x80024f <twi_buf>
 			TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTA);
-     fdc:	85 ea       	ldi	r24, 0xA5	; 165
-     fde:	14 c0       	rjmp	.+40     	; 0x1008 <__vector_17+0xfe>
+     fec:	85 ea       	ldi	r24, 0xA5	; 165
+     fee:	14 c0       	rjmp	.+40     	; 0x1018 <__vector_17+0xfe>
 		}
 		break;
 		// Master Receiver Mode
 	case TW_MR_DATA_ACK:
 		twi_buf[r_ix++] = TWDR;
-     fe0:	e0 91 78 00 	lds	r30, 0x0078	; 0x800078 <r_ix>
-     fe4:	81 e0       	ldi	r24, 0x01	; 1
-     fe6:	8e 0f       	add	r24, r30
-     fe8:	80 93 78 00 	sts	0x0078, r24	; 0x800078 <r_ix>
-     fec:	83 b1       	in	r24, 0x03	; 3
-     fee:	f0 e0       	ldi	r31, 0x00	; 0
-     ff0:	e1 5b       	subi	r30, 0xB1	; 177
-     ff2:	fd 4f       	sbci	r31, 0xFD	; 253
-     ff4:	80 83       	st	Z, r24
+     ff0:	e0 91 78 00 	lds	r30, 0x0078	; 0x800078 <r_ix>
+     ff4:	81 e0       	ldi	r24, 0x01	; 1
+     ff6:	8e 0f       	add	r24, r30
+     ff8:	80 93 78 00 	sts	0x0078, r24	; 0x800078 <r_ix>
+     ffc:	83 b1       	in	r24, 0x03	; 3
+     ffe:	f0 e0       	ldi	r31, 0x00	; 0
+    1000:	e1 5b       	subi	r30, 0xB1	; 177
+    1002:	fd 4f       	sbci	r31, 0xFD	; 253
+    1004:	80 83       	st	Z, r24
 	case TW_MR_SLA_ACK:
 		if (r_ix < r_last_index) {
-     ff6:	90 91 78 00 	lds	r25, 0x0078	; 0x800078 <r_ix>
-     ffa:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <r_last_index>
-     ffe:	98 17       	cp	r25, r24
-    1000:	10 f4       	brcc	.+4      	; 0x1006 <__vector_17+0xfc>
+    1006:	90 91 78 00 	lds	r25, 0x0078	; 0x800078 <r_ix>
+    100a:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <r_last_index>
+    100e:	98 17       	cp	r25, r24
+    1010:	10 f4       	brcc	.+4      	; 0x1016 <__vector_17+0xfc>
 			TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWEA);
-    1002:	85 ec       	ldi	r24, 0xC5	; 197
-    1004:	01 c0       	rjmp	.+2      	; 0x1008 <__vector_17+0xfe>
+    1012:	85 ec       	ldi	r24, 0xC5	; 197
+    1014:	01 c0       	rjmp	.+2      	; 0x1018 <__vector_17+0xfe>
 		} else {
 			TWCR = TWI_ENABLE | (1 << TWINT);
-    1006:	85 e8       	ldi	r24, 0x85	; 133
-    1008:	86 bf       	out	0x36, r24	; 54
-    100a:	10 c0       	rjmp	.+32     	; 0x102c <__vector_17+0x122>
+    1016:	85 e8       	ldi	r24, 0x85	; 133
+    1018:	86 bf       	out	0x36, r24	; 54
+    101a:	10 c0       	rjmp	.+32     	; 0x103c <__vector_17+0x122>
 		}
 		break;
 	case TW_MR_DATA_NACK:
 		twi_buf[r_ix] = TWDR;
-    100c:	83 b1       	in	r24, 0x03	; 3
-    100e:	e0 91 78 00 	lds	r30, 0x0078	; 0x800078 <r_ix>
-    1012:	f0 e0       	ldi	r31, 0x00	; 0
-    1014:	e1 5b       	subi	r30, 0xB1	; 177
-    1016:	fd 4f       	sbci	r31, 0xFD	; 253
-    1018:	80 83       	st	Z, r24
+    101c:	83 b1       	in	r24, 0x03	; 3
+    101e:	e0 91 78 00 	lds	r30, 0x0078	; 0x800078 <r_ix>
+    1022:	f0 e0       	ldi	r31, 0x00	; 0
+    1024:	e1 5b       	subi	r30, 0xB1	; 177
+    1026:	fd 4f       	sbci	r31, 0xFD	; 253
+    1028:	80 83       	st	Z, r24
 		TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTO);
-    101a:	85 e9       	ldi	r24, 0x95	; 149
-    101c:	86 bf       	out	0x36, r24	; 54
+    102a:	85 e9       	ldi	r24, 0x95	; 149
+    102c:	86 bf       	out	0x36, r24	; 54
 		twi_result = TWI_SUCCESS;
-    101e:	81 e0       	ldi	r24, 0x01	; 1
-    1020:	03 c0       	rjmp	.+6      	; 0x1028 <__vector_17+0x11e>
+    102e:	81 e0       	ldi	r24, 0x01	; 1
+    1030:	03 c0       	rjmp	.+6      	; 0x1038 <__vector_17+0x11e>
 		break;
 		// MT + MR errors
 	case TW_MT_SLA_NACK:
 	case TW_MT_DATA_NACK:
 	case TW_MR_SLA_NACK:
 		TWCR = TWI_ENABLE | (1 << TWINT) | (1 << TWSTO);
-    1022:	85 e9       	ldi	r24, 0x95	; 149
-    1024:	86 bf       	out	0x36, r24	; 54
+    1032:	85 e9       	ldi	r24, 0x95	; 149
+    1034:	86 bf       	out	0x36, r24	; 54
 		twi_result = TWI_ERROR;
-    1026:	8f ef       	ldi	r24, 0xFF	; 255
-    1028:	80 93 72 02 	sts	0x0272, r24	; 0x800272 <twi_result>
+    1036:	8f ef       	ldi	r24, 0xFF	; 255
+    1038:	80 93 72 02 	sts	0x0272, r24	; 0x800272 <twi_result>
 		break;
 #endif // MASTER_ONLY
 	default:
 		break;
 	};
-    102c:	ff 91       	pop	r31
-    102e:	ef 91       	pop	r30
-    1030:	9f 91       	pop	r25
-    1032:	8f 91       	pop	r24
-    1034:	0f 90       	pop	r0
-    1036:	0f be       	out	0x3f, r0	; 63
-    1038:	0f 90       	pop	r0
-    103a:	1f 90       	pop	r1
-    103c:	18 95       	reti
+    103c:	ff 91       	pop	r31
+    103e:	ef 91       	pop	r30
+    1040:	9f 91       	pop	r25
+    1042:	8f 91       	pop	r24
+    1044:	0f 90       	pop	r0
+    1046:	0f be       	out	0x3f, r0	; 63
+    1048:	0f 90       	pop	r0
+    104a:	1f 90       	pop	r1
+    104c:	18 95       	reti
 
-0000103e <load_flash>:
-    103e:	e8 2f       	mov	r30, r24
-    1040:	f9 2f       	mov	r31, r25
-    1042:	a6 2f       	mov	r26, r22
-    1044:	b7 2f       	mov	r27, r23
+0000104e <load_flash>:
+    104e:	e8 2f       	mov	r30, r24
+    1050:	f9 2f       	mov	r31, r25
+    1052:	a6 2f       	mov	r26, r22
+    1054:	b7 2f       	mov	r27, r23
 
-00001046 <copy_flesh>:
-    1046:	c8 95       	lpm
-    1048:	0d 92       	st	X+, r0
-    104a:	31 96       	adiw	r30, 0x01	; 1
-    104c:	4a 95       	dec	r20
-    104e:	d9 f7       	brne	.-10     	; 0x1046 <copy_flesh>
-    1050:	08 95       	ret
+00001056 <copy_flesh>:
+    1056:	c8 95       	lpm
+    1058:	0d 92       	st	X+, r0
+    105a:	31 96       	adiw	r30, 0x01	; 1
+    105c:	4a 95       	dec	r20
+    105e:	d9 f7       	brne	.-10     	; 0x1056 <copy_flesh>
+    1060:	08 95       	ret
 
-00001052 <load_tt>:
-    1052:	02 e0       	ldi	r16, 0x02	; 2
-    1054:	00 93 c3 01 	sts	0x01C3, r16	; 0x8001c3 <tt>
-    1058:	03 e6       	ldi	r16, 0x63	; 99
-    105a:	00 93 c5 01 	sts	0x01C5, r16	; 0x8001c5 <tt+0x2>
-    105e:	05 e0       	ldi	r16, 0x05	; 5
-    1060:	00 93 c6 01 	sts	0x01C6, r16	; 0x8001c6 <tt+0x3>
-    1064:	0a eb       	ldi	r16, 0xBA	; 186
-    1066:	00 93 c9 01 	sts	0x01C9, r16	; 0x8001c9 <tt+0x6>
-    106a:	05 e0       	ldi	r16, 0x05	; 5
-    106c:	00 93 ca 01 	sts	0x01CA, r16	; 0x8001ca <tt+0x7>
-    1070:	e0 e0       	ldi	r30, 0x00	; 0
-    1072:	fe e3       	ldi	r31, 0x3E	; 62
-    1074:	14 91       	lpm	r17, Z
-    1076:	11 23       	and	r17, r17
-    1078:	31 f0       	breq	.+12     	; 0x1086 <no_tasks>
-    107a:	32 96       	adiw	r30, 0x02	; 2
+00001062 <load_tt>:
+    1062:	02 e0       	ldi	r16, 0x02	; 2
+    1064:	00 93 c3 01 	sts	0x01C3, r16	; 0x8001c3 <tt>
+    1068:	03 e6       	ldi	r16, 0x63	; 99
+    106a:	00 93 c5 01 	sts	0x01C5, r16	; 0x8001c5 <tt+0x2>
+    106e:	05 e0       	ldi	r16, 0x05	; 5
+    1070:	00 93 c6 01 	sts	0x01C6, r16	; 0x8001c6 <tt+0x3>
+    1074:	0a eb       	ldi	r16, 0xBA	; 186
+    1076:	00 93 c9 01 	sts	0x01C9, r16	; 0x8001c9 <tt+0x6>
+    107a:	05 e0       	ldi	r16, 0x05	; 5
+    107c:	00 93 ca 01 	sts	0x01CA, r16	; 0x8001ca <tt+0x7>
+    1080:	e0 e0       	ldi	r30, 0x00	; 0
+    1082:	fe e3       	ldi	r31, 0x3E	; 62
+    1084:	14 91       	lpm	r17, Z
+    1086:	11 23       	and	r17, r17
+    1088:	31 f0       	breq	.+12     	; 0x1096 <no_tasks>
+    108a:	32 96       	adiw	r30, 0x02	; 2
 
-0000107c <task_copy>:
-    107c:	85 91       	lpm	r24, Z+
-    107e:	95 91       	lpm	r25, Z+
-    1080:	03 d0       	rcall	.+6      	; 0x1088 <append_alg_to_end>
-    1082:	1a 95       	dec	r17
-    1084:	d9 f7       	brne	.-10     	; 0x107c <task_copy>
+0000108c <task_copy>:
+    108c:	85 91       	lpm	r24, Z+
+    108e:	95 91       	lpm	r25, Z+
+    1090:	03 d0       	rcall	.+6      	; 0x1098 <append_alg_to_end>
+    1092:	1a 95       	dec	r17
+    1094:	d9 f7       	brne	.-10     	; 0x108c <task_copy>
 
-00001086 <no_tasks>:
-    1086:	08 95       	ret
+00001096 <no_tasks>:
+    1096:	08 95       	ret
 
-00001088 <append_alg_to_end>:
-    1088:	a3 ec       	ldi	r26, 0xC3	; 195
-    108a:	b1 e0       	ldi	r27, 0x01	; 1
-    108c:	2c 91       	ld	r18, X
-    108e:	23 95       	inc	r18
-    1090:	2c 93       	st	X, r18
-    1092:	2a 95       	dec	r18
-    1094:	12 96       	adiw	r26, 0x02	; 2
-    1096:	34 e0       	ldi	r19, 0x04	; 4
-    1098:	23 9f       	mul	r18, r19
-    109a:	a0 0d       	add	r26, r0
-    109c:	b1 1d       	adc	r27, r1
-    109e:	11 24       	eor	r1, r1
-    10a0:	8d 93       	st	X+, r24
-    10a2:	9d 93       	st	X+, r25
-    10a4:	1d 92       	st	X+, r1
-    10a6:	1d 92       	st	X+, r1
-    10a8:	08 95       	ret
+00001098 <append_alg_to_end>:
+    1098:	a3 ec       	ldi	r26, 0xC3	; 195
+    109a:	b1 e0       	ldi	r27, 0x01	; 1
+    109c:	2c 91       	ld	r18, X
+    109e:	23 95       	inc	r18
+    10a0:	2c 93       	st	X, r18
+    10a2:	2a 95       	dec	r18
+    10a4:	12 96       	adiw	r26, 0x02	; 2
+    10a6:	34 e0       	ldi	r19, 0x04	; 4
+    10a8:	23 9f       	mul	r18, r19
+    10aa:	a0 0d       	add	r26, r0
+    10ac:	b1 1d       	adc	r27, r1
+    10ae:	11 24       	eor	r1, r1
+    10b0:	8d 93       	st	X+, r24
+    10b2:	9d 93       	st	X+, r25
+    10b4:	1d 92       	st	X+, r1
+    10b6:	1d 92       	st	X+, r1
+    10b8:	08 95       	ret
 
-000010aa <core_run>:
-    10aa:	8f da       	rcall	.-2786   	; 0x5ca <net_poll>
-    10ac:	44 de       	rcall	.-888    	; 0xd36 <update_counter>
-    10ae:	34 fa       	bst	r3, 4
-    10b0:	e6 f3       	brts	.-8      	; 0x10aa <core_run>
-    10b2:	a3 ec       	ldi	r26, 0xC3	; 195
-    10b4:	b1 e0       	ldi	r27, 0x01	; 1
-    10b6:	0d 91       	ld	r16, X+
-    10b8:	1d 91       	ld	r17, X+
-    10ba:	24 e0       	ldi	r18, 0x04	; 4
-    10bc:	12 9f       	mul	r17, r18
-    10be:	a0 0d       	add	r26, r0
-    10c0:	b1 1d       	adc	r27, r1
-    10c2:	11 24       	eor	r1, r1
-    10c4:	ed 91       	ld	r30, X+
-    10c6:	fd 91       	ld	r31, X+
-    10c8:	f8 94       	cli
-    10ca:	8d 91       	ld	r24, X+
-    10cc:	9d 91       	ld	r25, X+
-    10ce:	78 94       	sei
-    10d0:	88 23       	and	r24, r24
-    10d2:	99 f4       	brne	.+38     	; 0x10fa <next_task>
-    10d4:	99 23       	and	r25, r25
-    10d6:	89 f4       	brne	.+34     	; 0x10fa <next_task>
-    10d8:	af 93       	push	r26
-    10da:	bf 93       	push	r27
-    10dc:	68 94       	set
-    10de:	35 f8       	bld	r3, 5
-    10e0:	09 95       	icall
-    10e2:	e8 94       	clt
-    10e4:	35 f8       	bld	r3, 5
-    10e6:	bf 91       	pop	r27
-    10e8:	af 91       	pop	r26
-    10ea:	f8 94       	cli
-    10ec:	9e 93       	st	-X, r25
-    10ee:	8e 93       	st	-X, r24
-    10f0:	78 94       	sei
-    10f2:	00 91 c3 01 	lds	r16, 0x01C3	; 0x8001c3 <tt>
-    10f6:	10 91 c4 01 	lds	r17, 0x01C4	; 0x8001c4 <tt+0x1>
+000010ba <core_run>:
+    10ba:	87 da       	rcall	.-2802   	; 0x5ca <net_poll>
+    10bc:	3c de       	rcall	.-904    	; 0xd36 <update_counter>
+    10be:	a8 95       	wdr
+    10c0:	34 fa       	bst	r3, 4
+    10c2:	de f3       	brts	.-10     	; 0x10ba <core_run>
+    10c4:	a3 ec       	ldi	r26, 0xC3	; 195
+    10c6:	b1 e0       	ldi	r27, 0x01	; 1
+    10c8:	0d 91       	ld	r16, X+
+    10ca:	1d 91       	ld	r17, X+
+    10cc:	24 e0       	ldi	r18, 0x04	; 4
+    10ce:	12 9f       	mul	r17, r18
+    10d0:	a0 0d       	add	r26, r0
+    10d2:	b1 1d       	adc	r27, r1
+    10d4:	11 24       	eor	r1, r1
+    10d6:	ed 91       	ld	r30, X+
+    10d8:	fd 91       	ld	r31, X+
+    10da:	f8 94       	cli
+    10dc:	8d 91       	ld	r24, X+
+    10de:	9d 91       	ld	r25, X+
+    10e0:	78 94       	sei
+    10e2:	88 23       	and	r24, r24
+    10e4:	99 f4       	brne	.+38     	; 0x110c <next_task>
+    10e6:	99 23       	and	r25, r25
+    10e8:	89 f4       	brne	.+34     	; 0x110c <next_task>
+    10ea:	af 93       	push	r26
+    10ec:	bf 93       	push	r27
+    10ee:	68 94       	set
+    10f0:	35 f8       	bld	r3, 5
+    10f2:	09 95       	icall
+    10f4:	e8 94       	clt
+    10f6:	35 f8       	bld	r3, 5
+    10f8:	bf 91       	pop	r27
+    10fa:	af 91       	pop	r26
+    10fc:	f8 94       	cli
+    10fe:	9e 93       	st	-X, r25
+    1100:	8e 93       	st	-X, r24
+    1102:	78 94       	sei
+    1104:	00 91 c3 01 	lds	r16, 0x01C3	; 0x8001c3 <tt>
+    1108:	10 91 c4 01 	lds	r17, 0x01C4	; 0x8001c4 <tt+0x1>
 
-000010fa <next_task>:
-    10fa:	13 95       	inc	r17
-    10fc:	01 13       	cpse	r16, r17
-    10fe:	01 c0       	rjmp	.+2      	; 0x1102 <update_cur_task>
-    1100:	11 27       	eor	r17, r17
+0000110c <next_task>:
+    110c:	13 95       	inc	r17
+    110e:	01 13       	cpse	r16, r17
+    1110:	01 c0       	rjmp	.+2      	; 0x1114 <update_cur_task>
+    1112:	11 27       	eor	r17, r17
 
-00001102 <update_cur_task>:
-    1102:	10 93 c4 01 	sts	0x01C4, r17	; 0x8001c4 <tt+0x1>
-    1106:	d1 cf       	rjmp	.-94     	; 0x10aa <core_run>
+00001114 <update_cur_task>:
+    1114:	10 93 c4 01 	sts	0x01C4, r17	; 0x8001c4 <tt+0x1>
+    1118:	d0 cf       	rjmp	.-96     	; 0x10ba <core_run>
 
-00001108 <__vector_9>:
-    1108:	7f 93       	push	r23
-    110a:	7f b7       	in	r23, 0x3f	; 63
-    110c:	7f 93       	push	r23
-    110e:	8f 93       	push	r24
-    1110:	9f 93       	push	r25
-    1112:	af 93       	push	r26
-    1114:	bf 93       	push	r27
-    1116:	a3 ec       	ldi	r26, 0xC3	; 195
-    1118:	b1 e0       	ldi	r27, 0x01	; 1
-    111a:	7c 91       	ld	r23, X
-    111c:	77 23       	and	r23, r23
-    111e:	79 f0       	breq	.+30     	; 0x113e <_int_main_exit>
-    1120:	14 96       	adiw	r26, 0x04	; 4
+0000111a <__vector_9>:
+    111a:	7f 93       	push	r23
+    111c:	7f b7       	in	r23, 0x3f	; 63
+    111e:	7f 93       	push	r23
+    1120:	8f 93       	push	r24
+    1122:	9f 93       	push	r25
+    1124:	af 93       	push	r26
+    1126:	bf 93       	push	r27
+    1128:	a3 ec       	ldi	r26, 0xC3	; 195
+    112a:	b1 e0       	ldi	r27, 0x01	; 1
+    112c:	7c 91       	ld	r23, X
+    112e:	77 23       	and	r23, r23
+    1130:	79 f0       	breq	.+30     	; 0x1150 <_int_main_exit>
+    1132:	14 96       	adiw	r26, 0x04	; 4
 
-00001122 <int_main_loop>:
-    1122:	8d 91       	ld	r24, X+
-    1124:	9c 91       	ld	r25, X
-    1126:	99 23       	and	r25, r25
-    1128:	21 f4       	brne	.+8      	; 0x1132 <_sub_1>
-    112a:	88 23       	and	r24, r24
-    112c:	11 f4       	brne	.+4      	; 0x1132 <_sub_1>
-    112e:	13 96       	adiw	r26, 0x03	; 3
-    1130:	04 c0       	rjmp	.+8      	; 0x113a <_int_main_next_task>
+00001134 <int_main_loop>:
+    1134:	8d 91       	ld	r24, X+
+    1136:	9c 91       	ld	r25, X
+    1138:	99 23       	and	r25, r25
+    113a:	21 f4       	brne	.+8      	; 0x1144 <_sub_1>
+    113c:	88 23       	and	r24, r24
+    113e:	11 f4       	brne	.+4      	; 0x1144 <_sub_1>
+    1140:	13 96       	adiw	r26, 0x03	; 3
+    1142:	04 c0       	rjmp	.+8      	; 0x114c <_int_main_next_task>
 
-00001132 <_sub_1>:
-    1132:	01 97       	sbiw	r24, 0x01	; 1
-    1134:	9c 93       	st	X, r25
-    1136:	8e 93       	st	-X, r24
-    1138:	14 96       	adiw	r26, 0x04	; 4
+00001144 <_sub_1>:
+    1144:	01 97       	sbiw	r24, 0x01	; 1
+    1146:	9c 93       	st	X, r25
+    1148:	8e 93       	st	-X, r24
+    114a:	14 96       	adiw	r26, 0x04	; 4
 
-0000113a <_int_main_next_task>:
-    113a:	7a 95       	dec	r23
-    113c:	91 f7       	brne	.-28     	; 0x1122 <int_main_loop>
+0000114c <_int_main_next_task>:
+    114c:	7a 95       	dec	r23
+    114e:	91 f7       	brne	.-28     	; 0x1134 <int_main_loop>
 
-0000113e <_int_main_exit>:
-    113e:	83 e6       	ldi	r24, 0x63	; 99
-    1140:	82 bf       	out	0x32, r24	; 50
-    1142:	80 91 be 01 	lds	r24, 0x01BE	; 0x8001be <timer_cnt_unsafe>
-    1146:	90 91 bf 01 	lds	r25, 0x01BF	; 0x8001bf <timer_cnt_unsafe+0x1>
-    114a:	a0 91 c0 01 	lds	r26, 0x01C0	; 0x8001c0 <timer_cnt_unsafe+0x2>
-    114e:	b0 91 c1 01 	lds	r27, 0x01C1	; 0x8001c1 <timer_cnt_unsafe+0x3>
-    1152:	01 96       	adiw	r24, 0x01	; 1
-    1154:	a7 1f       	adc	r26, r23
-    1156:	b7 1f       	adc	r27, r23
-    1158:	80 93 be 01 	sts	0x01BE, r24	; 0x8001be <timer_cnt_unsafe>
-    115c:	90 93 bf 01 	sts	0x01BF, r25	; 0x8001bf <timer_cnt_unsafe+0x1>
-    1160:	a0 93 c0 01 	sts	0x01C0, r26	; 0x8001c0 <timer_cnt_unsafe+0x2>
-    1164:	b0 93 c1 01 	sts	0x01C1, r27	; 0x8001c1 <timer_cnt_unsafe+0x3>
-    1168:	80 91 eb 00 	lds	r24, 0x00EB	; 0x8000eb <r_data_cnt>
-    116c:	88 23       	and	r24, r24
-    116e:	19 f0       	breq	.+6      	; 0x1176 <clear_stack>
-    1170:	8a 95       	dec	r24
-    1172:	80 93 eb 00 	sts	0x00EB, r24	; 0x8000eb <r_data_cnt>
+00001150 <_int_main_exit>:
+    1150:	83 e6       	ldi	r24, 0x63	; 99
+    1152:	82 bf       	out	0x32, r24	; 50
+    1154:	80 91 be 01 	lds	r24, 0x01BE	; 0x8001be <timer_cnt_unsafe>
+    1158:	90 91 bf 01 	lds	r25, 0x01BF	; 0x8001bf <timer_cnt_unsafe+0x1>
+    115c:	a0 91 c0 01 	lds	r26, 0x01C0	; 0x8001c0 <timer_cnt_unsafe+0x2>
+    1160:	b0 91 c1 01 	lds	r27, 0x01C1	; 0x8001c1 <timer_cnt_unsafe+0x3>
+    1164:	01 96       	adiw	r24, 0x01	; 1
+    1166:	a7 1f       	adc	r26, r23
+    1168:	b7 1f       	adc	r27, r23
+    116a:	80 93 be 01 	sts	0x01BE, r24	; 0x8001be <timer_cnt_unsafe>
+    116e:	90 93 bf 01 	sts	0x01BF, r25	; 0x8001bf <timer_cnt_unsafe+0x1>
+    1172:	a0 93 c0 01 	sts	0x01C0, r26	; 0x8001c0 <timer_cnt_unsafe+0x2>
+    1176:	b0 93 c1 01 	sts	0x01C1, r27	; 0x8001c1 <timer_cnt_unsafe+0x3>
+    117a:	80 91 eb 00 	lds	r24, 0x00EB	; 0x8000eb <r_data_cnt>
+    117e:	88 23       	and	r24, r24
+    1180:	19 f0       	breq	.+6      	; 0x1188 <clear_stack>
+    1182:	8a 95       	dec	r24
+    1184:	80 93 eb 00 	sts	0x00EB, r24	; 0x8000eb <r_data_cnt>
 
-00001176 <clear_stack>:
-    1176:	bf 91       	pop	r27
-    1178:	af 91       	pop	r26
-    117a:	9f 91       	pop	r25
-    117c:	8f 91       	pop	r24
-    117e:	7f 91       	pop	r23
-    1180:	7f bf       	out	0x3f, r23	; 63
-    1182:	7f 91       	pop	r23
-    1184:	18 95       	reti
+00001188 <clear_stack>:
+    1188:	bf 91       	pop	r27
+    118a:	af 91       	pop	r26
+    118c:	9f 91       	pop	r25
+    118e:	8f 91       	pop	r24
+    1190:	7f 91       	pop	r23
+    1192:	7f bf       	out	0x3f, r23	; 63
+    1194:	7f 91       	pop	r23
+    1196:	18 95       	reti
 
-00001186 <memcpy>:
-    1186:	fb 01       	movw	r30, r22
-    1188:	dc 01       	movw	r26, r24
-    118a:	02 c0       	rjmp	.+4      	; 0x1190 <memcpy+0xa>
-    118c:	01 90       	ld	r0, Z+
-    118e:	0d 92       	st	X+, r0
-    1190:	41 50       	subi	r20, 0x01	; 1
-    1192:	50 40       	sbci	r21, 0x00	; 0
-    1194:	d8 f7       	brcc	.-10     	; 0x118c <memcpy+0x6>
-    1196:	08 95       	ret
+00001198 <memcpy>:
+    1198:	fb 01       	movw	r30, r22
+    119a:	dc 01       	movw	r26, r24
+    119c:	02 c0       	rjmp	.+4      	; 0x11a2 <memcpy+0xa>
+    119e:	01 90       	ld	r0, Z+
+    11a0:	0d 92       	st	X+, r0
+    11a2:	41 50       	subi	r20, 0x01	; 1
+    11a4:	50 40       	sbci	r21, 0x00	; 0
+    11a6:	d8 f7       	brcc	.-10     	; 0x119e <memcpy+0x6>
+    11a8:	08 95       	ret
 
-00001198 <memset>:
-    1198:	dc 01       	movw	r26, r24
-    119a:	01 c0       	rjmp	.+2      	; 0x119e <memset+0x6>
-    119c:	6d 93       	st	X+, r22
-    119e:	41 50       	subi	r20, 0x01	; 1
-    11a0:	50 40       	sbci	r21, 0x00	; 0
-    11a2:	e0 f7       	brcc	.-8      	; 0x119c <memset+0x4>
-    11a4:	08 95       	ret
+000011aa <memset>:
+    11aa:	dc 01       	movw	r26, r24
+    11ac:	01 c0       	rjmp	.+2      	; 0x11b0 <memset+0x6>
+    11ae:	6d 93       	st	X+, r22
+    11b0:	41 50       	subi	r20, 0x01	; 1
+    11b2:	50 40       	sbci	r21, 0x00	; 0
+    11b4:	e0 f7       	brcc	.-8      	; 0x11ae <memset+0x4>
+    11b6:	08 95       	ret
 
-000011a6 <eeprom_read_block>:
-    11a6:	dc 01       	movw	r26, r24
-    11a8:	cb 01       	movw	r24, r22
+000011b8 <eeprom_read_block>:
+    11b8:	dc 01       	movw	r26, r24
+    11ba:	cb 01       	movw	r24, r22
 
-000011aa <eeprom_read_blraw>:
-    11aa:	fc 01       	movw	r30, r24
-    11ac:	e1 99       	sbic	0x1c, 1	; 28
-    11ae:	fe cf       	rjmp	.-4      	; 0x11ac <eeprom_read_blraw+0x2>
-    11b0:	06 c0       	rjmp	.+12     	; 0x11be <eeprom_read_blraw+0x14>
-    11b2:	ff bb       	out	0x1f, r31	; 31
-    11b4:	ee bb       	out	0x1e, r30	; 30
-    11b6:	e0 9a       	sbi	0x1c, 0	; 28
-    11b8:	31 96       	adiw	r30, 0x01	; 1
-    11ba:	0d b2       	in	r0, 0x1d	; 29
-    11bc:	0d 92       	st	X+, r0
-    11be:	41 50       	subi	r20, 0x01	; 1
-    11c0:	50 40       	sbci	r21, 0x00	; 0
-    11c2:	b8 f7       	brcc	.-18     	; 0x11b2 <eeprom_read_blraw+0x8>
-    11c4:	08 95       	ret
+000011bc <eeprom_read_blraw>:
+    11bc:	fc 01       	movw	r30, r24
+    11be:	e1 99       	sbic	0x1c, 1	; 28
+    11c0:	fe cf       	rjmp	.-4      	; 0x11be <eeprom_read_blraw+0x2>
+    11c2:	06 c0       	rjmp	.+12     	; 0x11d0 <eeprom_read_blraw+0x14>
+    11c4:	ff bb       	out	0x1f, r31	; 31
+    11c6:	ee bb       	out	0x1e, r30	; 30
+    11c8:	e0 9a       	sbi	0x1c, 0	; 28
+    11ca:	31 96       	adiw	r30, 0x01	; 1
+    11cc:	0d b2       	in	r0, 0x1d	; 29
+    11ce:	0d 92       	st	X+, r0
+    11d0:	41 50       	subi	r20, 0x01	; 1
+    11d2:	50 40       	sbci	r21, 0x00	; 0
+    11d4:	b8 f7       	brcc	.-18     	; 0x11c4 <eeprom_read_blraw+0x8>
+    11d6:	08 95       	ret
 
-000011c6 <eeprom_write_block>:
-    11c6:	dc 01       	movw	r26, r24
-    11c8:	cb 01       	movw	r24, r22
-    11ca:	03 c0       	rjmp	.+6      	; 0x11d2 <eeprom_write_block+0xc>
-    11cc:	2d 91       	ld	r18, X+
-    11ce:	0e 94 ee 08 	call	0x11dc	; 0x11dc <eeprom_write_r18>
-    11d2:	41 50       	subi	r20, 0x01	; 1
-    11d4:	50 40       	sbci	r21, 0x00	; 0
-    11d6:	d0 f7       	brcc	.-12     	; 0x11cc <eeprom_write_block+0x6>
-    11d8:	08 95       	ret
+000011d8 <eeprom_write_block>:
+    11d8:	dc 01       	movw	r26, r24
+    11da:	cb 01       	movw	r24, r22
+    11dc:	03 c0       	rjmp	.+6      	; 0x11e4 <eeprom_write_block+0xc>
+    11de:	2d 91       	ld	r18, X+
+    11e0:	0e 94 f7 08 	call	0x11ee	; 0x11ee <eeprom_write_r18>
+    11e4:	41 50       	subi	r20, 0x01	; 1
+    11e6:	50 40       	sbci	r21, 0x00	; 0
+    11e8:	d0 f7       	brcc	.-12     	; 0x11de <eeprom_write_block+0x6>
+    11ea:	08 95       	ret
 
-000011da <eeprom_write_byte>:
-    11da:	26 2f       	mov	r18, r22
+000011ec <eeprom_write_byte>:
+    11ec:	26 2f       	mov	r18, r22
 
-000011dc <eeprom_write_r18>:
-    11dc:	e1 99       	sbic	0x1c, 1	; 28
-    11de:	fe cf       	rjmp	.-4      	; 0x11dc <eeprom_write_r18>
-    11e0:	9f bb       	out	0x1f, r25	; 31
-    11e2:	8e bb       	out	0x1e, r24	; 30
-    11e4:	2d bb       	out	0x1d, r18	; 29
-    11e6:	0f b6       	in	r0, 0x3f	; 63
-    11e8:	f8 94       	cli
-    11ea:	e2 9a       	sbi	0x1c, 2	; 28
-    11ec:	e1 9a       	sbi	0x1c, 1	; 28
-    11ee:	0f be       	out	0x3f, r0	; 63
-    11f0:	01 96       	adiw	r24, 0x01	; 1
-    11f2:	08 95       	ret
+000011ee <eeprom_write_r18>:
+    11ee:	e1 99       	sbic	0x1c, 1	; 28
+    11f0:	fe cf       	rjmp	.-4      	; 0x11ee <eeprom_write_r18>
+    11f2:	9f bb       	out	0x1f, r25	; 31
+    11f4:	8e bb       	out	0x1e, r24	; 30
+    11f6:	2d bb       	out	0x1d, r18	; 29
+    11f8:	0f b6       	in	r0, 0x3f	; 63
+    11fa:	f8 94       	cli
+    11fc:	e2 9a       	sbi	0x1c, 2	; 28
+    11fe:	e1 9a       	sbi	0x1c, 1	; 28
+    1200:	0f be       	out	0x3f, r0	; 63
+    1202:	01 96       	adiw	r24, 0x01	; 1
+    1204:	08 95       	ret
 
-000011f4 <_exit>:
-    11f4:	f8 94       	cli
+00001206 <_exit>:
+    1206:	f8 94       	cli
 
-000011f6 <__stop_program>:
-    11f6:	ff cf       	rjmp	.-2      	; 0x11f6 <__stop_program>
+00001208 <__stop_program>:
+    1208:	ff cf       	rjmp	.-2      	; 0x1208 <__stop_program>
 
 Disassembly of section .nrww:
 
@@ -3223,21 +3234,21 @@ Disassembly of section .nrww:
     3c0c:	05 c5       	rjmp	.+2570   	; 0x4618 <__TEXT_REGION_LENGTH__+0x618>
     3c0e:	c4 04       	cpc	r12, r4
     3c10:	cc 0c       	add	r12, r12
-    3c12:	0d cd       	rjmp	.-1510   	; 0x362e <_user_space+0x23ae>
-    3c14:	0f cf       	rjmp	.-482    	; 0x3a34 <_user_space+0x27b4>
+    3c12:	0d cd       	rjmp	.-1510   	; 0x362e <_user_space+0x232e>
+    3c14:	0f cf       	rjmp	.-482    	; 0x3a34 <_user_space+0x2734>
     3c16:	ce 0e       	add	r12, r30
-    3c18:	0a ca       	rjmp	.-3052   	; 0x302e <_user_space+0x1dae>
+    3c18:	0a ca       	rjmp	.-3052   	; 0x302e <_user_space+0x1d2e>
     3c1a:	cb 0b       	sbc	r28, r27
     3c1c:	c9 09       	sbc	r28, r9
-    3c1e:	08 c8       	rjmp	.-4080   	; 0x2c30 <_user_space+0x19b0>
+    3c1e:	08 c8       	rjmp	.-4080   	; 0x2c30 <_user_space+0x1930>
     3c20:	d8 18       	sub	r13, r8
-    3c22:	19 d9       	rcall	.-3534   	; 0x2e56 <_user_space+0x1bd6>
-    3c24:	1b db       	rcall	.-2506   	; 0x325c <_user_space+0x1fdc>
+    3c22:	19 d9       	rcall	.-3534   	; 0x2e56 <_user_space+0x1b56>
+    3c24:	1b db       	rcall	.-2506   	; 0x325c <_user_space+0x1f5c>
     3c26:	da 1a       	sub	r13, r26
-    3c28:	1e de       	rcall	.-964    	; 0x3866 <_user_space+0x25e6>
+    3c28:	1e de       	rcall	.-964    	; 0x3866 <_user_space+0x2566>
     3c2a:	df 1f       	adc	r29, r31
     3c2c:	dd 1d       	adc	r29, r13
-    3c2e:	1c dc       	rcall	.-1992   	; 0x3468 <_user_space+0x21e8>
+    3c2e:	1c dc       	rcall	.-1992   	; 0x3468 <_user_space+0x2168>
     3c30:	14 d4       	rcall	.+2088   	; 0x445a <__TEXT_REGION_LENGTH__+0x45a>
     3c32:	d5 15       	cp	r29, r5
     3c34:	d7 17       	cp	r29, r23
@@ -3250,7 +3261,7 @@ Disassembly of section .nrww:
     3c42:	31 f1       	breq	.+76     	; 0x3c90 <_nrww_start+0x90>
     3c44:	33 f3       	brvs	.-52     	; 0x3c12 <_nrww_start+0x12>
     3c46:	f2 32       	cpi	r31, 0x22	; 34
-    3c48:	36 f6       	brtc	.-116    	; 0x3bd6 <_user_space+0x2956>
+    3c48:	36 f6       	brtc	.-116    	; 0x3bd6 <_user_space+0x28d6>
     3c4a:	f7 37       	cpi	r31, 0x77	; 119
     3c4c:	f5 35       	cpi	r31, 0x55	; 85
     3c4e:	34 f4       	brge	.+12     	; 0x3c5c <_nrww_start+0x5c>
@@ -3590,8 +3601,8 @@ Disassembly of section .nrww:
 
 Disassembly of section .tab:
 
-000011f8 <FLASH_TWI-0x8>:
+0000120a <FLASH_TWI-0x76>:
 	...
 
-00001200 <FLASH_TWI>:
+00001280 <FLASH_TWI>:
 	...

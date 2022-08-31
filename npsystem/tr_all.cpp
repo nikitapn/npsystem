@@ -106,6 +106,7 @@ CItemView* CSFCControlUnit::CreateView(CTreeControlUnit* tree, CMyTabView& tabvi
 
 } // namespace npsys
 
+//BOOST_CLASS_EXPORT_GUID(npsys::CFBDControlUnit, "fbdpou");
 
 CItemView* CTreeControlUnit::CreateView(CMyTabView& tabview) {
 	return n_->CreateView(this, tabview);

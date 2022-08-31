@@ -51,11 +51,11 @@ public:
 
 	virtual void CreateItemManager(nprpc::detail::flat::ObjectId_Direct im) {
 		auto item_manager = new ItemManagerImpl();
-		auto oid = item_manager_poa->activate_object(item_manager);
+		auto oid = item_manager_poa->activate_object(item_manager, &nprpc::get_context());
 		nprpc::assign_to_out(oid, im);
 	}
 
-	virtual void SendRawData(::flat::Span<uint8_t> data) {
+	virtual void SendRawData(nprpc::flat::Span<uint8_t> data) {
 		proto->t_add_task(protocol::t_send_raw(data.data(), static_cast<uint8_t>(data.size())));
 	}
 
@@ -99,7 +99,7 @@ public:
 		process_cmd(protocol::write::t_write_32(dev_addr, mem_addr, value, 1, qvalue));
 	}
 
-	virtual void WriteBlock(uint8_t dev_addr, uint16_t mem_addr, ::flat::Span<uint8_t> data) {
+	virtual void WriteBlock(uint8_t dev_addr, uint16_t mem_addr, nprpc::flat::Span<uint8_t> data) {
 		environment::get_instance().validate_device(dev_addr);
 		process_cmd(protocol::write::t_write_block(dev_addr, mem_addr, data.data(), static_cast<uint8_t>(data.size())));
 	}
@@ -109,7 +109,7 @@ public:
 		process_cmd(protocol::read::t_read_byte(dev_addr, addr, value));
 	}
 
-	virtual void ReadBlock(uint8_t dev_addr, uint16_t addr, uint8_t len, /*out*/::flat::Vector_Direct1<uint8_t> data) {
+	virtual void ReadBlock(uint8_t dev_addr, uint16_t addr, uint8_t len, /*out*/nprpc::flat::Vector_Direct1<uint8_t> data) {
 		environment::get_instance().validate_device(dev_addr);
 		process_cmd(protocol::read::t_read_memory(dev_addr, addr, len, data));
 	}
@@ -125,12 +125,12 @@ public:
 		process_cmd(protocol::avr5::t_reinit_io(dev_addr));
 	}
 
-	virtual void AVR_SendRemoteData(uint8_t dev_addr, uint16_t page_num, ::flat::Span<uint8_t> data) {
+	virtual void AVR_SendRemoteData(uint8_t dev_addr, uint16_t page_num, nprpc::flat::Span<uint8_t> data) {
 		environment::get_instance().validate_device(dev_addr);
 		process_cmd(protocol::avr5::t_update_remote_data(dev_addr, page_num, data.data(), data.size()));
 	}
 
-	virtual void AVR_SendPage(uint8_t dev_addr, uint8_t page_num, ::flat::Span<uint8_t> data) {
+	virtual void AVR_SendPage(uint8_t dev_addr, uint8_t page_num, nprpc::flat::Span<uint8_t> data) {
 		environment::get_instance().validate_device(dev_addr);
 		process_cmd(protocol::avr5::t_send_page(dev_addr, page_num, data.data(), data.size()));
 	}
@@ -145,17 +145,17 @@ public:
 		process_cmd(protocol::avr5::t_replace_alg(dev_addr, old_addr, new_addr));
 	}
 
-	virtual void AVR_WriteEeprom(uint8_t dev_addr, uint16_t mem_addr, ::flat::Span<uint8_t> data) {
+	virtual void AVR_WriteEeprom(uint8_t dev_addr, uint16_t mem_addr, nprpc::flat::Span<uint8_t> data) {
 		environment::get_instance().validate_device(dev_addr);
 		process_cmd(protocol::avr5::t_write_eeprom(dev_addr, mem_addr, data.data(), data.size()));
 	}
 
-	virtual void AVR_WriteTwiTable(uint8_t dev_addr, uint8_t page_num, ::flat::Span<uint8_t> data) {
+	virtual void AVR_WriteTwiTable(uint8_t dev_addr, uint8_t page_num, nprpc::flat::Span<uint8_t> data) {
 		environment::get_instance().validate_device(dev_addr);
 		process_cmd(protocol::avr5::t_write_twi_table(dev_addr, page_num, data.data(), data.size()));
 	}
 
-	virtual void AVR_V_GetFlash(cbt1::oid_t device_id, /*out*/::flat::Vector_Direct1<uint16_t> data) {
+	virtual void AVR_V_GetFlash(cbt1::oid_t device_id, /*out*/nprpc::flat::Vector_Direct1<uint16_t> data) {
 		auto virt = environment::get_instance().find_virtual_controller_by_id(device_id);
 		auto v = dynamic_cast<VirtualAvrController*>(virt);
 		if (v == nullptr) throw nps::NPNetCommunicationError(S_COMMUNICATION_ERROR_DEVICE_NOT_EXIST);
@@ -217,7 +217,7 @@ public:
 		g_hist->remove_parameter(param_id);
 	}
 
-	virtual void GetNetworkStatus(/*out*/::flat::Vector_Direct1<uint8_t> network_status) {
+	virtual void GetNetworkStatus(/*out*/nprpc::flat::Vector_Direct1<uint8_t> network_status) {
 	}
 };
 
@@ -311,8 +311,6 @@ int start(int argc, char** argv) {
 		odb::Database::init(nameserver.get(), server1_poa, keypath, "npserver");
 		nameserver->Bind(server1_poa->activate_object(&server_servant1), "npsystem_server");
 
-		rpc->start();
-
 		environment::get_instance().init();
 		proto = std::make_unique<protocol::protocol_service>();
 		g_hist = std::make_unique<History>();
@@ -323,12 +321,14 @@ int start(int argc, char** argv) {
 #endif
 
 		thread_pool::get_instance().ctx().run();
-		std::cout << "Returned from io_contex.run()." << std::endl;
+		std::cout << "Returned from io_context.run()." << std::endl;
 		//		item_mgr_pman->deactivate(true, true);
 		//		server_pman->deactivate(true, true);
 
 		environment::get_instance().shutdown();
 		std::cout << "environment::get_instance().shutdown()." << std::endl;
+
+		rpc->destroy();
 
 		return 0;
 	} catch (nprpc::Exception& ex) {

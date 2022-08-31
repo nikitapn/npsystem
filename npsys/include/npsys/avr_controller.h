@@ -1,6 +1,8 @@
 #pragma once
 
-#include <avr_info/avr_info.h>
+#if defined(_CONFIGURATOR_) || defined(_NPSERVER_)
+#	include <avr_info/avr_info.h>
+#endif
 
 #include "network.h"
 
@@ -22,7 +24,7 @@ public:
 	const int version = 0;
 	odb::node_list<avr_port_n> ports;
 	avr_assigned_object_files_l assigned_ofs;
-	virtual void boost_serialization_always_abstact_base() {}
+	virtual void boost_serialization_always_abstact_base() { std::abort(); }
 #if defined(_CONFIGURATOR_) || defined(_NPSERVER_)
 	virtual uint16_t GetA_Time() const noexcept { return GetFirmwareInfo().rmem.lt; }
 	const avrinfo::PeripheralInfo& GetPeripheralInfo() const { return avrinfo::AVRInfo::get_instance().GetPeripheralInfo(controller_model); }
@@ -119,7 +121,7 @@ public:
 		: CNetworkDevice("Virtual Bridge", 0)
 	{
 	}
-	virtual void boost_serialization_always_abstact_base() {}
+	virtual void boost_serialization_always_abstact_base() { std::abort(); }
 };
 
 } // namespace npsys

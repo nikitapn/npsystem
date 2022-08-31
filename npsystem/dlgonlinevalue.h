@@ -234,7 +234,7 @@ protected:
 			return 0;
 
 		} catch (input_error& e) {
-			e.msg_box(this->m_hWnd);
+			MessageBoxA(m_hWnd, e.what(), "Input Error", MB_ICONERROR);
 			return 0;
 		} catch (nps::NPNetCommunicationError& ex) {
 			std::cout << "Communication failed: " << TranslateError(ex.code).data() << std::endl;

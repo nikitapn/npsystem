@@ -5,18 +5,15 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="idl">
-      <UniqueIdentifier>{f1f26120-4ddd-4894-8a19-1e326c26d6d9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\npwebserver.cpp">
+    <ClCompile Include="src\npsys.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\npsys.cpp">
+    <ClCompile Include="src\boost_export.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -24,20 +21,8 @@
     <ClInclude Include="src\config.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\npwebserver.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\npwebserver_m.hpp">
-      <Filter>src</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="idl\make.bat">
-      <Filter>idl</Filter>
-    </None>
-    <None Include="idl\npwebserver.npidl">
-      <Filter>idl</Filter>
-    </None>
     <None Include="Makefile" />
   </ItemGroup>
 </Project>

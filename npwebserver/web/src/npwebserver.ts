@@ -108,7 +108,7 @@ export class WebServer extends NPRPC.ObjectProxy {
     __ch.function_idx = 0;
     buf.write_len(buf.size - 4);
     await NPRPC.rpc.call(
-      {ip4: this.data.ip4, port: this.data.websocket_port}, buf, this.timeout
+      this.endpoint(), buf, this.timeout
     );
     let std_reply = NPRPC.handle_standart_reply(buf);
     if (std_reply != -1) {

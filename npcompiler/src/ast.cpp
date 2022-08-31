@@ -1,24 +1,38 @@
 #include "ast.hpp"
 
-#include <npsys/network.h>
-#include <npsys/control_unit.h>
-#include <npsys/algcat.h>
-#include <npsys/algsubcat.h>
-#include <npsys/fbdblock.h>
-
-#include <npsys/cpp/cpp_variable.h>
-#include <npsys/cpp/cpp_slot.h>
-
 namespace npcompiler::ast {
-	AstNode* ParserContext::ext_ident_get(std::string_view str) {
-	//	if (auto founded = symbols_global.find(str); founded != symbols_global.end()) {
-	//		return founded->second;
-	//	}
-	//
-	//	auto slot = npsys::CFBDSlot::get_by_path(str);
-	//	if (!slot->var.fetch()) throw std::string(str) + " is not defined.";
-	//
-	//	//slot->var->GetClearType();
-		return nullptr;
+	
+AstNode* ParserContext::create_binary_op(AstType type, AstNode* lhs, AstNode* rhs) {
+	auto t1 = lhs->get_expression_type(), t2 = rhs->get_expression_type();
+	if (t1 == t2) return new AstNode(type, lhs, rhs);
+
+	auto cast_to = std::max(t1, t2);
+	auto [n1, n2] = cast_to == t1 ? std::make_tuple(lhs, rhs) : std::make_tuple(rhs, lhs);
+
+	auto n = new AstNode(
+		type,
+		new AstNode(std::forward_as_tuple(AstType::Cast, CastTo{ cast_to }), n1),
+		n2
+	);
+
+	return n;
+}
+
+AstNode* ParserContext::create_assignment(AstNode* lhs, AstNode* rhs) {
+	auto src = lhs->get_expression_type(), dest = rhs->get_expression_type();
+	if (src == dest) new AstNode(AstType::Assignment, lhs, rhs);
+
+	//std::cerr << "Assignment: " << npsys::variable::to_ctype(src) << " := " << npsys::variable::to_ctype(dest) << '\n';
+
+	if (src > dest) {
+		std::cout << "assignment may result loss of data\n";
 	}
+
+	return new AstNode(
+		AstType::Assignment,
+		lhs,
+		new AstNode(std::forward_as_tuple(AstType::Cast, CastTo{ src }), rhs)
+	);
+}
+
 } // namespace npcompiler::ast

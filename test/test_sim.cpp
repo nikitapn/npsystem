@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include "stdafx.h"
 #include <sim/sim.h>
 #include <sim/medium.h>
@@ -97,10 +100,10 @@ int test_sim() {
 		for (int i = 0, addr = 2; i < Count; i++, addr++) {
 			auto ptr = std::make_unique<Microcontroller<Atmega8>>(16'000'000, addr);
 			if (addr == 2) {
-				ptr->LoadFlash("d:\\projects\\cpp\\Alpha\\x64\\firmware\\pc-link-virtual.hex");
+				ptr->LoadFlash("d:\\projects\\cpp\\npsystem\\x64\\firmware\\pc-link-virtual.hex");
 			} else {
 				ptr->LoadFlash(
-					"d:\\projects\\cpp\\Alpha\\x64\\firmware\\atmega8_virtual_"
+					"d:\\projects\\cpp\\npsystem\\x64\\firmware\\atmega8_virtual_"
 					+ std::to_string(addr) + ".hex");
 			}
 			medium.AddController(ptr.get());

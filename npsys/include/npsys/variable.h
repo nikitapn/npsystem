@@ -116,6 +116,7 @@ public:
 	std::string to_vardecl() const noexcept;
 	std::string to_vardeclq() const noexcept;
 
+	constexpr static std::string_view to_ctype(int type) noexcept;
 	constexpr static bool TypesEqual(int type_1, int type_2) noexcept;
 	constexpr static bool IsBit(int type) noexcept;
 	constexpr static bool IsIO(int type) noexcept;

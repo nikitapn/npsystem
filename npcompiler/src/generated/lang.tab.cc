@@ -41,7 +41,7 @@
 
 
 // Unqualified %code blocks.
-#line 28 "src/lang.y" // lalr1.cc:435
+#line 29 "src/lang.y" // lalr1.cc:435
 
 	#include <iostream>
   #include <fstream>
@@ -50,11 +50,12 @@
 	extern int yylex(yy::parser::semantic_type* yylval, yy::parser::location_type* loc);
 
 	using namespace npcompiler::ast;
+	using namespace npcompiler;
 
 	#define mkn(...) new AstNode(__VA_ARGS__)
 	#define msv(x) std::string_view(x.ptr, x.len)
 
-#line 58 "src/generated/lang.tab.cc" // lalr1.cc:435
+#line 59 "src/generated/lang.tab.cc" // lalr1.cc:435
 
 
 #ifndef YY_
@@ -149,7 +150,7 @@
 
 
 namespace yy {
-#line 153 "src/generated/lang.tab.cc" // lalr1.cc:510
+#line 154 "src/generated/lang.tab.cc" // lalr1.cc:510
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -632,316 +633,328 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 77 "src/lang.y" // lalr1.cc:919
+#line 80 "src/lang.y" // lalr1.cc:919
     { root_.push((yystack_[0].value.val_node)); (yylhs.value.val_node) = &root_; }
-#line 638 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 639 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 3:
-#line 78 "src/lang.y" // lalr1.cc:919
+#line 81 "src/lang.y" // lalr1.cc:919
     { root_.push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 644 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 645 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 4:
-#line 82 "src/lang.y" // lalr1.cc:919
+#line 85 "src/lang.y" // lalr1.cc:919
     { 
 			(yylhs.value.val_node) = (yystack_[2].value.val_node);
 			(yystack_[2].value.val_node)->push((yystack_[1].value.val_node), mkn(AstType::Program_End)); 
 			}
-#line 653 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 654 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 5:
-#line 86 "src/lang.y" // lalr1.cc:919
+#line 89 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[2].value.val_node), (yystack_[2].value.val_node)->push((yystack_[1].value.val_node), mkn(AstType::Function_End)); }
-#line 659 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 660 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 6:
-#line 87 "src/lang.y" // lalr1.cc:919
+#line 90 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 665 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 666 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 7:
-#line 91 "src/lang.y" // lalr1.cc:919
+#line 94 "src/lang.y" // lalr1.cc:919
     { ctx_.symbols_local.clear(); }
-#line 671 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 672 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 8:
-#line 95 "src/lang.y" // lalr1.cc:919
+#line 98 "src/lang.y" // lalr1.cc:919
     { ctx_.symbols_local.clear(); }
-#line 677 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 678 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 9:
-#line 99 "src/lang.y" // lalr1.cc:919
+#line 102 "src/lang.y" // lalr1.cc:919
     { ctx_.symbols_local.clear(); }
-#line 683 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 684 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 10:
-#line 103 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Function, (yystack_[0].value.val_node)); }
-#line 689 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 106 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::Function, (yystack_[0].value.val_node)); }
+#line 690 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 11:
-#line 104 "src/lang.y" // lalr1.cc:919
+#line 107 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 695 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 696 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 12:
-#line 108 "src/lang.y" // lalr1.cc:919
+#line 111 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 701 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 702 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 13:
-#line 112 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::StmtList); }
-#line 707 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 115 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::StmtList); }
+#line 708 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 14:
-#line 113 "src/lang.y" // lalr1.cc:919
+#line 116 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 713 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 714 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 15:
-#line 117 "src/lang.y" // lalr1.cc:919
+#line 120 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 719 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 720 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 16:
-#line 118 "src/lang.y" // lalr1.cc:919
+#line 121 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 725 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 726 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 17:
-#line 122 "src/lang.y" // lalr1.cc:919
-    { ctx_.error = true; std::cerr << "missing a semicolon after the statement.\n"; }
-#line 731 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 125 "src/lang.y" // lalr1.cc:919
+    { ctx_.error = true; std::cerr << "missing semicolon after the statement.\n"; }
+#line 732 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 19:
-#line 126 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Assignment, ctx_.ident_get(msv((yystack_[3].value.val_str))), (yystack_[1].value.val_node)); }
-#line 737 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 20:
-#line 130 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_SIGNED_BYTE); }
-#line 743 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 129 "src/lang.y" // lalr1.cc:919
+    { ctx_.error = true; std::cerr << "missing semicolon after the var declaration.\n"; }
+#line 738 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 21:
-#line 131 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_BYTE); }
-#line 749 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 133 "src/lang.y" // lalr1.cc:919
+    {(yylhs.value.val_node) = ctx_.ident_get(msv((yystack_[0].value.val_str)));}
+#line 744 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 22:
-#line 132 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_SIGNED_WORD); }
-#line 755 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 134 "src/lang.y" // lalr1.cc:919
+    {(yylhs.value.val_node) = ctx_.ext_ident_get(msv((yystack_[0].value.val_str)));}
+#line 750 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 23:
-#line 133 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_WORD); }
-#line 761 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 138 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = ctx_.create_assignment((yystack_[3].value.val_node), (yystack_[1].value.val_node)); }
+#line 756 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 24:
-#line 134 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_SIGNED_DWORD); }
-#line 767 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 142 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_BOOLEAN; }
+#line 762 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 25:
-#line 135 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_DWORD); }
-#line 773 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 143 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_U8; }
+#line 768 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 26:
-#line 136 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_FLOAT); }
-#line 779 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 144 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_S8; }
+#line 774 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 27:
-#line 137 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = static_cast<int>(npsys::variable::Type::VT_DISCRETE); }
-#line 785 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 145 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_U16; }
+#line 780 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 28:
-#line 141 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Program); }
-#line 791 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 146 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_S16; }
+#line 786 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 29:
-#line 142 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
-#line 797 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 147 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_U32; }
+#line 792 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 30:
-#line 143 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
-#line 803 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 148 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_S32; }
+#line 798 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 31:
-#line 147 "src/lang.y" // lalr1.cc:919
-    { ctx_.global = false; }
-#line 809 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 149 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = fl::FDT_F32; }
+#line 804 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 32:
-#line 147 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 815 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 153 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::Program); }
+#line 810 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 33:
-#line 151 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::LocalVarDeclSeq); }
-#line 821 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 154 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
+#line 816 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 34:
-#line 152 "src/lang.y" // lalr1.cc:919
-    { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 827 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 155 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
+#line 822 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 35:
-#line 156 "src/lang.y" // lalr1.cc:919
-    { ctx_.global = true; }
-#line 833 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 159 "src/lang.y" // lalr1.cc:919
+    { ctx_.global = false; }
+#line 828 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 36:
-#line 156 "src/lang.y" // lalr1.cc:919
+#line 159 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 839 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 834 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 37:
-#line 160 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::GlobalVarDeclSeq); }
-#line 845 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 163 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::LocalVarDeclSeq); }
+#line 840 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 38:
-#line 161 "src/lang.y" // lalr1.cc:919
+#line 164 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 851 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 846 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 39:
-#line 165 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = ctx_.ident_create(msv((yystack_[3].value.val_str)), (yystack_[1].value.val_int)); }
-#line 857 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 168 "src/lang.y" // lalr1.cc:919
+    { ctx_.global = true; }
+#line 852 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 40:
-#line 169 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::If); }
-#line 863 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 168 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
+#line 858 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 41:
+#line 172 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::GlobalVarDeclSeq); }
+#line 864 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 42:
+#line 173 "src/lang.y" // lalr1.cc:919
+    { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
+#line 870 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 43:
+#line 177 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = ctx_.ident_create(msv((yystack_[3].value.val_str)), (yystack_[1].value.val_int)); }
+#line 876 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 44:
-#line 179 "src/lang.y" // lalr1.cc:919
-    { std::cerr << "NUMBER_DISCRETE not impl\n"; }
-#line 869 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 45:
-#line 180 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn((yystack_[0].value.val_int)); }
-#line 875 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 46:
 #line 181 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::If); }
+#line 882 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 48:
+#line 191 "src/lang.y" // lalr1.cc:919
+    { std::cerr << "NUMBER_DISCRETE not impl\n"; }
+#line 888 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 49:
+#line 192 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(utils::parse_integer(msv((yystack_[0].value.val_str)))); }
+#line 894 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 50:
+#line 193 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn((yystack_[0].value.val_float)); }
-#line 881 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 52:
-#line 195 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 887 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 53:
-#line 196 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Uminus, (yystack_[0].value.val_node)); }
-#line 893 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 54:
-#line 197 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 899 "src/generated/lang.tab.cc" // lalr1.cc:919
-    break;
-
-  case 55:
-#line 198 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Add, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
-#line 905 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 900 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 56:
-#line 199 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Add, (yystack_[2].value.val_node), mkn(non_term, AstType::Uminus, (yystack_[0].value.val_node))); }
-#line 911 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 207 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
+#line 906 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 57:
-#line 200 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Mul, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
-#line 917 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 208 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = mkn(AstType::Uminus, (yystack_[0].value.val_node)); }
+#line 912 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 58:
-#line 201 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = mkn(non_term, AstType::Div, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
-#line 923 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 209 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
+#line 918 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 59:
-#line 202 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 929 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 210 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Add, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
+#line 924 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 60:
-#line 203 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = ctx_.ident_get(msv((yystack_[0].value.val_str))); }
-#line 935 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 211 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Add, (yystack_[2].value.val_node), mkn(AstType::Uminus, (yystack_[0].value.val_node))); }
+#line 930 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 61:
-#line 204 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_node) = ctx_.ext_ident_get(msv((yystack_[0].value.val_str))); }
-#line 941 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 212 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Mul, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
+#line 936 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 62:
+#line 213 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Div, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
+#line 942 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 63:
+#line 214 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
+#line 948 "src/generated/lang.tab.cc" // lalr1.cc:919
+    break;
+
+  case 64:
+#line 215 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
+#line 954 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
 
-#line 945 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 958 "src/generated/lang.tab.cc" // lalr1.cc:919
             default:
               break;
             }
@@ -1211,104 +1224,106 @@ namespace yy {
   }
 
 
-  const signed char parser::yypact_ninf_ = -37;
+  const signed char parser::yypact_ninf_ = -18;
 
   const signed char parser::yytable_ninf_ = -1;
 
   const signed char
   parser::yypact_[] =
   {
-      54,    -6,     3,     5,    74,   -37,   -37,    13,    13,   -37,
-     -37,    -5,   -37,    13,   -37,   -37,    24,   -37,    -1,   -37,
-     -37,   -37,   -37,     1,   -37,   -37,   -37,   -37,    -4,    32,
-     -37,   -37,   -37,   -37,    64,   -37,   -37,    71,    32,   -37,
-     -37,   -37,   -37,   -37,    32,    32,    32,   -37,    20,     6,
-     -37,   -16,   -37,   -37,   -37,     0,    61,    61,    15,   -37,
-     -37,    32,    32,    32,    32,    32,    32,    32,    60,   -37,
-     -37,   -37,   -37,    52,    59,    61,    61,   -37,   -37,    59,
-      59,   -37,   -37,   -37,   -37,   -37,   -37,   -37,   -37,    14,
-      32,   -37,   -37,   -37,   -37,    44,     2,   -37,   -37,    52,
-     -37
+       7,    11,    16,    22,    96,   -18,   -18,     4,     4,   -18,
+     -18,    12,   -18,     4,   -18,   -18,    66,   -18,    35,   -18,
+     -18,   -18,   -18,     3,   -18,   -18,   -18,   -18,   -18,   -18,
+      -5,   -18,   -18,    29,   -18,   -18,    72,   -18,   -18,    86,
+     -18,   -18,   -18,    -5,    -5,    -5,   -18,   -18,    -7,   -10,
+      -5,   -18,    31,   -18,   -18,   -18,    73,    73,    33,   -18,
+     -18,    -5,    -5,    -5,    -5,    -5,    -5,    -5,     1,    63,
+     -18,    38,    70,    73,    73,   -18,   -18,    70,    70,   -18,
+     -18,   -18,   -18,   -18,   -18,   -18,   -18,   -18,   -18,   -18,
+       2,    -5,   -18,   -18,   -18,   -18,   -18,   -18,    62,    60,
+     -18,   -18,    38,   -18
   };
 
   const unsigned char
   parser::yydefact_[] =
   {
-       0,     0,     0,     0,     0,     2,    28,     0,     0,     1,
-       3,    13,    31,    13,    10,    12,     0,    35,     0,    29,
-      30,    33,    11,     0,     9,     6,    37,     7,     0,     0,
-       4,    14,    15,    16,     0,     8,     5,     0,     0,    60,
-      61,    44,    45,    46,     0,     0,     0,    59,     0,    47,
-      32,     0,    34,    36,    38,     0,    54,    53,     0,    13,
-      51,     0,     0,     0,     0,     0,     0,     0,     0,    17,
-      18,    19,    52,     0,    49,    55,    56,    57,    58,    48,
-      50,    20,    21,    22,    23,    24,    25,    26,    27,     0,
-       0,    13,    43,    40,    39,     0,     0,    13,    42,     0,
-      41
+       0,     0,     0,     0,     0,     2,    32,     0,     0,     1,
+       3,    13,    35,    13,    10,    12,     0,    39,     0,    33,
+      34,    37,    11,     0,     9,     6,    41,     7,    21,    22,
+       0,     4,    14,     0,    15,    16,     0,     8,     5,     0,
+      48,    49,    50,     0,     0,     0,    64,    63,     0,    51,
+       0,    36,     0,    38,    40,    42,    58,    57,     0,    13,
+      55,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+      56,     0,    53,    59,    60,    61,    62,    52,    54,    17,
+      18,    23,    26,    25,    28,    27,    30,    29,    31,    24,
+       0,     0,    13,    47,    44,    19,    20,    43,     0,     0,
+      13,    46,     0,    45
   };
 
   const signed char
   parser::yypgoto_[] =
   {
-     -37,   -37,    76,   -37,   -37,   -37,    57,    47,   -13,   -37,
-     -37,   -37,   -37,   -37,    88,   -37,   -37,   -37,   -37,   -37,
-      31,   -37,     4,   -37,    10,   -36
+     -18,   -18,    74,   -18,   -18,   -18,    78,    40,   -13,   -18,
+     -18,   -18,   -17,   -18,   -18,   -18,    89,   -18,   -18,   -18,
+     -18,   -18,    69,   -18,     0,   -18,    20,    -1
   };
 
   const signed char
   parser::yydefgoto_[] =
   {
-      -1,     4,     5,    30,    36,    25,    13,    14,    18,    31,
-      71,    32,    89,    11,    15,    21,    34,    20,    26,    37,
-      52,    33,    93,    47,    48,    49
+      -1,     4,     5,    31,    38,    25,    13,    14,    18,    32,
+      81,    97,    46,    34,    90,    11,    15,    21,    36,    20,
+      26,    39,    53,    35,    94,    47,    48,    49
   };
 
   const unsigned char
   parser::yytable_[] =
   {
-      23,    69,    55,    27,    12,    17,     6,    35,    56,    57,
-      58,    28,    38,    28,    28,     7,    29,     8,    29,    29,
-      60,    61,    12,    98,    68,    74,    75,    76,    77,    78,
-      79,    80,    24,    12,    62,    63,    64,    65,    59,    70,
-      62,    63,    64,    65,    39,    40,    73,    66,    67,    62,
-      63,    64,    65,    94,    41,    42,    43,     1,    72,     2,
-      22,     3,    97,    22,    28,    16,    44,    45,    54,    29,
-      46,    90,    91,    92,     9,    50,    51,     1,    96,     2,
-      10,     3,    53,    51,    99,    81,    82,    83,    84,    85,
-      86,    87,    88,    62,    63,    64,    65,    64,    65,    19,
-      95,     0,     0,   100
+      23,    33,    79,    95,    60,    61,    33,    28,    29,    37,
+       1,    59,     2,    12,     3,    28,    29,    40,    41,    42,
+      30,    12,    17,     6,    62,    63,    64,    65,     7,    43,
+      44,    66,    67,    45,     8,    62,    63,    64,    65,    27,
+      80,    96,    56,    57,    58,    50,    71,    28,    29,    68,
+      28,    29,    30,    22,    33,    30,    22,    91,    92,    93,
+      72,    73,    74,    75,    76,    77,    78,    62,    63,    64,
+      65,    69,    28,    29,    24,    12,    70,    30,    10,    99,
+     100,   101,    33,    51,    52,    33,    16,   102,    82,    83,
+      84,    85,    86,    87,    88,    89,     9,    54,    52,     1,
+      19,     2,   103,     3,    62,    63,    64,    65,    55,    64,
+      65,    98
   };
 
-  const signed char
+  const unsigned char
   parser::yycheck_[] =
   {
-      13,     1,    38,     4,     9,    10,    12,     6,    44,    45,
-      46,    12,    16,    12,    12,    12,    17,    12,    17,    17,
-      14,    15,     9,    21,    40,    61,    62,    63,    64,    65,
-      66,    67,     8,     9,    34,    35,    36,    37,    18,    39,
-      34,    35,    36,    37,    12,    13,    59,    41,    42,    34,
-      35,    36,    37,    39,    22,    23,    24,     3,    43,     5,
-      13,     7,    18,    16,    12,     8,    34,    35,    37,    17,
-      38,    19,    20,    21,     0,    11,    12,     3,    91,     5,
-       4,     7,    11,    12,    97,    25,    26,    27,    28,    29,
-      30,    31,    32,    34,    35,    36,    37,    36,    37,    11,
-      90,    -1,    -1,    99
+      13,    18,     1,     1,    14,    15,    23,    12,    13,     6,
+       3,    18,     5,     9,     7,    12,    13,    22,    23,    24,
+      17,     9,    10,    12,    34,    35,    36,    37,    12,    34,
+      35,    41,    42,    38,    12,    34,    35,    36,    37,     4,
+      39,    39,    43,    44,    45,    16,    59,    12,    13,    50,
+      12,    13,    17,    13,    71,    17,    16,    19,    20,    21,
+      61,    62,    63,    64,    65,    66,    67,    34,    35,    36,
+      37,    40,    12,    13,     8,     9,    43,    17,     4,    92,
+      18,    21,    99,    11,    12,   102,     8,   100,    25,    26,
+      27,    28,    29,    30,    31,    32,     0,    11,    12,     3,
+      11,     5,   102,     7,    34,    35,    36,    37,    39,    36,
+      37,    91
   };
 
   const unsigned char
   parser::yystos_[] =
   {
        0,     3,     5,     7,    45,    46,    12,    12,    12,     0,
-      46,    57,     9,    50,    51,    58,    50,    10,    52,    58,
-      61,    59,    51,    52,     8,    49,    62,     4,    12,    17,
-      47,    53,    55,    65,    60,     6,    48,    63,    16,    12,
-      13,    22,    23,    24,    34,    35,    38,    67,    68,    69,
-      11,    12,    64,    11,    64,    69,    69,    69,    69,    18,
-      14,    15,    34,    35,    36,    37,    41,    42,    40,     1,
-      39,    54,    43,    52,    69,    69,    69,    69,    69,    69,
-      69,    25,    26,    27,    28,    29,    30,    31,    32,    56,
-      19,    20,    21,    66,    39,    68,    52,    18,    21,    52,
-      66
+      46,    59,     9,    50,    51,    60,    50,    10,    52,    60,
+      63,    61,    51,    52,     8,    49,    64,     4,    12,    13,
+      17,    47,    53,    56,    57,    67,    62,     6,    48,    65,
+      22,    23,    24,    34,    35,    38,    56,    69,    70,    71,
+      16,    11,    12,    66,    11,    66,    71,    71,    71,    18,
+      14,    15,    34,    35,    36,    37,    41,    42,    71,    40,
+      43,    52,    71,    71,    71,    71,    71,    71,    71,     1,
+      39,    54,    25,    26,    27,    28,    29,    30,    31,    32,
+      58,    19,    20,    21,    68,     1,    39,    55,    70,    52,
+      18,    21,    52,    68
   };
 
   const unsigned char
@@ -1316,23 +1331,23 @@ namespace yy {
   {
        0,    44,    45,    45,    46,    46,    46,    47,    48,    49,
       50,    50,    51,    52,    52,    53,    53,    54,    54,    55,
-      56,    56,    56,    56,    56,    56,    56,    56,    57,    57,
-      57,    59,    58,    60,    60,    62,    61,    63,    63,    64,
-      65,    66,    66,    66,    67,    67,    67,    68,    68,    68,
-      68,    68,    69,    69,    69,    69,    69,    69,    69,    69,
-      69,    69
+      55,    56,    56,    57,    58,    58,    58,    58,    58,    58,
+      58,    58,    59,    59,    59,    61,    60,    62,    62,    64,
+      63,    65,    65,    66,    67,    68,    68,    68,    69,    69,
+      69,    70,    70,    70,    70,    70,    71,    71,    71,    71,
+      71,    71,    71,    71,    71
   };
 
   const unsigned char
   parser::yyr2_[] =
   {
        0,     2,     1,     2,     5,     5,     4,     1,     1,     1,
-       1,     2,     1,     0,     2,     1,     1,     1,     1,     4,
-       1,     1,     1,     1,     1,     1,     1,     1,     0,     2,
-       2,     0,     4,     0,     2,     0,     4,     0,     2,     4,
-       5,     5,     3,     1,     1,     1,     1,     1,     3,     3,
-       3,     2,     3,     2,     2,     3,     3,     3,     3,     1,
-       1,     1
+       1,     2,     1,     0,     2,     1,     1,     1,     1,     1,
+       1,     1,     1,     4,     1,     1,     1,     1,     1,     1,
+       1,     1,     0,     2,     2,     0,     4,     0,     2,     0,
+       4,     0,     2,     4,     5,     5,     3,     1,     1,     1,
+       1,     1,     3,     3,     3,     2,     3,     2,     2,     3,
+       3,     3,     3,     1,     1
   };
 
 
@@ -1350,23 +1365,23 @@ namespace yy {
   "VT_I32", "VT_U32", "VT_REAL", "VT_BOOL", "','", "'+'", "'-'", "'*'",
   "'/'", "'('", "';'", "':'", "'<'", "'>'", "')'", "$accept", "module",
   "module0", "end_program", "end_function", "end_function_block",
-  "function", "function0", "stmt_list", "stmt", "semicolon", "assignment",
-  "var_type", "prog_decl", "var_decl_local", "$@1", "var_decl_seq",
-  "var_decl_global", "$@2", "var_decl_seq_global", "var_decl0", "if_stmt",
-  "else_clause", "number", "logical_exp", "exp", YY_NULLPTR
+  "function", "function0", "stmt_list", "stmt", "semicolon", "semicolon1",
+  "ident", "assignment", "var_type", "prog_decl", "var_decl_local", "$@1",
+  "var_decl_seq", "var_decl_global", "$@2", "var_decl_seq_global",
+  "var_decl0", "if_stmt", "else_clause", "number", "logical_exp", "exp", YY_NULLPTR
   };
 
 #if YYDEBUG
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    77,    77,    78,    82,    86,    87,    91,    95,    99,
-     103,   104,   108,   112,   113,   117,   118,   122,   122,   126,
-     130,   131,   132,   133,   134,   135,   136,   137,   141,   142,
-     143,   147,   147,   151,   152,   156,   156,   160,   161,   165,
-     169,   173,   174,   175,   179,   180,   181,   186,   187,   188,
-     189,   190,   195,   196,   197,   198,   199,   200,   201,   202,
-     203,   204
+       0,    80,    80,    81,    85,    89,    90,    94,    98,   102,
+     106,   107,   111,   115,   116,   120,   121,   125,   125,   129,
+     129,   133,   134,   138,   142,   143,   144,   145,   146,   147,
+     148,   149,   153,   154,   155,   159,   159,   163,   164,   168,
+     168,   172,   173,   177,   181,   185,   186,   187,   191,   192,
+     193,   198,   199,   200,   201,   202,   207,   208,   209,   210,
+     211,   212,   213,   214,   215
   };
 
   // Print the state stack on the debug stream.
@@ -1450,8 +1465,8 @@ namespace yy {
 
 
 } // yy
-#line 1454 "src/generated/lang.tab.cc" // lalr1.cc:1242
-#line 207 "src/lang.y" // lalr1.cc:1243
+#line 1469 "src/generated/lang.tab.cc" // lalr1.cc:1242
+#line 218 "src/lang.y" // lalr1.cc:1243
 
 
 namespace yy {

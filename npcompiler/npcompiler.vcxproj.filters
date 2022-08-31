@@ -26,6 +26,8 @@
     <ClCompile Include="src\builder_llvm.cpp" />
     <ClCompile Include="src\npcompiler.cpp" />
     <ClCompile Include="src\ast.cpp" />
+    <ClCompile Include="src\typer.cpp" />
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\builder_llvm.hpp" />
@@ -43,6 +45,11 @@
       <Filter>generated</Filter>
     </ClInclude>
     <ClInclude Include="include\npcompiler\npcompiler.hpp" />
+    <ClInclude Include="include\npcompiler\resolver.hpp" />
+    <ClInclude Include="src\typer.hpp" />
+    <ClInclude Include="src\ast_utils.hpp" />
+    <ClInclude Include="src\utils.hpp" />
+    <ClInclude Include="src\number.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\lang.l" />

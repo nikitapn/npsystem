@@ -6,7 +6,7 @@ CXXFLAGS := -std=$(CXXVER) -O2 -Wall -ftemplate-backtrace-limit=0
 
 SRCS = $(shell find src/ -name '*.cpp') 
 OBJS = $(addprefix obj/,$(addsuffix .o, $(basename $(notdir $(SRCS)))))
-DEFS = -DBOOST_LOG_DYN_LINK -DNDEBUG -DNPSYSTEM_FIRMWARE_API_CPP
+DEFS = -DBOOST_LOG_DYN_LINK -DNDEBUG -DNPSYSTEM_FIRMWARE_API_CPP -D_NPSERVER_
 
 INC_DIR = \
 	-I../npc/include \

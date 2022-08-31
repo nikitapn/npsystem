@@ -15,7 +15,6 @@
     <ClInclude Include="include\npsys\other\online_value.h" />
     <ClInclude Include="include\npsys\other\remote.h" />
     <ClInclude Include="include\npsys\other\uploadable.h" />
-    <ClInclude Include="include\npsys\boost_export.h" />
     <ClInclude Include="include\npsys\cpp\cpp_variable.h" />
     <ClInclude Include="include\npsys\strings.h" />
     <ClInclude Include="include\npsys\memtypes.h" />
@@ -25,6 +24,7 @@
     <ClInclude Include="include\npsys\web.h" />
     <ClInclude Include="include\npsys\cmodels.h" />
     <ClInclude Include="include\npsys\avr_controller.h" />
+    <ClInclude Include="include\npsys\boost_export.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\alg.cpp" />

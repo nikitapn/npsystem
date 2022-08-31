@@ -6,7 +6,7 @@ CXXFLAGS := -std=$(CXXVER) -O2 -Wall -ftemplate-backtrace-limit=0
 
 SRCS = $(shell find src/ -name '*.cpp') 
 OBJS = $(addprefix obj/,$(addsuffix .o, $(basename $(notdir $(SRCS)))))
-DEFS = -DNDEBUG -DNPSYSTEM_FIRMWARE_API_CPP
+DEFS = -DNDEBUG -DNPSYSTEM_FIRMWARE_API_CPP -D_NPWEBSERVER_
 
 INC_DIR = \
 	-I../avr_info/include \

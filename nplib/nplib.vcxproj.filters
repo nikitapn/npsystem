@@ -29,6 +29,7 @@
     <ClInclude Include="include\nplib\utils\binary_search.hpp" />
     <ClInclude Include="src\service_error.h" />
     <ClInclude Include="include\nplib\windows\console.hpp" />
+    <ClInclude Include="include\nplib\utils\boost_export2.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

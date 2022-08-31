@@ -702,7 +702,7 @@ void CAVRController::WriteDefaultValues(const std::vector<WriteDefaultValuesRequ
 		ExecMultiCmd(CWriteEepromCmd(dev_addr, info, eeprom_offset, req.GetLength(), req.GetData()));
 	}
 	for (const auto& req : m_requests) {
-		npsys_rpc->server->WriteBlock(dev_addr, req.GetOffset(), flat::make_read_only_span(req.GetData(), req.GetLength()));
+		npsys_rpc->server->WriteBlock(dev_addr, req.GetOffset(), nprpc::flat::make_read_only_span(req.GetData(), req.GetLength()));
 	}
 }
 
@@ -1156,7 +1156,7 @@ bool CAVRController::UploadIO() noexcept {
 			eep.adc_state = ADC_DISABLE;
 		}
 
-		npsys_rpc->server->WriteBlock(dev_addr, info.rmem.eeprcfg, flat::make_read_only_span((uint8_t*)&eep, sizeof(eeprcfg_t)));
+		npsys_rpc->server->WriteBlock(dev_addr, info.rmem.eeprcfg, nprpc::flat::make_read_only_span((uint8_t*)&eep, sizeof(eeprcfg_t)));
 
 		WriteEeprom(info.emem.eeprcfg, sizeof(eeprcfg_t), (uint8_t*)&eep);
 

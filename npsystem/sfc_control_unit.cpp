@@ -188,7 +188,7 @@ size_t CSFCControlUnit::AdviseImpl() {
 	return 0;
 }
 
-void CSFCControlUnit::OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) {
+void CSFCControlUnit::OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) {
 }
 void CSFCControlUnit::OnConnectionLost() noexcept {
 }

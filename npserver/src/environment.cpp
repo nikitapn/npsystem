@@ -194,7 +194,7 @@ bool CAVRController::AddToNetwork(npsys::device_n device) {
 	case npsys::hardware::Model::ATMEGA8:
 	case npsys::hardware::Model::ATMEGA16:
 		environment::get_instance().br_map_[dev_addr] = br_udp.get();
-		if (g_cfg.log_level > 2) std::cout << "avr device \"" << name_ << "\" added" << std::endl;
+		if (g_cfg.log_level > 0) std::cout << "avr device \"" << name_ << "\" added" << std::endl;
 		break;
 	case npsys::hardware::Model::ATMEGA8_VIRTUAL:
 	case npsys::hardware::Model::ATMEGA16_VIRTUAL: {
@@ -205,11 +205,11 @@ bool CAVRController::AddToNetwork(npsys::device_n device) {
 				std::cerr << "Error in database.\n";
 				return false;
 			}
-			if (g_cfg.log_level > 2) std::cout << "virtual device \"" << name_ << "\" added" << std::endl;
+			if (g_cfg.log_level > 0) std::cout << "virtual device \"" << name_ << "\" added" << std::endl;
 			environment::get_instance().vc_list_.store();
 		}
 		environment::get_instance().br_map_[dev_addr] = v_pc_link_serv.get();
-		if (g_cfg.log_level > 2) std::cout << "virtual device \"" << name_ << "\" founded" << std::endl;
+		if (g_cfg.log_level > 0) std::cout << "virtual device \"" << name_ << "\" founded" << std::endl;
 		ptr->run();
 		break;
 	}

@@ -21,11 +21,11 @@
   <ItemGroup>
     <ClInclude Include="include\npsys\access.h" />
     <ClInclude Include="include\npsys\avr_controller.h" />
+    <ClInclude Include="include\npsys\boost_export.hpp" />
     <ClInclude Include="include\npsys\cmodels.h" />
     <ClInclude Include="include\npsys\control_unit.h" />
     <ClInclude Include="include\npsys\algcat.h" />
     <ClInclude Include="include\npsys\algsubcat.h" />
-    <ClInclude Include="include\npsys\boost_export.h" />
     <ClInclude Include="include\npsys\corba.h" />
     <ClInclude Include="include\npsys\cpp\cpp_slot.h" />
     <ClInclude Include="include\npsys\cpp\cpp_variable.h" />
@@ -68,26 +68,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -136,7 +136,7 @@
       <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NPSYS_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_NPSYS_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>include\;..\nplib\include;..\npc\include;..\npdbclient\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -172,7 +172,7 @@
       <PreprocessorDefinitions>NPSYSTEM_FIRMWARE_API_CPP;_WIN32_WINNT=0x0A00;WINVER=0x0A00;NPSYS_EXPORTS;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;_NPSYS_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>include\;..\nplib\include;..\npc\include;..\npdbclient\include;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>

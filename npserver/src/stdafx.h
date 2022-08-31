@@ -3,7 +3,6 @@
 
 #pragma once
 
-#define _NPSERVER_
 #define BOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE
 
 #include <iostream>

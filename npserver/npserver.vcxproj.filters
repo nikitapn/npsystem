@@ -71,9 +71,6 @@
     <ClCompile Include="src\avr_virtual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\boost_export.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\bridge_avr_virtual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -105,6 +102,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\boost_export.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

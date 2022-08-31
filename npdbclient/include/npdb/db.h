@@ -10,7 +10,7 @@
 #include <optional>
 #include <unordered_map>
 #include <memory>
-#include <assert.h>
+#include <cassert>
 #include <sstream>
 #include <type_traits>
 #include <filesystem>
@@ -37,7 +37,7 @@
 
 
 #ifdef DEBUG
-#	define ASSERT_FETCH(node) ASSERT(node.fetch())
+#	define ASSERT_FETCH(node) assert(node.fetch())
 #else
 #	define ASSERT_FETCH(node) node.fetch()
 #endif // DEBUG

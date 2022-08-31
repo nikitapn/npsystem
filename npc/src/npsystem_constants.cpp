@@ -1,8 +1,11 @@
 #include "npsystem_constants.hpp"
-#include "npsystem_constants_m.hpp"
-#include <nprpc/nprpc_impl.hpp>
+#include <nprpc/impl/nprpc_impl.hpp>
 
-void npsystem_constants_throw_exception(boost::beast::flat_buffer& buf);
+void npsystem_constants_throw_exception(::nprpc::flat_buffer& buf);
+
+namespace {
+
+} // 
 
 namespace npsysc { 
 } // namespace npsysc

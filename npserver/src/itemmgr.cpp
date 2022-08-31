@@ -29,14 +29,14 @@ ItemManagerImpl::ItemManagerImpl() noexcept
 }
 
 // nprpc thread
-void ItemManagerImpl::Advise(::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/::flat::Vector_Direct1<uint64_t> h) {
+void ItemManagerImpl::Advise(nprpc::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/nprpc::flat::Vector_Direct1<uint64_t> h) {
 	h.length(a.size());
 	auto span = h();
 	t_advise({(nps::flat::DataDef*)a.data(), (nps::flat::DataDef*)a.data_end()}, span);
 }
 
 // nprpc thread
-void ItemManagerImpl::UnAdvise(::flat::Span<uint64_t> a) {
+void ItemManagerImpl::UnAdvise(nprpc::flat::Span<uint64_t> a) {
 }
 
 // nprpc thread
@@ -44,8 +44,7 @@ void ItemManagerImpl::Activate(nprpc::Object* client) {
 	assert(client);
 
 	pd_client_.reset(nprpc::narrow<nps::DataCallBack>(client));
-	pd_client_->add_ref();
-	
+
 	if (g_cfg.log_level > 2) {
 			std::cout <<"ItemManagerImpl::Activate()" << std::endl;
 	}
@@ -99,7 +98,7 @@ void ItemManagerImpl::OnDataChanged(const std::vector<nps::server_value>& ar) {
 //	}
 
 	try {
-		pd_client_->OnDataChanged(flat::make_read_only_span(ar));
+		pd_client_->OnDataChanged(nprpc::flat::make_read_only_span(ar));
 		death_counter_ = 0;
 	} catch (nprpc::Exception& ex) {
 		std::cerr << "ItemManagerImpl::OnDataChanged().NPRPC::Exception: " << ex.what() << '\n';

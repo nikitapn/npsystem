@@ -1666,7 +1666,7 @@ LRESULT CPropertyGrid::OnEditChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
 				DeleteEditControl();
 				Invalidate();
 			} catch (input_error& e) {
-				e.msg_box(this->m_hWnd);
+				MessageBoxA(m_hWnd, e.what(), "Input Error", MB_ICONERROR);
 			}
 		} else if (item->m_type == IT_TEXT) {
 			boost::get<std::string>(item->v) = *(std::string*)wParam;

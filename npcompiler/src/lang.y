@@ -15,8 +15,9 @@
 %code requires // *.hh
 {
 
-#include <npsys/variable.h>
+#include "../number.hpp"
 #include "../ast.hpp"
+#include "../utils.hpp"
 
 namespace yy {
 void set_buffer(char* buf, size_t size);	
@@ -33,6 +34,7 @@ void set_buffer(char* buf, size_t size);
 	extern int yylex(yy::parser::semantic_type* yylval, yy::parser::location_type* loc);
 
 	using namespace npcompiler::ast;
+	using namespace npcompiler;
 
 	#define mkn(...) new AstNode(__VA_ARGS__)
 	#define msv(x) std::string_view(x.ptr, x.len)
@@ -63,11 +65,12 @@ void set_buffer(char* buf, size_t size);
 	npcompiler::ast::AstNode* val_node;
 }												
 
-%type	<val_str>					IDENTIFIER EXTERNAL_IDENTIFIER
+%type	<val_str>					NUMBER_INTEGER IDENTIFIER EXTERNAL_IDENTIFIER 
 %type	<val_discrete>		NUMBER_DISCRETE
-%type	<val_int>					NUMBER_INTEGER var_type
+%type	<val_int>					var_type
 %type	<val_float>				NUMBER_FLOAT
-%type <val_node>				stmt stmt_list var_decl0 var_decl_seq var_decl_seq_global exp number assignment module module0 function function0 prog_decl var_decl_local var_decl_global  if_stmt
+%type <val_node>				stmt stmt_list var_decl0 var_decl_seq var_decl_seq_global exp ident
+												number assignment module module0 function function0 prog_decl var_decl_local var_decl_global if_stmt
 
 
 %%
@@ -100,7 +103,7 @@ end_function_block:
 ;
 
 function:
-		function0 { $$ = mkn(non_term, AstType::Function, $1); }
+		function0 { $$ = mkn(AstType::Function, $1); }
 	|	function function0 { $1->push($2); $$ = $1; }
 ;
 
@@ -109,7 +112,7 @@ function0:
 ;
 
 stmt_list:
-		%empty { $$ = mkn(non_term, AstType::StmtList); }
+		%empty { $$ = mkn(AstType::StmtList); }
 	|	stmt_list stmt { $1->push($2); $$ = $1; }
 ;
 
@@ -119,26 +122,35 @@ stmt:
 ;
 
 semicolon:
-	error { ctx_.error = true; std::cerr << "missing a semicolon after the statement.\n"; } | ';'
+	error { ctx_.error = true; std::cerr << "missing semicolon after the statement.\n"; } | ';'
+;
+
+semicolon1:
+	error { ctx_.error = true; std::cerr << "missing semicolon after the var declaration.\n"; } | ';'
+;
+
+ident:
+	 IDENTIFIER {$$ = ctx_.ident_get(msv($1));}
+	| EXTERNAL_IDENTIFIER {$$ = ctx_.ext_ident_get(msv($1));}
 ;
 
 assignment:
-	IDENTIFIER ASSIGNMENT exp semicolon { $$ = mkn(non_term, AstType::Assignment, ctx_.ident_get(msv($1)), $3); }
+	ident ASSIGNMENT exp semicolon { $$ = ctx_.create_assignment($1, $3); }
 ;
 
 var_type: 
-		VT_I8			{ $$ = static_cast<int>(npsys::variable::Type::VT_SIGNED_BYTE); }
-	|	VT_U8	 		{ $$ = static_cast<int>(npsys::variable::Type::VT_BYTE); }
-	|	VT_I16 		{ $$ = static_cast<int>(npsys::variable::Type::VT_SIGNED_WORD); }
-	|	VT_U16 		{ $$ = static_cast<int>(npsys::variable::Type::VT_WORD); }
-	|	VT_I32 		{ $$ = static_cast<int>(npsys::variable::Type::VT_SIGNED_DWORD); }
-	|	VT_U32 		{ $$ = static_cast<int>(npsys::variable::Type::VT_DWORD); }
-	| VT_REAL 	{ $$ = static_cast<int>(npsys::variable::Type::VT_FLOAT); }
-	| VT_BOOL 	{ $$ = static_cast<int>(npsys::variable::Type::VT_DISCRETE); }
+	 	VT_BOOL 	{ $$ = fl::FDT_BOOLEAN; }
+	|	VT_U8	 		{ $$ = fl::FDT_U8; }
+	|	VT_I8			{ $$ = fl::FDT_S8; }
+	|	VT_U16 		{ $$ = fl::FDT_U16; }
+	|	VT_I16 		{ $$ = fl::FDT_S16; }
+	|	VT_U32 		{ $$ = fl::FDT_U32; }
+	|	VT_I32 		{ $$ = fl::FDT_S32; }
+	| VT_REAL 	{ $$ = fl::FDT_F32; }
 ;
 
 prog_decl:
-		%empty { $$ = mkn(non_term, AstType::Program); }
+		%empty { $$ = mkn(AstType::Program); }
 	| prog_decl var_decl_local { $$ = $1; $1->push($2); }
 	| prog_decl var_decl_global { $$ = $1; $1->push($2); }
 ;
@@ -148,7 +160,7 @@ var_decl_local:
 ;
 
 var_decl_seq:
-		%empty { $$ = mkn(non_term, AstType::LocalVarDeclSeq); }
+		%empty { $$ = mkn(AstType::LocalVarDeclSeq); }
 	|	var_decl_seq var_decl0 { $1->push($2); $$ = $1; }
 ;
 
@@ -157,16 +169,16 @@ var_decl_global:
 ;
 
 var_decl_seq_global:
-		%empty { $$ = mkn(non_term, AstType::GlobalVarDeclSeq); }
+		%empty { $$ = mkn(AstType::GlobalVarDeclSeq); }
 	|	var_decl_seq_global var_decl0 { $1->push($2); $$ = $1; }
 ;
 
 var_decl0: 
-		IDENTIFIER ':' var_type ';' { $$ = ctx_.ident_create(msv($1), $3); }
+		IDENTIFIER ':' var_type semicolon1 { $$ = ctx_.ident_create(msv($1), $3); }
 ;
 
 if_stmt:
-		IF logical_exp THEN stmt_list else_clause { $$ = mkn(non_term, AstType::If); }
+		IF logical_exp THEN stmt_list else_clause { $$ = mkn(AstType::If); }
 ;
 
 else_clause:
@@ -177,7 +189,7 @@ else_clause:
 
 number:
 		NUMBER_DISCRETE 	{ std::cerr << "NUMBER_DISCRETE not impl\n"; }	
-	|	NUMBER_INTEGER 		{ $$ = mkn($1); }
+	|	NUMBER_INTEGER 		{ $$ = mkn(utils::parse_integer(msv($1))); }
 	|	NUMBER_FLOAT 			{ $$ = mkn($1); }
 ;
 
@@ -193,15 +205,14 @@ logical_exp:
 
 exp:
 	  '(' exp ')' { $$ = $2; }
-	| '-' exp 		{ $$ = mkn(non_term, AstType::Uminus, $2); }
+	| '-' exp 		{ $$ = mkn(AstType::Uminus, $2); }
 	| '+' exp 		{ $$ = $2; }
-	| exp '+' exp { $$ = mkn(non_term, AstType::Add, $1, $3); }
-	| exp '-' exp { $$ = mkn(non_term, AstType::Add, $1, mkn(non_term, AstType::Uminus, $3)); }
-	|	exp '*' exp { $$ = mkn(non_term, AstType::Mul, $1, $3); }
-	|	exp '/' exp { $$ = mkn(non_term, AstType::Div, $1, $3); }
+	| exp '+' exp { $$ = ctx_.create_binary_op(AstType::Add, $1, $3); }
+	| exp '-' exp { $$ = ctx_.create_binary_op(AstType::Add, $1, mkn(AstType::Uminus, $3)); }
+	|	exp '*' exp { $$ = ctx_.create_binary_op(AstType::Mul, $1, $3); }
+	|	exp '/' exp { $$ = ctx_.create_binary_op(AstType::Div, $1, $3); }
 	|	number 			{ $$ = $1; }
-	| IDENTIFIER 	{ $$ = ctx_.ident_get(msv($1)); }
-	| EXTERNAL_IDENTIFIER { $$ = ctx_.ext_ident_get(msv($1)); }
+	| ident 			{ $$ = $1; }
 ;
 
 %%

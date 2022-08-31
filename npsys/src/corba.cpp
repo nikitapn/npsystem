@@ -14,8 +14,8 @@ void NPRPC_System::server_init() {
 	if (!nameserver->Resolve("npsystem_server", obj)) {
 		throw std::runtime_error("npserver could not be found");
 	}
+
 	server.reset(nprpc::narrow<nps::Server>(obj));
-	server->add_ref();
 
 	assert(server->policy_lifespan() == nprpc::Policy_Lifespan::Persistent);
 	
@@ -58,7 +58,6 @@ void NPRPC_System::init(
 
 	npsys_rpc->corba_monitor_thread_ = std::thread(&NPRPC_System::monitor, npsys_rpc);
 	
-	npsys_rpc->rpc->start();
 	npsys_rpc->server_init();
 }
 
@@ -107,7 +106,7 @@ void NPRPC_System::destroy() noexcept {
 	npsys_rpc = nullptr;
 }
 
-void IFatDataCallBack::OnDataChanged(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) {
+void IFatDataCallBack::OnDataChanged(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) {
 	last_update_ = std::chrono::steady_clock::now();
 	while (ready_for_callbacks_.load(std::memory_order_relaxed) == false);
 	if (con_status_ == ConnectionStatus::advised_connected) {

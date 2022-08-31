@@ -283,7 +283,7 @@ CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 	using vs = npsys::variable::Status;
 	using namespace std::string_literals;
 	
-	bool was_errors = false;
+	bool had_errors = false;
 
 	if (!alg.fetch()) {
 		ASSERT(FALSE);
@@ -443,7 +443,7 @@ CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 				}
 
 				if (error) {
-					was_errors = true;
+					had_errors = true;
 					break;
 				}
 
@@ -957,7 +957,7 @@ CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 			// Restart online session if needed
 			alg->OnlineRestart();
 			g_progress->OffsetPos(10);
-			return was_errors ? Result::R_ERROR : Result::R_OK;
+			return had_errors ? Result::R_ERROR : Result::R_OK;
 		} else {
 			std::cerr << ">Error: could not update the database, changes will be saved locally...\n";
 			// not impl...
@@ -974,7 +974,7 @@ CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 		ex;
 		std::cerr << ">Existing algorithm was not found in the controller.\r\nAbort...\n";
 	} catch (sram_bad_alloc& ex) {
-		std::cerr << ">There is no free memory for variables in device \""
+		std::cerr << ">There is not enough RAM space in the device \""
 			<< ex.dev->get_name() << "\".\n";
 	} catch (flash_bad_alloc&) {
 		std::cerr << ">There is not enough flash memory for this algorithm...\n";

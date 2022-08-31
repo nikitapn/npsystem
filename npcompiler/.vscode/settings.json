@@ -1,0 +1,11 @@
+{
+  "makefile.extensionOutputFolder": "./.vscode",
+  "files.exclude": {
+		"**/src/generated": true,
+		"**/include": true,
+		"**/x64": true,
+    "src/*.cpp": true,
+		"src/*.hpp": true,
+		"npcompiler.*": true,
+	}
+}

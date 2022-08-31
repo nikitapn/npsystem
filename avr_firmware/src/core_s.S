@@ -106,6 +106,8 @@ core_run:
 	rcall	net_poll
 	rcall	update_counter
 
+	wdr
+
 	bst r_status, 4 ; HIGH_PRIORITY
 	brts core_run
 

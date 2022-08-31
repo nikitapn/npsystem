@@ -92,7 +92,7 @@ SIM_IMPORT_EXPORT AVRCore::AVRCore(MICROCONTROLLER mc, Flash& flash, sram_t& sra
 	memset(spm_buf_.get(), 0xFF, page_size);
 }
 
-inline int AVRCore::DecodeInstruction(uint16_t& instruction) const {
+inline int AVRCore::DecodeInstruction(uint16_t instruction) const {
 	int i = 0;
 	while (((instruction & masks[i]) != patterns[i]) && (++i != OP_UNKNOWN));
 	return i;

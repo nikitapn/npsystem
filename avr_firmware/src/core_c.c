@@ -254,6 +254,8 @@ int main(void) {
 	net_init();
 	
 	sei();
+
+	wdt_enable(WDTO_2S);
 	core_run();
 }
 

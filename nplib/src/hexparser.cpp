@@ -24,7 +24,7 @@ int HexParserAlgorithm::GetPageData(uint8_t* dest, int& size) {
 
 	unsigned char RecLen;
 	unsigned char RecTyp;
-	unsigned short LoadOffset;
+
 
 	for (;;) {
 		switch (state_) {
@@ -46,7 +46,7 @@ int HexParserAlgorithm::GetPageData(uint8_t* dest, int& size) {
 				}
 			} else {
 				linelenght_ = RecLen / 2;
-				LoadOffset = get_word();
+				get_word();
 				RecTyp = get_byte();
 				if (RecTyp == 3 || RecTyp == 2) {
 					// ignore this shit

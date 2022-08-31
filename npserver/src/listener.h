@@ -29,7 +29,7 @@ class listener {
 protected:
 	boost::asio::io_context::strand strand_;
 
-	void advise(const ::flat::Span<const nps::flat::DataDef>& a, ::flat::Span<nps::var_handle>& handles);
+	void advise(const nprpc::flat::Span<const nps::flat::DataDef>& a, nprpc::flat::Span<nps::var_handle>& handles);
 	void release_one(protocol::client_handle handle);
 	void release_all();
 public:
@@ -42,7 +42,7 @@ public:
 
 	// wait only function
 	[[nodiscard]]
-	auto t_advise(const ::flat::Span<const nps::flat::DataDef>& a, ::flat::Span<nps::var_handle>& handles) {
+	auto t_advise(const nprpc::flat::Span<const nps::flat::DataDef>& a, nprpc::flat::Span<nps::var_handle>& handles) {
 		task_count_++;
 		return nplib::async<true>(strand_, &listener::advise, this, std::cref(a), std::ref(handles)).get();
 	}

@@ -12,7 +12,7 @@ export let cats = new Array<WS.WebCategory>();
 
 export async function rpc_init() {
 	//	NPRPC.set_debug_level(NPRPC.DebugLevel.DebugLevel_EveryCall);
-	let rpc = NPRPC.init();
+	let rpc = await NPRPC.init();
 	poa = rpc.create_poa(32);
 
 	let nameserver = NPRPC.get_nameserver("192.168.1.2");

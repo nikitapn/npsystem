@@ -20,7 +20,7 @@
 #include <llvm/IR/LegacyPassManager.h>
 //#include <llvm/Linker/Linker.h>
 #include <llvm/Bitcode/BitcodeWriter.h>
-				 
+
 #include <llvm/ExecutionEngine/ExecutionEngine.h>
 //#include <llvm/ExecutionEngine/GenericValue.h>
 //#include <llvm/ExecutionEngine/MCJIT.h>
@@ -45,48 +45,43 @@ using namespace llvm;
 namespace npcompiler {
 
 class BuilderLLVMImpl {
-  std::unique_ptr<LLVMContext> ctx_;
-  std::unique_ptr<Module> module_;
+	std::unique_ptr<LLVMContext> ctx_;
+	std::unique_ptr<Module> module_;
 	std::unique_ptr<IRBuilder<>> mirb_;
 	Function* cur_fun_;
 public:
+	/*
 	Value* make_constant(ast::AstNode& n) {
-		assert(ast::is_number(n));
-		if (n.llvm_value) return n.llvm_value;
-		
-		auto& num = n.as_number();
-		if (num.as_floating_point) {
-			n.llvm_value = ConstantFP::get(*ctx_.get(), APFloat(num.value_float));
-		} else {
-			n.llvm_value = ConstantInt::get(*ctx_.get(), APInt(32, num.value_int, true));
-		}
-	}
+		auto& number = n.cast<ast::Number>();
+		auto& llvm_value = number.llvm_value;
+
+		if (llvm_value) return llvm_value;
+
+		llvm_value = number.is_float()
+			? ConstantFP::get(*ctx_.get(), APFloat((float)number))
+			: llvm_value = ConstantInt::get(*ctx_.get(), APInt(32, (int)number, true));
+	}*/
 
 	llvm::Type* to_llvm_type(int var_type) {
 		switch (npsys::variable::GetClearType(var_type))
 		{
-		case npsys::variable::VT_UNDEFINE:
-			assert(false);
-			return nullptr;
-			break;
-
-		case npsys::variable::VT_DISCRETE:
+		case fl::FDT_BOOLEAN:
 			return Type::getInt1Ty(*ctx_);
 			break;
 
-		case npsys::variable::VT_BYTE:
-		case npsys::variable::VT_SIGNED_BYTE:
+		case fl::FDT_S8:
+		case fl::FDT_U8:
 			return Type::getInt8Ty(*ctx_);
 
-		case npsys::variable::VT_WORD:
-		case npsys::variable::VT_SIGNED_WORD:
+		case fl::FDT_S16:
+		case fl::FDT_U16:
 			return Type::getInt16Ty(*ctx_);
 
-		case npsys::variable::VT_DWORD:
-		case npsys::variable::VT_SIGNED_DWORD:
+		case fl::FDT_S32:
+		case fl::FDT_U32:
 			return Type::getInt32Ty(*ctx_);
-
-		case npsys::variable::VT_FLOAT:
+		
+		case fl::FDT_F32:
 			return Type::getFloatTy(*ctx_);
 
 		default:
@@ -107,6 +102,8 @@ public:
 	}
 
 	Value* emit_expression(ast::AstNode& n) {
+		using npsys::variable;
+
 		assert(n.is_expression());
 
 		//BitCastInst::
@@ -122,18 +119,55 @@ public:
 
 		case Add:
 			return mirb_->CreateAdd(emit_expression(n[0]), emit_expression(n[1]));
-		
+
 		case Number: {
-			auto number = n.as_number();
-			if (!number.as_floating_point)
-				return ConstantInt::get(*ctx_, APInt(16, number.value_int, true));
-			else 
-				return ConstantFP::get(*ctx_, APFloat(number.value_float));
+			auto& number = n.cast<ast::Number>();
+			if (!number.is_float()) {
+				auto& i = number.as_int();
+				auto [size, sign] = fl::get_number_info(i.type);
+				return ConstantInt::get(*ctx_, APInt(size, i.x, sign));
+			} else {
+				return ConstantFP::get(*ctx_, APFloat((float)number));
+			}
 		}
 
-		case Identifier:
-			return mirb_->CreateLoad(to_llvm_type(n.as_ident().type), n.as_ident().ptr, n.as_ident().name);
+		case Identifier: {
+			auto& ident = n.cast<ast::Identifier>();
+			return mirb_->CreateLoad(to_llvm_type(ident.type), ident.llvm_value, ident.name);
+		}
+
+		case Cast: {
+			auto value = emit_expression(n[0]);
+			auto from = n[0].get_expression_type();
+			auto to = n.cast<ast::CastTo>().type;
+
+			assert(from != to);
+
+			// Cast operators ...
+			// HANDLE_CAST_INST(38, Trunc   , TruncInst   )  // Truncate integers
+			// HANDLE_CAST_INST(39, ZExt    , ZExtInst    )  // Zero extend integers
+			// HANDLE_CAST_INST(40, SExt    , SExtInst    )  // Sign extend integers
+			// HANDLE_CAST_INST(41, FPToUI  , FPToUIInst  )  // floating point -> UInt
+			// HANDLE_CAST_INST(42, FPToSI  , FPToSIInst  )  // floating point -> SInt
+			// HANDLE_CAST_INST(43, UIToFP  , UIToFPInst  )  // UInt -> floating point
+			// HANDLE_CAST_INST(44, SIToFP  , SIToFPInst  )  // SInt -> floating point
+			// HANDLE_CAST_INST(45, FPTrunc , FPTruncInst )  // Truncate floating point
+			// HANDLE_CAST_INST(46, FPExt   , FPExtInst   )  // Extend floating point
+			// HANDLE_CAST_INST(47, PtrToInt, PtrToIntInst)  // Pointer -> Integer
+			// HANDLE_CAST_INST(48, IntToPtr, IntToPtrInst)  // Integer -> Pointer
+			// HANDLE_CAST_INST(49, BitCast , BitCastInst )  // Type cast
+			// HANDLE_CAST_INST(50, AddrSpaceCast, AddrSpaceCastInst)  // addrspace cast
+
+			std::cerr << "Casting: " << variable::to_ctype(from) << " -> " << variable::to_ctype(to) << '\n';
+
+			if (fl::is_integer(from) && fl::is_integer(to)) {
+				return mirb_->CreateIntCast(value, to_llvm_type(to), fl::is_signed(from));
+				//return CastInst::CreateIntegerCast(value, to_llvm_type(to), fl::is_signed(from), "...CAST...");
+			}
+
+
 			break;
+		}
 
 		default:
 			using namespace std::string_literals;
@@ -148,18 +182,18 @@ public:
 
 		using enum ast::AstType;
 
-//		std::cerr << n.node_type_str() << '\n';
+		//		std::cerr << n.node_type_str() << '\n';
 
 		switch (n.type) {
 
 		case Program: {
 			cur_fun_ =
-				Function::Create(FunctionType::get(Type::getVoidTy(*ctx_), false), 
-					GlobalValue::LinkageTypes::ExternalLinkage, 
-					"program", 
+				Function::Create(FunctionType::get(Type::getVoidTy(*ctx_), false),
+					GlobalValue::LinkageTypes::ExternalLinkage,
+					"program",
 					*module_
 				);
-			
+
 			// Create a new basic block to start insertion into.
 			auto bb = BasicBlock::Create(*ctx_, "program", cur_fun_);
 			mirb_->SetInsertPoint(bb);
@@ -179,17 +213,19 @@ public:
 
 		case LocalVarDeclSeq:
 			for (auto var : n) {
-				auto& ident = var->as_ident();
-				ident.ptr = CreateEntryBlockAlloca(cur_fun_, ident.name, ident.type);
+				auto& ident = var->cast<ast::Identifier>();
+				ident.llvm_value = CreateEntryBlockAlloca(cur_fun_, ident.name, ident.type);
 			}
 			break;
 
 		case StmtList:
 			break;
 
-		case ast::AstType::Assignment: {
+		case Assignment: {
 			// 0 - ident, 1 - expr
-			mirb_->CreateStore(emit_expression(n[1]), n[0].as_ident().ptr);
+			auto& ident = n[0].cast<ast::Identifier>();
+			auto& expr = n[1];
+			mirb_->CreateStore(emit_expression(expr), ident.llvm_value);
 			break;
 		}
 		default:
@@ -207,12 +243,12 @@ public:
 
 		auto eb = EngineBuilder(std::move(module_));
 		auto native_target = eb.selectTarget();
-		
+
 		if (!native_target) {
 			errs() << "Error: native target undefined.\n";
 			abort();
 		}
-		
+
 		auto ee = eb.create(native_target);
 		if (!ee) {
 			errs() << "Error: execution engine creation failed.\n";
@@ -242,6 +278,8 @@ public:
 		mirb_ = std::make_unique<IRBuilder<>>(*ctx_);
 	}
 
+	static constexpr auto sss = sizeof(ast::AstNode);
+
 	void avr_create_object() {
 		//llvm::InitializeNativeTarget();
 		//LLVMInitializeNativeAsmPrinter();
@@ -263,7 +301,7 @@ public:
 			std::cerr << "AVR targer not found: " << EC << '\n';
 			std::abort();
 		}
-		
+
 		auto CPU = "avr4";
 		auto Features = "";
 
@@ -286,7 +324,7 @@ public:
 
 		legacy::PassManager pass;
 		auto FileType = CGFT_AssemblyFile;
-	
+
 		if (avr_target_machine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
 			errs() << "TargetMachine can't emit a file of this type";
 			std::abort();
@@ -303,8 +341,8 @@ void BuilderLLVM::print_debug() { impl_->print_debug(); }
 void BuilderLLVM::avr_create_object() { impl_->avr_create_object(); }
 
 
-BuilderLLVM::BuilderLLVM(std::string_view module_name) { 
-	impl_ = new BuilderLLVMImpl(module_name); 
+BuilderLLVM::BuilderLLVM(std::string_view module_name) {
+	impl_ = new BuilderLLVMImpl(module_name);
 }
 
 BuilderLLVM::~BuilderLLVM() {
@@ -312,3 +350,4 @@ BuilderLLVM::~BuilderLLVM() {
 }
 
 } // namespace npcompiler
+

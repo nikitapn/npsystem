@@ -126,14 +126,13 @@ size_t CMyOnlineTreeView::AdviseImpl() {
 		assert(item_manager_);
 		assert(item_manager_->policy_lifespan() == nprpc::Policy_Lifespan::Transient);
 		if (!item_manager_) return 0;
-		item_manager_->add_ref();
 	}
 
 	auto this_oid = npsys_rpc->callback_poa->activate_object(this);
 	item_manager_->Activate(this_oid);
 
 	std::vector<nps::var_handle> handles;
-	item_manager_->Advise(flat::make_read_only_span(a), handles);
+	item_manager_->Advise(nprpc::flat::make_read_only_span(a), handles);
 
 	for (int i = 0; i < online_values_.size(); ++i) {
 		m_ref[handles[i]] = online_values_[i];
@@ -142,7 +141,7 @@ size_t CMyOnlineTreeView::AdviseImpl() {
 	return online_values_.size();
 }
 
-void CMyOnlineTreeView::OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> values) {
+void CMyOnlineTreeView::OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> values) {
 	//const auto size = a.size();
 
 	for (auto val : values) {

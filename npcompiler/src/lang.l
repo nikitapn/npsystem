@@ -24,6 +24,7 @@ using tok = yy::parser::token;
 "\r\n" 	{ loc->lines(); }
 "\t" 		{ loc->columns(2); }
 " "  		{ loc->columns(); }
+
 "TRUE" { 
 		loc->step(); 
 		loc->columns(4); 
@@ -36,19 +37,7 @@ using tok = yy::parser::token;
 		yylval->val_discrete = false; 
 		return tok::NUMBER_DISCRETE; 
 	}
-[0-9]+ { 
-		loc->step(); 
-		loc->columns(static_cast<int>(yyleng)); 
-		yylval->val_int = std::atoi(yytext); 
-		return tok::NUMBER_INTEGER; 
-	} 
-[0-9]*[.]?[0-9]+  { 
-		loc->step(); 
-		loc->columns(static_cast<int>(yyleng)); 
-		yylval->val_float = static_cast<float>(std::atof(yytext)); 
-		return tok::NUMBER_FLOAT; 
-	}
-[\(\)\+\-\*\/\>\<\,\;\:]	{ loc->step(); loc->columns(); return *yytext; }
+
 "<="     	{ loc->step(); loc->columns(2); return tok::LE; }
 ">="     	{ loc->step(); loc->columns(2); return tok::GE; }
 ":="     	{ loc->step(); loc->columns(2); return tok::ASSIGNMENT; }
@@ -76,14 +65,22 @@ using tok = yy::parser::token;
 "REAL" 		{ loc->step(); loc->columns(4); return tok::VT_REAL; }
 "BOOL" 		{ loc->step(); loc->columns(4); return tok::VT_BOOL; }
 
-[\/][A-Z_]+[0-9_]?[\/][A-Z_]+[A-Z0-9_]?[\.][A-Z]+ { 
-		loc->step();
+[0-9]+ { 
+		loc->step(); 
 		loc->columns(static_cast<int>(yyleng)); 
 		yylval->val_str = { yytext, yyleng }; 
-		return tok::IDENTIFIER; 
+		return tok::NUMBER_INTEGER; 
 	}
 
-[\'][A-Z_]+[A-Z0-9_]?[\.][A-Z]+ { 
+[0-9]*[.]?[0-9]+  { 
+		loc->step(); 
+		loc->columns(static_cast<int>(yyleng)); 
+		yylval->val_float = static_cast<float>(std::atof(yytext)); 
+		return tok::NUMBER_FLOAT; 
+	}
+
+[\/](.+)[\/](.+)[\/](.+)[\.][A-Z]+ { 
+	// to do: correct lenght for utf-8 string
 		loc->step();
 		loc->columns(static_cast<int>(yyleng)); 
 		yylval->val_str = { yytext, yyleng }; 
@@ -96,6 +93,8 @@ using tok = yy::parser::token;
 		yylval->val_str = { yytext, yyleng }; 
 		return tok::IDENTIFIER; 
 	}
+
+[\(\)\+\-\*\/\>\<\,\;\:]	{ loc->step(); loc->columns(); return *yytext; }
 
 .	{ 
 		loc->step();

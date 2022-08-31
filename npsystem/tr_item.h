@@ -798,7 +798,7 @@ public:
 	}
 
 	io::Status ConvertStatus() {
-		static_assert(false, "not implemented");
+		//static_assert(false, "not implemented");
 		return io::Status::assigned;
 	}
 };

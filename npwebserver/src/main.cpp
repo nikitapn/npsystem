@@ -1,3 +1,6 @@
+// Copyright (c) 2021 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+
 #include <iostream>
 #include <cassert>
 
@@ -9,9 +12,11 @@
 #include <boost/asio/signal_set.hpp>
 #include <boost/beast/core/error.hpp>
 
+#include <npsys/variable.h>
 #include <npsys/web.h>
+#include <npsys/variable.h>
 #include "config.h"
-#include "npwebserver.hpp"
+#include <npc/npwebserver.hpp>
 
 npwebserver::Config g_cfg;
 
@@ -23,7 +28,7 @@ class IWebServerImpl
 	: public npwebserver::IWebServer_Servant {
 public:
 	virtual void get_web_categories(
-		/*out*/::flat::Vector_Direct2<npwebserver::flat::WebCategory, npwebserver::flat::WebCategory_Direct> catso) {
+		/*out*/nprpc::flat::Vector_Direct2<npwebserver::flat::WebCategory, npwebserver::flat::WebCategory_Direct> catso) {
 		npsys::web_l cats;
 		cats.fetch_all_nodes();
 		catso.length(cats.size());
@@ -78,6 +83,7 @@ int main(int argc, char* argv[]) {
 	try {
 		nprpc::Config rpc_cfg;
 		rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
+		rpc_cfg.hostname = "server.lan";
 		rpc_cfg.port = g_cfg.socket_port;
 		rpc_cfg.websocket_port = g_cfg.websocket_port;
 		rpc_cfg.http_root_dir = g_cfg.doc_root;
@@ -93,7 +99,6 @@ int main(int argc, char* argv[]) {
 
 		nameserver->Bind(oid, "npsystem_webserver");
 
-		rpc->start();
 		thread_pool::get_instance().ctx().run();
 	} catch (std::exception& ex) {
 		std::cerr << ex.what();

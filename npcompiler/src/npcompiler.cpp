@@ -1,5 +1,6 @@
 // Copyright (c) 2021 nikitapnn1@gmail.com
 // This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+#include <iostream>
 
 #include "../include/npcompiler/npcompiler.hpp"
 
@@ -8,17 +9,18 @@
 #include "llvm/ExecutionEngine/ExecutionEngine.h"
 
 #include "ast.hpp"
+#include "ast_utils.hpp"
 #include "generated/lang.tab.hh"
 #include "builder_llvm.hpp"
 
 namespace npcompiler {
 
-bool Compilation::compile() noexcept {
+bool Compilation::compile(globals_resolver_cb_t glr) noexcept {
 	ast::AstNode::pool_t pool{ 256 };
 	ast::AstNode::pool_ = &pool;
 
-	ast::AstNode script(ast::non_term, ast::AstType::Module);
-	ast::ParserContext parser_ctx;
+	ast::AstNode script(ast::AstType::Module);
+	ast::ParserContext parser_ctx{ glr };
 
 	yy::set_buffer(buffer_.data(), buffer_.size());
 	yy::parser parser(parser_ctx, script);

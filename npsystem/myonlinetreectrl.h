@@ -135,7 +135,7 @@ private:
 	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	
 	virtual size_t AdviseImpl();
-	virtual void OnDataChangedImpl(::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a);
+	virtual void OnDataChangedImpl(nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a);
 	virtual void OnConnectionLost() noexcept;
 
 	CTreeWrapper wrapper_;

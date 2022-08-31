@@ -46,7 +46,7 @@ protected:
 			}
 			EndDialog(wID);
 		} catch (input_error& e) {
-			e.msg_box(this->m_hWnd);
+			MessageBoxA(m_hWnd, e.what(), "Input Error", MB_ICONERROR);
 		}
 		return 0;
 	}

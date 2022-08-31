@@ -40,14 +40,15 @@ struct NPNetCommunicationError {
 };
 
 class NPNetCommunicationError_Direct {
-  boost::beast::flat_buffer& buffer_;
-  const size_t offset_;
+  ::nprpc::flat_buffer& buffer_;
+  const std::uint32_t offset_;
 
   auto& base() noexcept { return *reinterpret_cast<NPNetCommunicationError*>(reinterpret_cast<std::byte*>(buffer_.data().data()) + offset_); }
   auto const& base() const noexcept { return *reinterpret_cast<const NPNetCommunicationError*>(reinterpret_cast<const std::byte*>(buffer_.data().data()) + offset_); }
 public:
+  uint32_t offset() const noexcept { return offset_; }
   void* __data() noexcept { return (void*)&base(); }
-  NPNetCommunicationError_Direct(boost::beast::flat_buffer& buffer, size_t offset)
+  NPNetCommunicationError_Direct(::nprpc::flat_buffer& buffer, std::uint32_t offset)
     : buffer_(buffer)
     , offset_(offset)
   {
@@ -69,18 +70,19 @@ namespace flat {
 struct server_value {
   uint64_t h;
   var_status s;
-  ::flat::Array<uint8_t,8> data;
+  ::nprpc::flat::Array<uint8_t,8> data;
 };
 
 class server_value_Direct {
-  boost::beast::flat_buffer& buffer_;
-  const size_t offset_;
+  ::nprpc::flat_buffer& buffer_;
+  const std::uint32_t offset_;
 
   auto& base() noexcept { return *reinterpret_cast<server_value*>(reinterpret_cast<std::byte*>(buffer_.data().data()) + offset_); }
   auto const& base() const noexcept { return *reinterpret_cast<const server_value*>(reinterpret_cast<const std::byte*>(buffer_.data().data()) + offset_); }
 public:
+  uint32_t offset() const noexcept { return offset_; }
   void* __data() noexcept { return (void*)&base(); }
-  server_value_Direct(boost::beast::flat_buffer& buffer, size_t offset)
+  server_value_Direct(::nprpc::flat_buffer& buffer, std::uint32_t offset)
     : buffer_(buffer)
     , offset_(offset)
   {
@@ -89,7 +91,7 @@ public:
   uint64_t& h() noexcept { return base().h;}
   const var_status& s() const noexcept { return base().s;}
   var_status& s() noexcept { return base().s;}
-  auto data() noexcept { return (::flat::Span<uint8_t>)base().data; }
+  auto data() noexcept { return (::nprpc::flat::Span<uint8_t>)base().data; }
 };
 } // namespace flat
 
@@ -107,14 +109,15 @@ struct RawDataDef {
 };
 
 class RawDataDef_Direct {
-  boost::beast::flat_buffer& buffer_;
-  const size_t offset_;
+  ::nprpc::flat_buffer& buffer_;
+  const std::uint32_t offset_;
 
   auto& base() noexcept { return *reinterpret_cast<RawDataDef*>(reinterpret_cast<std::byte*>(buffer_.data().data()) + offset_); }
   auto const& base() const noexcept { return *reinterpret_cast<const RawDataDef*>(reinterpret_cast<const std::byte*>(buffer_.data().data()) + offset_); }
 public:
+  uint32_t offset() const noexcept { return offset_; }
   void* __data() noexcept { return (void*)&base(); }
-  RawDataDef_Direct(boost::beast::flat_buffer& buffer, size_t offset)
+  RawDataDef_Direct(::nprpc::flat_buffer& buffer, std::uint32_t offset)
     : buffer_(buffer)
     , offset_(offset)
   {
@@ -142,14 +145,15 @@ struct DataDef {
 };
 
 class DataDef_Direct {
-  boost::beast::flat_buffer& buffer_;
-  const size_t offset_;
+  ::nprpc::flat_buffer& buffer_;
+  const std::uint32_t offset_;
 
   auto& base() noexcept { return *reinterpret_cast<DataDef*>(reinterpret_cast<std::byte*>(buffer_.data().data()) + offset_); }
   auto const& base() const noexcept { return *reinterpret_cast<const DataDef*>(reinterpret_cast<const std::byte*>(buffer_.data().data()) + offset_); }
 public:
+  uint32_t offset() const noexcept { return offset_; }
   void* __data() noexcept { return (void*)&base(); }
-  DataDef_Direct(boost::beast::flat_buffer& buffer, size_t offset)
+  DataDef_Direct(::nprpc::flat_buffer& buffer, std::uint32_t offset)
     : buffer_(buffer)
     , offset_(offset)
   {
@@ -191,7 +195,7 @@ public:
   static std::string_view _get_class() noexcept { return "server/nps.DataCallBack"; }
   std::string_view get_class() const noexcept override { return IDataCallBack_Servant::_get_class(); }
   void dispatch(nprpc::Buffers& bufs, nprpc::EndPoint remote_endpoint, bool from_parent, nprpc::ReferenceList& ref_list) override;
-  virtual void OnDataChanged (::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) = 0;
+  virtual void OnDataChanged (::nprpc::flat::Span_ref<nps::flat::server_value, nps::flat::server_value_Direct> a) = 0;
 };
 
 class DataCallBack
@@ -202,11 +206,11 @@ public:
   using servant_t = IDataCallBack_Servant;
 
   DataCallBack(uint8_t interface_idx)
-    : interface_idx_(interface_idx)
-    , Pingable(interface_idx + 1)
+    : Pingable(interface_idx + 1)
+    , interface_idx_(interface_idx)
   {
   }
-  void OnDataChanged (/*in*/::flat::Span<const nps::server_value> a);
+  void OnDataChanged (/*in*/::nprpc::flat::Span<const nps::server_value> a);
 };
 
 class IItemManager_Servant
@@ -217,8 +221,8 @@ public:
   std::string_view get_class() const noexcept override { return IItemManager_Servant::_get_class(); }
   void dispatch(nprpc::Buffers& bufs, nprpc::EndPoint remote_endpoint, bool from_parent, nprpc::ReferenceList& ref_list) override;
   virtual void Activate (nprpc::Object* client) = 0;
-  virtual void Advise (::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/::flat::Vector_Direct1<uint64_t> h) = 0;
-  virtual void UnAdvise (::flat::Span<uint64_t> a) = 0;
+  virtual void Advise (::nprpc::flat::Span_ref<nps::flat::DataDef, nps::flat::DataDef_Direct> a, /*out*/::nprpc::flat::Vector_Direct1<uint64_t> h) = 0;
+  virtual void UnAdvise (::nprpc::flat::Span<uint64_t> a) = 0;
 };
 
 class ItemManager
@@ -229,13 +233,13 @@ public:
   using servant_t = IItemManager_Servant;
 
   ItemManager(uint8_t interface_idx)
-    : interface_idx_(interface_idx)
-    , Pingable(interface_idx + 1)
+    : Pingable(interface_idx + 1)
+    , interface_idx_(interface_idx)
   {
   }
   void Activate (/*in*/const ObjectId& client);
-  void Advise (/*in*/::flat::Span<const nps::DataDef> a, /*out*/std::vector<var_handle>& h);
-  void UnAdvise (/*in*/::flat::Span<const var_handle> a);
+  void Advise (/*in*/::nprpc::flat::Span<const nps::DataDef> a, /*out*/std::vector<var_handle>& h);
+  void UnAdvise (/*in*/::nprpc::flat::Span<const var_handle> a);
 };
 
 class IServer_Servant
@@ -245,9 +249,9 @@ public:
   static std::string_view _get_class() noexcept { return "server/nps.Server"; }
   std::string_view get_class() const noexcept override { return IServer_Servant::_get_class(); }
   void dispatch(nprpc::Buffers& bufs, nprpc::EndPoint remote_endpoint, bool from_parent, nprpc::ReferenceList& ref_list) override;
-  virtual void GetNetworkStatus (/*out*/::flat::Vector_Direct1<uint8_t> network_status) = 0;
+  virtual void GetNetworkStatus (/*out*/::nprpc::flat::Vector_Direct1<uint8_t> network_status) = 0;
   virtual void CreateItemManager (nprpc::detail::flat::ObjectId_Direct im) = 0;
-  virtual void SendRawData (::flat::Span<uint8_t> data) = 0;
+  virtual void SendRawData (::nprpc::flat::Span<uint8_t> data) = 0;
   virtual void Write_1 (uint8_t dev_addr, uint16_t mem_addr, uint8_t bit, uint8_t value) = 0;
   virtual void Write_q1 (uint8_t dev_addr, uint16_t mem_addr, uint8_t bit, uint8_t value, uint8_t qvalue) = 0;
   virtual void Write_8 (uint8_t dev_addr, uint16_t mem_addr, uint8_t value) = 0;
@@ -256,18 +260,18 @@ public:
   virtual void Write_q16 (uint8_t dev_addr, uint16_t mem_addr, uint16_t value, uint8_t qvalue) = 0;
   virtual void Write_32 (uint8_t dev_addr, uint16_t mem_addr, uint32_t value) = 0;
   virtual void Write_q32 (uint8_t dev_addr, uint16_t mem_addr, uint32_t value, uint8_t qvalue) = 0;
-  virtual void WriteBlock (uint8_t dev_addr, uint16_t mem_addr, ::flat::Span<uint8_t> data) = 0;
+  virtual void WriteBlock (uint8_t dev_addr, uint16_t mem_addr, ::nprpc::flat::Span<uint8_t> data) = 0;
   virtual void ReadByte (uint8_t dev_addr, uint16_t addr, uint8_t& value) = 0;
-  virtual void ReadBlock (uint8_t dev_addr, uint16_t addr, uint8_t len, /*out*/::flat::Vector_Direct1<uint8_t> data) = 0;
+  virtual void ReadBlock (uint8_t dev_addr, uint16_t addr, uint8_t len, /*out*/::nprpc::flat::Vector_Direct1<uint8_t> data) = 0;
   virtual bool AVR_StopAlgorithm (uint8_t dev_addr, uint16_t alg_addr) = 0;
   virtual void AVR_ReinitIO (uint8_t dev_addr) = 0;
-  virtual void AVR_SendRemoteData (uint8_t dev_addr, uint16_t page_num, ::flat::Span<uint8_t> data) = 0;
-  virtual void AVR_SendPage (uint8_t dev_addr, uint8_t page_num, ::flat::Span<uint8_t> data) = 0;
+  virtual void AVR_SendRemoteData (uint8_t dev_addr, uint16_t page_num, ::nprpc::flat::Span<uint8_t> data) = 0;
+  virtual void AVR_SendPage (uint8_t dev_addr, uint8_t page_num, ::nprpc::flat::Span<uint8_t> data) = 0;
   virtual void AVR_RemoveAlgorithm (uint8_t dev_addr, uint16_t alg_addr) = 0;
   virtual void AVR_ReplaceAlgorithm (uint8_t dev_addr, uint16_t old_addr, uint16_t new_addr) = 0;
-  virtual void AVR_WriteEeprom (uint8_t dev_addr, uint16_t mem_addr, ::flat::Span<uint8_t> data) = 0;
-  virtual void AVR_WriteTwiTable (uint8_t dev_addr, uint8_t page_num, ::flat::Span<uint8_t> data) = 0;
-  virtual void AVR_V_GetFlash (cbt1::oid_t device_id, /*out*/::flat::Vector_Direct1<uint16_t> data) = 0;
+  virtual void AVR_WriteEeprom (uint8_t dev_addr, uint16_t mem_addr, ::nprpc::flat::Span<uint8_t> data) = 0;
+  virtual void AVR_WriteTwiTable (uint8_t dev_addr, uint8_t page_num, ::nprpc::flat::Span<uint8_t> data) = 0;
+  virtual void AVR_V_GetFlash (cbt1::oid_t device_id, /*out*/::nprpc::flat::Vector_Direct1<uint16_t> data) = 0;
   virtual bool AVR_V_StoreFlash (cbt1::oid_t device_id) = 0;
   virtual bool Notify_DeviceActivated (cbt1::oid_t device_id) = 0;
   virtual bool Notify_DeviceDeactivated (cbt1::oid_t device_id) = 0;
@@ -285,13 +289,13 @@ public:
   using servant_t = IServer_Servant;
 
   Server(uint8_t interface_idx)
-    : interface_idx_(interface_idx)
-    , Pingable(interface_idx + 1)
+    : Pingable(interface_idx + 1)
+    , interface_idx_(interface_idx)
   {
   }
   void GetNetworkStatus (/*out*/std::vector<uint8_t>& network_status);
   void CreateItemManager (/*out*/Object*& im);
-  void SendRawData (/*in*/::flat::Span<const uint8_t> data);
+  void SendRawData (/*in*/::nprpc::flat::Span<const uint8_t> data);
   void Write_1 (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/uint8_t bit, /*in*/uint8_t value);
   void Write_q1 (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/uint8_t bit, /*in*/uint8_t value, /*in*/uint8_t qvalue);
   void Write_8 (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/uint8_t value);
@@ -300,17 +304,17 @@ public:
   void Write_q16 (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/uint16_t value, /*in*/uint8_t qvalue);
   void Write_32 (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/uint32_t value);
   void Write_q32 (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/uint32_t value, /*in*/uint8_t qvalue);
-  void WriteBlock (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/::flat::Span<const uint8_t> data);
+  void WriteBlock (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/::nprpc::flat::Span<const uint8_t> data);
   void ReadByte (/*in*/uint8_t dev_addr, /*in*/uint16_t addr, /*out*/uint8_t& value);
   void ReadBlock (/*in*/uint8_t dev_addr, /*in*/uint16_t addr, /*in*/uint8_t len, /*out*/std::vector<uint8_t>& data);
   bool AVR_StopAlgorithm (/*in*/uint8_t dev_addr, /*in*/uint16_t alg_addr);
   void AVR_ReinitIO (/*in*/uint8_t dev_addr);
-  void AVR_SendRemoteData (/*in*/uint8_t dev_addr, /*in*/uint16_t page_num, /*in*/::flat::Span<const uint8_t> data);
-  void AVR_SendPage (/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /*in*/::flat::Span<const uint8_t> data);
+  void AVR_SendRemoteData (/*in*/uint8_t dev_addr, /*in*/uint16_t page_num, /*in*/::nprpc::flat::Span<const uint8_t> data);
+  void AVR_SendPage (/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /*in*/::nprpc::flat::Span<const uint8_t> data);
   void AVR_RemoveAlgorithm (/*in*/uint8_t dev_addr, /*in*/uint16_t alg_addr);
   void AVR_ReplaceAlgorithm (/*in*/uint8_t dev_addr, /*in*/uint16_t old_addr, /*in*/uint16_t new_addr);
-  void AVR_WriteEeprom (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/::flat::Span<const uint8_t> data);
-  void AVR_WriteTwiTable (/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /*in*/::flat::Span<const uint8_t> data);
+  void AVR_WriteEeprom (/*in*/uint8_t dev_addr, /*in*/uint16_t mem_addr, /*in*/::nprpc::flat::Span<const uint8_t> data);
+  void AVR_WriteTwiTable (/*in*/uint8_t dev_addr, /*in*/uint8_t page_num, /*in*/::nprpc::flat::Span<const uint8_t> data);
   void AVR_V_GetFlash (/*in*/const cbt1::oid_t& device_id, /*out*/std::vector<uint16_t>& data);
   bool AVR_V_StoreFlash (/*in*/const cbt1::oid_t& device_id);
   bool Notify_DeviceActivated (/*in*/const cbt1::oid_t& device_id);
@@ -325,18 +329,18 @@ public:
 
 namespace server::helper {
 template<::nprpc::IterableCollection T>
-void assign_Advise_h(/*out*/::flat::Vector_Direct1<uint64_t>& dest, const T & src) {
-  dest.length(src.size());
+void assign_from_cpp_Advise_h(/*out*/::nprpc::flat::Vector_Direct1<uint64_t>& dest, const T & src) {
+  dest.length(static_cast<uint32_t>(src.size()));
   memcpy(dest().data(), src.data(), src.size() * 8);
 }
 template<::nprpc::IterableCollection T>
-void assign_GetNetworkStatus_network_status(/*out*/::flat::Vector_Direct1<uint8_t>& dest, const T & src) {
-  dest.length(src.size());
+void assign_from_cpp_GetNetworkStatus_network_status(/*out*/::nprpc::flat::Vector_Direct1<uint8_t>& dest, const T & src) {
+  dest.length(static_cast<uint32_t>(src.size()));
   memcpy(dest().data(), src.data(), src.size() * 1);
 }
 template<::nprpc::IterableCollection T>
-void assign_AVR_V_GetFlash_data(/*out*/::flat::Vector_Direct1<uint16_t>& dest, const T & src) {
-  dest.length(src.size());
+void assign_from_cpp_AVR_V_GetFlash_data(/*out*/::nprpc::flat::Vector_Direct1<uint16_t>& dest, const T & src) {
+  dest.length(static_cast<uint32_t>(src.size()));
   memcpy(dest().data(), src.data(), src.size() * 2);
 }
 } // namespace server::helper
