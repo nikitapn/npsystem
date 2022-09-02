@@ -160,7 +160,6 @@ void protocol_service::print_table() {
 	std::cout.flush();
 }
 
-// ������� ��������� ����� ������� � ������ ��������������� ���������
 int protocol_service::add_register(NewRegister& r) {
 	auto handle = (server_handle)r.c_handle;
 	assert(handle.size > 0 && handle.size <= 5);

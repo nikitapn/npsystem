@@ -71,13 +71,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>..\..\mycommon\include;include\;$(BOOST_DIR);$(VC_IncludePath);$(VSC)\leveldb\include;$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;C:\opt\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <LibraryPath>..\x64\$(Confuration);$(BOOST_DIR)\stage_x64\lib;C:\opt\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <TargetName>nplibd</TargetName>
     <OutDir>C:\opt\x64\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>..\..\mycommon\include;include\;$(BOOST_DIR);$(VC_IncludePath);$(VSC)\leveldb\include;$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;C:\opt\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
+    <LibraryPath>..\x64\$(Confuration);$(BOOST_DIR)\stage_x64\lib;C:\opt\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
     <OutDir>C:\opt\x64\</OutDir>
     <TargetName>nplib</TargetName>
   </PropertyGroup>
