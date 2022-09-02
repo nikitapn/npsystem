@@ -4,9 +4,6 @@
 #SVN
 .svn/
 
-#Scintilla
-scintilla/
-
 # User-specific files
 *.suo
 *.user
