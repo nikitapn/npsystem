@@ -3,6 +3,8 @@
 
 #SVN
 .svn/
+3rd/leveldb
+3rd/scintilla
 
 # User-specific files
 *.suo
