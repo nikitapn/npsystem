@@ -27,6 +27,11 @@ public:
 
 	const uint32_t max_size_;
 	std::atomic<Val> tail_ix_;
+<<<<<<< HEAD
+	char padding_[64 - sizeof(std::atomic<Val>)];
+	std::atomic_size_t size_;
+=======
+>>>>>>> 74a671ed6c27b516b78ae2ac55070ab5b0ed2e54
 
 	using Items = std::aligned_storage_t<sizeof(Item), alignof(Item)>*;
 	Items items_;
@@ -58,6 +63,11 @@ public:
 
 		data(idx).val = val;
 
+<<<<<<< HEAD
+		++size_;
+
+=======
+>>>>>>> 74a671ed6c27b516b78ae2ac55070ab5b0ed2e54
 		return (gix << 32) | idx;
 	}
 
@@ -75,8 +85,16 @@ public:
 			to_be_removed.next = old_free.idx;
 			new_free.cnt = old_free.cnt + 1;
 		} while (!tail_ix_.compare_exchange_weak(old_free, new_free, std::memory_order_relaxed, std::memory_order_relaxed));
+<<<<<<< HEAD
+
+	  --size_;
 	}
 
+	size_t size() const noexcept { return size_.load(); }
+=======
+	}
+
+>>>>>>> 74a671ed6c27b516b78ae2ac55070ab5b0ed2e54
 
 	std::remove_pointer_t<T>* get(uint64_t id) noexcept {
 		const auto idx = index(id);
@@ -103,7 +121,12 @@ public:
 	}
 
 	Storage(uint32_t max_size) noexcept
+<<<<<<< HEAD
+		: max_size_(max_size)
+		, size_{0} {
+=======
 		: max_size_(max_size) {
+>>>>>>> 74a671ed6c27b516b78ae2ac55070ab5b0ed2e54
 		items_ = (Items)new char[max_size * sizeof(Item)];
 		init();
 	}
@@ -111,6 +134,52 @@ public:
 
 Storage<int> items{8000};
 
+<<<<<<< HEAD
+#include <boost/lockfree/queue.hpp>
+
+constexpr size_t n_add_treads = 8;
+constexpr size_t n_rm_treads = 1;
+
+std::atomic_size_t add_cnt {0};
+boost::lockfree::queue<int, boost::lockfree::capacity<8000>> to_remove;
+
+using namespace std::chrono_literals;
+
+void add() {
+	std::this_thread::sleep_for(10ms);
+	for (int i = 0; i < 1000; ++i) {
+		auto const id = items.add(100);
+		std::cerr << id << " - added\n";
+		to_remove.push(id);
+		//std::this_thread::sleep_for(1us);
+	}
+	++add_cnt;
+}
+
+void rm() {
+	while(add_cnt != n_add_treads || items.size()) {
+		to_remove.consume_one([](auto& id) {
+			items.remove(id);
+			std::cerr << id << " - removed\n";
+		});
+	}
+	std::cerr << "_____________rm exited\n";
+}
+
+int test_storage() {
+	std::thread add_threads[n_add_treads];
+	std::thread rm_threads[n_rm_treads];
+
+	for (size_t i = 0; i < n_rm_treads; ++i) rm_threads[i] = std::thread(rm);
+	for (size_t i = 0; i < n_add_treads; ++i) add_threads[i] = std::thread(add);
+	
+	for (size_t i = 0; i < n_rm_treads; ++i) rm_threads[i].join();
+	for (size_t i = 0; i < n_add_treads; ++i) add_threads[i].join();
+
+	std::cerr << items.size() << '\n';
+
+	assert(items.size() == 0);
+=======
 
 void add() {
 	using namespace std::chrono_literals;
@@ -131,6 +200,7 @@ int test_storage() {
 		threads[i].join();
 
 	std::cerr << items.tail_ix_.load().idx << '\n';
+>>>>>>> 74a671ed6c27b516b78ae2ac55070ab5b0ed2e54
 
 	return 0;
 }
