@@ -41,7 +41,7 @@
 
 
 // Unqualified %code blocks.
-#line 29 "src/lang.y" // lalr1.cc:435
+#line 28 "src/lang.y" // lalr1.cc:435
 
 	#include <iostream>
   #include <fstream>
@@ -633,19 +633,19 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 80 "src/lang.y" // lalr1.cc:919
+#line 79 "src/lang.y" // lalr1.cc:919
     { root_.push((yystack_[0].value.val_node)); (yylhs.value.val_node) = &root_; }
 #line 639 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 3:
-#line 81 "src/lang.y" // lalr1.cc:919
+#line 80 "src/lang.y" // lalr1.cc:919
     { root_.push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 645 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 4:
-#line 85 "src/lang.y" // lalr1.cc:919
+#line 84 "src/lang.y" // lalr1.cc:919
     { 
 			(yylhs.value.val_node) = (yystack_[2].value.val_node);
 			(yystack_[2].value.val_node)->push((yystack_[1].value.val_node), mkn(AstType::Program_End)); 
@@ -654,301 +654,301 @@ namespace yy {
     break;
 
   case 5:
-#line 89 "src/lang.y" // lalr1.cc:919
+#line 88 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[2].value.val_node), (yystack_[2].value.val_node)->push((yystack_[1].value.val_node), mkn(AstType::Function_End)); }
 #line 660 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 6:
-#line 90 "src/lang.y" // lalr1.cc:919
+#line 89 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 666 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 7:
-#line 94 "src/lang.y" // lalr1.cc:919
+#line 93 "src/lang.y" // lalr1.cc:919
     { ctx_.symbols_local.clear(); }
 #line 672 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 8:
-#line 98 "src/lang.y" // lalr1.cc:919
+#line 97 "src/lang.y" // lalr1.cc:919
     { ctx_.symbols_local.clear(); }
 #line 678 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 9:
-#line 102 "src/lang.y" // lalr1.cc:919
+#line 101 "src/lang.y" // lalr1.cc:919
     { ctx_.symbols_local.clear(); }
 #line 684 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 10:
-#line 106 "src/lang.y" // lalr1.cc:919
+#line 105 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::Function, (yystack_[0].value.val_node)); }
 #line 690 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 11:
-#line 107 "src/lang.y" // lalr1.cc:919
+#line 106 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 696 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 12:
-#line 111 "src/lang.y" // lalr1.cc:919
+#line 110 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
 #line 702 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 13:
-#line 115 "src/lang.y" // lalr1.cc:919
+#line 114 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::StmtList); }
 #line 708 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 14:
-#line 116 "src/lang.y" // lalr1.cc:919
+#line 115 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 714 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 15:
-#line 120 "src/lang.y" // lalr1.cc:919
+#line 119 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
 #line 720 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 16:
-#line 121 "src/lang.y" // lalr1.cc:919
+#line 120 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
 #line 726 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 17:
-#line 125 "src/lang.y" // lalr1.cc:919
+#line 124 "src/lang.y" // lalr1.cc:919
     { ctx_.error = true; std::cerr << "missing semicolon after the statement.\n"; }
 #line 732 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 19:
-#line 129 "src/lang.y" // lalr1.cc:919
+#line 128 "src/lang.y" // lalr1.cc:919
     { ctx_.error = true; std::cerr << "missing semicolon after the var declaration.\n"; }
 #line 738 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 21:
-#line 133 "src/lang.y" // lalr1.cc:919
+#line 132 "src/lang.y" // lalr1.cc:919
     {(yylhs.value.val_node) = ctx_.ident_get(msv((yystack_[0].value.val_str)));}
 #line 744 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 22:
-#line 134 "src/lang.y" // lalr1.cc:919
+#line 133 "src/lang.y" // lalr1.cc:919
     {(yylhs.value.val_node) = ctx_.ext_ident_get(msv((yystack_[0].value.val_str)));}
 #line 750 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 23:
-#line 138 "src/lang.y" // lalr1.cc:919
+#line 137 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = ctx_.create_assignment((yystack_[3].value.val_node), (yystack_[1].value.val_node)); }
 #line 756 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 24:
-#line 142 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_BOOLEAN; }
+#line 141 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_BOOL; }
 #line 762 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 25:
-#line 143 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_U8; }
+#line 142 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_U8; }
 #line 768 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 26:
-#line 144 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_S8; }
+#line 143 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_I8; }
 #line 774 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 27:
-#line 145 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_U16; }
+#line 144 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_U16; }
 #line 780 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 28:
-#line 146 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_S16; }
+#line 145 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_I16; }
 #line 786 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 29:
-#line 147 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_U32; }
+#line 146 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_U32; }
 #line 792 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 30:
-#line 148 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_S32; }
+#line 147 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_I32; }
 #line 798 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 31:
-#line 149 "src/lang.y" // lalr1.cc:919
-    { (yylhs.value.val_int) = fl::FDT_F32; }
+#line 148 "src/lang.y" // lalr1.cc:919
+    { (yylhs.value.val_int) = npsys::nptype::NPT_F32; }
 #line 804 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 32:
-#line 153 "src/lang.y" // lalr1.cc:919
+#line 152 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::Program); }
 #line 810 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 33:
-#line 154 "src/lang.y" // lalr1.cc:919
+#line 153 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
 #line 816 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 34:
-#line 155 "src/lang.y" // lalr1.cc:919
+#line 154 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
 #line 822 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 35:
-#line 159 "src/lang.y" // lalr1.cc:919
+#line 158 "src/lang.y" // lalr1.cc:919
     { ctx_.global = false; }
 #line 828 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 36:
-#line 159 "src/lang.y" // lalr1.cc:919
+#line 158 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 834 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 37:
-#line 163 "src/lang.y" // lalr1.cc:919
+#line 162 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::LocalVarDeclSeq); }
 #line 840 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 38:
-#line 164 "src/lang.y" // lalr1.cc:919
+#line 163 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 846 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 39:
-#line 168 "src/lang.y" // lalr1.cc:919
+#line 167 "src/lang.y" // lalr1.cc:919
     { ctx_.global = true; }
 #line 852 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 40:
-#line 168 "src/lang.y" // lalr1.cc:919
+#line 167 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 858 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 41:
-#line 172 "src/lang.y" // lalr1.cc:919
+#line 171 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::GlobalVarDeclSeq); }
 #line 864 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 42:
-#line 173 "src/lang.y" // lalr1.cc:919
+#line 172 "src/lang.y" // lalr1.cc:919
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 870 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 43:
-#line 177 "src/lang.y" // lalr1.cc:919
+#line 176 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = ctx_.ident_create(msv((yystack_[3].value.val_str)), (yystack_[1].value.val_int)); }
 #line 876 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 44:
-#line 181 "src/lang.y" // lalr1.cc:919
+#line 180 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::If); }
 #line 882 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 48:
-#line 191 "src/lang.y" // lalr1.cc:919
+#line 190 "src/lang.y" // lalr1.cc:919
     { std::cerr << "NUMBER_DISCRETE not impl\n"; }
 #line 888 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 49:
-#line 192 "src/lang.y" // lalr1.cc:919
+#line 191 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(utils::parse_integer(msv((yystack_[0].value.val_str)))); }
 #line 894 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 50:
-#line 193 "src/lang.y" // lalr1.cc:919
+#line 192 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn((yystack_[0].value.val_float)); }
 #line 900 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 56:
-#line 207 "src/lang.y" // lalr1.cc:919
+#line 206 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
 #line 906 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 57:
-#line 208 "src/lang.y" // lalr1.cc:919
+#line 207 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = mkn(AstType::Uminus, (yystack_[0].value.val_node)); }
 #line 912 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 58:
-#line 209 "src/lang.y" // lalr1.cc:919
+#line 208 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
 #line 918 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 59:
-#line 210 "src/lang.y" // lalr1.cc:919
+#line 209 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Add, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
 #line 924 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 60:
-#line 211 "src/lang.y" // lalr1.cc:919
+#line 210 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Add, (yystack_[2].value.val_node), mkn(AstType::Uminus, (yystack_[0].value.val_node))); }
 #line 930 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 61:
-#line 212 "src/lang.y" // lalr1.cc:919
+#line 211 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Mul, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
 #line 936 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 62:
-#line 213 "src/lang.y" // lalr1.cc:919
+#line 212 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Div, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
 #line 942 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 63:
-#line 214 "src/lang.y" // lalr1.cc:919
+#line 213 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
 #line 948 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
 
   case 64:
-#line 215 "src/lang.y" // lalr1.cc:919
+#line 214 "src/lang.y" // lalr1.cc:919
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
 #line 954 "src/generated/lang.tab.cc" // lalr1.cc:919
     break;
@@ -1361,10 +1361,10 @@ namespace yy {
   "END_FUNCTION", "FUNCTION_BLOCK", "END_FUNCTION_BLOCK", "VAR",
   "VAR_GLOBAL", "END_VAR", "IDENTIFIER", "EXTERNAL_IDENTIFIER", "GE", "LE",
   "ASSIGNMENT", "IF", "THEN", "ELSIF", "ELSE", "END_IF", "NUMBER_DISCRETE",
-  "NUMBER_INTEGER", "NUMBER_FLOAT", "VT_I8", "VT_U8", "VT_I16", "VT_U16",
-  "VT_I32", "VT_U32", "VT_REAL", "VT_BOOL", "','", "'+'", "'-'", "'*'",
-  "'/'", "'('", "';'", "':'", "'<'", "'>'", "')'", "$accept", "module",
-  "module0", "end_program", "end_function", "end_function_block",
+  "NUMBER_INTEGER", "NUMBER_FLOAT", "NPT_I8", "NPT_U8", "NPT_I16",
+  "NPT_U16", "NPT_I32", "NPT_U32", "NPT_F32", "NPT_BOOL", "','", "'+'",
+  "'-'", "'*'", "'/'", "'('", "';'", "':'", "'<'", "'>'", "')'", "$accept",
+  "module", "module0", "end_program", "end_function", "end_function_block",
   "function", "function0", "stmt_list", "stmt", "semicolon", "semicolon1",
   "ident", "assignment", "var_type", "prog_decl", "var_decl_local", "$@1",
   "var_decl_seq", "var_decl_global", "$@2", "var_decl_seq_global",
@@ -1375,13 +1375,13 @@ namespace yy {
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    80,    80,    81,    85,    89,    90,    94,    98,   102,
-     106,   107,   111,   115,   116,   120,   121,   125,   125,   129,
-     129,   133,   134,   138,   142,   143,   144,   145,   146,   147,
-     148,   149,   153,   154,   155,   159,   159,   163,   164,   168,
-     168,   172,   173,   177,   181,   185,   186,   187,   191,   192,
-     193,   198,   199,   200,   201,   202,   207,   208,   209,   210,
-     211,   212,   213,   214,   215
+       0,    79,    79,    80,    84,    88,    89,    93,    97,   101,
+     105,   106,   110,   114,   115,   119,   120,   124,   124,   128,
+     128,   132,   133,   137,   141,   142,   143,   144,   145,   146,
+     147,   148,   152,   153,   154,   158,   158,   162,   163,   167,
+     167,   171,   172,   176,   180,   184,   185,   186,   190,   191,
+     192,   197,   198,   199,   200,   201,   206,   207,   208,   209,
+     210,   211,   212,   213,   214
   };
 
   // Print the state stack on the debug stream.
@@ -1466,7 +1466,7 @@ namespace yy {
 
 } // yy
 #line 1469 "src/generated/lang.tab.cc" // lalr1.cc:1242
-#line 218 "src/lang.y" // lalr1.cc:1243
+#line 217 "src/lang.y" // lalr1.cc:1243
 
 
 namespace yy {

@@ -7,8 +7,6 @@
 #pragma warning(disable:4456)
 #pragma warning(disable:26495)
 
-#define ALPHA_MODULE
-
 #include "targetver.h"
 #define _RICHEDIT_VER 0x0500
 #define _CONFIGURATOR_

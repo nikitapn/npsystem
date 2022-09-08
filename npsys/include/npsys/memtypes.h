@@ -15,97 +15,94 @@
 #include <stdint.h>
 
 #ifdef __cplusplus
+namespace npsystem::types {
 #	pragma pack(push, 1)
 #endif
 
 typedef struct {
 	uint8_t value;
-} bit;
+} BIT;
 
 typedef struct {
 	uint8_t value;
 	uint8_t quality;
-} Q_bit;
+} QBIT;
 
 typedef struct {
 	uint8_t value;
-} u8;
+} U8;
 
 typedef struct {
 	uint8_t value;
 	uint8_t quality;
-} Q_u8;
+} QU8;
 
 typedef struct {
 	int8_t value;
-} i8;
+} I8;
 
 typedef struct {
 	int8_t value;
 	uint8_t quality;
-} Q_i8;
+} QI8;
 
 typedef struct {
 	uint16_t value;
-} u16;
+} U16;
 
 typedef struct {
 	uint16_t value;
 	uint8_t quality;
-} Q_u16;
+} QU16;
 
 typedef struct {
 	int16_t value;
-} i16;
+} I16;
 
 typedef struct {
 	int16_t value;
 	uint8_t quality;
-} Q_i16;
+} QI16;
 
 typedef struct {
 	uint32_t value;
-} u32;
+} U32;
 
 typedef struct {
 	uint32_t value;
 	uint8_t quality;
-} Q_u32;
+} QU32;
 
 typedef struct {
 	int32_t value;
-} i32;
+} I32;
 
 typedef struct {
 	int32_t value;
 	uint8_t quality;
-} Q_i32;
+} QI32;
 
 typedef struct {
 	float value;
-} flt;
+} F32;
 
 typedef struct {
 	float value;
 	uint8_t quality;
-} Q_flt;
-
-#ifdef __cplusplus
-namespace alpha {
-#endif
+} QF32;
 
 typedef struct {
-	Q_u8 sec;
-	Q_u8 min;
-	Q_u8 hour;
-	Q_u8 wday;
-	Q_u8 mday;
-	Q_u8 mon;
-	Q_u8 year;
+	QU8 sec;
+	QU8 min;
+	QU8 hour;
+	QU8 wday;
+	QU8 mday;
+	QU8 mon;
+	QU8 year;
 } Time;
 
 #ifdef __cplusplus
-} // namespace alpha
+} // namespace npsystem
 #	pragma pack(pop)
 #endif
 

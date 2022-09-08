@@ -9,31 +9,31 @@
 
 namespace npsys {
 
-void variable::m_DefaultValue_Clear(Type tp) noexcept {
+void variable::m_DefaultValue_Clear(nptype::Type tp) noexcept {
 	switch (tp) {
-	case VT_DISCRETE:
-		def_value_.d = static_cast<discrete>(0);
+	case nptype::NPT_BOOL:
+		def_value_._b = static_cast<bool>(0);
 		break;
-	case VT_BYTE:
-		def_value_.u8 = static_cast<byte>(0);
+	case nptype::NPT_U8:
+		def_value_._u8 = static_cast<u8>(0);
 		break;
-	case VT_SIGNED_BYTE:
-		def_value_.i8 = static_cast<signed_byte>(0);
+	case nptype::NPT_I8:
+		def_value_._i8 = static_cast<i8>(0);
 		break;
-	case VT_WORD:
-		def_value_.u16 = static_cast<word>(0);
+	case nptype::NPT_U16:
+		def_value_._u16 = static_cast<u16>(0);
 		break;
-	case VT_SIGNED_WORD:
-		def_value_.i16 = static_cast<signed_word>(0);
+	case nptype::NPT_I16:
+		def_value_._i16 = static_cast<i16>(0);
 		break;
-	case VT_DWORD:
-		def_value_.u32 = static_cast<dword>(0);
+	case nptype::NPT_U32:
+		def_value_._u32 = static_cast<u32>(0);
 		break;
-	case VT_SIGNED_DWORD:
-		def_value_.i32 = static_cast<signed_dword>(0);
+	case nptype::NPT_I32:
+		def_value_._i32 = static_cast<i32>(0);
 		break;
-	case VT_FLOAT:
-		def_value_.flt = static_cast<floating_point>(0.0f);
+	case nptype::NPT_F32:
+		def_value_._f32 = static_cast<f32>(0.0f);
 		break;
 	default:
 		memset(def_value_.data, 0x00, sizeof(def_value_.data));
@@ -44,36 +44,36 @@ void variable::m_DefaultValue_Clear(Type tp) noexcept {
 std::string variable::DefaultValue_ToString() const noexcept {
 	std::string str;
 
-	switch (type_ & TYPE_MASK) {
-	case VT_UNDEFINE:
+	switch (type_ & nptype::TYPE_MASK) {
+	case nptype::NPT_UNDEFINE:
 		str = "***UNDEFINED TYPE***";
 		break;
-	case VT_DISCRETE:
-		if (def_value_.d == true)
+	case nptype::NPT_BOOL:
+		if (def_value_._b == true)
 			str = "1";
 		else
 			str = "0";
 		break;
-	case VT_BYTE:
-		str = std::to_string(def_value_.u8);
+	case nptype::NPT_U8:
+		str = std::to_string(def_value_._u8);
 		break;
-	case VT_SIGNED_BYTE:
-		str = std::to_string(def_value_.i8);
+	case nptype::NPT_I8:
+		str = std::to_string(def_value_._i8);
 		break;
-	case VT_WORD:
-		str = std::to_string(def_value_.u16);
+	case nptype::NPT_U16:
+		str = std::to_string(def_value_._u16);
 		break;
-	case VT_SIGNED_WORD:
-		str = std::to_string(def_value_.i16);
+	case nptype::NPT_I16:
+		str = std::to_string(def_value_._i16);
 		break;
-	case VT_DWORD:
-		str = std::to_string(def_value_.u32);
+	case nptype::NPT_U32:
+		str = std::to_string(def_value_._u32);
 		break;
-	case VT_SIGNED_DWORD:
-		str = std::to_string(def_value_.i32);
+	case nptype::NPT_I32:
+		str = std::to_string(def_value_._i32);
 		break;
-	case VT_FLOAT:
-		str = std::to_string(def_value_.flt);
+	case nptype::NPT_F32:
+		str = std::to_string(def_value_._f32);
 		break;
 	default:
 		ASSERT(FALSE);
@@ -83,32 +83,32 @@ std::string variable::DefaultValue_ToString() const noexcept {
 }
 
 void variable::DefaultValue_FromString(const std::string& str) {
-	switch (type_ & TYPE_MASK) {
-	case VT_UNDEFINE:
+	switch (type_ & nptype::TYPE_MASK) {
+	case nptype::NPT_UNDEFINE:
 		break;
-	case VT_DISCRETE:
-		ParseTextValue(str.c_str(), str.length(), def_value_.d);
+	case nptype::NPT_BOOL:
+		ParseTextValue(str.c_str(), str.length(), def_value_._b);
 		break;
-	case VT_BYTE:
-		ParseTextValue(str.c_str(), str.length(), def_value_.u8);
+	case nptype::NPT_U8:
+		ParseTextValue(str.c_str(), str.length(), def_value_._u8);
 		break;
-	case VT_SIGNED_BYTE:
-		ParseTextValue(str.c_str(), str.length(), def_value_.i8);
+	case nptype::NPT_I8:
+		ParseTextValue(str.c_str(), str.length(), def_value_._i8);
 		break;
-	case VT_WORD:
-		ParseTextValue(str.c_str(), str.length(), def_value_.u16);
+	case nptype::NPT_U16:
+		ParseTextValue(str.c_str(), str.length(), def_value_._u16);
 		break;
-	case VT_SIGNED_WORD:
-		ParseTextValue(str.c_str(), str.length(), def_value_.i16);
+	case nptype::NPT_I16:
+		ParseTextValue(str.c_str(), str.length(), def_value_._i16);
 		break;
-	case VT_DWORD:
-		ParseTextValue(str.c_str(), str.length(), def_value_.u32);
+	case nptype::NPT_U32:
+		ParseTextValue(str.c_str(), str.length(), def_value_._u32);
 		break;
-	case VT_SIGNED_DWORD:
-		ParseTextValue(str.c_str(), str.length(), def_value_.i32);
+	case nptype::NPT_I32:
+		ParseTextValue(str.c_str(), str.length(), def_value_._i32);
 		break;
-	case VT_FLOAT:
-		ParseTextValue(str.c_str(), str.length(), def_value_.flt);
+	case nptype::NPT_F32:
+		ParseTextValue(str.c_str(), str.length(), def_value_._f32);
 		break;
 	default:
 		ASSERT(FALSE);

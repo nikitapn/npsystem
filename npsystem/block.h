@@ -163,7 +163,7 @@ public:
 		return var->fetch() ? var->get() : nullptr;
 	}
 	virtual void ReleaseMemory() noexcept = 0;
-	virtual int DefineTypeR() { return npsys::variable::VT_UNDEFINE; }
+	virtual int DefineTypeR() { return npsys::nptype::NPT_UNDEFINE; }
 	virtual bool Equal(CSlotType*) { return false; }
 	virtual bool Equal(CValue*) { return false; }
 	virtual bool Equal(CAvrInternalPin*) { return false; }
@@ -496,7 +496,7 @@ public:
 		return &variable_;
 	}
 	virtual int DefineTypeR() {
-		return variable_.fetch() ? variable_->GetType() : npsys::variable::VT_UNDEFINE;
+		return variable_.fetch() ? variable_->GetType() : npsys::nptype::NPT_UNDEFINE;
 	}
 	virtual void ReleaseMemory() noexcept {
 		if (variable_.is_invalid_node()) return;

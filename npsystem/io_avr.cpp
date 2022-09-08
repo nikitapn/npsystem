@@ -137,16 +137,16 @@ void CAVRPin::UpdateVar(const avrinfo::FirmwareInfo& info, const io_reg_addr& re
 	switch (use_) {
 	case avrinfo::PinPurpose::INPUTPU_PIN:
 	case avrinfo::PinPurpose::INPUT_PIN:
-		var_->SetType(npsys::variable::VT_DISCRETE | npsys::variable::IO_SPACE);
+		var_->SetType(npsys::nptype::NPT_BOOL | npsys::nptype::IO_SPACE);
 		var_->SetBit(bit_);
 		var_->SetAddr(reg.pin);
 		break;
 	case avrinfo::PinPurpose::ANALOG_PIN:
-		var_->SetType(npsys::variable::VT_WORD | npsys::variable::IO_SPACE);
+		var_->SetType(npsys::nptype::NPT_U16 | npsys::nptype::IO_SPACE);
 		var_->SetAddr(info.rmem.adc_array + bit_ * 2);
 		break;
 	case avrinfo::PinPurpose::OUTPUT_PIN:
-		var_->SetType(npsys::variable::VT_DISCRETE | npsys::variable::IO_SPACE);
+		var_->SetType(npsys::nptype::NPT_BOOL | npsys::nptype::IO_SPACE);
 		var_->SetBit(bit_);
 		var_->SetAddr(reg.port);
 		break;

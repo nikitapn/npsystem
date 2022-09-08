@@ -14,7 +14,6 @@
 
 %code requires // *.hh
 {
-
 #include "../number.hpp"
 #include "../ast.hpp"
 #include "../utils.hpp"
@@ -45,7 +44,7 @@ void set_buffer(char* buf, size_t size);
 %token IDENTIFIER EXTERNAL_IDENTIFIER
 %token GE LE ASSIGNMENT IF THEN ELSIF ELSE END_IF
 %token NUMBER_DISCRETE NUMBER_INTEGER NUMBER_FLOAT
-%token VT_I8 VT_U8 VT_I16 VT_U16 VT_I32 VT_U32 VT_REAL VT_BOOL
+%token NPT_I8 NPT_U8 NPT_I16 NPT_U16 NPT_I32 NPT_U32 NPT_F32 NPT_BOOL
 
 %left ','
 %left	'+' '-'
@@ -139,14 +138,14 @@ assignment:
 ;
 
 var_type: 
-	 	VT_BOOL 	{ $$ = fl::FDT_BOOLEAN; }
-	|	VT_U8	 		{ $$ = fl::FDT_U8; }
-	|	VT_I8			{ $$ = fl::FDT_S8; }
-	|	VT_U16 		{ $$ = fl::FDT_U16; }
-	|	VT_I16 		{ $$ = fl::FDT_S16; }
-	|	VT_U32 		{ $$ = fl::FDT_U32; }
-	|	VT_I32 		{ $$ = fl::FDT_S32; }
-	| VT_REAL 	{ $$ = fl::FDT_F32; }
+	 	NPT_BOOL 	{ $$ = npsys::nptype::NPT_BOOL; }
+	|	NPT_U8	 		{ $$ = npsys::nptype::NPT_U8; }
+	|	NPT_I8			{ $$ = npsys::nptype::NPT_I8; }
+	|	NPT_U16 		{ $$ = npsys::nptype::NPT_U16; }
+	|	NPT_I16 		{ $$ = npsys::nptype::NPT_I16; }
+	|	NPT_U32 		{ $$ = npsys::nptype::NPT_U32; }
+	|	NPT_I32 		{ $$ = npsys::nptype::NPT_I32; }
+	| NPT_F32 	{ $$ = npsys::nptype::NPT_F32; }
 ;
 
 prog_decl:

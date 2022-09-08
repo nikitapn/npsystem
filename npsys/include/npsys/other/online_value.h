@@ -8,10 +8,9 @@
 #include <npsys/memtypes.h>
 #include <npsys/variable.h>
 
-class online_value
-{
+class online_value {
 	using variable = npsys::variable;
-	using type_t = variable::Type;
+	using type_t = npsys::nptype::Type;
 private:
 	int type_;
 	nps::server_value val_;
@@ -25,7 +24,7 @@ private:
 	}
 public:
 	online_value() noexcept {
-		type_ = type_t::VT_UNDEFINE;
+		type_ = type_t::NPT_UNDEFINE;
 		val_.s = nps::var_status::VST_UNKNOWN;
 	}
 	explicit online_value(int type) noexcept {
@@ -55,73 +54,73 @@ public:
 		return variable::IsQuality(type_);
 	}
 	// bit
-	const bit& to_bit() const {
-		validate_type(type_t::VT_DISCRETE, false);
-		return reinterpret_cast<const bit&>(val_.data[0]);
+	const npsystem::types::BIT& to_bit() const {
+		validate_type(type_t::NPT_BOOL, false);
+		return reinterpret_cast<const npsystem::types::BIT&>(val_.data[0]);
 	}
-	const Q_bit& to_Qbit() const {
-		validate_type(type_t::VT_DISCRETE, true);
-		return reinterpret_cast<const Q_bit&>(val_.data[0]);
+	const npsystem::types::QBIT& to_Qbit() const {
+		validate_type(type_t::NPT_BOOL, true);
+		return reinterpret_cast<const npsystem::types::QBIT&>(val_.data[0]);
 	}
 	//8
-	const u8& to_u8() const {
-		validate_type(type_t::VT_BYTE, false);
-		return reinterpret_cast<const u8&>(val_.data[0]);
+	const npsystem::types::U8& to_u8() const {
+		validate_type(type_t::NPT_U8, false);
+		return reinterpret_cast<const npsystem::types::U8&>(val_.data[0]);
 	}
-	const Q_u8& to_Qu8() const {
-		validate_type(type_t::VT_BYTE, true);
-		return reinterpret_cast<const Q_u8&>(val_.data[0]);
+	const npsystem::types::QU8& to_Qu8() const {
+		validate_type(type_t::NPT_U8, true);
+		return reinterpret_cast<const npsystem::types::QU8&>(val_.data[0]);
 	}
-	const i8& to_i8() const {
-		validate_type(type_t::VT_SIGNED_BYTE, false);
-		return reinterpret_cast<const i8&>(val_.data[0]);
+	const npsystem::types::I8& to_i8() const {
+		validate_type(type_t::NPT_I8, false);
+		return reinterpret_cast<const npsystem::types::I8&>(val_.data[0]);
 	}
-	const Q_i8& to_Qi8() const {
-		validate_type(type_t::VT_SIGNED_BYTE, true);
-		return reinterpret_cast<const Q_i8&>(val_.data[0]);
+	const npsystem::types::QI8& to_Qi8() const {
+		validate_type(type_t::NPT_I8, true);
+		return reinterpret_cast<const npsystem::types::QI8&>(val_.data[0]);
 	}
 	// 16
-	const u16& to_u16() const {
-		validate_type(type_t::VT_WORD, false);
-		return reinterpret_cast<const u16&>(val_.data[0]);
+	const npsystem::types::U16& to_u16() const {
+		validate_type(type_t::NPT_U16, false);
+		return reinterpret_cast<const npsystem::types::U16&>(val_.data[0]);
 	}
-	const Q_u16& to_Qu16() const {
-		validate_type(type_t::VT_WORD, true);
-		return reinterpret_cast<const Q_u16&>(val_.data[0]);
+	const npsystem::types::QU16& to_Qu16() const {
+		validate_type(type_t::NPT_U16, true);
+		return reinterpret_cast<const npsystem::types::QU16&>(val_.data[0]);
 	}
-	const i16& to_i16() const {
-		validate_type(type_t::VT_SIGNED_WORD, false);
-		return reinterpret_cast<const i16&>(val_.data[0]);
+	const npsystem::types::I16& to_i16() const {
+		validate_type(type_t::NPT_I16, false);
+		return reinterpret_cast<const npsystem::types::I16&>(val_.data[0]);
 	}
-	const Q_i16& to_Qi16() const {
-		validate_type(type_t::VT_SIGNED_WORD, true);
-		return reinterpret_cast<const Q_i16&>(val_.data[0]);
+	const npsystem::types::QI16& to_Qi16() const {
+		validate_type(type_t::NPT_I16, true);
+		return reinterpret_cast<const npsystem::types::QI16&>(val_.data[0]);
 	}
 	// 32
-	const u32& to_u32() const {
-		validate_type(type_t::VT_DWORD, false);
-		return reinterpret_cast<const u32&>(val_.data[0]);
+	const npsystem::types::U32& to_u32() const {
+		validate_type(type_t::NPT_U32, false);
+		return reinterpret_cast<const npsystem::types::U32&>(val_.data[0]);
 	}
-	const Q_u32& to_Qu32() const {
-		validate_type(type_t::VT_DWORD, true);
-		return reinterpret_cast<const Q_u32&>(val_.data[0]);
+	const npsystem::types::QU32& to_Qu32() const {
+		validate_type(type_t::NPT_U32, true);
+		return reinterpret_cast<const npsystem::types::QU32&>(val_.data[0]);
 	}
-	const i32& to_i32() const {
-		validate_type(type_t::VT_SIGNED_DWORD, false);
-		return reinterpret_cast<const i32&>(val_.data[0]);
+	const npsystem::types::I32& to_i32() const {
+		validate_type(type_t::NPT_I32, false);
+		return reinterpret_cast<const npsystem::types::I32&>(val_.data[0]);
 	}
-	const Q_i32& to_Qi32() const {
-		validate_type(type_t::VT_SIGNED_DWORD, true);
-		return reinterpret_cast<const Q_i32&>(val_.data[0]);
+	const npsystem::types::QI32& to_Qi32() const {
+		validate_type(type_t::NPT_I32, true);
+		return reinterpret_cast<const npsystem::types::QI32&>(val_.data[0]);
 	}
 	// float
-	const flt& to_flt() const {
-		validate_type(type_t::VT_FLOAT, false);
-		return reinterpret_cast<const flt&>(val_.data[0]);
+	const npsystem::types::F32& to_flt() const {
+		validate_type(type_t::NPT_F32, false);
+		return reinterpret_cast<const npsystem::types::F32&>(val_.data[0]);
 	}
-	const Q_flt& to_Qflt() const {
-		validate_type(type_t::VT_FLOAT, true);
-		return reinterpret_cast<const Q_flt&>(val_.data[0]);
+	const npsystem::types::QF32& to_Qflt() const {
+		validate_type(type_t::NPT_F32, true);
+		return reinterpret_cast<const npsystem::types::QF32&>(val_.data[0]);
 	}
 	void zero_memory() noexcept {
 		std::fill(val_.data.begin(), val_.data.end(), 0x00);

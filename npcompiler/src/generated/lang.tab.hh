@@ -46,7 +46,6 @@
 // //                    "%code requires" blocks.
 #line 16 "src/lang.y" // lalr1.cc:401
 
-
 #include "../number.hpp"
 #include "../ast.hpp"
 #include "../utils.hpp"
@@ -56,7 +55,7 @@ void set_buffer(char* buf, size_t size);
 }
 
 
-#line 60 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 59 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 # include <cstdlib> // std::abort
@@ -167,7 +166,7 @@ void set_buffer(char* buf, size_t size);
 
 
 namespace yy {
-#line 171 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 170 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 
@@ -179,7 +178,7 @@ namespace yy {
     /// Symbol semantic values.
     union semantic_type
     {
-    #line 57 "src/lang.y" // lalr1.cc:401
+    #line 56 "src/lang.y" // lalr1.cc:401
 
 	struct {	
 		char* ptr;
@@ -190,7 +189,7 @@ namespace yy {
 	float val_float;
 	npcompiler::ast::AstNode* val_node;
 
-#line 194 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 193 "src/generated/lang.tab.hh" // lalr1.cc:401
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -243,14 +242,14 @@ namespace yy {
         NUMBER_DISCRETE = 277,
         NUMBER_INTEGER = 278,
         NUMBER_FLOAT = 279,
-        VT_I8 = 280,
-        VT_U8 = 281,
-        VT_I16 = 282,
-        VT_U16 = 283,
-        VT_I32 = 284,
-        VT_U32 = 285,
-        VT_REAL = 286,
-        VT_BOOL = 287
+        NPT_I8 = 280,
+        NPT_U8 = 281,
+        NPT_I16 = 282,
+        NPT_U16 = 283,
+        NPT_I32 = 284,
+        NPT_U32 = 285,
+        NPT_F32 = 286,
+        NPT_BOOL = 287
       };
     };
 
@@ -731,7 +730,7 @@ namespace yy {
 
 
 } // yy
-#line 735 "src/generated/lang.tab.hh" // lalr1.cc:401
+#line 734 "src/generated/lang.tab.hh" // lalr1.cc:401
 
 
 

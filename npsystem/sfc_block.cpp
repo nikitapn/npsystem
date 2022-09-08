@@ -68,7 +68,7 @@ void CSFCLine::CreatePredraw() {
 
 	auto &p1 = GetP1(), &p2 = GetP2();
 	float dist = p2.x - p1.x;
-	float arrow_dir = dist > 0 ? 1 : -1;
+	float arrow_dir = dist > 0 ? 1.0f : -1.0f;
 	const bool reverse_y_direction = (p2.y < p1.y - 5.0f) ? true : false;
 
 	sink->BeginFigure(p1, D2D1_FIGURE_BEGIN_HOLLOW);
@@ -179,7 +179,7 @@ void CSFCLine::CreateSingle() {
 
 	auto &p1 = GetP1(), &p2 = GetP2();
 	float dist = p2.x - p1.x;
-	float arrow_dir = dist > 0 ? 1 : -1;
+	float arrow_dir = dist > 0 ? 1.0f : -1.0f;
 	const bool reverse_y_direction = (p2.y < p1.y - 5.0f) ? true : false;
 
 	sink->BeginFigure(p1, D2D1_FIGURE_BEGIN_HOLLOW);
@@ -295,7 +295,7 @@ void CSFCLine::CreateForBus() {
 
 	auto &p1 = GetP1(), &p2 = GetP2();
 	float dist = p2.x - p1.x;
-	float arrow_dir = dist > 0 ? 1 : -1;
+	float arrow_dir = dist > 0 ? 1.0f : -1.0f;
 	const bool reverse_y_direction = (p2.y < p1.y - 5.0f) ? true : false;
 
 	sink->BeginFigure(p1, D2D1_FIGURE_BEGIN_HOLLOW);

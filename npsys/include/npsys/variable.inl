@@ -35,38 +35,38 @@ inline void variable::reset() noexcept {
 }
 // static
 inline constexpr bool variable::IsSigned(int type) noexcept {
-	return (type & SIGNED) ? true : false;
+	return (type & nptype::SIGNED) ? true : false;
 }
 inline constexpr bool variable::TypesEqual(int type_1, int type_2) noexcept {
-	return (type_1 & ~BIT_MASK) == (type_2 & ~BIT_MASK);
+	return (type_1 & ~nptype::BIT_MASK) == (type_2 & ~nptype::BIT_MASK);
 }
 inline constexpr bool variable::IsQuality(int type) noexcept {
-	return (type & VQUALITY) ? true : false;
+	return (type & nptype::VQUALITY) ? true : false;
 }
 inline constexpr bool variable::IsMutableType(int type) noexcept {
-	return (type & MUTABLE) ? true : false;
+	return (type & nptype::MUTABLE) ? true : false;
 }
 inline constexpr bool variable::IsInternalType(int type) noexcept {
-	return (type & variable::INTERNAL) ? true : false;
+	return (type & nptype::INTERNAL) ? true : false;
 }
 inline constexpr bool variable::IsIO(int type) noexcept {
-	return (type & IO_SPACE) ? true : false;
+	return (type & nptype::IO_SPACE) ? true : false;
 }
 inline constexpr bool variable::IsBit(int type) noexcept {
-	return (type & BIT_VALUE) ? true : false;
+	return (type & nptype::BIT_VALUE) ? true : false;
 }
 inline constexpr int variable::GetBit(int type) noexcept {
 	assert(variable::IsBit(type));
 	return (type & 0xF00) >> 8;
 }
 inline constexpr int variable::GetSize(int type) noexcept {
-	return (type & SIZE_MASK);
+	return (type & nptype::SIZE_MASK);
 }
 inline constexpr int variable::GetSizeWithQuality(int type) noexcept {
 	return GetSize(type) + (IsBit(type) ? 0 : (IsQuality(type) ? 1 : 0));
 }
-inline constexpr variable::Type variable::GetClearType(int type) noexcept {
-	return static_cast<variable::Type>(type & TYPE_MASK);
+inline constexpr nptype::Type variable::GetClearType(int type) noexcept {
+	return static_cast<nptype::Type>(type & nptype::TYPE_MASK);
 }
 // static end
 inline bool variable::IsBit() const noexcept {
@@ -96,7 +96,7 @@ inline int variable::GetType() const noexcept {
 inline variable::Status variable::GetStatus() const noexcept {
 	return status_;
 }
-inline variable::Type variable::GetClearType() const noexcept {
+inline nptype::Type variable::GetClearType() const noexcept {
 	return variable::GetClearType(type_);
 }
 inline int variable::GetBit() const noexcept {
@@ -147,7 +147,7 @@ inline void variable::SetAlg(odb::weak_node<control_unit_n> unit) noexcept {
 }
 inline void variable::SetBit(int bit) noexcept {
 	assert(IsBit());
-	type_ &= ~BIT_MASK;
+	type_ &= ~nptype::BIT_MASK;
 	type_ |= bit << 8;
 	set_modified();
 }
@@ -170,7 +170,7 @@ inline int variable::AddRef() noexcept {
 inline int variable::RefCount() const noexcept {
 	return ref_cnt_;
 }
-inline variable::Value variable::DefaultValue_GetValue() const noexcept {
+inline variable::DefaultValue variable::DefaultValue_GetValue() const noexcept {
 	return def_value_;
 }
 inline void variable::DefaultValue_SetModified(bool modified) {
@@ -181,36 +181,36 @@ inline void variable::DefaultValue_SetModified(bool modified) {
 inline bool variable::DefaultValue_Modified() const {
 	return def_value_modified_;
 }
-inline void variable::DefaultValue_SetValue(variable::discrete value) noexcept {
-	def_value_.d = value;
+inline void variable::DefaultValue_SetValue(bool value) noexcept {
+	def_value_._b = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::byte value) noexcept {
-	def_value_.u8 = value;
+inline void variable::DefaultValue_SetValue(u8 value) noexcept {
+	def_value_._u8 = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::signed_byte value) noexcept {
-	def_value_.i8 = value;
+inline void variable::DefaultValue_SetValue(i8 value) noexcept {
+	def_value_._i8 = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::word value) noexcept {
-	def_value_.u16 = value;
+inline void variable::DefaultValue_SetValue(u16 value) noexcept {
+	def_value_._u16 = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::signed_word value) noexcept {
-	def_value_.i16 = value;
+inline void variable::DefaultValue_SetValue(i16 value) noexcept {
+	def_value_._i16 = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::dword value) noexcept {
-	def_value_.u32 = value;
+inline void variable::DefaultValue_SetValue(u32 value) noexcept {
+	def_value_._u32 = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::signed_dword value) noexcept {
-	def_value_.i32 = value;
+inline void variable::DefaultValue_SetValue(i32 value) noexcept {
+	def_value_._i32 = value;
 	DefaultValue_SetModified(true);
 }
-inline void variable::DefaultValue_SetValue(variable::floating_point value) noexcept {
-	def_value_.flt = value;
+inline void variable::DefaultValue_SetValue(f32 value) noexcept {
+	def_value_._f32 = value;
 	DefaultValue_SetModified(true);
 }
 
@@ -229,21 +229,21 @@ inline std::ostream& operator<<(std::ostream& os, const variable& v) {
 inline constexpr std::string_view variable::to_ctype(int type) noexcept {
 	using namespace std::string_view_literals;
 	switch (GetClearType(type)) {
-	case VT_DISCRETE:
+	case nptype::NPT_BOOL:
 		return "discrete_t"sv;
-	case VT_BYTE:
+	case nptype::NPT_U8:
 		return "uint8_t"sv;
-	case VT_SIGNED_BYTE:
+	case nptype::NPT_I8:
 		return "int8_t"sv;
-	case VT_WORD:
+	case nptype::NPT_U16:
 		return "uint16_t"sv;
-	case VT_SIGNED_WORD:
+	case nptype::NPT_I16:
 		return "int16_t"sv;
-	case VT_DWORD:
+	case nptype::NPT_U32:
 		return "uint32_t"sv;
-	case VT_SIGNED_DWORD:
+	case nptype::NPT_I32:
 		return "int32_t"sv;
-	case VT_FLOAT:
+	case nptype::NPT_F32:
 		return "float"sv;
 	default:
 		return "unknown_type"sv;

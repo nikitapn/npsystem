@@ -22,18 +22,18 @@ void CTypeDeterminant::Generate(CBinaryEncoder* block) {
 	auto in_size = block->top->slots.i_size();
 	auto& out = block->top->slots.at_o(0);
 	if (in_size <= 8) {
-		out.SetSlotType(new CValue(variable::VT_BYTE | variable::VQUALITY));
+		out.SetSlotType(new CValue(npsys::nptype::NPT_U8 | npsys::nptype::VQUALITY));
 	} else if (in_size > 8 && in_size <= 16) {
-		out.SetSlotType(new CValue(variable::VT_WORD | variable::VQUALITY));
+		out.SetSlotType(new CValue(npsys::nptype::NPT_U16 | npsys::nptype::VQUALITY));
 	} else {
-		out.SetSlotType(new CValue(variable::VT_DWORD | variable::VQUALITY));
+		out.SetSlotType(new CValue(npsys::nptype::NPT_U32 | npsys::nptype::VQUALITY));
 	}
 }
 void CTypeDeterminant::Generate(CBinaryDecoder* decoder) {
 	/*
 	auto begin = decoder->BeginOutput(), end = decoder->EndOutput();
 	for (auto i = begin; i != end; ++i)
-		(*i)->SetSlotType(new CValue(Variable::VT_DISCRETE | Variable::VQUALITY));
+		(*i)->SetSlotType(new CValue(Variable::NPT_BOOL | Variable::VQUALITY));
 		*/
 }
 
@@ -49,14 +49,14 @@ void CTypeDeterminant::Generate(CAdd* block) {
 	const auto in2 = i_at(1).GetInputVariable();
 	auto& out_slot = o_at(0);
 	if (!in1 && !in2) {
-		out_slot.SetSlotType(new CValue(variable::VT_UNDEFINE | variable::MUTABLE));
+		out_slot.SetSlotType(new CValue(npsys::nptype::NPT_UNDEFINE | npsys::nptype::MUTABLE));
 	} else if (!in1 && in2) {
-		out_slot.SetSlotType(new CValue(in2->GetType() | variable::MUTABLE));
+		out_slot.SetSlotType(new CValue(in2->GetType() | npsys::nptype::MUTABLE));
 	} else if (in1 && !in2) {
-		out_slot.SetSlotType(new CValue(in1->GetType() | variable::MUTABLE));
+		out_slot.SetSlotType(new CValue(in1->GetType() | npsys::nptype::MUTABLE));
 	} else {
 		auto type = get_output_1(in1->GetType(), in2->GetType());
-		out_slot.SetSlotType(new CValue(type | variable::MUTABLE));
+		out_slot.SetSlotType(new CValue(type | npsys::nptype::MUTABLE));
 	}
 }
 void CTypeDeterminant::Generate(CSub* block) {
@@ -119,12 +119,10 @@ void CTypeDeterminant::Generate(CDiv*) {
 void CTypeDeterminant::Generate(CTime*) {}
 
 void CTypeDeterminant::Generate(CBlockSchedule* block) {
-	using byte = npsys::variable::byte;
-	
 	auto info = block->GetSlider()->GetSliderInfo();
 	auto length = info.length;
 
-	std::vector<std::tuple<byte, byte>> time_points; // hour, minutes
+	std::vector<std::tuple<u8, u8>> time_points; // hour, minutes
 	std::transform(info.positions.begin(), info.positions.end(),
 		std::back_inserter(time_points), [length](float flt) {
 			auto tm = static_cast<int>(
@@ -142,8 +140,8 @@ void CTypeDeterminant::Generate(CBlockSchedule* block) {
 	} else {
 		block->ReleaseMemory();
 		for (size_t i = 0; i < time_points.size(); ++i) {
-			block->AddVariable(odb::create_node<npsys::variable_n>(npsys::variable::VT_BYTE)); // hour
-			block->AddVariable(odb::create_node<npsys::variable_n>(npsys::variable::VT_BYTE)); // minute
+			block->AddVariable(odb::create_node<npsys::variable_n>(npsys::nptype::NPT_U8)); // hour
+			block->AddVariable(odb::create_node<npsys::variable_n>(npsys::nptype::NPT_U8)); // minute
 		}
 		block->top->set_modified();
 	}
@@ -157,11 +155,11 @@ void CTypeDeterminant::Generate(CBlockSchedule* block) {
 		auto& var_hour = block->variables_[2 * i];
 		auto& var_minute = block->variables_[2 * i + 1];
 
-		if (std::get<0>(tm) != var_hour->DefaultValue_GetValue().u8) {
+		if (std::get<0>(tm) != var_hour->DefaultValue_GetValue()._u8) {
 			var_hour->DefaultValue_SetValue(std::get<0>(tm));
 		}
 		
-		if (std::get<1>(tm) != var_minute->DefaultValue_GetValue().u8) {
+		if (std::get<1>(tm) != var_minute->DefaultValue_GetValue()._u8) {
 			var_minute->DefaultValue_SetValue(std::get<1>(tm));
 		}
 	}
@@ -173,19 +171,19 @@ void CTypeDeterminant::Generate(CInput* pInput) {}
 void CTypeDeterminant::Generate(COutput* pOutput) {}
 
 int CTypeDeterminant::get_output_1(int _t1, int _t2) {
-	int quality = (_t1 & variable::VQUALITY) | (_t2 & variable::VQUALITY);
-	if (_t1 & variable::FLOAT_VALUE ||
-		_t2 & variable::FLOAT_VALUE) {
-		return variable::VT_FLOAT | quality;
+	int quality = (_t1 & npsys::nptype::VQUALITY) | (_t2 & npsys::nptype::VQUALITY);
+	if (_t1 & npsys::nptype::FLOAT_VALUE ||
+		_t2 & npsys::nptype::FLOAT_VALUE) {
+		return npsys::nptype::NPT_F32 | quality;
 	}
-	int t1 = _t1 & variable::SIZE_MASK;
-	int t2 = _t2 & variable::SIZE_MASK;
+	int t1 = _t1 & npsys::nptype::SIZE_MASK;
+	int t2 = _t2 & npsys::nptype::SIZE_MASK;
 	int t3 = std::max(t1, t2);
-	int sign = (_t1 & variable::SIGNED) | (_t2 & variable::SIGNED);
-	if (t3 & variable::BIT_VALUE) {
-		return (t1 & variable::BIT_VALUE) 
+	int sign = (_t1 & npsys::nptype::SIGNED) | (_t2 & npsys::nptype::SIGNED);
+	if (t3 & npsys::nptype::BIT_VALUE) {
+		return (t1 & npsys::nptype::BIT_VALUE)
 			? quality | sign | t2 
 			: quality | sign | t1;
 	}
-	return t3 | sign | quality | variable::INT_VALUE;
+	return t3 | sign | quality | npsys::nptype::INT_VALUE;
 }

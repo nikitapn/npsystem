@@ -130,36 +130,19 @@ public:
 		return dlg.DoModal();
 	}
 
-	constexpr auto ToStringType(int type) {
-		using Variable = npsys::variable;
+	constexpr std::string_view ToStringType(int type) {
+		using namespace npsys::nptype;
+		using namespace std::string_view_literals;
 
-		static const char u8[]			=	"u8";
-		static const char s8[]			=	"s8";
-		static const char u16[]			=	"u16";
-		static const char s16[]			=	"s16";
-		static const char u32[]			=	"u32";
-		static const char s32[]			=	"s32";
-		static const char flt[]			=	"real";
-		static const char unknown[]	=	"unknown type";
-
-		switch (Variable::GetClearType(type)) {
-		case Variable::VT_BYTE:
-			return u8;
-		case Variable::VT_SIGNED_BYTE:
-			return s8;
-		case Variable::VT_WORD:
-			return u16;
-		case Variable::VT_SIGNED_WORD:
-			return s16;
-		case Variable::VT_DWORD:
-			return u32;
-		case Variable::VT_SIGNED_DWORD:
-			return s32;
-		case Variable::VT_FLOAT:
-			return flt;
-		default:
-			return unknown;
-			break;
+		switch (npsys::variable::GetClearType(type)) {
+			case NPT_U8:	return "u8"sv;
+			case NPT_I8:	return "i8"sv;
+			case NPT_U16: return "u16"sv;
+			case NPT_I16: return "i16"sv;
+			case NPT_U32: return "u32"sv;
+			case NPT_I32: return "i32"sv;
+			case NPT_F32: return "f32"sv;
+			default: return "unknown type"sv;
 		}
 	}
 
@@ -179,7 +162,7 @@ public:
 			adapter->m_data.emplace_back(
 				(LPARAM)static_cast<InteractiveItem*>(item),
 				(LPARAM)item->GetName().c_str(),
-				(LPARAM)ToStringType(value->GetType()),
+				(LPARAM)ToStringType(value->GetType()).data(),
 				value->GetAddress(),
 				value->GetSize(),
 				npsys::variable::IsQuality(value->GetType())

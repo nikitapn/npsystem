@@ -32,13 +32,13 @@ int VarWrapper1::InsertVariable(WriteDefaultValuesRequest* request) const noexce
 	int ix = var_->GetAddr() - request->m_offset;
 
 	if (var_->IsBit()) {
-		bool b = var_->DefaultValue_GetValue().d;
+		bool b = var_->DefaultValue_GetValue()._b;
 		request->m_data[ix] |= b << var_->GetBit();
 		if (var_->IsQuality()) {
 			request->m_data[ix] |= 2 << var_->GetBit();
 		}
 	} else {
-		npsys::variable::Value value = var_->DefaultValue_GetValue();
+		auto value = var_->DefaultValue_GetValue();
 		for (int i = 0; i < size; ++i) {
 			request->m_data[ix + i] = value.data[i];
 		}
@@ -199,7 +199,7 @@ CSimpleVariableLoader::CSimpleVariableLoader(
 	: CVariableLoader(device) {
 	for (auto var : allocated_vars) {
 		ASSERT(!(*var)->IsIO());
-		if ((*var)->GetClearType() != npsys::variable::VT_UNDEFINE) {
+		if ((*var)->GetClearType() != npsys::nptype::NPT_UNDEFINE) {
 			m_all.push_back(std::make_unique<VarWrapper1>((*var).get()));
 		}
 	}
@@ -253,7 +253,7 @@ CAlgorithmVariableLoader::CAlgorithmVariableLoader(
 	for (auto var_ptr : algVars) {
 		auto var = *var_ptr;
 		ASSERT(!var->IsIO());
-		if (var->GetClearType() != npsys::variable::VT_UNDEFINE) {
+		if (var->GetClearType() != npsys::nptype::NPT_UNDEFINE) {
 			m_all.push_back(std::make_unique<VarWrapper1>(var.get()));
 		}
 	}
@@ -261,7 +261,7 @@ CAlgorithmVariableLoader::CAlgorithmVariableLoader(
 	// only new allocated ext ref variables
 	for (auto& var : algRefs) {
 		ASSERT(!var->IsIO());
-		if (var->GetClearType() != npsys::variable::VT_UNDEFINE && var->GetStatus() != vs::good) {
+		if (var->GetClearType() != npsys::nptype::NPT_UNDEFINE && var->GetStatus() != vs::good) {
 			m_all.push_back(std::make_unique<VarWrapper2>(var));
 		}
 	}

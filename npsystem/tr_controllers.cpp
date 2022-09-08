@@ -662,7 +662,7 @@ npsys::controller_n CreateAvrController(
 			pinfo.pins_cfg[ix_pin].port_letter; ix_pin++) {
 			int bit = static_cast<int>(pinfo.pins_cfg[ix_pin].pin_n);
 			auto var = odb::create_node<npsys::variable_n>(
-				npsys::variable::IO_SPACE | npsys::variable::VT_DISCRETE);
+				npsys::nptype::IO_SPACE | npsys::nptype::NPT_BOOL);
 			var->SetDev(avr.cast<npsys::device_n>());
 			port->pins_.add_value(new npsys::CAVRPin(
 				"P" + std::string(1, *letter) + std::to_string(bit),

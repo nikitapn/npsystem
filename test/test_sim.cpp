@@ -115,7 +115,7 @@ int test_sim() {
 	}
 	std::cout << "loaded" << std::endl;
 	//	controllers[0] = std::make_unique<Microcontroller<Atmega8>>(16'000'000, 3);
-	//	controllers[0]->LoadFlash("d:\\projects\\cpp\\Alpha\\x64\\firmware\\atmega8_3.hex");
+	//	controllers[0]->LoadFlash("d:\\projects\\cpp\\npsystem\\x64\\firmware\\atmega8_3.hex");
 	//	medium.AddPeripheral(controllers[0].get());
 
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

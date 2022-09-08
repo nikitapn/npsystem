@@ -495,17 +495,17 @@ bool CAVRController::HandleRequest(REQUEST* req) noexcept {
 
 const std::vector<std::tuple<int, uint16_t>>& CAVRController::InitInternalBlock(CTime* block) {
 	const auto tm_addr = GetA_Time();
-	constexpr auto type = npsys::variable::VT_BYTE | npsys::variable::VQUALITY | npsys::variable::INTERNAL;
+	constexpr auto type = npsys::nptype::NPT_U8 | npsys::nptype::VQUALITY | npsys::nptype::INTERNAL;
 
 	static const std::vector<std::tuple<int, uint16_t>> map =
 	{
-		{ type, tm_addr + offsetof(alpha::Time, sec) },
-		{ type, tm_addr + offsetof(alpha::Time, min) },
-		{ type, tm_addr + offsetof(alpha::Time, hour) },
-		{ type, tm_addr + offsetof(alpha::Time, wday) },
-		{ type, tm_addr + offsetof(alpha::Time, mday) },
-		{ type, tm_addr + offsetof(alpha::Time, mon) },
-		{ type, tm_addr + offsetof(alpha::Time, year) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, sec) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, min) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, hour) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, wday) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, mday) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, mon) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, year) },
 	};
 
 	return map;
@@ -513,13 +513,13 @@ const std::vector<std::tuple<int, uint16_t>>& CAVRController::InitInternalBlock(
 
 const std::vector<std::tuple<int, uint16_t>>& CAVRController::InitInternalBlock(CBlockSchedule* block) {
 	const auto tm_addr = GetA_Time();
-	constexpr auto type = npsys::variable::VT_BYTE | npsys::variable::VQUALITY | npsys::variable::INTERNAL;
+	constexpr auto type = npsys::nptype::NPT_U8 | npsys::nptype::VQUALITY | npsys::nptype::INTERNAL;
 
 	static const std::vector<std::tuple<int, uint16_t>> map =
 	{
-		{ type, tm_addr + offsetof(alpha::Time, hour) },
-		{ type, tm_addr + offsetof(alpha::Time, min) },
-		{ type, tm_addr + offsetof(alpha::Time, sec) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, hour) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, min) },
+		{ type, tm_addr + offsetof(npsystem::types::Time, sec) },
 	};
 
 	return map;
@@ -866,7 +866,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:SEC",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, sec),
+		info.rmem.lt + offsetof(npsystem::types::Time, sec),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));
@@ -876,7 +876,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:MIN",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, min),
+		info.rmem.lt + offsetof(npsystem::types::Time, min),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));
@@ -886,7 +886,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:HOUR",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, hour),
+		info.rmem.lt + offsetof(npsystem::types::Time, hour),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));
@@ -896,7 +896,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:WDAY",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, wday),
+		info.rmem.lt + offsetof(npsystem::types::Time, wday),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));
@@ -906,7 +906,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:MDAY",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, mday),
+		info.rmem.lt + offsetof(npsystem::types::Time, mday),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));
@@ -916,7 +916,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:MON",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, mon),
+		info.rmem.lt + offsetof(npsystem::types::Time, mon),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));
@@ -926,7 +926,7 @@ void CAVRController::CreateOnlineCustomItems(CTreeViewCtrl tree, HTREEITEM paren
 		"T:YEAR",
 		hIcon,
 		dev_addr,
-		info.rmem.lt + offsetof(alpha::Time, year),
+		info.rmem.lt + offsetof(npsystem::types::Time, year),
 		1,
 		COnlineTreeItem::Type::HEX_UI1
 		));

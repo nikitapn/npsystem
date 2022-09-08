@@ -171,19 +171,21 @@ protected:
 	}
 
 	int SetParam(Param param) {
+		using namespace npsys::nptype;
+
 		int i = -1;
-		
+
 		switch (param.param_type) {
 		case PARAMETER_TYPE::P_VALUE:
 			switch (variable::GetClearType(param.var_type)) {
-			case variable::VT_DISCRETE:				i = 0; break;
-			case variable::VT_BYTE:						i = 1; break;
-			case variable::VT_SIGNED_BYTE:		i = 2; break;
-			case variable::VT_WORD:						i = 3; break;
-			case variable::VT_SIGNED_WORD:		i = 4; break;
-			case variable::VT_DWORD:					i = 5; break;
-			case variable::VT_SIGNED_DWORD:		i = 6; break;
-			case variable::VT_FLOAT:					i = 7; break;
+			case NPT_BOOL:	i = 0; break;
+			case NPT_U8:		i = 1; break;
+			case NPT_I8:		i = 2; break;
+			case NPT_U16:		i = 3; break;
+			case NPT_I16:		i = 4; break;
+			case NPT_U32:		i = 5; break;
+			case NPT_I32:		i = 6; break;
+			case NPT_F32:		i = 7; break;
 			default: ASSERT(FALSE); break;
 			}
 			break;
@@ -207,6 +209,8 @@ protected:
 	}
 
 	Param GetParam(int selected_idx) {
+		using namespace npsys::nptype;
+
 		std::string link;
 
 		bool quality = true;
@@ -218,16 +222,16 @@ protected:
 		}
 		
 		switch (selected_idx) {
-		case 0: return { PARAMETER_TYPE::P_VALUE, variable::VT_DISCRETE, link, quality };
-		case 1: return { PARAMETER_TYPE::P_VALUE, variable::VT_BYTE, link, quality };
-		case 2: return { PARAMETER_TYPE::P_VALUE, variable::VT_SIGNED_BYTE, link, quality };
-		case 3: return { PARAMETER_TYPE::P_VALUE, variable::VT_WORD, link, quality };
-		case 4: return { PARAMETER_TYPE::P_VALUE, variable::VT_SIGNED_WORD, link, quality };
-		case 5: return { PARAMETER_TYPE::P_VALUE, variable::VT_DWORD, link, quality };
-		case 6: return { PARAMETER_TYPE::P_VALUE, variable::VT_SIGNED_DWORD, link, quality };
-		case 7: return { PARAMETER_TYPE::P_VALUE, variable::VT_FLOAT, link, quality };
-		case 8: return { PARAMETER_TYPE::P_INTERNAL_REF, variable::VT_UNDEFINE, link, true };
-		case 9: return { PARAMETER_TYPE::P_EXTERNAL_REF, variable::VT_UNDEFINE, link, true };
+		case 0: return { PARAMETER_TYPE::P_VALUE, NPT_BOOL, link, quality };
+		case 1: return { PARAMETER_TYPE::P_VALUE, NPT_U8, link, quality };
+		case 2: return { PARAMETER_TYPE::P_VALUE, NPT_I8, link, quality };
+		case 3: return { PARAMETER_TYPE::P_VALUE, NPT_U16, link, quality };
+		case 4: return { PARAMETER_TYPE::P_VALUE, NPT_I16, link, quality };
+		case 5: return { PARAMETER_TYPE::P_VALUE, NPT_U32, link, quality };
+		case 6: return { PARAMETER_TYPE::P_VALUE, NPT_I32, link, quality };
+		case 7: return { PARAMETER_TYPE::P_VALUE, NPT_F32, link, quality };
+		case 8: return { PARAMETER_TYPE::P_INTERNAL_REF, NPT_UNDEFINE, link, true };
+		case 9: return { PARAMETER_TYPE::P_EXTERNAL_REF, NPT_UNDEFINE, link, true };
 		default:
 			ASSERT(FALSE);
 			return {};
@@ -276,7 +280,7 @@ protected:
 
 		if (cur != prev) {
 			if (cur.param_type == PARAMETER_TYPE::P_VALUE) {
-				SetSlotType(new CValue(cur.var_type | (cur.quality ? variable::VQUALITY : 0)), PARAMETER_TYPE::P_VALUE);
+				SetSlotType(new CValue(cur.var_type | (cur.quality ? npsys::nptype::VQUALITY : 0)), PARAMETER_TYPE::P_VALUE);
 			} else if (cur.param_type == PARAMETER_TYPE::P_INTERNAL_REF) {
 				auto ix = cur.link.find(L'.', 0);
 				if (ix == std::string::npos) {

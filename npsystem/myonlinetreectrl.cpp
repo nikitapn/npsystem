@@ -79,18 +79,18 @@ void CMyOnlineTreeView::CreateItems(CTreeItemAbstract* root) {
 	
 }
 
-static npsys::variable::Type size2type(uint8_t size) {
+static npsys::nptype::Type size2type(uint8_t size) {
 	switch (size)
 	{
 	case 1:
-		return npsys::variable::Type::VT_BYTE;
+		return npsys::nptype::Type::NPT_U8;
 	case 2:
-		return npsys::variable::Type::VT_WORD;
+		return npsys::nptype::Type::NPT_U16;
 	case 4:
-		return npsys::variable::Type::VT_DWORD;
+		return npsys::nptype::Type::NPT_U32;
 	default:
 		ATLASSERT(FALSE);
-		return npsys::variable::Type::VT_UNDEFINE;
+		return npsys::nptype::Type::NPT_UNDEFINE;
 	}
 }
 

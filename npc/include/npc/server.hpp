@@ -5,7 +5,6 @@
 #include <nprpc/nprpc.hpp>
 
 namespace cbt1 { 
-using discrete = bool;
 using oid_t = uint64_t;
 using uuid = std::array<uint8_t,16>;
 } // namespace cbt1

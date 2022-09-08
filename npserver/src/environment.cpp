@@ -138,7 +138,7 @@ void environment::sync_time(const boost::system::error_code& ec) noexcept {
 
 	using namespace std::chrono_literals;
 
-	static alpha::Time lt;
+	static npsystem::types::Time lt;
 	lt.sec.quality = VQ_GOOD;
 	lt.min.quality = VQ_GOOD;
 	lt.hour.quality = VQ_GOOD;
@@ -166,7 +166,7 @@ void environment::sync_time(const boost::system::error_code& ec) noexcept {
 		addr++;
 		if (!ri.active) continue;
 		std::lock_guard<nplib::spinlock> lk(ri.mut);
-		auto result = proto->t_add_task(protocol::write::t_write_block(addr, ri.tm_addr, &lt, sizeof(alpha::Time))).get();
+		auto result = proto->t_add_task(protocol::write::t_write_block(addr, ri.tm_addr, &lt, sizeof(npsystem::types::Time))).get();
 		if (result >= 0) {
 			ri.accessable = true;
 //			net_status_[addr] = 1;

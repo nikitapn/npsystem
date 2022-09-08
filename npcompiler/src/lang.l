@@ -55,15 +55,17 @@ using tok = yy::parser::token;
 "VAR"    	{ loc->step(); loc->columns(3); return tok::VAR; }
 "VAR_GLOBAL" { loc->step(); loc->columns(10); return tok::VAR_GLOBAL; }
 "END_VAR" { loc->step(); loc->columns(7); return tok::END_VAR; }
+"END_VAR" { loc->step(); loc->columns(7); return tok::END_VAR; }
 "//".* 		{ loc->lines(); }
-"I8" 			{ loc->step(); loc->columns(2); return tok::VT_I8; }
-"U8"  		{ loc->step(); loc->columns(2); return tok::VT_U8; }
-"I16" 		{ loc->step(); loc->columns(3); return tok::VT_I16; }
-"U16" 		{ loc->step(); loc->columns(3); return tok::VT_U16; } 
-"I32" 		{ loc->step(); loc->columns(3); return tok::VT_I32; } 
-"U32" 		{ loc->step(); loc->columns(3); return tok::VT_U32; }
-"REAL" 		{ loc->step(); loc->columns(4); return tok::VT_REAL; }
-"BOOL" 		{ loc->step(); loc->columns(4); return tok::VT_BOOL; }
+"BOOL" 		{ loc->step(); loc->columns(4); return tok::NPT_BOOL; }
+"I8" 			{ loc->step(); loc->columns(2); return tok::NPT_I8; }
+"U8"  		{ loc->step(); loc->columns(2); return tok::NPT_U8; }
+"I16" 		{ loc->step(); loc->columns(3); return tok::NPT_I16; }
+"U16" 		{ loc->step(); loc->columns(3); return tok::NPT_U16; } 
+"I32" 		{ loc->step(); loc->columns(3); return tok::NPT_I32; } 
+"U32" 		{ loc->step(); loc->columns(3); return tok::NPT_U32; }
+"F32" 		{ loc->step(); loc->columns(3); return tok::NPT_F32; }
+
 
 [0-9]+ { 
 		loc->step(); 
@@ -72,7 +74,7 @@ using tok = yy::parser::token;
 		return tok::NUMBER_INTEGER; 
 	}
 
-[0-9]*[.]?[0-9]+  { 
+[0-9]*[.][0-9]+  { 
 		loc->step(); 
 		loc->columns(static_cast<int>(yyleng)); 
 		yylval->val_float = static_cast<float>(std::atof(yytext)); 

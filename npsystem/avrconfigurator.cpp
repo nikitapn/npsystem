@@ -620,7 +620,7 @@ CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 							ext->link_.loaded_variable = {};
 						}
 						(*var_ptr) = odb::create_node<npsys::variable_n>(
-							npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY);
+							npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY);
 						
 						ext->loaded_ = false;
 					};
@@ -735,7 +735,7 @@ CAVR5DynamicLinker::UploadFBDUnit(npsys::fbd_control_unit_n& alg) {
 								ext->variable_->AddRef();
 								ext->variable_->SetDev(curdev);
 								ext->variable_->SetAlg(curalg);
-								ext->variable_->SetType((ref_var->GetType() | npsys::variable::VQUALITY) & (~npsys::variable::IO_SPACE));
+								ext->variable_->SetType((ref_var->GetType() | npsys::nptype::VQUALITY) & (~npsys::nptype::IO_SPACE));
 
 								ext->link_.loaded_variable = ref_var;
 

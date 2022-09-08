@@ -25,6 +25,7 @@
     <ClInclude Include="include\npsys\cmodels.h" />
     <ClInclude Include="include\npsys\avr_controller.h" />
     <ClInclude Include="include\npsys\boost_export.hpp" />
+    <ClInclude Include="include\npsys\fundamental.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\alg.cpp" />

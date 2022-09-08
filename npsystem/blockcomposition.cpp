@@ -245,7 +245,7 @@ void CBlockCompositionWrapper::Adapt(CFBDBlockComposition* dest) {
 		if (source_alg_valid) ref_slot = fbd_unit_->FindSlot(ref->GetSlotID());
 		if (!source_alg_valid || !ref_slot) {
 			static_cast<CParameter*>(slot->GetParentBlock())->SetParamType(PARAMETER_TYPE::P_VALUE);
-			slot->SetSlotType(new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY));
+			slot->SetSlotType(new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY));
 			slot->CommitTypeChanges();
 			return true;
 		}

@@ -148,7 +148,7 @@ void CSlot::SetSlotType(CSlotType* slot_type) {
 
 void CSlot::BeforeStartOnline() {
 	auto var = GetVariable();
-	if (var && var->GetClearType() == npsys::variable::VT_BYTE && !top->strings.is_invalid_id()) {
+	if (var && var->GetClearType() == npsys::nptype::NPT_U8 && !top->strings.is_invalid_id()) {
 		Online.string = top->strings.fetch();
 	}
 	SetValue(nullptr);
@@ -324,7 +324,7 @@ npsys::variable* CInputSlot::GetSlotAssociateVariable() {
 int CInputSlot::DefineTypeR() {
 	return IsConnected()
 		? lines_[0]->GetAnotherSlot(this)->DefineTypeR()
-		: npsys::variable::VT_UNDEFINE;
+		: npsys::nptype::NPT_UNDEFINE;
 }
 
 
@@ -432,7 +432,7 @@ void COutputSlot::SetValue(const nps::server_value* value) {
 			}
 		} catch (std::bad_cast& ex) {
 			if (value_.is_discrete()) {
-				const bit& bit = value_.to_bit();
+				const auto& bit = value_.to_bit();
 				if (bit.value) width = CLine::LineWidth::Bold;
 			}
 			color = SolidColor::Black;
@@ -440,7 +440,6 @@ void COutputSlot::SetValue(const nps::server_value* value) {
 		} catch (std::exception& ex) {
 			color = SolidColor::Black;
 			std::cerr << ex.what() << '\n';
-
 		}
 		break;
 	default:
@@ -562,7 +561,7 @@ void CFixedValue::TopoSort(
 }
 
 void CFixedValue::Hardware_InitVariable(odb::weak_node<npsys::device_n> dev, int type, uint16_t addr) {
-	ASSERT(type & npsys::variable::INTERNAL);
+	ASSERT(type & npsys::nptype::INTERNAL);
 	variable_ = odb::create_node<npsys::variable_n>(type);
 	variable_->SetDev(dev);
 	variable_->SetAddr(addr);
@@ -572,34 +571,34 @@ void CFixedValue::Hardware_InitVariable(odb::weak_node<npsys::device_n> dev, int
 }
 
 void CValue::FillPropertyGrid(CPropertyGrid* grid) noexcept {
-	using vt = npsys::variable::Type;
+	using Type = npsys::nptype::Type;
 	npsys::CMyVariant var;
 
 	switch (variable_->GetClearType())
 	{
-	case vt::VT_DISCRETE:
-		var = variable_->DefaultValue_GetValue().d;
+	case Type::NPT_BOOL:
+		var = variable_->DefaultValue_GetValue()._b;
 		break;
-	case vt::VT_BYTE:
-		var = variable_->DefaultValue_GetValue().u8;
+	case Type::NPT_U8:
+		var = variable_->DefaultValue_GetValue()._u8;
 		break;
-	case vt::VT_SIGNED_BYTE:
-		var = variable_->DefaultValue_GetValue().i8;
+	case Type::NPT_I8:
+		var = variable_->DefaultValue_GetValue()._i8;
 		break;
-	case vt::VT_WORD:
-		var = variable_->DefaultValue_GetValue().u16;
+	case Type::NPT_U16:
+		var = variable_->DefaultValue_GetValue()._u16;
 		break;
-	case vt::VT_SIGNED_WORD:
-		var = variable_->DefaultValue_GetValue().i16;
+	case Type::NPT_I16:
+		var = variable_->DefaultValue_GetValue()._i16;
 		break;
-	case vt::VT_DWORD:
-		var = variable_->DefaultValue_GetValue().u32;
+	case Type::NPT_U32:
+		var = variable_->DefaultValue_GetValue()._u32;
 		break;
-	case vt::VT_SIGNED_DWORD:
-		var = variable_->DefaultValue_GetValue().i32;
+	case Type::NPT_I32:
+		var = variable_->DefaultValue_GetValue()._i32;
 		break;
-	case vt::VT_FLOAT:
-		var = variable_->DefaultValue_GetValue().flt;
+	case Type::NPT_F32:
+		var = variable_->DefaultValue_GetValue()._f32;
 		break;
 	default:
 		return;
@@ -616,31 +615,31 @@ void CValue::OnPropertyChanged(WPARAM wParam, LPARAM lParam) {
 	const auto& v = *(CPropertyGrid::Variant*)(wParam);
 	const auto& mv = boost::get<npsys::CMyVariant>(v);
 
-	using TP = npsys::variable::Type;
+	using Type = npsys::nptype::Type;
 	switch (variable_->GetClearType())
 	{
-	case TP::VT_DISCRETE:
+	case Type::NPT_BOOL:
 		variable_->DefaultValue_SetValue(mv.as<bool>());
 		break;
-	case TP::VT_BYTE:
+	case Type::NPT_U8:
 		variable_->DefaultValue_SetValue(mv.as<uint8_t>());
 		break;
-	case TP::VT_SIGNED_BYTE:
+	case Type::NPT_I8:
 		variable_->DefaultValue_SetValue(mv.as<int8_t>());
 		break;
-	case TP::VT_WORD:
+	case Type::NPT_U16:
 		variable_->DefaultValue_SetValue(mv.as<uint16_t>());
 		break;
-	case TP::VT_SIGNED_WORD:
+	case Type::NPT_I16:
 		variable_->DefaultValue_SetValue(mv.as<int16_t>());
 		break;
-	case TP::VT_DWORD:
+	case Type::NPT_U32:
 		variable_->DefaultValue_SetValue(mv.as<uint32_t>());
 		break;
-	case TP::VT_SIGNED_DWORD:
+	case Type::NPT_I32:
 		variable_->DefaultValue_SetValue(mv.as<int32_t>());
 		break;
-	case TP::VT_FLOAT:
+	case Type::NPT_F32:
 		variable_->DefaultValue_SetValue(mv.as<float>());
 		break;
 	default:
@@ -659,7 +658,7 @@ CInternalRef::~CInternalRef() {
 }
 
 int CInternalRef::DefineTypeR() {
-	if (!link_valid_) return npsys::variable::VT_UNDEFINE;
+	if (!link_valid_) return npsys::nptype::NPT_UNDEFINE;
 	return const_cast<CSlot*>(slot_link_)->DefineTypeR();
 }
 
@@ -779,11 +778,11 @@ npsys::variable_n* CAvrInternalPin::GetVariableAsNode() {
 };
 
 int CAvrInternalPin::DefineTypeR() {
-	if (!link_valid_) return npsys::variable::VT_UNDEFINE;
+	if (!link_valid_) return npsys::nptype::NPT_UNDEFINE;
 	if ((pin_->GetStatus() == io::Status::relevant) && IsPinTypeEqualParamDirection()) {
 		return pin_->GetVariableType();
 	} else {
-		return  npsys::variable::VT_UNDEFINE;
+		return  npsys::nptype::NPT_UNDEFINE;
 	}
 }
 
@@ -875,7 +874,7 @@ int CModuleValue::DefineTypeR() {
 		&& last_loaded_var_->GetStatus() != npsys::variable::Status::to_remove) {
 		return last_loaded_var_->GetType();
 	} else {
-		return npsys::variable::VT_UNDEFINE;
+		return npsys::nptype::NPT_UNDEFINE;
 	}
 }
 
@@ -1019,7 +1018,7 @@ CExternalReference::CExternalReference(
 
 int CExternalReference::DefineTypeR() {
 	auto ref_slot = GetRefSlot();
-	return ref_slot ? ref_slot->DefineTypeR() : npsys::variable::VT_UNDEFINE;
+	return ref_slot ? ref_slot->DefineTypeR() : npsys::nptype::NPT_UNDEFINE;
 }
 
 npsys::variable_n* CExternalReference::GetVariableAsNode() {

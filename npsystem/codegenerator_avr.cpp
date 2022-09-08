@@ -469,7 +469,7 @@ void CAVR5CodeGenerator::Generate(CNot* block) {
 		bl.AddOperand(OP_TYPE::GCC_OP_RW, "$out", out);
 
 		m_code << bl;
-	} else if (!(in->GetType() & variable::VT_FLOAT)) {
+	} else if (!(in->GetType() & npsys::nptype::NPT_F32)) {
 		// ASM_CONV_INV_BYTE_1_TO_BIT(in->to_vardecl(), out->to_vardecl(), out->GetBit());
 	}
 	BLOCK_END(block);
@@ -1107,7 +1107,7 @@ void CAVR5CodeGenerator::Generate(CAdd* block) {
 		gcc_->AddVariable(in1);
 		gcc_->AddVariable(in2);
 		gcc_->AddVariable(out);
-		if ((t1 & variable::FLOAT_VALUE) || (t2 & variable::FLOAT_VALUE)) {
+		if ((t1 & npsys::nptype::FLOAT_VALUE) || (t2 & npsys::nptype::FLOAT_VALUE)) {
 			AddLibrary("avr_libm");
 		}
 		m_code << out->to_vardecl() << " = " <<
@@ -1136,7 +1136,7 @@ void CAVR5CodeGenerator::Generate(CSub* pSub) {
 		gcc_->AddVariable(in2);
 		gcc_->AddVariable(out);
 		//
-		if ((t1 & Variable::VT_FLOAT) || (t2 & Variable::VT_FLOAT)) {
+		if ((t1 & Variable::NPT_F32) || (t2 & Variable::NPT_F32)) {
 			AddLibrary("avr_libm");
 		}
 		m_code << out->to_vardecl() + " = " + in1->to_vardecl() + " - " + in2->to_vardecl() + ";");
@@ -1157,7 +1157,7 @@ void CAVR5CodeGenerator::Generate(CMul* pMul) {
 		gcc_->AddVariable(in2);
 		gcc_->AddVariable(out);
 		//
-		if ((t1 & Variable::VT_FLOAT) || (t2 & Variable::VT_FLOAT)) {
+		if ((t1 & Variable::NPT_F32) || (t2 & Variable::NPT_F32)) {
 			AddLibrary("avr_libm");
 		}
 		m_code << out->to_vardecl() + " = " + in1->to_vardecl() + " * " + in2->to_vardecl() + ";");
@@ -1178,7 +1178,7 @@ void CAVR5CodeGenerator::Generate(CDiv* pDiv) {
 		gcc_->AddVariable(out);
 		//
 	//	m_AdditionalLib.emplace("libgcc_");
-		if ((t1 & Variable::VT_FLOAT) || (t2 & Variable::VT_FLOAT)) {
+		if ((t1 & Variable::NPT_F32) || (t2 & Variable::NPT_F32)) {
 			AddLibrary("avr_libm");
 		}
 		m_code << out->to_vardecl() + " = " + in1->to_vardecl() + " / " + in2->to_vardecl() + ";");
@@ -1224,8 +1224,8 @@ void CAVR5CodeGenerator::Generate(CComparator* block) {
 	gcc_->AddVariable(in1);
 	gcc_->AddVariable(in2);
 	
-	if (in1->GetType() & npsys::variable::FLOAT_VALUE || 
-		in2->GetType() & npsys::variable::FLOAT_VALUE) AddLibrary("avr_libm");
+	if (in1->GetType() & npsys::nptype::FLOAT_VALUE ||
+		in2->GetType() & npsys::nptype::FLOAT_VALUE) AddLibrary("avr_libm");
 
 	m_code << "uint8_t q_val;\n";
 	
@@ -1401,7 +1401,7 @@ void CAVR5CodeGenerator::GenerateAlarmBlock(CBlock* block, bool high) {
 
 	if (!value || !sp) return;
 
-	if (value->GetType() & npsys::variable::BIT_VALUE || sp->GetType() & npsys::variable::BIT_VALUE) {
+	if (value->GetType() & npsys::nptype::BIT_VALUE || sp->GetType() & npsys::nptype::BIT_VALUE) {
 		std::cerr << block->GetName() << ": discretre inputs are not supported\n";
 		return;
 	}
@@ -1409,7 +1409,7 @@ void CAVR5CodeGenerator::GenerateAlarmBlock(CBlock* block, bool high) {
 	const auto& hyst = block->GetPropertyByKey<float>("hyst");
 
 	std::string val;
-	if (value->GetType() & npsys::variable::FLOAT_VALUE || sp->GetType() & npsys::variable::FLOAT_VALUE) {
+	if (value->GetType() & npsys::nptype::FLOAT_VALUE || sp->GetType() & npsys::nptype::FLOAT_VALUE) {
 		AddLibrary("avr_libm");
 		val = std::to_string(hyst->GetValue());
 	} else {

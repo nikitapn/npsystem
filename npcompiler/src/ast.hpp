@@ -19,6 +19,7 @@
 #include <functional>
 #include <optional>
 
+#include <nplib/utils/types.h>
 #include <boost/pool/object_pool.hpp>
 #include <boost/container/small_vector.hpp>
 #include <npcompiler/resolver.hpp>
@@ -53,15 +54,6 @@ class Value;
 namespace npcompiler::ast {
 
 struct AstNode;
-
-using boolean = bool;
-using u8 = unsigned char;
-using i8 = signed char;
-using u16 = unsigned short;
-using i16 = signed short;
-using u32 = unsigned int;
-using i32 = signed int;
-using f32 = float;
 
 using namespace std::string_view_literals;
 
@@ -137,7 +129,7 @@ struct Number {
 	}
 
 	fl::FDType get_type() const noexcept {
-		return !is_float() ? as_int().type : fl::FDT_F32;
+		return !is_float() ? as_int().type : npsys::nptype::NPT_F32;
 	}
 
 	explicit Number() = default;
@@ -158,7 +150,6 @@ using symbols_t = std::map<std::string, AstNode*, std::less<>>;
 class ParserContext {
 	globals_resolver_cb_t& globals_resolver_cb_;
 public:
-
 	bool error = false;
 	bool global;
 	symbols_t symbols_global;
@@ -171,6 +162,7 @@ public:
 
 	AstNode* create_binary_op(AstType type, AstNode* lhs, AstNode* rhs);
 	AstNode* create_assignment(AstNode* lhs, AstNode* rhs);
+
 
 	ParserContext(globals_resolver_cb_t& cb)
 		: globals_resolver_cb_{ cb } {}
@@ -333,6 +325,7 @@ inline std::ostream& operator<<(std::ostream& os, const AstNode& n) {
 		break;
 	default:
 		os << n.node_type_str();
+		break;
 	}
 	return os;
 }
@@ -368,9 +361,7 @@ inline AstNode* ParserContext::ident_get(std::string_view str) {
 		return it->second;
 	}
 
-	static std::string s_ex = "unknown identifier \"" + std::string(str) + "\"";
-
-	throw std::runtime_error(s_ex);
+	throw std::runtime_error("unknown identifier \"" + std::string(str) + "\"");
 }
 
 inline AstNode* ParserContext::ext_ident_get(std::string_view str) noexcept {

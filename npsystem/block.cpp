@@ -272,7 +272,7 @@ CFBDBlockFactory::CreateOutput(npsys::fbd_block_n& n) {
 		CTextElement::T_RIGHT | CTextElement::T_VCENTER);
 
 	block->elements_.insert(block->elements_.begin(), text_name);
-	block->MountSlot(CreateInputSlot("IN", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateInputSlot("IN", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	block->SetParamType(PARAMETER_TYPE::P_VALUE);
 	block->AdjustBlock();
 }
@@ -300,7 +300,7 @@ CFBDBlockFactory::CreateInput(npsys::fbd_block_n& n) {
 		CTextElement::T_LEFT | CTextElement::T_VCENTER);
 
 	block->elements_.insert(block->elements_.begin(), text_name);
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	block->SetParamType(PARAMETER_TYPE::P_VALUE);
 	block->AdjustBlock();
 }
@@ -378,7 +378,7 @@ CFBDBlockFactory::CreateOr(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 }
 
 void
@@ -391,7 +391,7 @@ CFBDBlockFactory::CreateAnd(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 }
 
 void
@@ -404,7 +404,7 @@ CFBDBlockFactory::CreateRsTrigger(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("SET",  n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("RESET", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 }
 
 void
@@ -416,7 +416,7 @@ CFBDBlockFactory::CreateNot(npsys::fbd_block_n& n) {
 	block->Expand(1);
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN",  n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 }
 
 void
@@ -428,8 +428,8 @@ CFBDBlockFactory::CreatePositiveEdge(npsys::fbd_block_n& n) {
 	block->Expand(1);
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->variable_ = odb::create_node<npsys::variable_n>(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY);
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->variable_ = odb::create_node<npsys::variable_n>(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY);
 }
 
 void
@@ -441,8 +441,8 @@ CFBDBlockFactory::CreateNegativeEdge(npsys::fbd_block_n& n) {
 	block->Expand(1);
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->variable_ = odb::create_node<npsys::variable_n>(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY);
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->variable_ = odb::create_node<npsys::variable_n>(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY);
 }
 
 void
@@ -454,8 +454,8 @@ CFBDBlockFactory::CreateAnyEdge(npsys::fbd_block_n& n) {
 	block->Expand(1);
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->variable_ = odb::create_node<npsys::variable_n>(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY);
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->variable_ = odb::create_node<npsys::variable_n>(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY);
 }
 
 void
@@ -466,9 +466,9 @@ CFBDBlockFactory::CreateDelay(npsys::fbd_block_n& n) {
 	block->top = n.get();
 	block->Expand(2);
 	CreateBlock(block);
-	block->variable_ = odb::create_node<npsys::variable_n>(npsys::variable::VT_DWORD | npsys::variable::VQUALITY);
+	block->variable_ = odb::create_node<npsys::variable_n>(npsys::nptype::NPT_U32 | npsys::nptype::VQUALITY);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT",n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT",n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 //	block->AddGraphicElement(new CBlockVariantProperty(D2D1::RectF(10, Y_POSITION(1), 
 //		constants::block::BLOCK_WIDTH - 10, Y_POSITION(2)), "Delay(ms):", &block->timeout_));
 	block->AddProperty<int>(PRB::Section::ID_SECTION_BLOCK_SPECIAL, "Timeout", "timeout", 1000);
@@ -483,7 +483,7 @@ CFBDBlockFactory::CreateBinaryEncoder(npsys::fbd_block_n& n) {
 	block->top = n.get();
 	block->Expand(8);
 	CreateBlock(block);
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	for (int i = 0; i < 8; i++) {
 		block->MountSlot(CreateInputSlot("IN_" + std::to_string(i + 1), n, new CBlockInput));
 	}
@@ -499,7 +499,7 @@ CFBDBlockFactory::CreateBinaryDecoder(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
 	for (int i = 0; i < 16; i++) {
-		block->MountSlot(CreateOutputSlot("OUT_" + std::to_string(i + 1), n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+		block->MountSlot(CreateOutputSlot("OUT_" + std::to_string(i + 1), n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	}
 }
 
@@ -513,7 +513,7 @@ CFBDBlockFactory::CreateAdd(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_UNDEFINE | npsys::variable::MUTABLE)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_UNDEFINE | npsys::nptype::MUTABLE)));
 }
 
 void
@@ -526,7 +526,7 @@ CFBDBlockFactory::CreateSub(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_UNDEFINE | npsys::variable::MUTABLE)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_UNDEFINE | npsys::nptype::MUTABLE)));
 }
 
 void
@@ -539,7 +539,7 @@ CFBDBlockFactory::CreateMul(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_UNDEFINE | npsys::variable::MUTABLE)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_UNDEFINE | npsys::nptype::MUTABLE)));
 }
 
 void
@@ -552,7 +552,7 @@ CFBDBlockFactory::CreateDiv(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_UNDEFINE | npsys::variable::MUTABLE)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_UNDEFINE | npsys::nptype::MUTABLE)));
 }
 
 void
@@ -571,12 +571,12 @@ CFBDBlockFactory::CreateComparator(npsys::fbd_block_n& n) {
 	// -le меньше или равно if [ "$a" -le "$b" ]
 	block->MountSlot(CreateInputSlot("IN_1", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("IN_2", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("EQ", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->AddDisabledSlot(CreateOutputSlot("NE", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->AddDisabledSlot(CreateOutputSlot("GT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->AddDisabledSlot(CreateOutputSlot("GE", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->AddDisabledSlot(CreateOutputSlot("LT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
-	block->AddDisabledSlot(CreateOutputSlot("LE", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("EQ", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->AddDisabledSlot(CreateOutputSlot("NE", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->AddDisabledSlot(CreateOutputSlot("GT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->AddDisabledSlot(CreateOutputSlot("GE", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->AddDisabledSlot(CreateOutputSlot("LT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
+	block->AddDisabledSlot(CreateOutputSlot("LE", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 }
 
 void
@@ -589,7 +589,7 @@ CFBDBlockFactory::CreateFunction(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_FLOAT | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_F32 | npsys::nptype::VQUALITY)));
 }
 
 
@@ -602,10 +602,10 @@ CFBDBlockFactory::CreatePID(npsys::fbd_block_n& n) {
 	block->Expand(5);
 	CreateBlock(block);
 
-	block->variables_.push_back(odb::create_node<npsys::variable_n>(npsys::variable::VT_FLOAT | npsys::variable::VQUALITY));
+	block->variables_.push_back(odb::create_node<npsys::variable_n>(npsys::nptype::NPT_F32 | npsys::nptype::VQUALITY));
 
 	for (int i = 0; i < 6; ++i)
-		block->variables_.push_back(odb::create_node<npsys::variable_n>(npsys::variable::VT_FLOAT));
+		block->variables_.push_back(odb::create_node<npsys::variable_n>(npsys::nptype::NPT_F32));
 
 	block->variables_[CPID::PID_KP]->DefaultValue_SetValue(1.0f);
 	block->variables_[CPID::PID_KI]->DefaultValue_SetValue(0.0001f);
@@ -626,7 +626,7 @@ CFBDBlockFactory::CreateAlarmHigh(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("H", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	block->AddProperty<float>(PRB::Section::ID_SECTION_BLOCK_SPECIAL, "Hysteresis", "hyst", 10.0f);
 }
 
@@ -640,7 +640,7 @@ CFBDBlockFactory::CreateAlarmLow(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("L", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	block->AddProperty<float>(PRB::Section::ID_SECTION_BLOCK_SPECIAL, "Hysteresis", "hyst", 10.0f);
 }
 
@@ -677,7 +677,7 @@ CFBDBlockFactory::CreateSchedule(npsys::fbd_block_n& n) {
 	slider->AddGraphicElement(CreateSliderThing(slider));
 
 	block->MountSlot(CreateInputSlot("ENABLED", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 	block->MountSlot(CreateOutputSlot("HOUR", n, new CFixedValue));
 	block->MountSlot(CreateOutputSlot("MIN", n, new CFixedValue));
 	block->MountSlot(CreateOutputSlot("SEC", n, new CFixedValue));
@@ -740,8 +740,8 @@ CFBDBlockFactory::CreateCounter(npsys::fbd_block_n& n) {
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
 	block->MountSlot(CreateInputSlot("RST", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("VALUE", n, new CValue(npsys::variable::VT_WORD)));
-	block->variable_ = odb::create_node<npsys::variable_n>(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY);
+	block->MountSlot(CreateOutputSlot("VALUE", n, new CValue(npsys::nptype::NPT_U16)));
+	block->variable_ = odb::create_node<npsys::variable_n>(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY);
 }
 
 void 
@@ -753,16 +753,16 @@ CFBDBlockFactory::CreatePulse(npsys::fbd_block_n& n) {
 	block->Expand(1);
 	CreateBlock(block);
 	block->MountSlot(CreateInputSlot("IN", n, new CBlockInput));
-	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::variable::VT_DISCRETE | npsys::variable::VQUALITY)));
+	block->MountSlot(CreateOutputSlot("OUT", n, new CValue(npsys::nptype::NPT_BOOL | npsys::nptype::VQUALITY)));
 
 	// IV_TMR_CUR_CNT
 	block->AddVariable(
-		odb::create_node<npsys::variable_n>(npsys::variable::VT_WORD)
+		odb::create_node<npsys::variable_n>(npsys::nptype::NPT_U16)
 	);
 
 	// IV_EDGE_PREVIOUS_STATE
 	block->AddVariable(
-		odb::create_node<npsys::variable_n>(npsys::variable::VT_DISCRETE)
+		odb::create_node<npsys::variable_n>(npsys::nptype::NPT_BOOL)
 	);
 
 	block->AddProperty<bool>(PRB::Section::ID_SECTION_BLOCK_SPECIAL, "Initiate at Falling Edge", "fall", false);

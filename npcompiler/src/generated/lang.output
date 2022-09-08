@@ -42,14 +42,14 @@ Grammar
 
    22 assignment: ident ASSIGNMENT exp semicolon
 
-   23 var_type: VT_BOOL
-   24         | VT_U8
-   25         | VT_I8
-   26         | VT_U16
-   27         | VT_I16
-   28         | VT_U32
-   29         | VT_I32
-   30         | VT_REAL
+   23 var_type: NPT_BOOL
+   24         | NPT_U8
+   25         | NPT_I8
+   26         | NPT_U16
+   27         | NPT_I16
+   28         | NPT_U32
+   29         | NPT_I32
+   30         | NPT_F32
 
    31 prog_decl: %empty
    32          | prog_decl var_decl_local
@@ -135,14 +135,14 @@ END_IF (276) 45 46
 NUMBER_DISCRETE <val_discrete> (277) 47
 NUMBER_INTEGER <val_str> (278) 48
 NUMBER_FLOAT <val_float> (279) 49
-VT_I8 (280) 25
-VT_U8 (281) 24
-VT_I16 (282) 27
-VT_U16 (283) 26
-VT_I32 (284) 29
-VT_U32 (285) 28
-VT_REAL (286) 30
-VT_BOOL (287) 23
+NPT_I8 (280) 25
+NPT_U8 (281) 24
+NPT_I16 (282) 27
+NPT_U16 (283) 26
+NPT_I32 (284) 29
+NPT_U32 (285) 28
+NPT_F32 (286) 30
+NPT_BOOL (287) 23
 
 
 Nonterminals, with rules where they appear
@@ -1194,24 +1194,24 @@ State 68
 
 State 69
 
-   23 var_type: . VT_BOOL
-   24         | . VT_U8
-   25         | . VT_I8
-   26         | . VT_U16
-   27         | . VT_I16
-   28         | . VT_U32
-   29         | . VT_I32
-   30         | . VT_REAL
+   23 var_type: . NPT_BOOL
+   24         | . NPT_U8
+   25         | . NPT_I8
+   26         | . NPT_U16
+   27         | . NPT_I16
+   28         | . NPT_U32
+   29         | . NPT_I32
+   30         | . NPT_F32
    42 var_decl0: IDENTIFIER ':' . var_type semicolon1
 
-    VT_I8    shift, and go to state 82
-    VT_U8    shift, and go to state 83
-    VT_I16   shift, and go to state 84
-    VT_U16   shift, and go to state 85
-    VT_I32   shift, and go to state 86
-    VT_U32   shift, and go to state 87
-    VT_REAL  shift, and go to state 88
-    VT_BOOL  shift, and go to state 89
+    NPT_I8    shift, and go to state 82
+    NPT_U8    shift, and go to state 83
+    NPT_I16   shift, and go to state 84
+    NPT_U16   shift, and go to state 85
+    NPT_I32   shift, and go to state 86
+    NPT_U32   shift, and go to state 87
+    NPT_F32   shift, and go to state 88
+    NPT_BOOL  shift, and go to state 89
 
     var_type  go to state 90
 
@@ -1392,56 +1392,56 @@ State 81
 
 State 82
 
-   25 var_type: VT_I8 .
+   25 var_type: NPT_I8 .
 
     $default  reduce using rule 25 (var_type)
 
 
 State 83
 
-   24 var_type: VT_U8 .
+   24 var_type: NPT_U8 .
 
     $default  reduce using rule 24 (var_type)
 
 
 State 84
 
-   27 var_type: VT_I16 .
+   27 var_type: NPT_I16 .
 
     $default  reduce using rule 27 (var_type)
 
 
 State 85
 
-   26 var_type: VT_U16 .
+   26 var_type: NPT_U16 .
 
     $default  reduce using rule 26 (var_type)
 
 
 State 86
 
-   29 var_type: VT_I32 .
+   29 var_type: NPT_I32 .
 
     $default  reduce using rule 29 (var_type)
 
 
 State 87
 
-   28 var_type: VT_U32 .
+   28 var_type: NPT_U32 .
 
     $default  reduce using rule 28 (var_type)
 
 
 State 88
 
-   30 var_type: VT_REAL .
+   30 var_type: NPT_F32 .
 
     $default  reduce using rule 30 (var_type)
 
 
 State 89
 
-   23 var_type: VT_BOOL .
+   23 var_type: NPT_BOOL .
 
     $default  reduce using rule 23 (var_type)
 

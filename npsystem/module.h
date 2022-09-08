@@ -59,7 +59,7 @@ public:
 		: odb::systree_item_observable<CI2CModuleSegmentValue>(name)
 		, odb::id_support(true)
 		, addr_(addr)
-		, type_(variable::VT_BYTE | variable::VQUALITY)
+		, type_(npsys::nptype::NPT_U8 | npsys::nptype::VQUALITY)
 		, parent(_parent)
 		, assigned_(assigned)
 	{

@@ -52,8 +52,8 @@ protected:
 		std::string str;
 
 		switch (var_->GetClearType()) {
-		case npsys::variable::VT_DISCRETE:
-			type = "discrete";
+		case npsys::nptype::NPT_BOOL:
+			type = "boolean";
 			if (var_->IsQuality()) {
 				str = std::to_string(static_cast<bool>(value.to_Qbit().value));
 				SetQuality(value.to_Qbit().quality);
@@ -61,7 +61,7 @@ protected:
 				str = std::to_string(static_cast<bool>(value.to_bit().value));
 			}
 			break;
-		case npsys::variable::VT_BYTE:
+		case npsys::nptype::NPT_U8:
 			type = "byte";
 			
 			if (var_->IsQuality()) {
@@ -72,7 +72,7 @@ protected:
 			}
 			
 			break;
-		case npsys::variable::VT_SIGNED_BYTE:
+		case npsys::nptype::NPT_I8:
 			type = "signed byte";
 			if (var_->IsQuality()) {
 				str = std::to_string(value.to_Qi8().value);
@@ -81,7 +81,7 @@ protected:
 				str = std::to_string(value.to_i8().value);
 			}
 			break;
-		case npsys::variable::VT_WORD:
+		case npsys::nptype::NPT_U16:
 			type = "word";
 			if (var_->IsQuality()) {
 				str = std::to_string(value.to_Qu16().value);
@@ -90,7 +90,7 @@ protected:
 				str = std::to_string(value.to_u16().value);
 			}
 			break;
-		case npsys::variable::VT_SIGNED_WORD:
+		case npsys::nptype::NPT_I16:
 			type = "signed word";
 			if (var_->IsQuality()) {
 				str = std::to_string(value.to_Qi16().value);
@@ -99,7 +99,7 @@ protected:
 				str = std::to_string(value.to_i16().value);
 			}
 			break;
-		case npsys::variable::VT_DWORD:
+		case npsys::nptype::NPT_U32:
 			type = "dword";
 			if (var_->IsQuality()) {
 				str = std::to_string(value.to_Qu32().value);
@@ -108,7 +108,7 @@ protected:
 				str = std::to_string(value.to_u32().value);
 			}
 			break;
-		case npsys::variable::VT_SIGNED_DWORD:
+		case npsys::nptype::NPT_I32:
 			type = "signed double word";
 			if (var_->IsQuality()) {
 				str = std::to_string(value.to_Qi32().value);
@@ -117,7 +117,7 @@ protected:
 				str = std::to_string(value.to_i32().value);
 			}
 			break;
-		case npsys::variable::VT_FLOAT:
+		case npsys::nptype::NPT_F32:
 			type = "float";
 			if (var_->IsQuality()) {
 				str = std::to_string(value.to_Qflt().value);
@@ -146,7 +146,7 @@ protected:
 		try {
 			bool quality = var_->IsQuality();
 			switch (var_->GetClearType()) {
-			case npsys::variable::VT_DISCRETE:
+			case npsys::nptype::NPT_BOOL:
 			{
 				bool val = m_edit.as<bool>();
 				if (quality) {
@@ -156,7 +156,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_BYTE:
+			case npsys::nptype::NPT_U8:
 			{
 				uint8_t val = m_edit.as<uint8_t>();
 				if (quality) {
@@ -166,7 +166,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_SIGNED_BYTE:
+			case npsys::nptype::NPT_I8:
 			{
 				int8_t val = m_edit.as<int8_t>();
 				if (quality) {
@@ -176,7 +176,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_WORD:
+			case npsys::nptype::NPT_U16:
 			{
 				uint16_t val = m_edit.as<uint16_t>();
 				if (quality) {
@@ -186,7 +186,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_SIGNED_WORD:
+			case npsys::nptype::NPT_I16:
 			{
 				int16_t val = m_edit.as<int16_t>();
 				if (quality) {
@@ -196,7 +196,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_DWORD:
+			case npsys::nptype::NPT_U32:
 			{
 				uint32_t val = m_edit.as<uint32_t>();
 				if (quality) {
@@ -206,7 +206,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_SIGNED_DWORD:
+			case npsys::nptype::NPT_I32:
 			{
 				int32_t val = m_edit.as<int32_t>();
 				if (quality) {
@@ -216,7 +216,7 @@ protected:
 				}
 				break;
 			}
-			case npsys::variable::VT_FLOAT:
+			case npsys::nptype::NPT_F32:
 			{
 				float val = m_edit.as<float>();
 				if (quality) {

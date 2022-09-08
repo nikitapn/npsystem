@@ -65,23 +65,23 @@ public:
 	llvm::Type* to_llvm_type(int var_type) {
 		switch (npsys::variable::GetClearType(var_type))
 		{
-		case fl::FDT_BOOLEAN:
+		case fl::FDType::NPT_BOOL:
 			return Type::getInt1Ty(*ctx_);
 			break;
 
-		case fl::FDT_S8:
-		case fl::FDT_U8:
+		case fl::FDType::NPT_I8:
+		case fl::FDType::NPT_U8:
 			return Type::getInt8Ty(*ctx_);
 
-		case fl::FDT_S16:
-		case fl::FDT_U16:
+		case fl::FDType::NPT_I16:
+		case fl::FDType::NPT_U16:
 			return Type::getInt16Ty(*ctx_);
 
-		case fl::FDT_S32:
-		case fl::FDT_U32:
+		case fl::FDType::NPT_I32:
+		case fl::FDType::NPT_U32:
 			return Type::getInt32Ty(*ctx_);
 		
-		case fl::FDT_F32:
+		case fl::FDType::NPT_F32:
 			return Type::getFloatTy(*ctx_);
 
 		default:
@@ -103,17 +103,9 @@ public:
 
 	Value* emit_expression(ast::AstNode& n) {
 		using npsys::variable;
+		using enum ast::AstType;
 
 		assert(n.is_expression());
-
-		//BitCastInst::
-		//CastInst::CreateIntegerCast
-
-		//builder_->create
-
-		//mirb_->CreateBitCast()
-
-		using enum ast::AstType;
 
 		switch (n.type) {
 
@@ -141,6 +133,8 @@ public:
 			auto from = n[0].get_expression_type();
 			auto to = n.cast<ast::CastTo>().type;
 
+			std::cerr << "Casting: " << variable::to_ctype(from) << " " << n[0] << " -> " << variable::to_ctype(to) << '\n';
+
 			assert(from != to);
 
 			// Cast operators ...
@@ -158,11 +152,11 @@ public:
 			// HANDLE_CAST_INST(49, BitCast , BitCastInst )  // Type cast
 			// HANDLE_CAST_INST(50, AddrSpaceCast, AddrSpaceCastInst)  // addrspace cast
 
-			std::cerr << "Casting: " << variable::to_ctype(from) << " -> " << variable::to_ctype(to) << '\n';
-
 			if (fl::is_integer(from) && fl::is_integer(to)) {
 				return mirb_->CreateIntCast(value, to_llvm_type(to), fl::is_signed(from));
-				//return CastInst::CreateIntegerCast(value, to_llvm_type(to), fl::is_signed(from), "...CAST...");
+			} else if (fl::is_float(to)) {
+				//mirb_->CreateIntrinsic(
+				//mirb_->get
 			}
 
 
@@ -298,7 +292,7 @@ public:
 		std::string EC;
 		auto avr_target = TargetRegistry::lookupTarget(triple, EC);
 		if (!avr_target) {
-			std::cerr << "AVR targer not found: " << EC << '\n';
+			std::cerr << "AVR target not found: " << EC << '\n';
 			std::abort();
 		}
 

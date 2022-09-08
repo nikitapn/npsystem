@@ -34,6 +34,7 @@ bool Compilation::compile(globals_resolver_cb_t glr) noexcept {
 		for (auto node : ast::filter_dfs_preorder(script,
 			[](ast::AstNode& n, size_t, bool) { return !n.is_expression(); })
 			) {
+			//std::cerr << *node << '\n';
 			builder.emit(*node);
 		}
 

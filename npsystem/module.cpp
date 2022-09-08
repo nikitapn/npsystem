@@ -8,10 +8,9 @@
 namespace npsys {
 
 int CI2CModuleSegment::GetLenght() const {
-	using Variable = npsys::variable;
 	int len = 0;
 	for (auto& i : values) {
-		len += (variable::GetSize(i->GetType())) + ((i->GetType() & Variable::VQUALITY) ? 1 : 0);
+		len += (npsys::variable::GetSize(i->GetType())) + ((i->GetType() & npsys::nptype::VQUALITY) ? 1 : 0);
 	}
 	return len;
 }

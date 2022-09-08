@@ -38,12 +38,12 @@ protected:
 		m_editVarName.SetWindowText(wide(item_.GetName()).c_str());
 
 		m_comboType.AddString(L"u8");
-		m_comboType.AddString(L"s8");
+		m_comboType.AddString(L"i8");
 		m_comboType.AddString(L"u16");
-		m_comboType.AddString(L"s16");
+		m_comboType.AddString(L"i16");
 		m_comboType.AddString(L"u32");
-		m_comboType.AddString(L"s32");
-		m_comboType.AddString(L"real");
+		m_comboType.AddString(L"i32");
+		m_comboType.AddString(L"f32");
 
 		m_comboType.SetCurSel(FromTypeToIndex(segment_value_.GetType()));
 
@@ -58,49 +58,35 @@ protected:
 		segment_value_.set_name(var_name);
 		item_.ForceSetName(var_name);
 		segment_value_.SetType(
-			FromIndexToType(m_comboType.GetCurSel()) | npsys::variable::VQUALITY);
+			FromIndexToType(m_comboType.GetCurSel()) | npsys::nptype::VQUALITY);
 		EndDialog(wID);
 		return 0;
 	}
 
 	int FromIndexToType(int index) {
 		switch (index) {
-		case 0: 
-			return npsys::variable::VT_BYTE;
-		case 1: 
-			return npsys::variable::VT_SIGNED_BYTE;
-		case 2: 
-			return npsys::variable::VT_WORD;
-		case 3: 
-			return npsys::variable::VT_SIGNED_WORD;
-		case 4: 
-			return npsys::variable::VT_DWORD;
-		case 5: 
-			return npsys::variable::VT_SIGNED_DWORD;
-		case 6: 
-			return npsys::variable::VT_FLOAT;
+		case 0: return npsys::nptype::NPT_U8;
+		case 1: return npsys::nptype::NPT_I8;
+		case 2: return npsys::nptype::NPT_U16;
+		case 3: return npsys::nptype::NPT_I16;
+		case 4: return npsys::nptype::NPT_U32;
+		case 5: return npsys::nptype::NPT_I32;
+		case 6: return npsys::nptype::NPT_F32;
 		default:
 			ASSERT(FALSE);
-			return npsys::variable::VT_UNDEFINE;
+			return npsys::nptype::NPT_UNDEFINE;
 		}
 	}
 
 	int FromTypeToIndex(int type) {
 		switch (npsys::variable::GetClearType(type)) {
-		case npsys::variable::VT_BYTE:
-			return 0;
-		case npsys::variable::VT_SIGNED_BYTE:
-			return 1;
-		case npsys::variable::VT_WORD:
-			return 2;
-		case npsys::variable::VT_SIGNED_WORD:
-			return 3;
-		case npsys::variable::VT_DWORD:
-			return 4;
-		case npsys::variable::VT_SIGNED_DWORD:
-			return 5;
-		case npsys::variable::VT_FLOAT:
-			return 6;
+		case npsys::nptype::NPT_U8:  return 0;
+		case npsys::nptype::NPT_I8:  return 1;
+		case npsys::nptype::NPT_U16: return 2;
+		case npsys::nptype::NPT_I16: return 3;
+		case npsys::nptype::NPT_U32: return 4;
+		case npsys::nptype::NPT_I32: return 5;
+		case npsys::nptype::NPT_F32: return 6;
 		default:
 			ASSERT(FALSE);
 			return -1;
