@@ -9,5 +9,5 @@ I also want to rewrite it all for llvm backend, but I'm extremely busy right now
 <p align="center">
   <b>Structural Diagram</b>
   <br/><br/>
-  <img src="https://user-images.githubusercontent.com/86890989/188139445-8adb0661-455b-45d4-8f81-f3ae1af95b35.png">
+  <img src="https://user-images.githubusercontent.com/86890989/194228189-b999a2b3-aa35-41a7-9b53-975eb641f8f7.png">
 </p>
