@@ -105,8 +105,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>.\include;..\npdbclient\include;..\npsys\include;..\nplib\include;$(BOOST_DIR);$(LLVM_INCLUDE);d:\opt\llvm-project\build\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;c:\opt\llvm\Debug\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>.\include;..\npdbclient\include;..\npsys\include;..\nplib\include;$(BOOST_DIR);C:\opt\llvm-project\llvm\include;C:\opt\llvm-project\build\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;C:\opt\llvm-project\build\Debug\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -116,8 +116,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>.\include;..\npdbclient\include;..\npsys\include;..\nplib\include;$(BOOST_DIR);$(LLVM_INCLUDE);d:\opt\llvm-project\build\include\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;c:\opt\llvm\Release\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+    <IncludePath>.\include;..\npdbclient\include;..\npsys\include;..\nplib\include;$(BOOST_DIR);C:\opt\llvm-project\llvm\include;C:\opt\llvm-project\build\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_DIR)\stage_x64\lib;C:\opt\llvm-project\build\Release\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
