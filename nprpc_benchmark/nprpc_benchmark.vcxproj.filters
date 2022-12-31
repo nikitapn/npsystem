@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="nprpc_benchmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="benchmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="idl\benchmark.npidl" />
+    <None Include="idl\make.bat">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="web\nprpc_benchmark\webpack.config.js" />
+    <None Include="web\nprpc_benchmark\package.json" />
+    <None Include="web\nprpc_benchmark\tsconfig.json" />
+    <None Include="web\nprpc_benchmark\src\index.ts" />
+    <None Include="web\nprpc_benchmark\src\nprpc.ts" />
+    <None Include="web\nprpc_benchmark\public\host.json" />
+    <None Include="web\nprpc_benchmark\public\index.html" />
+    <None Include="web\nprpc_benchmark\public\build\index.js" />
+    <None Include="web\nprpc_benchmark\src\rpc\benchmark.ts" />
+    <None Include="web\nprpc_benchmark\src\rpc\rpc.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="benchmark.hpp" />
+  </ItemGroup>
+</Project>

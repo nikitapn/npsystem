@@ -128,6 +128,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "leveldb", "3rd\leveldb\leve
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SciLexer", "3rd\scintilla\win32\SciLexer.vcxproj", "{FBE04237-9C7B-4973-9C60-505975998B39}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nprpc_benchmark", "nprpc_benchmark\nprpc_benchmark.vcxproj", "{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -414,6 +416,22 @@ Global
 		{FBE04237-9C7B-4973-9C60-505975998B39}.Release|x64.Build.0 = Release|x64
 		{FBE04237-9C7B-4973-9C60-505975998B39}.Release|x86.ActiveCfg = Release|Win32
 		{FBE04237-9C7B-4973-9C60-505975998B39}.Release|x86.Build.0 = Release|Win32
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|ARM.ActiveCfg = Debug|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|ARM.Build.0 = Debug|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|ARM64.ActiveCfg = Debug|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|ARM64.Build.0 = Debug|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|x64.ActiveCfg = Debug|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|x64.Build.0 = Debug|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|x86.ActiveCfg = Debug|Win32
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Debug|x86.Build.0 = Debug|Win32
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|ARM.ActiveCfg = Release|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|ARM.Build.0 = Release|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|ARM64.ActiveCfg = Release|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|ARM64.Build.0 = Release|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|x64.ActiveCfg = Release|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|x64.Build.0 = Release|x64
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|x86.ActiveCfg = Release|Win32
+		{9C18ED10-59E1-47BC-95D3-D11B0AFB2C46}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -423,7 +441,7 @@ Global
 		{FBE04237-9C7B-4973-9C60-505975998B39} = {D58FF5D4-F8AF-4D77-9A0B-6965CFA8BF8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {A5F3F734-376E-4D3E-A48F-E4E88936082F}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

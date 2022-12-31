@@ -1,0 +1,15 @@
+{
+	"secured": false,
+	"objects": {
+		"benchmark": {
+			"object_id": 0,
+			"ip4": 2130706433,
+			"port": 62512,
+			"websocket_port": 8080,
+			"poa_idx": 0,
+			"flags": 1,
+			"class_id": "benchmark/benchmark.Benchmark",
+			"hostname": ""
+		}
+	}
+}

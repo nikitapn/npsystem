@@ -1,8 +1,8 @@
-// A Bison parser, made by GNU Bison 3.3.2.
+// A Bison parser, made by GNU Bison 3.0.4.
 
 // Skeleton implementation for Bison LALR(1) parsers in C++
 
-// Copyright (C) 2002-2015, 2018-2019 Free Software Foundation, Inc.
+// Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,18 +30,26 @@
 // This special exception was added by the Free Software Foundation in
 // version 2.2 of Bison.
 
-// Undocumented macros, especially those whose name start with YY_,
-// are private implementation details.  Do not rely on them.
 
+// First part of user declarations.
 
+#line 37 "src/generated/lang.tab.cc" // lalr1.cc:404
 
-
+# ifndef YY_NULLPTR
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULLPTR nullptr
+#  else
+#   define YY_NULLPTR 0
+#  endif
+# endif
 
 #include "lang.tab.hh"
 
+// User implementation prologue.
 
+#line 51 "src/generated/lang.tab.cc" // lalr1.cc:412
 // Unqualified %code blocks.
-#line 28 "src/lang.y" // lalr1.cc:435
+#line 28 "src/lang.y" // lalr1.cc:413
 
 	#include <iostream>
   #include <fstream>
@@ -55,7 +63,7 @@
 	#define mkn(...) new AstNode(__VA_ARGS__)
 	#define msv(x) std::string_view(x.ptr, x.len)
 
-#line 59 "src/generated/lang.tab.cc" // lalr1.cc:435
+#line 67 "src/generated/lang.tab.cc" // lalr1.cc:413
 
 
 #ifndef YY_
@@ -67,15 +75,6 @@
 # endif
 # ifndef YY_
 #  define YY_(msgid) msgid
-# endif
-#endif
-
-// Whether we are compiled with exception support.
-#ifndef YY_EXCEPTIONS
-# if defined __GNUC__ && !defined __EXCEPTIONS
-#  define YY_EXCEPTIONS 0
-# else
-#  define YY_EXCEPTIONS 1
 # endif
 #endif
 
@@ -96,7 +95,7 @@
         {                                                               \
           (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;      \
         }                                                               \
-    while (false)
+    while (/*CONSTCOND*/ false)
 # endif
 
 
@@ -115,7 +114,7 @@
     {                                           \
       *yycdebug_ << Title << ' ';               \
       yy_print_ (*yycdebug_, Symbol);           \
-      *yycdebug_ << '\n';                       \
+      *yycdebug_ << std::endl;                  \
     }                                           \
   } while (false)
 
@@ -134,9 +133,9 @@
 #else // !YYDEBUG
 
 # define YYCDEBUG if (false) std::cerr
-# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE (Symbol)
-# define YY_REDUCE_PRINT(Rule)           static_cast<void> (0)
-# define YY_STACK_PRINT()                static_cast<void> (0)
+# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE(Symbol)
+# define YY_REDUCE_PRINT(Rule)           static_cast<void>(0)
+# define YY_STACK_PRINT()                static_cast<void>(0)
 
 #endif // !YYDEBUG
 
@@ -150,7 +149,7 @@
 
 
 namespace yy {
-#line 154 "src/generated/lang.tab.cc" // lalr1.cc:510
+#line 153 "src/generated/lang.tab.cc" // lalr1.cc:479
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -162,7 +161,7 @@ namespace yy {
   {
     if (*yystr == '"')
       {
-        std::string yyr;
+        std::string yyr = "";
         char const *yyp = yystr;
 
         for (;;)
@@ -175,10 +174,7 @@ namespace yy {
             case '\\':
               if (*++yyp != '\\')
                 goto do_not_strip_quotes;
-              else
-                goto append;
-
-            append:
+              // Fall through.
             default:
               yyr += *yyp;
               break;
@@ -207,89 +203,110 @@ namespace yy {
   parser::~parser ()
   {}
 
-  parser::syntax_error::~syntax_error () YY_NOEXCEPT YY_NOTHROW
-  {}
 
   /*---------------.
   | Symbol types.  |
   `---------------*/
 
-  // basic_symbol.
-#if 201103L <= YY_CPLUSPLUS
-  template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (basic_symbol&& that)
-    : Base (std::move (that))
-    , value (std::move (that.value))
-    , location (std::move (that.location))
+  inline
+  parser::syntax_error::syntax_error (const location_type& l, const std::string& m)
+    : std::runtime_error (m)
+    , location (l)
   {}
-#endif
+
+  // basic_symbol.
+  template <typename Base>
+  inline
+  parser::basic_symbol<Base>::basic_symbol ()
+    : value ()
+  {}
 
   template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (const basic_symbol& that)
-    : Base (that)
-    , value (that.value)
-    , location (that.location)
+  inline
+  parser::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
+    : Base (other)
+    , value ()
+    , location (other.location)
+  {
+    value = other.value;
+  }
+
+
+  template <typename Base>
+  inline
+  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
+    : Base (t)
+    , value (v)
+    , location (l)
   {}
 
 
   /// Constructor for valueless symbols.
   template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_MOVE_REF (location_type) l)
+  inline
+  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
     : Base (t)
     , value ()
     , location (l)
   {}
 
   template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (semantic_type) v, YY_RVREF (location_type) l)
-    : Base (t)
-    , value (YY_MOVE (v))
-    , location (YY_MOVE (l))
-  {}
+  inline
+  parser::basic_symbol<Base>::~basic_symbol ()
+  {
+    clear ();
+  }
 
   template <typename Base>
+  inline
+  void
+  parser::basic_symbol<Base>::clear ()
+  {
+    Base::clear ();
+  }
+
+  template <typename Base>
+  inline
   bool
-  parser::basic_symbol<Base>::empty () const YY_NOEXCEPT
+  parser::basic_symbol<Base>::empty () const
   {
     return Base::type_get () == empty_symbol;
   }
 
   template <typename Base>
+  inline
   void
   parser::basic_symbol<Base>::move (basic_symbol& s)
   {
-    super_type::move (s);
-    value = YY_MOVE (s.value);
-    location = YY_MOVE (s.location);
+    super_type::move(s);
+    value = s.value;
+    location = s.location;
   }
 
   // by_type.
+  inline
   parser::by_type::by_type ()
     : type (empty_symbol)
   {}
 
-#if 201103L <= YY_CPLUSPLUS
-  parser::by_type::by_type (by_type&& that)
-    : type (that.type)
-  {
-    that.clear ();
-  }
-#endif
-
-  parser::by_type::by_type (const by_type& that)
-    : type (that.type)
+  inline
+  parser::by_type::by_type (const by_type& other)
+    : type (other.type)
   {}
 
+  inline
   parser::by_type::by_type (token_type t)
     : type (yytranslate_ (t))
   {}
 
+  inline
   void
   parser::by_type::clear ()
   {
     type = empty_symbol;
   }
 
+  inline
   void
   parser::by_type::move (by_type& that)
   {
@@ -297,28 +314,33 @@ namespace yy {
     that.clear ();
   }
 
+  inline
   int
-  parser::by_type::type_get () const YY_NOEXCEPT
+  parser::by_type::type_get () const
   {
     return type;
   }
 
 
   // by_state.
-  parser::by_state::by_state () YY_NOEXCEPT
+  inline
+  parser::by_state::by_state ()
     : state (empty_state)
   {}
 
-  parser::by_state::by_state (const by_state& that) YY_NOEXCEPT
-    : state (that.state)
+  inline
+  parser::by_state::by_state (const by_state& other)
+    : state (other.state)
   {}
 
+  inline
   void
-  parser::by_state::clear () YY_NOEXCEPT
+  parser::by_state::clear ()
   {
     state = empty_state;
   }
 
+  inline
   void
   parser::by_state::move (by_state& that)
   {
@@ -326,12 +348,14 @@ namespace yy {
     that.clear ();
   }
 
-  parser::by_state::by_state (state_type s) YY_NOEXCEPT
+  inline
+  parser::by_state::by_state (state_type s)
     : state (s)
   {}
 
+  inline
   parser::symbol_number_type
-  parser::by_state::type_get () const YY_NOEXCEPT
+  parser::by_state::type_get () const
   {
     if (state == empty_state)
       return empty_symbol;
@@ -339,39 +363,33 @@ namespace yy {
       return yystos_[state];
   }
 
+  inline
   parser::stack_symbol_type::stack_symbol_type ()
   {}
 
-  parser::stack_symbol_type::stack_symbol_type (YY_RVREF (stack_symbol_type) that)
-    : super_type (YY_MOVE (that.state), YY_MOVE (that.value), YY_MOVE (that.location))
-  {
-#if 201103L <= YY_CPLUSPLUS
-    // that is emptied.
-    that.state = empty_state;
-#endif
-  }
 
-  parser::stack_symbol_type::stack_symbol_type (state_type s, YY_MOVE_REF (symbol_type) that)
-    : super_type (s, YY_MOVE (that.value), YY_MOVE (that.location))
+  inline
+  parser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
+    : super_type (s, that.location)
   {
+    value = that.value;
     // that is emptied.
     that.type = empty_symbol;
   }
 
-#if YY_CPLUSPLUS < 201103L
+  inline
   parser::stack_symbol_type&
-  parser::stack_symbol_type::operator= (stack_symbol_type& that)
+  parser::stack_symbol_type::operator= (const stack_symbol_type& that)
   {
     state = that.state;
     value = that.value;
     location = that.location;
-    // that is emptied.
-    that.state = empty_state;
     return *this;
   }
-#endif
+
 
   template <typename Base>
+  inline
   void
   parser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
   {
@@ -391,12 +409,10 @@ namespace yy {
     std::ostream& yyoutput = yyo;
     YYUSE (yyoutput);
     symbol_number_type yytype = yysym.type_get ();
-#if defined __GNUC__ && ! defined __clang__ && ! defined __ICC && __GNUC__ * 100 + __GNUC_MINOR__ <= 408
     // Avoid a (spurious) G++ 4.8 warning about "array subscript is
     // below array bounds".
     if (yysym.empty ())
       std::abort ();
-#endif
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("
         << yysym.location << ": ";
@@ -405,27 +421,26 @@ namespace yy {
   }
 #endif
 
+  inline
   void
-  parser::yypush_ (const char* m, YY_MOVE_REF (stack_symbol_type) sym)
+  parser::yypush_ (const char* m, state_type s, symbol_type& sym)
+  {
+    stack_symbol_type t (s, sym);
+    yypush_ (m, t);
+  }
+
+  inline
+  void
+  parser::yypush_ (const char* m, stack_symbol_type& s)
   {
     if (m)
-      YY_SYMBOL_PRINT (m, sym);
-    yystack_.push (YY_MOVE (sym));
+      YY_SYMBOL_PRINT (m, s);
+    yystack_.push (s);
   }
 
+  inline
   void
-  parser::yypush_ (const char* m, state_type s, YY_MOVE_REF (symbol_type) sym)
-  {
-#if 201103L <= YY_CPLUSPLUS
-    yypush_ (m, stack_symbol_type (s, std::move (sym)));
-#else
-    stack_symbol_type ss (s, sym);
-    yypush_ (m, ss);
-#endif
-  }
-
-  void
-  parser::yypop_ (int n)
+  parser::yypop_ (unsigned int n)
   {
     yystack_.pop (n);
   }
@@ -457,7 +472,7 @@ namespace yy {
   }
 #endif // YYDEBUG
 
-  parser::state_type
+  inline parser::state_type
   parser::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
     int yyr = yypgoto_[yysym - yyntokens_] + yystate;
@@ -467,22 +482,16 @@ namespace yy {
       return yydefgoto_[yysym - yyntokens_];
   }
 
-  bool
+  inline bool
   parser::yy_pact_value_is_default_ (int yyvalue)
   {
     return yyvalue == yypact_ninf_;
   }
 
-  bool
+  inline bool
   parser::yy_table_value_is_error_ (int yyvalue)
   {
     return yyvalue == yytable_ninf_;
-  }
-
-  int
-  parser::operator() ()
-  {
-    return parse ();
   }
 
   int
@@ -506,11 +515,11 @@ namespace yy {
     /// The return value of parse ().
     int yyresult;
 
-#if YY_EXCEPTIONS
+    // FIXME: This shoud be completely indented.  It is not yet to
+    // avoid gratuitous conflicts when merging into the master branch.
     try
-#endif // YY_EXCEPTIONS
       {
-    YYCDEBUG << "Starting parse\n";
+    YYCDEBUG << "Starting parse" << std::endl;
 
 
     /* Initialize the stack.  The initial state will be set in
@@ -518,25 +527,21 @@ namespace yy {
        location values to have been already stored, initialize these
        stacks with a primary value.  */
     yystack_.clear ();
-    yypush_ (YY_NULLPTR, 0, YY_MOVE (yyla));
+    yypush_ (YY_NULLPTR, 0, yyla);
 
-  /*-----------------------------------------------.
-  | yynewstate -- push a new symbol on the stack.  |
-  `-----------------------------------------------*/
+    // A new symbol was pushed on the stack.
   yynewstate:
-    YYCDEBUG << "Entering state " << yystack_[0].state << '\n';
+    YYCDEBUG << "Entering state " << yystack_[0].state << std::endl;
 
     // Accept?
     if (yystack_[0].state == yyfinal_)
-      YYACCEPT;
+      goto yyacceptlab;
 
     goto yybackup;
 
-
-  /*-----------.
-  | yybackup.  |
-  `-----------*/
+    // Backup.
   yybackup:
+
     // Try to take a decision without lookahead.
     yyn = yypact_[yystack_[0].state];
     if (yy_pact_value_is_default_ (yyn))
@@ -546,20 +551,15 @@ namespace yy {
     if (yyla.empty ())
       {
         YYCDEBUG << "Reading a token: ";
-#if YY_EXCEPTIONS
         try
-#endif // YY_EXCEPTIONS
           {
             yyla.type = yytranslate_ (yylex (&yyla.value, &yyla.location));
           }
-#if YY_EXCEPTIONS
         catch (const syntax_error& yyexc)
           {
-            YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
             error (yyexc);
             goto yyerrlab1;
           }
-#endif // YY_EXCEPTIONS
       }
     YY_SYMBOL_PRINT ("Next token is", yyla);
 
@@ -584,9 +584,8 @@ namespace yy {
       --yyerrstatus_;
 
     // Shift the lookahead token.
-    yypush_ ("Shifting", yyn, YY_MOVE (yyla));
+    yypush_ ("Shifting", yyn, yyla);
     goto yynewstate;
-
 
   /*-----------------------------------------------------------.
   | yydefault -- do the default action for the current state.  |
@@ -597,15 +596,14 @@ namespace yy {
       goto yyerrlab;
     goto yyreduce;
 
-
   /*-----------------------------.
-  | yyreduce -- do a reduction.  |
+  | yyreduce -- Do a reduction.  |
   `-----------------------------*/
   yyreduce:
     yylen = yyr2_[yyn];
     {
       stack_symbol_type yylhs;
-      yylhs.state = yy_lr_goto_state_ (yystack_[yylen].state, yyr1_[yyn]);
+      yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);
       /* If YYLEN is nonzero, implement the default value of the
          action: '$$ = $1'.  Otherwise, use the top of the stack.
 
@@ -617,366 +615,359 @@ namespace yy {
       else
         yylhs.value = yystack_[0].value;
 
-      // Default location.
+      // Compute the default @$.
       {
-        stack_type::slice range (yystack_, yylen);
-        YYLLOC_DEFAULT (yylhs.location, range, yylen);
-        yyerror_range[1].location = yylhs.location;
+        slice<stack_symbol_type, stack_type> slice (yystack_, yylen);
+        YYLLOC_DEFAULT (yylhs.location, slice, yylen);
       }
 
       // Perform the reduction.
       YY_REDUCE_PRINT (yyn);
-#if YY_EXCEPTIONS
       try
-#endif // YY_EXCEPTIONS
         {
           switch (yyn)
             {
   case 2:
-#line 79 "src/lang.y" // lalr1.cc:919
+#line 79 "src/lang.y" // lalr1.cc:859
     { root_.push((yystack_[0].value.val_node)); (yylhs.value.val_node) = &root_; }
-#line 639 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 634 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 3:
-#line 80 "src/lang.y" // lalr1.cc:919
+#line 80 "src/lang.y" // lalr1.cc:859
     { root_.push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 645 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 640 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 4:
-#line 84 "src/lang.y" // lalr1.cc:919
+#line 84 "src/lang.y" // lalr1.cc:859
     { 
 			(yylhs.value.val_node) = (yystack_[2].value.val_node);
 			(yystack_[2].value.val_node)->push((yystack_[1].value.val_node), mkn(AstType::Program_End)); 
 			}
-#line 654 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 649 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 5:
-#line 88 "src/lang.y" // lalr1.cc:919
+#line 88 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[2].value.val_node), (yystack_[2].value.val_node)->push((yystack_[1].value.val_node), mkn(AstType::Function_End)); }
-#line 660 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 655 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 6:
-#line 89 "src/lang.y" // lalr1.cc:919
+#line 89 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 666 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 661 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 7:
-#line 93 "src/lang.y" // lalr1.cc:919
+#line 93 "src/lang.y" // lalr1.cc:859
     { ctx_.symbols_local.clear(); }
-#line 672 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 667 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 8:
-#line 97 "src/lang.y" // lalr1.cc:919
+#line 97 "src/lang.y" // lalr1.cc:859
     { ctx_.symbols_local.clear(); }
-#line 678 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 673 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 9:
-#line 101 "src/lang.y" // lalr1.cc:919
+#line 101 "src/lang.y" // lalr1.cc:859
     { ctx_.symbols_local.clear(); }
-#line 684 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 679 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 10:
-#line 105 "src/lang.y" // lalr1.cc:919
+#line 105 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::Function, (yystack_[0].value.val_node)); }
-#line 690 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 685 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 11:
-#line 106 "src/lang.y" // lalr1.cc:919
+#line 106 "src/lang.y" // lalr1.cc:859
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 696 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 691 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 12:
-#line 110 "src/lang.y" // lalr1.cc:919
+#line 110 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 702 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 697 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 13:
-#line 114 "src/lang.y" // lalr1.cc:919
+#line 114 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::StmtList); }
-#line 708 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 703 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 14:
-#line 115 "src/lang.y" // lalr1.cc:919
+#line 115 "src/lang.y" // lalr1.cc:859
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 714 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 709 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 15:
-#line 119 "src/lang.y" // lalr1.cc:919
+#line 119 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 720 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 715 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 16:
-#line 120 "src/lang.y" // lalr1.cc:919
+#line 120 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 726 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 721 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 17:
-#line 124 "src/lang.y" // lalr1.cc:919
+#line 124 "src/lang.y" // lalr1.cc:859
     { ctx_.error = true; std::cerr << "missing semicolon after the statement.\n"; }
-#line 732 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 727 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 19:
-#line 128 "src/lang.y" // lalr1.cc:919
+#line 128 "src/lang.y" // lalr1.cc:859
     { ctx_.error = true; std::cerr << "missing semicolon after the var declaration.\n"; }
-#line 738 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 733 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 21:
-#line 132 "src/lang.y" // lalr1.cc:919
+#line 132 "src/lang.y" // lalr1.cc:859
     {(yylhs.value.val_node) = ctx_.ident_get(msv((yystack_[0].value.val_str)));}
-#line 744 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 739 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 22:
-#line 133 "src/lang.y" // lalr1.cc:919
+#line 133 "src/lang.y" // lalr1.cc:859
     {(yylhs.value.val_node) = ctx_.ext_ident_get(msv((yystack_[0].value.val_str)));}
-#line 750 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 745 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 23:
-#line 137 "src/lang.y" // lalr1.cc:919
+#line 137 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = ctx_.create_assignment((yystack_[3].value.val_node), (yystack_[1].value.val_node)); }
-#line 756 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 751 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 24:
-#line 141 "src/lang.y" // lalr1.cc:919
+#line 141 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_BOOL; }
-#line 762 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 757 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 25:
-#line 142 "src/lang.y" // lalr1.cc:919
+#line 142 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_U8; }
-#line 768 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 763 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 26:
-#line 143 "src/lang.y" // lalr1.cc:919
+#line 143 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_I8; }
-#line 774 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 769 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 27:
-#line 144 "src/lang.y" // lalr1.cc:919
+#line 144 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_U16; }
-#line 780 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 775 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 28:
-#line 145 "src/lang.y" // lalr1.cc:919
+#line 145 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_I16; }
-#line 786 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 781 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 29:
-#line 146 "src/lang.y" // lalr1.cc:919
+#line 146 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_U32; }
-#line 792 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 787 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 30:
-#line 147 "src/lang.y" // lalr1.cc:919
+#line 147 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_I32; }
-#line 798 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 793 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 31:
-#line 148 "src/lang.y" // lalr1.cc:919
+#line 148 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_int) = npsys::nptype::NPT_F32; }
-#line 804 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 799 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 32:
-#line 152 "src/lang.y" // lalr1.cc:919
+#line 152 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::Program); }
-#line 810 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 805 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 33:
-#line 153 "src/lang.y" // lalr1.cc:919
+#line 153 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
-#line 816 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 811 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 34:
-#line 154 "src/lang.y" // lalr1.cc:919
+#line 154 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); }
-#line 822 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 817 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 35:
-#line 158 "src/lang.y" // lalr1.cc:919
+#line 158 "src/lang.y" // lalr1.cc:859
     { ctx_.global = false; }
-#line 828 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 823 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 36:
-#line 158 "src/lang.y" // lalr1.cc:919
+#line 158 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 834 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 829 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 37:
-#line 162 "src/lang.y" // lalr1.cc:919
+#line 162 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::LocalVarDeclSeq); }
-#line 840 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 835 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 38:
-#line 163 "src/lang.y" // lalr1.cc:919
+#line 163 "src/lang.y" // lalr1.cc:859
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 846 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 841 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 39:
-#line 167 "src/lang.y" // lalr1.cc:919
+#line 167 "src/lang.y" // lalr1.cc:859
     { ctx_.global = true; }
-#line 852 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 847 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 40:
-#line 167 "src/lang.y" // lalr1.cc:919
+#line 167 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 858 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 853 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 41:
-#line 171 "src/lang.y" // lalr1.cc:919
+#line 171 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::GlobalVarDeclSeq); }
-#line 864 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 859 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 42:
-#line 172 "src/lang.y" // lalr1.cc:919
+#line 172 "src/lang.y" // lalr1.cc:859
     { (yystack_[1].value.val_node)->push((yystack_[0].value.val_node)); (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 870 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 865 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 43:
-#line 176 "src/lang.y" // lalr1.cc:919
+#line 176 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = ctx_.ident_create(msv((yystack_[3].value.val_str)), (yystack_[1].value.val_int)); }
-#line 876 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 871 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 44:
-#line 180 "src/lang.y" // lalr1.cc:919
+#line 180 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::If); }
-#line 882 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 877 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 48:
-#line 190 "src/lang.y" // lalr1.cc:919
+#line 190 "src/lang.y" // lalr1.cc:859
     { std::cerr << "NUMBER_DISCRETE not impl\n"; }
-#line 888 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 883 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 49:
-#line 191 "src/lang.y" // lalr1.cc:919
+#line 191 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(utils::parse_integer(msv((yystack_[0].value.val_str)))); }
-#line 894 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 889 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 50:
-#line 192 "src/lang.y" // lalr1.cc:919
+#line 192 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn((yystack_[0].value.val_float)); }
-#line 900 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 895 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 56:
-#line 206 "src/lang.y" // lalr1.cc:919
+#line 206 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[1].value.val_node); }
-#line 906 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 901 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 57:
-#line 207 "src/lang.y" // lalr1.cc:919
+#line 207 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = mkn(AstType::Uminus, (yystack_[0].value.val_node)); }
-#line 912 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 907 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 58:
-#line 208 "src/lang.y" // lalr1.cc:919
+#line 208 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 918 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 913 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 59:
-#line 209 "src/lang.y" // lalr1.cc:919
+#line 209 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Add, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
-#line 924 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 919 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 60:
-#line 210 "src/lang.y" // lalr1.cc:919
+#line 210 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Add, (yystack_[2].value.val_node), mkn(AstType::Uminus, (yystack_[0].value.val_node))); }
-#line 930 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 925 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 61:
-#line 211 "src/lang.y" // lalr1.cc:919
+#line 211 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Mul, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
-#line 936 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 931 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 62:
-#line 212 "src/lang.y" // lalr1.cc:919
+#line 212 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = ctx_.create_binary_op(AstType::Div, (yystack_[2].value.val_node), (yystack_[0].value.val_node)); }
-#line 942 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 937 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 63:
-#line 213 "src/lang.y" // lalr1.cc:919
+#line 213 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 948 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 943 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
   case 64:
-#line 214 "src/lang.y" // lalr1.cc:919
+#line 214 "src/lang.y" // lalr1.cc:859
     { (yylhs.value.val_node) = (yystack_[0].value.val_node); }
-#line 954 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 949 "src/generated/lang.tab.cc" // lalr1.cc:859
     break;
 
 
-#line 958 "src/generated/lang.tab.cc" // lalr1.cc:919
+#line 953 "src/generated/lang.tab.cc" // lalr1.cc:859
             default:
               break;
             }
         }
-#if YY_EXCEPTIONS
       catch (const syntax_error& yyexc)
         {
-          YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
           error (yyexc);
           YYERROR;
         }
-#endif // YY_EXCEPTIONS
       YY_SYMBOL_PRINT ("-> $$ =", yylhs);
       yypop_ (yylen);
       yylen = 0;
       YY_STACK_PRINT ();
 
       // Shift the result of the reduction.
-      yypush_ (YY_NULLPTR, YY_MOVE (yylhs));
+      yypush_ (YY_NULLPTR, yylhs);
     }
     goto yynewstate;
-
 
   /*--------------------------------------.
   | yyerrlab -- here on detecting error.  |
@@ -1014,17 +1005,18 @@ namespace yy {
   | yyerrorlab -- error raised explicitly by YYERROR.  |
   `---------------------------------------------------*/
   yyerrorlab:
-    /* Pacify compilers when the user code never invokes YYERROR and
-       the label yyerrorlab therefore never appears in user code.  */
-    if (false)
-      YYERROR;
 
+    /* Pacify compilers like GCC when the user code never invokes
+       YYERROR and the label yyerrorlab therefore never appears in user
+       code.  */
+    if (false)
+      goto yyerrorlab;
+    yyerror_range[1].location = yystack_[yylen - 1].location;
     /* Do not reclaim the symbols of the rule whose action triggered
        this YYERROR.  */
     yypop_ (yylen);
     yylen = 0;
     goto yyerrlab1;
-
 
   /*-------------------------------------------------------------.
   | yyerrlab1 -- common code for both syntax error and YYERROR.  |
@@ -1062,30 +1054,20 @@ namespace yy {
 
       // Shift the error token.
       error_token.state = yyn;
-      yypush_ ("Shifting", YY_MOVE (error_token));
+      yypush_ ("Shifting", error_token);
     }
     goto yynewstate;
 
-
-  /*-------------------------------------.
-  | yyacceptlab -- YYACCEPT comes here.  |
-  `-------------------------------------*/
+    // Accept.
   yyacceptlab:
     yyresult = 0;
     goto yyreturn;
 
-
-  /*-----------------------------------.
-  | yyabortlab -- YYABORT comes here.  |
-  `-----------------------------------*/
+    // Abort.
   yyabortlab:
     yyresult = 1;
     goto yyreturn;
 
-
-  /*-----------------------------------------------------.
-  | yyreturn -- parsing is finished, return the result.  |
-  `-----------------------------------------------------*/
   yyreturn:
     if (!yyla.empty ())
       yy_destroy_ ("Cleanup: discarding lookahead", yyla);
@@ -1101,12 +1083,12 @@ namespace yy {
 
     return yyresult;
   }
-#if YY_EXCEPTIONS
     catch (...)
       {
-        YYCDEBUG << "Exception caught: cleaning lookahead and stack\n";
+        YYCDEBUG << "Exception caught: cleaning lookahead and stack"
+                 << std::endl;
         // Do not try to display the values of the reclaimed symbols,
-        // as their printers might throw an exception.
+        // as their printer might throw an exception.
         if (!yyla.empty ())
           yy_destroy_ (YY_NULLPTR, yyla);
 
@@ -1117,13 +1099,12 @@ namespace yy {
           }
         throw;
       }
-#endif // YY_EXCEPTIONS
   }
 
   void
   parser::error (const syntax_error& yyexc)
   {
-    error (yyexc.location, yyexc.what ());
+    error (yyexc.location, yyexc.what());
   }
 
   // Generate an error message.
@@ -1199,13 +1180,12 @@ namespace yy {
         case N:                               \
           yyformat = S;                       \
         break
-      default: // Avoid compiler warnings.
-        YYCASE_ (0, YY_("syntax error"));
-        YYCASE_ (1, YY_("syntax error, unexpected %s"));
-        YYCASE_ (2, YY_("syntax error, unexpected %s, expecting %s"));
-        YYCASE_ (3, YY_("syntax error, unexpected %s, expecting %s or %s"));
-        YYCASE_ (4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
-        YYCASE_ (5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+        YYCASE_(0, YY_("syntax error"));
+        YYCASE_(1, YY_("syntax error, unexpected %s"));
+        YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
+        YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+        YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+        YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
 #undef YYCASE_
       }
 
@@ -1394,18 +1374,18 @@ namespace yy {
            i_end = yystack_.end ();
          i != i_end; ++i)
       *yycdebug_ << ' ' << i->state;
-    *yycdebug_ << '\n';
+    *yycdebug_ << std::endl;
   }
 
   // Report on the debug stream that the rule \a yyrule is going to be reduced.
   void
   parser::yy_reduce_print_ (int yyrule)
   {
-    unsigned yylno = yyrline_[yyrule];
+    unsigned int yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
     // Print the symbols being reduced, and their result.
     *yycdebug_ << "Reducing stack by rule " << yyrule - 1
-               << " (line " << yylno << "):\n";
+               << " (line " << yylno << "):" << std::endl;
     // The symbols being reduced.
     for (int yyi = 0; yyi < yynrhs; yyi++)
       YY_SYMBOL_PRINT ("   $" << yyi + 1 << " =",
@@ -1413,16 +1393,16 @@ namespace yy {
   }
 #endif // YYDEBUG
 
+  // Symbol number corresponding to token number t.
+  inline
   parser::token_number_type
   parser::yytranslate_ (int t)
   {
-    // YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to
-    // TOKEN-NUM as returned by yylex.
     static
     const token_number_type
     translate_table[] =
     {
-       0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -1452,12 +1432,12 @@ namespace yy {
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32
     };
-    const unsigned user_token_number_max_ = 287;
+    const unsigned int user_token_number_max_ = 287;
     const token_number_type undef_token_ = 2;
 
-    if (static_cast<int> (t) <= yyeof_)
+    if (static_cast<int>(t) <= yyeof_)
       return yyeof_;
-    else if (static_cast<unsigned> (t) <= user_token_number_max_)
+    else if (static_cast<unsigned int> (t) <= user_token_number_max_)
       return translate_table[t];
     else
       return undef_token_;
@@ -1465,8 +1445,8 @@ namespace yy {
 
 
 } // yy
-#line 1469 "src/generated/lang.tab.cc" // lalr1.cc:1242
-#line 217 "src/lang.y" // lalr1.cc:1243
+#line 1449 "src/generated/lang.tab.cc" // lalr1.cc:1167
+#line 217 "src/lang.y" // lalr1.cc:1168
 
 
 namespace yy {

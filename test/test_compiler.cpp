@@ -38,12 +38,12 @@ int test_compiler() {
 
 		rpc = nprpc::init(thread_pool::get_instance().ctx(), std::move(rpc_cfg));
 
-		auto nameserver = rpc->get_nameserver("192.168.1.2");
+		auto nameserver = rpc->get_nameserver("127.0.0.1");
 		auto p1 = std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent);
 		auto poa = rpc->create_poa(2, { p1.get() });
 		odb::Database::init(nameserver.get(), poa, "./", "nptestdb");
 
-		npcompiler::Compilation compilation(std::filesystem::path("c:/projects/cpp/npsystem/npcompiler/test/example0.txt"));
+		npcompiler::Compilation compilation(std::filesystem::path("c:/projects/npsystem/npcompiler/test/example0.txt"));
 		return !(compilation.compile(
 			[](std::string_view path)->npsys::variable_n {
 				auto slot = npsys::CFBDSlot::get_by_path(path); 

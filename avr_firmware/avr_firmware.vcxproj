@@ -66,7 +66,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <NMakeOutput>avr_firmware.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>MSVC;F_CPU=16000000UL;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <IncludePath>..\npsys\include;d:\projects\AVR\toolchain\avr8\avr8-gnu-toolchain\avr\include\;$(IncludePath)</IncludePath>
+    <IncludePath>..\npsys\include;c:\projects\AVR\toolchain\avr8\avr8-gnu-toolchain\avr\include\;$(IncludePath)</IncludePath>
     <NMakeBuildCommandLine>
     </NMakeBuildCommandLine>
     <NMakeCleanCommandLine>
@@ -80,7 +80,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeOutput>avr_firmware.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>MSVC;F_CPU=16000000UL;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <IncludePath>..\npsys\include;d:\projects\AVR\toolchain\avr8\avr8-gnu-toolchain\avr\include\;$(IncludePath)</IncludePath>
+    <IncludePath>..\npsys\include;c:\projects\AVR\toolchain\avr8\avr8-gnu-toolchain\avr\include\;$(IncludePath)</IncludePath>
     <NMakeBuildCommandLine>
     </NMakeBuildCommandLine>
     <NMakeCleanCommandLine>

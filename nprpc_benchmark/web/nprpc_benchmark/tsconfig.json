@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"baseUrl": "src",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"outDir": "build",
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"module": "esnext",
+		"target": "esnext",
+		"typeRoots": [ "./node_modules/@types", "../web/build" ]
+	},
+	"include": [
+			"./src/**/*"
+	],
+	"exclude": ["node_modules", "typings"]
+}

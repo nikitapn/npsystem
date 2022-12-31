@@ -309,7 +309,7 @@ public:
 		module_->setTargetTriple(triple);
 
 		std::error_code ec;
-		raw_fd_ostream dest("D:/temp/llvm/test.elf", ec, sys::fs::OF_None);
+		raw_fd_ostream dest("c:/projects/npsystem/npcompiler/test/out/test.elf", ec, sys::fs::OF_None);
 
 		if (ec) {
 			errs() << "Could not open file: " << ec.message();

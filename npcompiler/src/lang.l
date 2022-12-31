@@ -55,7 +55,6 @@ using tok = yy::parser::token;
 "VAR"    	{ loc->step(); loc->columns(3); return tok::VAR; }
 "VAR_GLOBAL" { loc->step(); loc->columns(10); return tok::VAR_GLOBAL; }
 "END_VAR" { loc->step(); loc->columns(7); return tok::END_VAR; }
-"END_VAR" { loc->step(); loc->columns(7); return tok::END_VAR; }
 "//".* 		{ loc->lines(); }
 "BOOL" 		{ loc->step(); loc->columns(4); return tok::NPT_BOOL; }
 "I8" 			{ loc->step(); loc->columns(2); return tok::NPT_I8; }
