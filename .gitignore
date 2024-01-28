@@ -4,7 +4,7 @@
 .svn/
 3rd/leveldb
 3rd/scintilla
-
+build/
 
 # User-specific files
 *.suo

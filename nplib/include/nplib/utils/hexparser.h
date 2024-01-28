@@ -5,6 +5,7 @@
 
 #include <string>
 #include <string_view>
+#include <cstdint>
 #include "../import_export.h"
 
 class HexParser {
