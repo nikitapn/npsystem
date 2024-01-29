@@ -14,7 +14,7 @@ for size in 19 24 32 48 128 256; do
   inkscape -z -e $size.png -w $size -h $size $1 >/dev/null 2>/dev/null
 done
 
-convert 19.png 24.png 32.png 48.png 128.png 256.png ../npsystem/res/`basename $1 .svg`.ico
+convert out/19.png out/24.png out/32.png out/48.png out/128.png out/256.png ../npsystem/res/`basename $1 .svg`.ico
 
 [ $? -eq 0 ] && exit 0  || exit 1
 

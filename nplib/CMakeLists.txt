@@ -1,5 +1,5 @@
 
-add_library(nplib
+add_library(nplib SHARED
   src/hexparser.cpp
   src/log.cpp  
   include/nplib/import_export.h
