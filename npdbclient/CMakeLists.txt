@@ -1,5 +1,5 @@
 list(APPEND SOURCES src/db.cpp)
-if (MSVC)
+if (WIN32)
   list(APPEND SOURCES src/dllmain.cpp)
 endif()
 
@@ -12,5 +12,15 @@ target_include_directories(npdbclient PRIVATE
   ../npc/include
 )
 
-target_compile_options(nplib PRIVATE -fPIC)
+if(WIN32)
+  target_compile_definitions(npdbclient PRIVATE -DNPDBCLIENT_EXPORTS)
+else()
+  target_compile_options(npdbclient PRIVATE -fPIC)
+endif()
 
+target_link_libraries(npdbclient PRIVATE
+  npdbstatic
+  npc
+  nprpc
+  nprpcst
+)

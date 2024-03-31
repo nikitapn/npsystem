@@ -13,4 +13,8 @@ target_include_directories(npsys PRIVATE
   ../nprpc/include
 )
 
-target_compile_options(nplib PRIVATE -fPIC)
+if(WIN32)
+  target_compile_definitions(npsys PRIVATE -DNPSYS_EXPORTS)
+else()
+  target_compile_options(npsys PRIVATE -fPIC)
+endif()

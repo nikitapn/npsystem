@@ -32,12 +32,7 @@ target_include_directories(npserver PRIVATE
 )
 
 target_link_libraries(npserver PUBLIC 
-  /usr/lib/libboost_system.a
-	/usr/lib/libboost_thread.a
-	/usr/lib/libboost_serialization.a
-	/usr/lib/libboost_log.a
   nprpcst
-  pthread
 	leveldb
 	npdbstatic
 	npdbclient
@@ -49,3 +44,12 @@ target_link_libraries(npserver PUBLIC
 	npc
 )
 
+if(UNIX)
+	target_link_libraries(npserver PUBLIC 
+		/usr/lib/libboost_system.a
+		/usr/lib/libboost_thread.a
+		/usr/lib/libboost_serialization.a
+		/usr/lib/libboost_log.a
+		pthread
+	)
+endif()

@@ -22,10 +22,17 @@ target_include_directories(sim PRIVATE
 )
 
 target_link_libraries(sim PUBLIC 
-  /usr/lib/libboost_system.a
-  pthread
   npdbstatic
   npdbclient
+  nplib
 )
 
-target_compile_options(sim PRIVATE -fPIC)
+if(WIN32)
+  target_compile_definitions(sim PRIVATE -DSIM_EXPORTS)
+else()
+  target_link_libraries(sim PUBLIC 
+    /usr/lib/libboost_system.a
+    pthread
+  )
+  target_compile_options(sim PRIVATE -fPIC)
+endif()

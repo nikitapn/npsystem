@@ -4,5 +4,7 @@ add_library(npdbstatic STATIC
 )
 
 target_include_directories(npdbstatic PRIVATE ../npdbclient/include)
-target_compile_options(npdbstatic PRIVATE -fPIC)
 
+if(UNIX)
+  target_compile_options(npdbstatic PRIVATE -fPIC)
+endif()

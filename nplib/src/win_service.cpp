@@ -296,9 +296,9 @@ VOID WINAPI Service::SvcMain(DWORD dwArgc, LPTSTR *lpszArgv)
 //
 
 VOID Service::SvcInit(DWORD dwArgc, LPTSTR *lpszArgv) {
-	 std::ofstream out("d:\\temp\\" + std::string(service_name_) + ".log");
-   std::cout.rdbuf(out.rdbuf());
-	 std::cerr.rdbuf(out.rdbuf());
+	 //std::ofstream out("d:\\temp\\" + std::string(service_name_) + ".log");
+   //std::cout.rdbuf(out.rdbuf());
+   //std::cerr.rdbuf(out.rdbuf());
 
 	// TO_DO: Declare and set any required variables.
 	//   Be sure to periodically call ReportSvcStatus() with 

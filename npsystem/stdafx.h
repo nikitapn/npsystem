@@ -65,8 +65,8 @@ extern CAppModule _Module;
 #include <filesystem>
 #include <fstream>
 
-#include "../3rd/scintilla/include/Scintilla.h"
-#include "../3rd/scintilla/include/SciLexer.h"
+#include <Scintilla.h>
+#include <SciLexer.h>
 
 #include <boost/mp11/mpl_tuple.hpp>
 namespace mp11 = boost::mp11;

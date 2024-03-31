@@ -1,7 +1,7 @@
 
-add_library(nplib SHARED
+set(LIST_FILES 
   src/hexparser.cpp
-  src/log.cpp  
+  src/log.cpp
   include/nplib/import_export.h
   include/nplib/utils/helper.h
   include/nplib/utils/thread_pool.hpp
@@ -25,5 +25,20 @@ add_library(nplib SHARED
   include/nplib/windows/console.hpp
 )
 
+if(WIN32)
+  list(APPEND LIST_FILES
+    src/win_service.cpp
+    src/service_error.h
+    src/service_error.mc
+  )
+endif()
+
+add_library(nplib SHARED ${LIST_FILES})
+
 target_include_directories(nplib PRIVATE ./include)
-target_compile_options(nplib PRIVATE -fPIC)
+
+if(WIN32)
+  target_compile_definitions(nplib PRIVATE -DNPLIB_EXPORTS)
+else()
+  target_compile_options(nplib PRIVATE -fPIC)
+endif()

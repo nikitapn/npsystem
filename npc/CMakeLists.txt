@@ -14,7 +14,7 @@ foreach(file ${IDL_FILES_LIST})
   add_custom_command(
     OUTPUT ${CMAKE_SOURCE_DIR}/npc/include/npc/${filename_hpp} 
       ${CMAKE_SOURCE_DIR}/npc/src/gen/${filename_cpp}
-      COMMAND ${CMAKE_SOURCE_DIR}/build/nprpc/npidl/npidl
+      COMMAND npidl
       --out-inc-dir ${CMAKE_SOURCE_DIR}/npc/include/npc 
       --out-src-dir ${CMAKE_SOURCE_DIR}/npc/src/gen
       --out-ts-dir ${CMAKE_SOURCE_DIR}/nprpc/idl/npwebserver/web/src/gen
@@ -26,7 +26,7 @@ foreach(file ${IDL_FILES_LIST})
   )
 endforeach()
 
-add_library(npc SHARED
+add_library(npc STATIC
   include/npc/db.hpp
   include/npc/npsystem_constants.hpp
   include/npc/npwebserver.hpp
@@ -37,3 +37,7 @@ add_library(npc SHARED
 )
 
 target_include_directories(npc PRIVATE ./include/npc ../nprpc/include)
+
+if(UNIX)
+  target_compile_options(npc PRIVATE -fPIC)
+endif()

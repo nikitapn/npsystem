@@ -1,4 +1,4 @@
-add_library(avr_info SHARED 
+add_library(avr_info STATIC 
   src/avr_info.cpp
   src/m8.cpp
   src/m16.cpp
@@ -11,7 +11,6 @@ target_include_directories(avr_info PRIVATE
 	../npsys/include
 )
 
-target_compile_options(avr_info PRIVATE -fPIC)
-
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+if(UNIX)
+  target_compile_options(avr_info PRIVATE -fPIC)
+endif()

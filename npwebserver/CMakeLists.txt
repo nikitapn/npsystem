@@ -19,11 +19,7 @@ target_include_directories(npwebserver PRIVATE
 )
 
 target_link_libraries(npwebserver PUBLIC 
-  /usr/lib/libboost_system.a
-	/usr/lib/libboost_thread.a
-	/usr/lib/libboost_serialization.a
   nprpcst
-  pthread
 	npdbstatic
 	npdbclient
 	nplib
@@ -31,4 +27,13 @@ target_link_libraries(npwebserver PUBLIC
 	nprpc
 	npc
 )
+
+if(UNIX)
+  target_link_libraries(npwebserver PUBLIC 
+    /usr/lib/libboost_system.a
+	  /usr/lib/libboost_thread.a
+	  /usr/lib/libboost_serialization.a
+    pthread
+  )
+endif()
 
