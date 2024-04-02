@@ -52,6 +52,7 @@ system "make clean";
 system "make";
 chdir "..";
 
+mkdir ".out/generated" or $!{EEXIST};
 system "perl gen-map.pl";
 system "perl gen-map-pc-link.pl";
 system "perl gen-map-pc-link-virtual.pl";

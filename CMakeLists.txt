@@ -75,6 +75,7 @@ endif()
 
 project(npsystem)
 
+add_subdirectory(avr_firmware)
 add_subdirectory(nplib)
 add_subdirectory(nprpc)
 add_subdirectory(npc)

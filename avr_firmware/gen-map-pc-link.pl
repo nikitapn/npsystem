@@ -3,16 +3,16 @@ require './common.pl';
 sub gen_memory {
 	my $type = shift(@_);
 
-	opendir(DIR, "".$type."/build/") || die "Wrong directory";
+	opendir(DIR, "".$type."/.build/") || die "Wrong directory";
 	@files = grep(/\.sym$/,readdir(DIR));
 	closedir(DIR);
 	
-	my $symtab = "".$type."/build/".@files[0];
+	my $symtab = "".$type."/.build/".@files[0];
 	open IN, $symtab || die "Can not open the symbol file";
 	@lines = <IN>;
 	close IN;
 
-	open(FILE, ">generated/$type.h") or die "Cannot open file";
+	open(FILE, ">.out/generated/$type.h") or die "Cannot open file";
 	
 	printf FILE "\/*Ram Memory*\/\n";
 	printf FILE "#define SYS_RAM_START            0x%04x\n", get_data_seg(\@lines, "_sys_ram_start");

@@ -35,7 +35,7 @@ inline std::filesystem::path GetExecutableRootPath() noexcept {
 
 	auto c = buffer.get() + len - 1;
 	while (*c != L'\\') c--; c--;
-	while (*c != L'\\') c--;
+	// while (*c != L'\\') c--;
 
 	assert(c > buffer.get());
 

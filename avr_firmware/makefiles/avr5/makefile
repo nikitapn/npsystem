@@ -5,10 +5,10 @@ FORMAT = ihex
 #FORMAT = srec
 
 # Destination directory
-DESTDIR = build
+DESTDIR = .build
 
 # Objects directory
-OBJDIR = obj
+OBJDIR = .obj
 
 dummy := $(shell mkdir -p $(DESTDIR))
 dummy := $(shell mkdir -p $(OBJDIR))
@@ -22,7 +22,7 @@ OPT = s
 # Debugging format.
 # Native formats for AVR-GCC's -g are stabs [default], or dwarf-2.
 # AVR (extended) COFF requires stabs, plus an avr-objcopy run.
-DEBUG = stabs
+#DEBUG = stabs
 
 # List any extra directories to look for include files here.
 #     Each directory must be seperated by a space.
@@ -165,11 +165,13 @@ all: begin gccversion sizebefore build sizeafter finished end size
 build: elf hex eep lss sym
 
 elf: $(DESTDIR)/$(TARGET).elf
-hex: ../../x64/firmware/$(TARGET).hex
-eep: ../../x64/firmware/$(TARGET).eep
+hex: ../.out/firmware/$(TARGET).hex
+eep: ../.out/firmware/$(TARGET).eep
 lss: $(DESTDIR)/$(TARGET).lss
 sym: $(DESTDIR)/$(TARGET).sym
 
+firmware: 
+	mkdir -p ../.out/firmware
 
 # Eye candy.
 # AVR Studio 3.x does not check make's exit code but relies on
@@ -203,12 +205,12 @@ gccversion :
 
 # Create final output files (.hex, .eep) from ELF output file.
 # $(OBJCOPY) -O $(FORMAT)  -j .text -j .tab -j .nrww  --change-section-address .nrww=$(NRWW_ORG) -R .eeprom $< $@
-%.hex: %.elf
+%.hex: %.elf | firmware
 	@echo
 	@echo $(MSG_FLASH) $@
 	$(OBJCOPY) -O $(FORMAT) -R .eeprom --change-section-address .nrww=$(NRWW_ORG) $< $@
 
-%.eep: %.elf
+%.eep: %.elf | firmware
 	@echo
 	@echo $(MSG_EEPROM) $@
 	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
@@ -237,13 +239,13 @@ gccversion :
 
 
 # Compile: create object files from C source files.
-obj/%.o: ../src/%.c
+$(OBJDIR)/%.o: ../src/%.c
 	@echo
 	@echo $(MSG_COMPILING) $<
 	$(CC) -c $(ALL_CFLAGS) $< -o $@
 
 # Assemble: create object files from assembler source files.
-obj/%.o : ../src/%.S
+$(OBJDIR)/%.o : ../src/%.S
 	@echo
 	@echo $(MSG_ASSEMBLING) $<
 	$(CC) -c $(ALL_ASFLAGS) $< -o $@
@@ -265,4 +267,4 @@ clean_list :
 # Listing of phony targets.
 .PHONY : all begin finish end sizebefore sizeafter gccversion \
 build elf hex eep lss sym coff extcoff \
-clean clean_list  
+clean clean_list firmware 

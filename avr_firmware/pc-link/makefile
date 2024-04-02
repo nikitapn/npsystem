@@ -18,8 +18,8 @@ SRC = ../src/pc_link.c ../src/net_c.c ../src/tcpip/enc28j60.c ../src/tcpip/lan.c
 # care about how the name is spelled on its command-line.
 ASRC = ../src/net_s.S ../src/crc.S ../src/zero_memory.S
 
-dummy := $(shell mkdir -p obj/tcpip)
-dummy := $(shell mkdir -p obj/pclink)
+dummy := $(shell mkdir -p .obj/tcpip)
+dummy := $(shell mkdir -p .obj/pclink)
 
 LDFLAGS = -T../ldscripts/avr4_pc_link.x
 LDFLAGS += -Wl,-defsym,__TEXT_REGION_LENGTH__=8192
