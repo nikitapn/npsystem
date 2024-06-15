@@ -1,3 +1,14 @@
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/generated/Ribbon.h 
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated/Ribbon.rc 
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated/Ribbon.bml 
+  COMMAND uicc ${CMAKE_CURRENT_SOURCE_DIR}/Ribbon.xml
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated/Ribbon.bml
+    /header:${CMAKE_CURRENT_SOURCE_DIR}/generated/Ribbon.h
+    /res:${CMAKE_CURRENT_SOURCE_DIR}/generated/Ribbon.rc 
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Ribbon.xml
+)
+
 add_executable(npsystem WIN32
   assignedalgorithm.h
   assigned.cpp
@@ -122,180 +133,11 @@ add_executable(npsystem WIN32
   #propertygridmonthcalctrl.cpp
   #propertygridmonthcalctrl.h
   quadrant.h
-  res
-  res/ai_pin.ico
-  res/algorithm.ico
-  res/algorithm_loaded.ico
-  res/algorithm_not_loaded.ico
-  res/alg_toolbar_enabled.bmp
-  res/arrowcop.cur
-  res/arrow.cur
-  res/binary.ico
-  res/bitmap1.bmp
-  res/bitmap2.bmp
-  res/bitmap3.bmp
-  res/bitmap4.bmp
-  res/blockdevice.ico
-  res/block.ico
-  res/blocks
-  res/blocks/add.bmp
-  res/blocks/ae.bmp
-  res/blocks/and.bmp
-  res/blocks/any_edge.svg.bmp
-  res/blocks/bd.bmp
-  res/blocks/be.bmp
-  res/blocks/block_function.bmp
-  res/blocks/clock.svg.bmp
-  res/blocks/cmp.bmp
-  res/blocks/cnt.svg.bmp
-  res/blocks/cpa.bmp
-  res/blocks/cpb.bmp
-  res/blocks/cursor_selected.bmp
-  res/blocks/delay.bmp
-  res/blocks/div.bmp
-  res/blocks/in.bmp
-  res/blocks/input.svg.bmp
-  res/blocks/mul.bmp
-  res/blocks/ne.bmp
-  res/blocks/negative_edge.svg.bmp
-  res/blocks/not.bmp
-  res/blocks/or.bmp
-  res/blocks/out.bmp
-  res/blocks/output.svg.bmp
-  res/blocks/pid.bmp
-  res/blocks/positive_edge.svg.bmp
-  res/blocks/pulse.svg.bmp
-  res/blocks/rs.bmp
-  res/blocks/rs_trigger.svg.bmp
-  res/blocks/schedule.svg.bmp
-  res/blocks/sfc_step.bmp
-  res/blocks/sfc_term.bmp
-  res/blocks/sfc_transition.bmp
-  res/blocks/sub.bmp
-  res/book.ico
-  res/classview.bmp
-  res/classview_hc.bmp
-  res/class_view_hc.ico
-  res/class_view.ico
-  res/codeblocks.ico
-  res/configurator.ico
-  res/container.ico
-  res/controller_bad.ico
-  res/controller_good.ico
-  res/controller.ico
-  res/ctrl_accessible.ico
-  res/ctrl_deactivated.ico
-  res/ctrl.ico
-  res/ctrl_inaccessible.ico
-  res/cursors
-  res/cursors/aero_link_l.cur
-  res/cursors/arrowcop.cur
-  res/cursors/arrow.cur
-  res/cursors/drop.cur
-  res/cursors/nodrop.cur
-  res/cursors/pen.cur
-  res/di_pin.ico
-  res/document_delete.ico
-  res/do_pin.ico
-  res/download_20x20.png
-  res/empty.ico
-  res/exclamation.ico
-  res/ex.ico
-  res/explorer.bmp
-  res/explorer_hc.bmp
-  res/favicon.ico
-  res/FBD.svg.ico
-  res/file.ico
-  res/fileview_hc.bmp
-  res/file_view_hc.ico
-  res/file_view.ico
-  res/flusk.ico
-  res/folder_closed.ico
-  res/folder_open.ico
-  res/function.ico
-  res/functions.ico
-  res/HardwareChip.ico
-  res/hardware.ico
-  res/i2c.ico
-  res/icon3.ico
-  res/icon6.ico
-  res/icon7.ico
-  res/input_analog.ico
-  res/input.ico
-  res/input_output.ico
-  res/inputs.ico
-  res/i_pin.ico
-  res/Library.ico
-  res/main.ico
-  res/menuimages.bmp
-  res/menuimages_hc.bmp
-  res/mime-template_source.ico
-  res/mind.ico
-  res/module_file_format.ico
-  res/module_pin.ico
-  res/mycomputer.ico
-  res/network.ico
-  res/npsystem.svg.ico
-  res/o_pin.ico
   resource.h
-  res/output.ico
-  res/outputs.ico
-  res/output_wnd_hc.ico
-  res/output_wnd.ico
-  res/pinned.ico
-  res/pins.ico
-  res/play_20x20.png
-  res/PrintPreviewL.bmp
-  res/properties.bmp
-  res/properties_hc.bmp
-  res/properties_wnd_hc.ico
-  res/properties_wnd.ico
-  res/question.svg.ico
-  res/redo_20x20.png
-  res/sfc_step.svg.bmp
-  res/SFC.svg.ico
-  res/software.ico
-  res/sort.bmp
-  res/sort_hc.bmp
-  "res/source_c (1).ico"
-  "res/source_c (3).ico"
-  "res/source_c (4).ico"
-  "res/source_c (5).ico"
-  "res/source_c.ico"
-  res/source_h.ico
-  res/source_s.ico
-  res/src.ico
-  res/start_button.bmp
-  res/start_button.ico
-  res/start_button.png
-  res/start_online.bmp
-  res/stop_20x20.png
-  res/stop_button.ico
-  res/stop_online.bmp
-  res/system.ico
-  res/system_rotate.ico
-  res/test.bmp
-  res/test.ico
-  res/toolbar1.bmp
-  res/Toolbar256.bmp
-  res/toolbar2.bmp
-  res/toolbar.bmp
-  res/toolbar_.bmp
-  res/tree_button_collapsed_focused.ico
-  res/tree_button_collapsed_not_focused.ico
-  res/tree_button_expanded_focused.ico
-  res/tree_button_expanded_not_focused.ico
-  res/undo_20x20.png
-  res/undo_redo2.bmp
-  res/undo_redo.bmp
-  res/unpinned.ico
-  res/upload_algorithm.bmp
-  res/var_ico.ico
-  #Ribbon.bml
-  #Ribbon.h
-  #Ribbon.rc
-  #ribbonstate.h
   Ribbon.xml
+  generated/Ribbon.h
+  generated/Ribbon.bml
+  ribbonstate.h
   ScintillaView.cpp
   ScintillaView.h
   scintillawindow.cpp

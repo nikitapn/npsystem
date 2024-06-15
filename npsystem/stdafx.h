@@ -104,7 +104,7 @@ namespace mp11 = boost::mp11;
 #include "serialization_atl_rect.h"
 
 #include "resource.h"
-#include "ribbon.h"
+#include "generated/Ribbon.h"
 #include "messages.h"
 
 #include "iter.h"

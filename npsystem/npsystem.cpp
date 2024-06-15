@@ -2,7 +2,7 @@
 // This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
 
 #include "stdafx.h"
-#include "Ribbon.h"
+#include "generated/Ribbon.h"
 #include "resource.h"
 #include "View.h"
 #include "dlgabout.h"

@@ -5,6 +5,7 @@
 3rd/leveldb
 3rd/scintilla
 build/
+generated
 
 # User-specific files
 *.suo

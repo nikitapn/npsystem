@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Ribbon.h"
+#include "generated/Ribbon.h"
 
 // other
 #define WM_UPDATE_MYLIST				(WM_USER + 700)
