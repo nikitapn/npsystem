@@ -88,6 +88,8 @@ add_subdirectory(sim)
 add_subdirectory(npserver)
 add_subdirectory(npwebserver)
 if(WIN32)
+  add_subdirectory(npcompiler)
   add_subdirectory(npsystem)
+  add_subdirectory(tests)
 endif()
 

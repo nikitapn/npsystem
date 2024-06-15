@@ -191,6 +191,11 @@ add_executable(npsystem WIN32
   wm_user.h
 )
 
+add_custom_command(TARGET npsystem POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:npsystem> $<TARGET_RUNTIME_DLLS:npsystem>
+  COMMAND_EXPAND_LISTS
+)
+
 add_definitions(
   -DNPSYSTEM_FIRMWARE_API_CPP
   -D_NPSYSTEM_

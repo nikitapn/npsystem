@@ -4,7 +4,7 @@
 
 #include "../include/npcompiler/npcompiler.hpp"
 
-#include <llvm/Support/Host.h>
+//#include <llvm/Support/Host.h>
 #include <llvm/Support/TargetSelect.h>
 #include "llvm/ExecutionEngine/ExecutionEngine.h"
 

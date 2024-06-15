@@ -300,7 +300,7 @@ public:
 		auto Features = "";
 
 		TargetOptions opt;
-		auto RM = Optional<Reloc::Model>();
+		auto RM = std::optional<Reloc::Model>();
 		auto avr_target_machine = avr_target->createTargetMachine(triple, CPU, Features, opt, RM);
 
 		assert(avr_target_machine);
@@ -317,9 +317,8 @@ public:
 		}
 
 		legacy::PassManager pass;
-		auto FileType = CGFT_AssemblyFile;
 
-		if (avr_target_machine->addPassesToEmitFile(pass, dest, nullptr, FileType)) {
+		if (avr_target_machine->addPassesToEmitFile(pass, dest, nullptr, CodeGenFileType::AssemblyFile)) {
 			errs() << "TargetMachine can't emit a file of this type";
 			std::abort();
 		}
