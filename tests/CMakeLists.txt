@@ -30,10 +30,10 @@ target_link_libraries(test_compiler
   npcompiler
 )
 
-add_custom_command(TARGET test_compiler PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:test_compiler> $<TARGET_RUNTIME_DLLS:test_compiler>
-  COMMAND_EXPAND_LISTS
-)
+#add_custom_command(TARGET test_compiler POST_BUILD
+#  COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:test_compiler> $<TARGET_FILE_DIR:test_compiler>
+#  COMMAND_EXPAND_LISTS
+#)
 
 target_include_directories(test_compiler PRIVATE
   ../avr_info/include

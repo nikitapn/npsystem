@@ -1,3 +1,4 @@
+%require "3.2"
 %language "c++"
  //%lex-param { type1 arg1 }
  //%defines
@@ -70,7 +71,6 @@ void set_buffer(char* buf, size_t size);
 %type	<val_float>				NUMBER_FLOAT
 %type <val_node>				stmt stmt_list var_decl0 var_decl_seq var_decl_seq_global exp ident
 												number assignment module module0 function function0 prog_decl var_decl_local var_decl_global if_stmt
-
 
 %%
 %start module;

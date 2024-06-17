@@ -33,7 +33,8 @@ inline std::tuple<int, bool> get_number_info(int type) {
 }
 
 inline std::ostream& operator<<(std::ostream& os, const Integer& i) {
-	return os << (is_signed(i.type) ? -i.x : i.x);
+	if (is_signed(i.type)) os << '-';
+	return os << i.x;
 }
 
 }

@@ -18,6 +18,7 @@
 #include <llvm/IR/Verifier.h>
 #include <llvm/IR/PassManager.h>
 #include <llvm/IR/LegacyPassManager.h>
+#include "llvm/IR/InlineAsm.h"
 //#include <llvm/Linker/Linker.h>
 #include <llvm/Bitcode/BitcodeWriter.h>
 
@@ -135,7 +136,7 @@ public:
 
 			std::cerr << "Casting: " << variable::to_ctype(from) << " " << n[0] << " -> " << variable::to_ctype(to) << '\n';
 
-			assert(from != to);
+			//assert(from != to);
 
 			// Cast operators ...
 			// HANDLE_CAST_INST(38, Trunc   , TruncInst   )  // Truncate integers
@@ -192,6 +193,53 @@ public:
 			auto bb = BasicBlock::Create(*ctx_, "program", cur_fun_);
 			mirb_->SetInsertPoint(bb);
 
+			Type* Int8Ty = Type::getInt8Ty(*ctx_);
+			/*GlobalVariable* Var =
+				new GlobalVariable(*module_, 
+					Int32Ty, 
+					true,
+					GlobalValue::InternalLinkage,
+					nullptr, // no initializer 
+					"var", 
+					nullptr,
+					GlobalVariable::NotThreadLocal,
+					0x100);
+
+			Constant* DummyCast1 = module_->getOrInsertGlobal("dummy_cast", Int32Ty);
+			*/
+			Value* val1 = ConstantExpr::getIntToPtr(
+				ConstantInt::get(Type::getInt16Ty(*ctx_), 0x100), PointerType::getUnqual(Int8Ty));
+			
+			Value* input = mirb_->CreateLoad(Int8Ty, val1);
+
+			Value* val2 = ConstantExpr::getIntToPtr(
+				ConstantInt::get(Type::getInt16Ty(*ctx_), 0x101), PointerType::getUnqual(Int8Ty));
+
+			//mirb_->CreateStore(ConstantInt::get(Type::getInt8Ty(*ctx_), 0x40), val1);
+
+			//Value* bit = mirb_->CreateAnd(input, ConstantInt::get(Type::getInt8Ty(*ctx_), 0x40));
+			//Value* val = mirb_->CreateShl(bit, 1);
+
+			Value* output = mirb_->CreateLoad(Int8Ty, val2);
+			//Value* val3 = mirb_->CreateOr(output, val);
+
+			// Define the inline assembly code (example: add immediate value to input and store in output)
+			// $0 is output, $1 is input
+			std::string AsmString =
+				"bld $1, 5 \n\t"
+				"bst $0, 6 \n\t"
+				;
+			std::string Constraints = "=r,r,r"; // "=r" for output, "r" for input
+
+			// Create the InlineAsm object
+			FunctionType* AsmFuncType = FunctionType::get(mirb_->getInt8Ty(), { mirb_->getInt8Ty(), mirb_->getInt8Ty() }, false);
+			InlineAsm* IA = InlineAsm::get(AsmFuncType, AsmString, Constraints, true);
+
+			// Create the call to inline assembly
+			Value* Result = mirb_->CreateCall(IA, { input, output }, "asmResult");
+
+			mirb_->CreateStore(Result, val2);
+
 			break;
 		}
 
@@ -230,6 +278,7 @@ public:
 
 	void print_debug() {
 		// Print out all of the generated code.
+
 		module_->print(errs(), nullptr);
 
 		/*
@@ -282,11 +331,13 @@ public:
 		LLVMInitializeAVRTarget();
 		LLVMInitializeAVRTargetMC();
 		LLVMInitializeAVRAsmPrinter();
+		LLVMInitializeAVRAsmParser();
 
 		LLVMInitializeARMTargetInfo();
 		LLVMInitializeARMTarget();
 		LLVMInitializeARMTargetMC();
 		LLVMInitializeARMAsmPrinter();
+		LLVMInitializeARMAsmParser();
 
 		auto triple = Triple("avr", "", "", "elf").normalize();
 		std::string EC;
@@ -307,9 +358,11 @@ public:
 
 		module_->setDataLayout(avr_target_machine->createDataLayout());
 		module_->setTargetTriple(triple);
+		//module_->setFramePointer(FramePointerKind::None);
+		//avr_target_machine->setOptLevel(CodeGenOptLevel::None);
 
 		std::error_code ec;
-		raw_fd_ostream dest("c:/projects/npsystem/npcompiler/test/out/test.elf", ec, sys::fs::OF_None);
+		raw_fd_ostream dest("c:/Temp/test1.elf", ec, sys::fs::CD_CreateAlways);
 
 		if (ec) {
 			errs() << "Could not open file: " << ec.message();

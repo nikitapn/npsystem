@@ -1,27 +1,23 @@
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/lex.yy.cc 
   COMMAND bash -c ${CMAKE_CURRENT_SOURCE_DIR}/flex.sh
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/lang.l
+  DEPENDS src/lang.l
 )
 
 add_custom_command(
   OUTPUT 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/stack.hh
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/lang.tab.hh
     ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/location.hh
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/position.hh
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/lang.tab.hh
     ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/lang.tab.cc
-  COMMAND bash -c "bison -r all -t -Wempty-rule -d -v -b ${CMAKE_CURRENT_SOURCE_DIR}/src/generated ${CMAKE_CURRENT_SOURCE_DIR}/src/lang.y"
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/lang.y
+  COMMAND bash -c "bison -r all -t -Wempty-rule -d -v -b ${CMAKE_CURRENT_SOURCE_DIR}/src/generated/lang ${CMAKE_CURRENT_SOURCE_DIR}/src/lang.y"
+  DEPENDS src/lang.y
 )
 
 add_library(npcompiler SHARED 
-  src/generated/stack.hh
-  src/generated/lang.tab.hh
-  src/generated/location.hh
-  src/generated/lang.tab.cc
-  src/generated/position.hh
   src/generated/lex.yy.cc
+  src/generated/location.hh
+  src/generated/lang.tab.hh
+  src/generated/lang.tab.cc
   src/ast.hpp
   src/ast.cpp
   src/ast_utils.hpp
@@ -35,6 +31,7 @@ add_library(npcompiler SHARED
   src/npcompiler.cpp
 )
 
+if(WIN32)
 add_definitions(
   -DNPCOMPILER_EXPORTS
   -DWIN32
@@ -49,23 +46,28 @@ add_definitions(
   -D__STDC_VERSION__=_DEBUG
   -D_LIB
 )
+endif()
 
-target_include_directories(npcompiler PRIVATE
-  ./include
+list(APPEND INCLUDE_DIRS
+   ./include
   ../npdbclient/include
   ../npsys/include
   ../nplib/include
-  C:\\opt\\llvm\\llvm\\include
-  C:\\opt\\llvm\\build\\include
 )
 
+if (WIN32)
+  list(APPEND INCLUDE_DIRS
+    ${OPT_LLVM_DIR}\\llvm\\include
+    ${OPT_LLVM_DIR}\\build\\include
+  )
+  target_link_directories(npcompiler PRIVATE
+    ${OPT_LLVM_LIB_DIR}
+  )
+endif()
 
-target_link_directories(npcompiler PRIVATE
-  C:\\opt\\llvm\\build\\Debug\\lib
-)
+target_include_directories(npcompiler PRIVATE ${INCLUDE_DIRS})
 
-target_link_libraries(npcompiler PRIVATE
-  ntdll
+list(APPEND LIBS 
   LLVMCore
   LLVMMC
   LLVMMCJIT
@@ -131,3 +133,10 @@ target_link_libraries(npcompiler PRIVATE
   LLVMDemangle
 )
 
+if(WIN32)
+  list(APPEND LIBS 
+    ntdll
+  )
+endif()
+
+target_link_libraries(npcompiler PRIVATE ${LIBS})

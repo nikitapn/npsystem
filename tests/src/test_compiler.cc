@@ -20,7 +20,6 @@
 #include <npsys/cpp/cpp_variable.h>
 #include <npsys/cpp/cpp_slot.h>
 
-/*
 using thread_pool = nplib::thread_pool_2;
 
 int test_compiler() {
@@ -31,7 +30,7 @@ int test_compiler() {
 		if (rpc) rpc->destroy();
 	};
 
-	try {
+	try {/*
 		nprpc::Config rpc_cfg;
 		rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
 		rpc_cfg.port = 24685;
@@ -43,30 +42,30 @@ int test_compiler() {
 		auto p1 = std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent);
 		auto poa = rpc->create_poa(2, { p1.get() });
 		odb::Database::init(nameserver.get(), poa, "./", "nptestdb");
-
-		npcompiler::Compilation compilation(std::filesystem::path("c:/projects/npsystem/npcompiler/test/example0.txt"));
+		*/
+		npcompiler::Compilation compilation(std::filesystem::path("N:/projects/npsystem/npcompiler/test/example0.txt"));
 		return !(compilation.compile(
 			[](std::string_view path)->npsys::variable_n {
-				auto slot = npsys::CFBDSlot::get_by_path(path); 
-				slot->var.fetch();
-				return slot->var;
+				return {};
+				//auto slot = npsys::CFBDSlot::get_by_path(path); 
+				//slot->var.fetch();
+				//return slot->var;
 			}
 		) == true);
 		
-		destroy();
+		// destroy();
 	} catch (std::exception& ex) {
 		std::cerr << ex.what();
 		destroy();
 		return -1;
 	}
 }
-*/
 
 // Demonstrate some basic assertions.
 TEST(HelloTest, BasicAssertions) {
-  //test_compiler();
+  test_compiler();
   // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
+  // EXPECT_STRNE("hello", "world");
   // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
+  // EXPECT_EQ(7 * 6, 42);
 }

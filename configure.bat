@@ -10,5 +10,6 @@ cmake -S . -B build\win ^
   -DOPT_LEVELDB_INCLUDE_DIR="C:\opt\leveldb\include" ^
   -DOPT_LEVELDB_LIB_DIR="C:\opt\leveldb\lib" ^
   -DOPT_WTL_INCLUDE_DIR="C:\opt\wtl\Include" ^
-  -DOPT_SCINTILLA_DIR="C:\opt\scintilla"
+  -DOPT_SCINTILLA_DIR="C:\opt\scintilla" ^
+  -DOPT_LLVM_DIR="C:\opt\llvm"
 

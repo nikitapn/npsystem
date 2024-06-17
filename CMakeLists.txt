@@ -45,6 +45,16 @@ if(WIN32)
     set(OPT_SCINTILLA_LIB_DIR "${OPT_SCINTILLA_DIR}/Debug")
   endif()
 
+  if ("${OPT_LLVM_DIR}" STREQUAL "")
+    message(FATAL_ERROR "-DOPT_LLVM_DIR is not set")
+  endif()
+  
+  if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(OPT_LLVM_LIB_DIR "${OPT_LLVM_DIR}/build/Release/lib")
+  else()
+    set(OPT_LLVM_LIB_DIR "${OPT_LLVM_DIR}/build/Debug/lib")
+  endif()
+
 
   set(OPT_OPENSSL_DIR "C:\\Program Files\\OpenSSL" CACHE STRING "Path to OpenSSL directory")
  
