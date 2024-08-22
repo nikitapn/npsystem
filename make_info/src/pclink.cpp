@@ -2,7 +2,7 @@
 // This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
 
 #include <avr_info/avr_info.h>
-#include "../avr_firmware/generated/pc-link.h"
+#include "../../avr_firmware/.out/generated/pc-link.h"
 
 namespace {
 

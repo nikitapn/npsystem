@@ -209,7 +209,7 @@ bool CAVRController::AddToNetwork(npsys::device_n device) {
 			environment::get_instance().vc_list_.store();
 		}
 		environment::get_instance().br_map_[dev_addr] = v_pc_link_serv.get();
-		if (g_cfg.log_level > 0) std::cout << "virtual device \"" << name_ << "\" founded" << std::endl;
+		if (g_cfg.log_level > 0) std::cout << "virtual device \"" << name_ << "\" was found" << std::endl;
 		ptr->run();
 		break;
 	}

@@ -13,9 +13,9 @@
 #define __AVR_ATmega16__
 
 #include "iom16.h"
-#include "../avr_firmware/generated/m16v.h"
-#include "../avr_firmware/src/cfg/sconfig_m16.h"
-#include "../avr_firmware/include/avr_firmware/twi.h"
+#include "../../avr_firmware/.out/generated/m16v.h"
+#include "../../avr_firmware/src/cfg/sconfig_m16.h"
+#include "../../avr_firmware/include/avr_firmware/twi.h"
 
 MAKE_FIRMWARE_INFO(16v)
 

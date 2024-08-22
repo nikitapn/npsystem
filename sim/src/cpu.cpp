@@ -1473,8 +1473,11 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		//		break;
 		//	case OP_BREAK:
 		//		break;
-		//	case OP_WDR:
-		//		break;
+	case OP_WDR:
+		// do nothing for now
+		PC = PC + 1;
+		CC = CC + 1;
+		break;
 	case OP_FAKE_UDR_OUT:
 		*ucsra_ptr_ |= (1 << 6); // set TXC
 		if (mstate_) {

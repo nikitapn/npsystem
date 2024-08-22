@@ -202,6 +202,8 @@ add_definitions(
   -D_UNICODE
 )
 
+#remove_definitions(-D_UNICODE -D_MBCS)
+
 target_include_directories(npsystem PRIVATE
   ../avr_info/include
   ../npc/include
