@@ -58,7 +58,7 @@ struct FirmwareInfo {
 		uint16_t lt;
 
 		template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & ram_end;
 			ar & noinit_start;
 			ar & user_start;
@@ -78,7 +78,7 @@ struct FirmwareInfo {
 		uint16_t org;
 
 		template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & eeprcfg;
 			ar & org;
 		}
@@ -93,7 +93,7 @@ struct FirmwareInfo {
 		uint16_t user_end;
 
 		template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & tt;
 			ar & rd;
 			ar & io;
@@ -115,7 +115,7 @@ struct FirmwareInfo {
 		uint16_t max_user_pages;
 
 		template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & pagesize;
 			ar & max_pages;
 			ar & tt;
@@ -138,7 +138,7 @@ struct FirmwareInfo {
 		uint8_t twi_requests_max;
 
 		template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & partno;
 			ar & adc_max;
 			ar & rdata_max;
@@ -157,7 +157,7 @@ struct FirmwareInfo {
 	mccfg_t mccfg;
 
 	template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & version;
 			ar & rmem;
 			ar & emem;
@@ -169,7 +169,7 @@ struct FirmwareInfo {
 
 struct PCLinkInfo {
 	template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {	
+		void serialize(Archive& ar, const int /*file_version*/) {	
 		}
 };
 
@@ -180,7 +180,7 @@ struct VirtualPCLinkInfo {
 		uint16_t busy;
 
 		template<typename Archive>
-		void serialize(Archive& ar, const int file_version) {
+		void serialize(Archive& ar, const int /*file_version*/) {
 			ar & data_addr;
 			ar & data_recieved;
 			ar & data_transmitted;

@@ -10,18 +10,18 @@
 # pragma warning(disable:4068)  
 #endif
 
-#define __AVR_ATmega8__
+#define __AVR_ATmega16__
 
-#include "iom8.h"
-#include "../avr_firmware/generated/m8.h"
-#include "../avr_firmware/src/cfg/sconfig_m8.h"
-#include "../avr_firmware/include/avr_firmware/twi.h"
+#include "iom16.h"
+#include "../../avr_firmware/.out/generated/m16.h"
+#include "../../avr_firmware/src/cfg/sconfig_m16.h"
+#include "../../avr_firmware/include/avr_firmware/twi.h"
 
-MAKE_FIRMWARE_INFO(8)
+MAKE_FIRMWARE_INFO(16)
 
 #ifdef _MSC_VER
 # pragma warning(default:4068)  
 #endif
 
 
-avrinfo::FirmwareInfo* info_m8 = &m8::info;
+avrinfo::FirmwareInfo* info_m16 = &m16::info;

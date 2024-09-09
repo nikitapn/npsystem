@@ -30,7 +30,7 @@ void Medium::stop() noexcept {
 
 uint64_t Medium::GetCpuFrequency(uint64_t seconds) {
 	volatile int i = 0;
-	for (; i < 100000; ++i); // warm up cpu lol
+	for (; i < 1000000; ++i);
 	auto a = __rdtsc();
 	std::this_thread::sleep_for(std::chrono::seconds(seconds));
 	auto b = __rdtsc();
@@ -90,10 +90,11 @@ int Medium::CoreProc() noexcept {
 			for (size_t ix = 0; ix < controllers_count_; ++ix) {
 				duration += controllers_[ix]->ExecuteCore();
 			}
-			duration = duration / (double)controllers_count_ - 0.0000000118;
-			auto cc_next = (uint64_t)(ca + (uint64_t)(duration * cpu_frequency_));
+			duration = duration / (double)controllers_count_;// -0.0000000118;
+			uint64_t cc_next = ca + static_cast<uint64_t>(duration * cpu_frequency_);
 			if (cc_next < __rdtsc()) {
-				//	runtime_simulation_failed_cnt++;
+				// std::cerr << "$\n";
+				// runtime_simulation_failed_cnt++;
 				continue;
 			}
 			while (__rdtsc() < cc_next);

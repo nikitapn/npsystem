@@ -145,7 +145,7 @@ public:
 			if (result != -1) core->Interrupt(result);
 		});
 	}
-	virtual double ExecuteCore() noexcept final {
+	virtual double ExecuteCore() final {
 		last_instruction_duration_ = (double)core->Execute() * tick_duration_s_;
 		time_internal_ += last_instruction_duration_;
 		return last_instruction_duration_;

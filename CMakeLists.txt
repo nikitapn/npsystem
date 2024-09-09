@@ -10,6 +10,7 @@ endif()
 message("Building: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 if(WIN32)
   if ("${OPT_BOOST_INCLUDE_DIR}" STREQUAL "")
@@ -85,7 +86,8 @@ endif()
 
 project(npsystem)
 
-add_subdirectory(avr_firmware)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 add_subdirectory(nplib)
 add_subdirectory(nprpc)
 add_subdirectory(npc)
@@ -97,9 +99,23 @@ add_subdirectory(avr_info)
 add_subdirectory(sim)
 add_subdirectory(npserver)
 add_subdirectory(npwebserver)
-if(WIN32)
-  add_subdirectory(npcompiler)
-  add_subdirectory(npsystem)
-  add_subdirectory(tests)
-endif()
 
+if(WIN32)
+#  add_subdirectory(npcompiler)
+  add_subdirectory(npsystem)
+#  add_subdirectory(tests)
+
+  add_subdirectory(avr_firmware)
+  add_subdirectory(make_info)
+
+  add_custom_command(
+    OUTPUT generate_info.stamp
+    COMMENT "Creating memory addresses file"
+    COMMAND ${CMAKE_COMMAND} -E touch generate_info.stamp
+    COMMAND make_info --out-dir $<TARGET_FILE_DIR:npsystem>/data
+    DEPENDS avr_firmware make_info
+  )
+
+  add_custom_target(avr DEPENDS generate_info.stamp)
+
+endif()

@@ -11,6 +11,11 @@
 #include <boost/serialization/array.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 
+
+#ifdef WIN32
+# include <Windows.h>
+#endif
+
 std::filesystem::path avrinfo::AVRInfo::data_path_;
 
 namespace avrinfo {
@@ -103,7 +108,11 @@ AVRInfo::AVRInfo() {
 			}
 		}
 	} catch (std::exception& ex) {
+#ifdef WIN32
+		MessageBox(NULL, ex.what(), "Error while loading memory map", MB_ICONERROR);
+#else 
 		std::cerr << ex.what() << '\n';
+#endif
 		std::abort();
 	}
 }

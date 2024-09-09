@@ -18,8 +18,8 @@ class Medium;
 
 class IController {
 public:
-	virtual double ExecuteCore() noexcept = 0;
-	virtual void ExecutePeripheral(uint64_t time_gap) noexcept = 0;
+	virtual double ExecuteCore() = 0;
+	virtual void ExecutePeripheral(uint64_t time_gap) = 0;
 	virtual void SetMedium(Medium* medium) noexcept = 0;
 };
 
