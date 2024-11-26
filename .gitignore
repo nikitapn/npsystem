@@ -6,6 +6,7 @@
 3rd/scintilla
 build/
 generated
+npsystem_db
 
 # User-specific files
 *.suo

@@ -22,8 +22,8 @@ target_link_libraries(npdbserver
 if(UNIX)
 	add_definitions(-DBOOST_LOG_DYN_LINK)
 	target_link_libraries(npdbserver
-		/usr/lib/libboost_system.a
-		/usr/lib/libboost_serialization.a
+		${BOOST_LIB_PREFIX}/libboost_system.a
+		${BOOST_LIB_PREFIX}/libboost_serialization.a
 		boost_log
 		pthread
 		systemd

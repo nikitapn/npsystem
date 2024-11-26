@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 3.28.1)
 
+set(BOOST_LIB_PREFIX "/usr/lib" CACHE STRING "Location of the boost libs")
+#set_property(CACHE BOOST_LIB_PREFIX PROPERTY STRINGS "/usr/lib" "/usr/local/lib")
+
+option(OPT_BUILD_ONLY_RPC "<help_text>" OFF)
+
 #set(OUTPUT_LIB_DIR ${CMAKE_BINARY_DIR}/lib)
 #link_directories(${OUTPUT_DIR_LIB})
 
@@ -90,32 +95,36 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(nplib)
 add_subdirectory(nprpc)
-add_subdirectory(npc)
-add_subdirectory(npdbclient)
-add_subdirectory(npdbserver)
-add_subdirectory(npdbstatic)
-add_subdirectory(npsys)
-add_subdirectory(avr_info)
-add_subdirectory(sim)
-add_subdirectory(npserver)
-add_subdirectory(npwebserver)
 
-if(WIN32)
-#  add_subdirectory(npcompiler)
-  add_subdirectory(npsystem)
-#  add_subdirectory(tests)
+if (NOT OPT_BUILD_ONLY_RPC)
 
-  add_subdirectory(avr_firmware)
-  add_subdirectory(make_info)
+  add_subdirectory(npc)
+  add_subdirectory(npdbclient)
+  add_subdirectory(npdbserver)
+  add_subdirectory(npdbstatic)
+  add_subdirectory(npsys)
+  add_subdirectory(avr_info)
+  add_subdirectory(sim)
+  add_subdirectory(npserver)
+  add_subdirectory(npwebserver)
 
-  add_custom_command(
-    OUTPUT generate_info.stamp
-    COMMENT "Creating memory addresses file"
-    COMMAND ${CMAKE_COMMAND} -E touch generate_info.stamp
-    COMMAND make_info --out-dir $<TARGET_FILE_DIR:npsystem>/data
-    DEPENDS avr_firmware make_info
-  )
+  if(WIN32)
+  #  add_subdirectory(npcompiler)
+    add_subdirectory(npsystem)
+  #  add_subdirectory(tests)
 
-  add_custom_target(avr DEPENDS generate_info.stamp)
+    add_subdirectory(avr_firmware)
+    add_subdirectory(make_info)
 
+    add_custom_command(
+      OUTPUT generate_info.stamp
+      COMMENT "Creating memory addresses file"
+      COMMAND ${CMAKE_COMMAND} -E touch generate_info.stamp
+      COMMAND make_info --out-dir $<TARGET_FILE_DIR:npsystem>/data
+      DEPENDS avr_firmware make_info
+    )
+
+    add_custom_target(avr DEPENDS generate_info.stamp)
+
+  endif()
 endif()

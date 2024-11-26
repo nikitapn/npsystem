@@ -30,9 +30,9 @@ target_link_libraries(npwebserver PUBLIC
 
 if(UNIX)
   target_link_libraries(npwebserver PUBLIC 
-    /usr/lib/libboost_system.a
-	  /usr/lib/libboost_thread.a
-	  /usr/lib/libboost_serialization.a
+    ${BOOST_LIB_PREFIX}/libboost_system.a
+    ${BOOST_LIB_PREFIX}/libboost_thread.a
+    ${BOOST_LIB_PREFIX}/libboost_serialization.a
     pthread
   )
 endif()
