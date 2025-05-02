@@ -6,6 +6,7 @@
 #include <boost/core/exchange.hpp>
 #include <cstring>
 #include <streambuf>
+#include <cstdint>
 
 class membuffer {
 	uint8_t* ptr_ = nullptr;
@@ -69,7 +70,7 @@ protected:
 		return c;
 	}
 	virtual pos_type seekoff(off_type offset, 
-		std::ios_base::seekdir seek, std::ios_base::openmode mode) {
+		std::ios_base::seekdir seek, std::ios_base::openmode /* mode */) {
 		saved_size_ = length();
 		if (seek == std::ios_base::beg) {
 			if (offset < 0 || offset > saved_size_) std::streampos(-1);

@@ -153,7 +153,8 @@ public:
 				return false;
 			} else {
 				uuid_class uid;
-				s = db_ptr->Put(leveldb::WriteOptions(), create_slice(&DB_GUID_ID), leveldb::Slice((char*)uid.data, 16));
+				static_assert(sizeof(uid) == 16);
+				s = db_ptr->Put(leveldb::WriteOptions(), create_slice(&DB_GUID_ID), leveldb::Slice((char*)&uid, 16));
 				if (!s.ok()) return false;
 			}
 		}

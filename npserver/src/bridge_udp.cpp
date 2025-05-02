@@ -14,7 +14,7 @@ bridge_udp::bridge_udp(std::string remote_ip, uint16_t port, uint64_t timeout_ms
 	deadline_(ioc_),
 	timeout_(boost::posix_time::milliseconds(timeout_ms))
 {
-	endpoint_ = asio::ip::udp::endpoint(asio::ip::address::from_string(remote_ip), port);
+	endpoint_ = asio::ip::udp::endpoint(asio::ip::make_address_v4(remote_ip), port);
 	// No deadline is required until the first socket operation is started. We
 	// set the deadline to positive infinity so that the actor takes no action
 	// until a specific deadline is set.

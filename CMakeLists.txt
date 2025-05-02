@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.28.1)
 
 set(BOOST_LIB_PREFIX "/usr/lib" CACHE STRING "Location of the boost libs")
-#set_property(CACHE BOOST_LIB_PREFIX PROPERTY STRINGS "/usr/lib" "/usr/local/lib")
-
-option(OPT_BUILD_ONLY_RPC "<help_text>" OFF)
+option(OPT_BUILD_ONLY_RPC "Enable if only nprpc is needed" OFF)
 
 #set(OUTPUT_LIB_DIR ${CMAKE_BINARY_DIR}/lib)
 #link_directories(${OUTPUT_DIR_LIB})
@@ -12,9 +10,10 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "")
   set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-message("Building: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Building: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
 if(WIN32)
@@ -85,7 +84,7 @@ if(WIN32)
 
   add_compile_options(/W3 /bigobj)
 else()
-  add_compile_options(-Wall -Wextra -Wpedantic )
+  add_compile_options(-Wall -Wextra -ftemplate-backtrace-limit=0)
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 

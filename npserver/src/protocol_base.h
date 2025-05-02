@@ -113,7 +113,7 @@ public:
 		this->op_available = RegStatus::REG_UNKNOWN;
 	}
 	
-	static void* operator new(size_t n) {
+	static void* operator new(size_t) {
 		//static auto t_id = std::this_thread::get_id();
 		//assert(t_id == std::this_thread::get_id());
 		return pool_.malloc();

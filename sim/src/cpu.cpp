@@ -74,13 +74,13 @@ SIM_IMPORT_EXPORT AVRCore::AVRCore(MICROCONTROLLER mc, Flash& flash, sram_t& sra
 	uint16_t* sp_ptr, uint8_t* sreg_ptr, uint8_t* ucsra_ptr, int page_size, uint8_t dev_addr)
 	: mc_(mc)
 	, flash_(flash)
-	, eeprom_(eeprom)
 	, sram_(sram)
-	, sp_ptr_(sp_ptr)
+	, eeprom_(eeprom)
 	, sreg_ptr_(sreg_ptr)
 	, ucsra_ptr_(ucsra_ptr)
-	, page_size_(page_size)
+	, sp_ptr_(sp_ptr)
 	, dev_addr_(dev_addr)
+	, page_size_(page_size)
 {
 	r_file_ = &sram_[0];
 	io_space_ = &sram_[0] + 0x20;
@@ -329,9 +329,8 @@ inline void AVRCore::normalize_pc() {
 	}
 }
 
-// to do: add sram memory boundary check
-#ifdef _MSC_VER
-SIM_IMPORT_EXPORT int AVRCore::Execute() {
+// TODO: add sram memory boundary check
+SIM_IMPORT_EXPORT int AVRCore::Step() {
 	if (ev_list_.increase_tcnt0) {
 		sram_[0x52]++;
 		ev_list_.increase_tcnt0 = 0;
@@ -377,11 +376,13 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		return CC - cc;
 	}
 
+#ifdef _MSC_VER
 	union {
 		uint8_t u8;
 		uint8_t u16;
 		uint8_t u32;
-	} nu;
+    } nu;
+#endif
 
 	uint8_t h, s, v, n, z, _z, c;
 
@@ -572,7 +573,16 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = (instruction >> 4) & 0x1F;
 		Rr = (instruction & 0x0F) | ((instruction & 0x200) >> 5);
 
+#ifdef _MSC_VER
 		_addcarry_u8(0, Register8(Rd), Register8(Rr), &Register8(Rd));
+#else
+		__asm__ __volatile__(
+		  "add %1, %0\n\t"
+		  : "+r"(Register8(Rd))
+		  : "r"(Register8(Rr))
+		  : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -605,7 +615,16 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = (instruction >> 4) & 0x1F;
 		Rr = (instruction & 0x0F) | ((instruction & 0x200) >> 5);
 
+#ifdef _MSC_VER
 		_addcarry_u8(GETF_CARRY(), Register8(Rd), Register8(Rr), &Register8(Rd));
+#else
+        __asm__ __volatile__(
+		  "bt %2, 0\n\t"
+          "adc %1, %0\n\t"
+          : "+r"(Register8(Rd))
+          : "r"(Register8(Rr)),"r"((uint16_t)SREG)
+          : "cc");
+#endif
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -627,7 +646,16 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = (instruction >> 4) & 0x1F;
 		Rr = (instruction & 0x0F) | ((instruction & 0x200) >> 5);
 
+#ifdef _MSC_VER
 		_subborrow_u8(0, Register8(Rd), Register8(Rr), &Register8(Rd));
+#else
+        __asm__ __volatile__(
+		  "sub %1, %0\n\t"
+          : "+r"(Register8(Rd))
+          : "r"(Register8(Rr))
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -648,7 +676,17 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rr = (instruction & 0x0F) | ((instruction & 0x200) >> 5);
 		_z = GETF_ZERO();
 
+#ifdef _MSC_VER
 		_subborrow_u8(GETF_CARRY(), Register8(Rd), Register8(Rr), &Register8(Rd));
+#else
+        __asm__ __volatile__(
+		  "bt %2, 0\n\t"
+		  "sbb %1, %0\n\t"
+          : "+r"(Register8(Rd))
+          : "r"(Register8(Rr)),"r"((uint16_t)SREG)
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -668,7 +706,16 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = ((instruction >> 4) & 0x0F) + 16;
 		K = ((instruction >> 4) & 0xF0) | (instruction & 0x0F);
 
+#ifdef _MSC_VER
 		_subborrow_u8(0, Register8(Rd), K, &Register8(Rd));
+#else
+        __asm__ __volatile__(
+		  "sub %1, %0\n\t"
+          : "+r"(Register8(Rd))
+          : "r"(K)
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -689,7 +736,17 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		K = ((instruction >> 4) & 0xF0) | (instruction & 0x0F);
 		_z = GETF_ZERO();
 
+#ifdef _MSC_VER
 		_subborrow_u8(GETF_CARRY(), Register8(Rd), K, &Register8(Rd));
+#else
+        __asm__ __volatile__(
+		  "bt %2, 0\n\t"
+		  "sbb %1, %0\n\t"
+          : "+r"(Register8(Rd))
+          : "r"(K),"r"((uint16_t)SREG)
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -833,6 +890,7 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		break;
 	case OP_RETI:
 		SREG |= (1 << I);
+		[[fallthrough]];
 	case OP_RET:
 		STACK = STACK + 2;
 		PC = sram_.at(STACK - 1) << 8;
@@ -857,7 +915,15 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = (instruction >> 4) & 0x1F;
 		Rr = (instruction & 0x0F) | ((instruction & 0x200) >> 5);
 
+#ifdef _MSC_VER
 		_subborrow_u8(0, Register8(Rd), Register8(Rr), &nu.u8);
+#else
+        __asm__ __volatile__(
+		  "sub %1, %0\n\t"
+          :: "r"(Register8(Rd)), "r"(Register8(Rr))
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -879,7 +945,16 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 
 		_z = GETF_ZERO();
 
+#ifdef _MSC_VER
 		_subborrow_u8(GETF_CARRY(), Register8(Rd), Register8(Rr), &nu.u8);
+#else
+        __asm__ __volatile__(
+		  "bt %2, 0\n\t"
+		  "sub %1, %0\n\t"
+          :: "r"(Register8(Rd)), "r"(Register8(Rr)), "r"((uint16_t)SREG)
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -899,7 +974,15 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = ((instruction >> 4) & 0x0F) + 16;
 		K = (instruction & 0x0F) | ((instruction & 0xF00) >> 4);
 
+#ifdef _MSC_VER
 		_subborrow_u8(0, Register8(Rd), K, &nu.u8);
+#else
+        __asm__ __volatile__(
+		  "sub %0, %1\n\t"
+          :: "r"(Register8(Rd)), "r"(K)
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -981,8 +1064,17 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = ((instruction >> 4) & 0x03) * 2 + 24;
 		K = (instruction & 0x0F) | ((instruction >> 2) & 0x30);
 
+#ifdef _MSC_VER
 		_addcarry_u16(0, Register16(Rd), (uint16_t)K, &Register16(Rd));
-		eflags = __readeflags();
+#else
+        __asm__ __volatile__(
+		  "add %0, %1\n\t"
+		   : "+r"(Register16(Rd))
+		   : "r"((uint16_t)K)
+		   : "cc");
+#endif
+
+        eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
 		z = ((eflags & (1 << ZF)) >> (ZF - Z));
@@ -1000,7 +1092,15 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		Rd = ((instruction >> 4) & 0x03) * 2 + 24;
 		K = (instruction & 0x0F) | ((instruction >> 2) & 0x30);
 
+#ifdef _MSC_VER
 		_subborrow_u16(0, Register16(Rd), (uint16_t)K, &Register16(Rd));
+#else
+        __asm__ __volatile__(
+		  "sub %0, %1\n\t"
+          :: "r"(Register16(Rd)), "r"((uint16_t)K)
+          : "cc");
+#endif
+
 		eflags = __readeflags();
 
 		c = (eflags & (1 << CF));
@@ -1522,7 +1622,15 @@ SIM_IMPORT_EXPORT int AVRCore::Execute() {
 		PC = PC + 1;
 		CC = CC + 1;
 		break;
-	}
+    }
+	// sends a signal to the host
+    case OP_FAKE_SIGNAL:
+      if (signal_handler_) {
+		  signal_handler_(sram_);
+      }
+	  PC = PC + 1;
+	  CC = CC + 1;
+	  break;
 	default:
 		throw unknown_insruction(instruction);
 	}
@@ -1544,6 +1652,3 @@ SIM_IMPORT_EXPORT void AVRCore::PrintLastInstructions() {
 	std::cout << std::endl;
 	std::cout.flags(f);
 }
-#else 
-SIM_IMPORT_EXPORT int AVRCore::Execute() { return 0; }
-#endif // _MSC_VER

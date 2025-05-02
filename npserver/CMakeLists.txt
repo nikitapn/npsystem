@@ -22,34 +22,34 @@ add_definitions(
 
 target_include_directories(npserver PRIVATE
   ../npc/include
-	../avr_info/include
-	../sim/include
-	../nplib/include
-	../npdbclient/include
-	../npsys/include
-	../avr_firmware/include
-	../nprpc/include
+  ../avr_info/include
+  ../sim/include
+  ../nplib/include
+  ../npdbclient/include
+  ../npsys/include
+  ../avr_firmware/include
+  ../nprpc/include
 )
 
 target_link_libraries(npserver PUBLIC 
   nprpcst
-	leveldb
-	npdbstatic
-	npdbclient
-	sim
-	nplib
-	npsys
-	avr_info
-	nprpc
-	npc
+  leveldb
+  npdbstatic
+  npdbclient
+  sim
+  nplib
+  npsys
+  avr_info
+  nprpc
+  npc
 )
 
 if(UNIX)
-	target_link_libraries(npserver PUBLIC 
-		${BOOST_LIB_PREFIX}/libboost_system.a
-		${BOOST_LIB_PREFIX}/libboost_thread.a
-		${BOOST_LIB_PREFIX}/libboost_serialization.a
-		${BOOST_LIB_PREFIX}/libboost_log.a
-		pthread
-	)
+  target_link_libraries(npserver PUBLIC
+    ${BOOST_LIB_PREFIX}/libboost_system.a
+    ${BOOST_LIB_PREFIX}/libboost_thread.a
+    ${BOOST_LIB_PREFIX}/libboost_serialization.a
+    ${BOOST_LIB_PREFIX}/libboost_log.a
+    pthread
+  )
 endif()

@@ -21,7 +21,7 @@ struct DeviceLinks {
 	link_list lbyte;
 
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int file_version) {
+	void serialize(Archive & ar, const unsigned int /* file_version */) {
 		ar & lbit;
 		ar & lbyte;
 	}

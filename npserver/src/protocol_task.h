@@ -48,7 +48,8 @@ public:
 	t_send_raw(const void* data, const uint8_t len)
 		: t_no_answer(1)
 	{
-		std::memcpy(&(*f_)[0], data, len);
+		f_ = std::make_shared<frame>();
+		std::memcpy(f_->data(), data, len);
 		f_->set_length(len);
 	}
 };

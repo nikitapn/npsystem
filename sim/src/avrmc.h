@@ -24,7 +24,7 @@ class AvrMicrocontroller
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int /*file_version*/) { }
+	void serialize(Archive & /* ar */, const unsigned int /* file_version */) { }
 public:
 	// throws exception file not found
 	virtual void LoadFlash(std::string hex_file) = 0;
@@ -46,14 +46,14 @@ protected:
 private:
 	friend class boost::serialization::access;
 	template<class Archive>
-	void load(Archive& ar, const unsigned int version) {
+	void load(Archive& /* ar */, const unsigned int /* version */) {
 		sram_.resize(MC::RAMEND + 1);
 		memset(&sram_[0], 0x00, MC::RAMEND + 1);
 		core = std::make_unique<AVRCore>(MC::CHIP, flash_, sram_, eeprom_, 
 			(uint16_t*)(&sram_[0] + MC::SPL), &sram_[0] + MC::SREG, &sram_[0] + MC::UCSRA, MC::PAGE_SIZE, dev_addr_);
 	}
 	template<class Archive>
-	void save(Archive& ar, const unsigned int version) const {}
+	void save(Archive& /* ar */, const unsigned int /* version */) const {}
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int file_version) {
 		ar & boost::serialization::base_object<AvrMicrocontroller>(*this);
@@ -146,7 +146,7 @@ public:
 		});
 	}
 	virtual double ExecuteCore() final {
-		last_instruction_duration_ = (double)core->Execute() * tick_duration_s_;
+		last_instruction_duration_ = (double)core->Step() * tick_duration_s_;
 		time_internal_ += last_instruction_duration_;
 		return last_instruction_duration_;
 	}

@@ -10,7 +10,7 @@
 
 boost::pool<> ItemManagerImpl::pool_(sizeof(ItemManagerImpl), 32);
 
-void ItemManagerImpl::keep_alive_timer(std::shared_ptr<std::atomic_bool> del) {
+void ItemManagerImpl::keep_alive_timer(std::shared_ptr<std::atomic_bool> /* del */) {
 //	if (del->load() == true) return;
 
 //	if (timer_.expires_at() <= boost::asio::deadline_timer::traits_type::now()) {
@@ -36,7 +36,8 @@ void ItemManagerImpl::Advise(nprpc::flat::Span_ref<nps::flat::DataDef, nps::flat
 }
 
 // nprpc thread
-void ItemManagerImpl::UnAdvise(nprpc::flat::Span<uint64_t> a) {
+void ItemManagerImpl::UnAdvise(nprpc::flat::Span<uint64_t> /* a */) {
+
 }
 
 // nprpc thread

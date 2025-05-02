@@ -44,7 +44,7 @@ void trim(std::string& s) {
 	}
 }
 
-std::string online_value::to_string_impl(int precision, bool show_quality) const noexcept {
+std::string online_value::to_string_impl(int /* precision */, bool show_quality) const noexcept {
 	std::string result;
 	using namespace npsystem::types;
 	try

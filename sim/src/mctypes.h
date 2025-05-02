@@ -19,7 +19,7 @@ public:
 		uint8_t size;
 		//
 		template<class Archive>
-		void serialize(Archive& ar, const unsigned int file_version) {
+		void serialize(Archive& ar, const unsigned int /* file_version */) {
 			ar & instruction;
 			ar & op;
 			ar & size;
@@ -55,7 +55,7 @@ public:
 		return *(reinterpret_cast<uint8_t*>(&data_[addr_b / 2].instruction) + (addr_b % 2));
 	}
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
+	void serialize(Archive& ar, const unsigned int /* file_version */) {
 		ar & data_;
 	}
 protected:

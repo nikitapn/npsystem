@@ -37,7 +37,7 @@ public:
 	// protocol::listener
 	virtual void OnDataChanged(const std::vector<nps::server_value>& ar) override;
 
-	static void* operator new(std::size_t size) {
+	static void* operator new(std::size_t /* size */) {
 		std::lock_guard<std::mutex> lk(pool_lock_);
 		return pool_.malloc();
 	}

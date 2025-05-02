@@ -15,7 +15,7 @@ class VirtualDevice
 {
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int /*file_version*/) {}
+	void serialize(Archive& /* ar */, const unsigned int /*file_version*/) {}
 public:
 	virtual oid_t id() = 0;
 	virtual void run() = 0;
@@ -27,7 +27,7 @@ class VirtualController
 {
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
+	void serialize(Archive& ar, const unsigned int /* file_version */) {
 		ar & boost::serialization::base_object<VirtualDevice>(*this);
 	}
 };
@@ -37,7 +37,7 @@ class ExecutableVirtualAvrController
 {
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
+	void serialize(Archive& ar, const unsigned int /* file_version */) {
 		ar & boost::serialization::base_object<VirtualController>(*this);
 		ar & avr_;
 	}
@@ -56,7 +56,7 @@ class VirtualAvrPCLINK
 {
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
+	void serialize(Archive& ar, const unsigned int /* file_version */) {
 		ar & boost::serialization::base_object<ExecutableVirtualAvrController>(*this);
 	}
 public:
@@ -71,9 +71,9 @@ class VirtualAvrController
 {
 	friend boost::serialization::access;
 	template<class Archive>
-	void save(Archive& ar, const unsigned int /*file_version*/) const {}
+	void save(Archive& /* ar */, const unsigned int /*file_version*/) const {}
 	template<class Archive>
-	void load(Archive& ar, const unsigned int /*file_version*/) {
+	void load(Archive& /* ar */, const unsigned int /*file_version*/) {
 		ctrl.fetch();
 	}
 	template<class Archive>

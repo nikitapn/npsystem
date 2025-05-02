@@ -20,7 +20,6 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/bind.hpp>
 #include <boost/serialization/unique_ptr.hpp>
 
 #include <boost/pool/pool.hpp>

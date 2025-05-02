@@ -35,16 +35,16 @@ private:
 	}
 	friend class boost::serialization::access;
 	template<class Archive>
-	void load(Archive& ar, const unsigned int version) {
+	void load(Archive& /* ar */, const unsigned int /* version */) {
 		set_peripheral();
 	}
 	template<class Archive>
-	void save(Archive& ar, const unsigned int version) const {}
+	void save(Archive& /* ar */, const unsigned int /* version */) const {}
 	
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int file_version) {
+	void serialize(Archive & ar, const unsigned int version) {
 		ar & boost::serialization::base_object<base>(*this);
-		boost::serialization::split_member(ar, *this, file_version);
+		boost::serialization::split_member(ar, *this, version);
 	}
 };
 

@@ -15,7 +15,7 @@ void CControlUnit::SetScanPeriodMs(uint16_t _scan_period) {
 }
 
 // CAlgorithms
-void CAlgorithms::CreateAlgorithmCat(std::string&& name) noexcept {
+void CAlgorithms::CreateAlgorithmCat(std::string&& /* name */) noexcept {
 	
 }
 

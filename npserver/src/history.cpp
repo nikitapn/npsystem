@@ -78,7 +78,7 @@ class HistoryImpl : public protocol::listener {
 			current_ = static_cast<char*>(current_) + 16;
 		}
 
-		FileMap(const char* file_path, oid_t oid = 0, size_t value_size = 0)
+		FileMap(const char* file_path, oid_t oid = 0)
 			: file_(file_path, bip::read_write)
 			, map_(file_, bip::read_write, 0, cv_max_temp_size)
 		{
@@ -101,6 +101,7 @@ class HistoryImpl : public protocol::listener {
 	};
 
 	void E(int rc, const std::source_location location = std::source_location::current()) {
+		(void)rc; (void)location;
 		//if (rc == MDB_SUCCESS) return;
 
 		// copying the error message placed in closed stack frame to std::string (win32 only)
@@ -139,7 +140,7 @@ class HistoryImpl : public protocol::listener {
 
 		auto res = files_.emplace(
 			oid,
-			std::make_unique<FileMap>(reinterpret_cast<const char*>(file.u8string().c_str()), oid, 8)
+			std::make_unique<FileMap>(reinterpret_cast<const char*>(file.u8string().c_str()), oid)
 		);
 
 		assert(res.second);
@@ -348,19 +349,18 @@ public:
 	}
 };
 
-History::~History() {
-	delete impl_;
-}
-
 History::History() {
 	std::filesystem::path data_path(g_cfg.data_dir);
 	data_path /= "history";
-	impl_ = new HistoryImpl(data_path);
+	impl_ = std::make_unique<HistoryImpl>(data_path);
+}
+
+History::~History() {
 }
 
 protocol::listener* History::get_listener() noexcept {
 	assert(impl_);
-	return impl_;
+	return impl_.get();
 }
 
 void History::add_parameter(oid_t param_id) {

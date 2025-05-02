@@ -76,7 +76,7 @@ int VirtualAvrPCLINK::send_recive(const frame &output, frame &received, size_t e
 
 	while (until > steady_clock::now()) {
 		if (answer && (answer < frame::max_size())) {
-			int recv_len = answer;
+			auto recv_len = answer;
 			received.set_length(recv_len);
 			memcpy(received.data(), buf, recv_len);
 			answer = 0;

@@ -117,7 +117,7 @@ public:
 	virtual bool AddToNetwork(npsys::device_n device);
 #endif // _NPSERVER_
 	CVirtualAVRPCLINK() = default;
-	CVirtualAVRPCLINK(int create_new)
+	CVirtualAVRPCLINK(int /* create_new */)
 		: CNetworkDevice("Virtual Bridge", 0)
 	{
 	}

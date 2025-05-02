@@ -18,7 +18,7 @@ public:
 		AvrPeripheral::Setup(sram, tick_duration, ev);
 		dev_addr_ = dev_addr;
 	}
-	int Execute(uint64_t time_gap) {
+	int Execute(uint64_t /* time_gap */) {
 		auto ucsrb = reg(MC::UCSRB);
 		// auto ucsra = reg(MC::UCSRA);
 
@@ -42,7 +42,7 @@ public:
 template<typename MC>
 class AtmegaExtInterrupt0 : public AvrPeripheral {
 public:
-	int Execute(uint64_t time_gap) {
+	int Execute(uint64_t /* time_gap */) {
 		if (mstate_->is_int_0_changed()) {
 			auto pind = reg(MC::PIND);
 			pind &= ~(1 << MC::PD2);

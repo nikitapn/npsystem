@@ -57,7 +57,7 @@ class CControlUnit
 	, public IUploadable {
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int file_version) {
+	void serialize(Archive & ar, const unsigned int /* file_version */) {
 		ar & name_;
 		ar & cat;
 		ar & assigned_dev;
@@ -139,7 +139,7 @@ class CFBDControlUnit
 #endif
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int file_version) {
+	void serialize(Archive & ar, const unsigned int /* file_version */) {
 		ar & boost::serialization::base_object<CControlUnit>(*this);
 		ar & editor_;
 		ar & fbd_blocks;
@@ -203,7 +203,7 @@ class CSFCControlUnit
 #endif
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int file_version) {
+	void serialize(Archive & ar, const unsigned int /* file_version */) {
 		ar & boost::serialization::base_object<CControlUnit>(*this);
 		ar & editor_;
 	}

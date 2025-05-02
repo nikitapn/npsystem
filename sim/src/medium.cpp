@@ -30,7 +30,7 @@ void Medium::stop() noexcept {
 
 uint64_t Medium::GetCpuFrequency(uint64_t seconds) {
 	volatile int i = 0;
-	for (; i < 1000000; ++i);
+	for (; i < 1000000; i = i + 1);
 	auto a = __rdtsc();
 	std::this_thread::sleep_for(std::chrono::seconds(seconds));
 	auto b = __rdtsc();

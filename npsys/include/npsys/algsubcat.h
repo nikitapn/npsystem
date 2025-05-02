@@ -11,7 +11,7 @@ class CAlgorithmCat
 	, public odb::systree_item<CAlgorithmCat> {
 	friend boost::serialization::access;
 	template<class Archive>
-	void serialize(Archive& ar, const unsigned int file_version) {
+	void serialize(Archive& ar, const unsigned int /* file_version */) {
 		ar & name_;
 		ar & units;
 	}

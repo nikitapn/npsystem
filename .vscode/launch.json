@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "cppdbg",
+      "request": "launch",
+      "name": "Launch debug",
+      "program": "${workspaceFolder}/build/linux/bin/${input:executableName}",
+      "args": [],
+      "cwd": "${workspaceFolder}/sim/test/firmware/out",
+      "stopAtEntry": false
+    }
+  ],
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "executableName",
+      "description": "Enter the name of the executable to debug (e.g., npnameserver, npdbserver, npserver, test_sim)"
+    }
+  ]
+}

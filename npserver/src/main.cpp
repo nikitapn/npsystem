@@ -166,7 +166,7 @@ public:
 		data.length(size);
 		auto span = data();
 
-		for (int i = 0; i < size; ++i) {
+		for (size_t i = 0; i < size; ++i) {
 			span[i] = flash[i].instruction;
 		}
 	}
@@ -203,10 +203,10 @@ public:
 		return false;
 	}
 
-	virtual void Notify_ParameterRemoved(cbt1::oid_t param_id) {
+	virtual void Notify_ParameterRemoved(cbt1::oid_t /* param_id */) {
 	}
 
-	virtual void Notify_TypeOrVariableChanged(cbt1::oid_t param_id) {
+	virtual void Notify_TypeOrVariableChanged(cbt1::oid_t /* param_id */) {
 	}
 
 	virtual void History_AddParameter(cbt1::oid_t param_id) {
@@ -217,7 +217,7 @@ public:
 		g_hist->remove_parameter(param_id);
 	}
 
-	virtual void GetNetworkStatus(/*out*/nprpc::flat::Vector_Direct1<uint8_t> network_status) {
+	virtual void GetNetworkStatus(/*out*/nprpc::flat::Vector_Direct1<uint8_t> /* network_status */) {
 	}
 };
 
@@ -227,7 +227,7 @@ public:
 std::unique_ptr<protocol::protocol_service> proto;
 std::unique_ptr<History> g_hist;
 
-void sigint_handler(int sig_num) {
+void sigint_handler(int /* sig_num */) {
 	std::cout << "npserver is shutting down..." << std::endl;
 	try {
 		proto->stop();
@@ -254,9 +254,9 @@ void watch_x() {
 #endif
 
 #ifdef _WIN32
-int start(int argc, char** argv, Service::ready_t* ready = nullptr) {
+int start(int /* argc */, char** /* argv */, Service::ready_t* ready = nullptr) {
 #else 
-int start(int argc, char** argv) {
+int start(int /* argc */, char** /* argv */) {
 #endif
 
 #ifdef _WIN32

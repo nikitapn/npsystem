@@ -169,8 +169,7 @@ struct FirmwareInfo {
 
 struct PCLinkInfo {
 	template<typename Archive>
-		void serialize(Archive& ar, const int /*file_version*/) {	
-		}
+		void serialize(Archive& /* ar */, const int /*file_version*/) { }
 };
 
 struct VirtualPCLinkInfo {

@@ -18,7 +18,6 @@ public:
 
 inline bool IsNumber(const char* lpsz, size_t len) noexcept {
 	if (lpsz == nullptr) return false;
-	if (len == -1) len = strlen(lpsz);
 	if (len == 0) return false;
 
 	const char* p;
@@ -117,7 +116,7 @@ inline void ParseTextValue(const char* lpsz, size_t len, float& value) {
 	auto [ptr, ec] = std::from_chars(lpsz, lpsz + len, value);
 	if (ec == std::errc()) return;
 #else
-	if (sscanf(lpsz, "f", &value) != EOF) return;
+	if (sscanf(lpsz, "%f", &value) != EOF) return;
 #endif
 	throw input_error("The data have incorrect format");
 }
@@ -133,7 +132,7 @@ inline void ParseTextValue(const char* lpsz, size_t len, double& value) {
 	auto [ptr, ec] = std::from_chars(lpsz, lpsz + len, value);
 	if (ec == std::errc()) return;
 #else
-	if (sscanf(lpsz, "lf", &value) != EOF) return;
+	if (sscanf(lpsz, "%lf", &value) != EOF) return;
 #endif
 	throw input_error("The data have incorrect format");
 }

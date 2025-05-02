@@ -6,6 +6,8 @@
 #include <ostream>
 #include <iomanip>
 #include <algorithm>
+#include <cstdint>
+#include <array>
 
 class frame_invalid_size : public std::runtime_error {
 public:
@@ -13,7 +15,7 @@ public:
 };
 
 class frame {
-	static constexpr auto max_size_ = 256; // don't change
+	static constexpr size_t max_size_ = 256; // don't change
 	
 	using buffer_t = std::array<uint8_t, max_size_>;
 	buffer_t data_;
@@ -24,7 +26,7 @@ class frame {
 		return length_ >= 4;
 	}
 public:
-	static constexpr auto max_size() noexcept {
+	static constexpr size_t max_size() noexcept {
 		return max_size_;
 	}
 
@@ -94,11 +96,11 @@ public:
 };
 
 namespace boost::asio {
-inline const_buffers_1 buffer(const frame& f) {
+inline auto buffer(const frame& f) {
 	return boost::asio::buffer(f.data(), f.length());
 }
 
-inline mutable_buffers_1 buffer(frame& f) {
+inline auto buffer(frame& f) {
 	return boost::asio::buffer(f.data(), frame::max_size());
 }
 } // namespace boost::asio

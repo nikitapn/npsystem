@@ -62,7 +62,7 @@ public:
 };
 
 
-int main(int argc, char* argv[]) {
+int main() {
 #ifdef _WIN32
 	SetConsoleOutputCP(CP_UTF8);
 	// Enable buffering to prevent VS from chopping up UTF-8 byte sequences

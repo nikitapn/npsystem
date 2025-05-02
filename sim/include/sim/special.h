@@ -32,7 +32,7 @@ public:
 	static constexpr uint64_t ONE_BIT_DURATION_19200 = 52083;
 //	static constexpr uint64_t ONE_BIT_DURATION_19200 = 20000;
 
-	void uart_put_byte(uint8_t byte, uint8_t dev_addr) noexcept {
+	void uart_put_byte(uint8_t byte, uint8_t /* dev_addr */) noexcept {
 		bool value = false;
 		if (uart_byte_sending_.compare_exchange_strong(value, true)) {
 			uart_byte_to_send_ = byte;

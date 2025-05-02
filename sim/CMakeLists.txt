@@ -36,3 +36,5 @@ else()
   )
   target_compile_options(sim PRIVATE -fPIC)
 endif()
+
+add_subdirectory(test)

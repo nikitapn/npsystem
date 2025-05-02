@@ -182,7 +182,7 @@ void environment::sync_time(const boost::system::error_code& ec) noexcept {
 
 namespace npsys {
 
-bool CServer::AddToNetwork(npsys::device_n device) {
+bool CServer::AddToNetwork(npsys::device_n /* device */) {
 	return true;
 }
 
@@ -228,7 +228,7 @@ bool CAVRController::AddToNetwork(npsys::device_n device) {
 	
 	return true;
 }
-bool CVirtualAVRPCLINK::AddToNetwork(npsys::device_n device) {
+bool CVirtualAVRPCLINK::AddToNetwork(npsys::device_n /* device */) {
 	return true;
 }
 

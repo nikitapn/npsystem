@@ -28,7 +28,7 @@ void NPRPC_System::server_init() {
 
 void NPRPC_System::init(
 	boost::asio::io_context& ioc,
-	uint16_t port,
+	uint16_t /* port */,
 	std::string_view nameserver_ip,
 	std::string_view key_file_path,
 	std::string_view module_name,

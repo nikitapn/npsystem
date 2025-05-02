@@ -80,7 +80,11 @@ namespace net {
 #define F_NO_ANSWER			0x40
 
 #ifdef NPSYSTEM_FIRMWARE_API_CPP
-#pragma warning(disable : 4200)  
+
+#ifdef _MSC_VER
+#pragma warning(disable : 4200)
+#endif
+
 #pragma pack(push, 1)
 
 #endif
@@ -281,7 +285,11 @@ namespace net {
 
 #ifdef NPSYSTEM_FIRMWARE_API_CPP
 #pragma pack(pop)
+
+#ifdef _MSC_VER
 #pragma warning(default : 4200)
+#endif
+
 #endif
 
 #ifndef NPSYSTEM_FIRMWARE_API_CPP

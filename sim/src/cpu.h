@@ -40,10 +40,12 @@ public:
 
 class AVRCore
 {
-public:
+ public:
+    using signal_t = std::function<void(const sram_t&)>;
+
 	SIM_IMPORT_EXPORT AVRCore(MICROCONTROLLER mc, Flash& flash, sram_t& sram,  eeprom_t& eeprom, 
 		uint16_t* sp_ptr, uint8_t* sreg_ptr, uint8_t* ucsra_ptr, int page_size, uint8_t dev_addr);
-	SIM_IMPORT_EXPORT int Execute();
+	SIM_IMPORT_EXPORT int Step();
 	SIM_IMPORT_EXPORT void PrintRegisterFile() const;
 	SIM_IMPORT_EXPORT void PrintSRAM() const;
 	SIM_IMPORT_EXPORT void PrintCurrentInstruction() const;
@@ -60,6 +62,9 @@ public:
 	}
 	void SetMediumState(MediumState* mstate) noexcept {
 		mstate_ = mstate;
+	}
+	void SetSignalHandler(signal_t signal_handler) noexcept {
+		signal_handler_ = signal_handler;
 	}
 	EventList ev_list_;
 protected:
@@ -86,6 +91,7 @@ protected:
 	using int_queue_t = boost::lockfree::spsc_queue<uint16_t, boost::lockfree::capacity<16>>;
 	int_queue_t interrupts_;
 	MediumState* mstate_ = nullptr;
+	signal_t signal_handler_;
 };
 
 #endif // CPU_H_
