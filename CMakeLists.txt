@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28.1)
+cmake_minimum_required(VERSION 4.0.1)
 
 set(BOOST_LIB_PREFIX "/usr/lib" CACHE STRING "Location of the boost libs")
 option(OPT_BUILD_ONLY_RPC "Enable if only nprpc is needed" OFF)
@@ -13,8 +13,11 @@ endif()
 message(STATUS "Building: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
+if (UNIX)
+  set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
+  set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+endif()
 
 if(WIN32)
   if ("${OPT_BOOST_INCLUDE_DIR}" STREQUAL "")
@@ -80,15 +83,29 @@ if(WIN32)
 
   add_definitions(
     -D_WIN32_WINNT=0x0A00
+    -DBOOST_DISABLE_CURRENT_LOCATION
+    -DBOOST_ASIO_DISABLE_CO_AWAIT
+    -DBOOST_ASIO_DISABLE_STD_COROUTINE
   )
 
-  add_compile_options(/W3 /bigobj)
+  add_compile_options(/W3 /bigobj /EHsc)
 else()
   add_compile_options(-Wall -Wextra -ftemplate-backtrace-limit=0)
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
 project(npsystem)
+
+# setting up GoogleTest
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

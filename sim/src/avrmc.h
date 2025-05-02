@@ -27,7 +27,7 @@ private:
 	void serialize(Archive & /* ar */, const unsigned int /* file_version */) { }
 public:
 	// throws exception file not found
-	virtual void LoadFlash(std::string hex_file) = 0;
+	virtual void LoadFlash(std::string_view hex_file) = 0;
 	virtual AVRCore* GetCore() = 0;
 	virtual void PrintIOSpace() = 0;
 	virtual sram_t& GetSram() = 0;
@@ -102,7 +102,7 @@ public:
 	}
 	virtual sram_t& GetSram() { return sram_; }
 	virtual Flash& GetFlash() { return flash_; }
-	virtual void LoadFlash(std::string hex_file) override
+	virtual void LoadFlash(std::string_view hex_file) override
 	{
 		hex_file_ = hex_file;
 		

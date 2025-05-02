@@ -214,7 +214,8 @@ class CFBDBlock
 #endif
 */
 	template<class Archive>
-	void serialize(Archive & ar, const unsigned int /* file_version */) {
+	void serialize(Archive & ar, const unsigned int file_version) {
+		(void)file_version;
 		ar & name_;
 		ar & slots;
 #ifdef _CONFIGURATOR_

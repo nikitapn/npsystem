@@ -618,12 +618,12 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 #ifdef _MSC_VER
 		_addcarry_u8(GETF_CARRY(), Register8(Rd), Register8(Rr), &Register8(Rd));
 #else
-        __asm__ __volatile__(
-		  "bt %2, 0\n\t"
-          "adc %1, %0\n\t"
-          : "+r"(Register8(Rd))
-          : "r"(Register8(Rr)),"r"((uint16_t)SREG)
-          : "cc");
+    __asm__ __volatile__(
+      "bt %3, %2\n\t"
+      "adc %1, %0\n\t"
+      : "+r"(Register8(Rd))
+      : "r"(Register8(Rr)),"r"((uint16_t)SREG), "i"(0)
+      : "cc");
 #endif
 		eflags = __readeflags();
 
@@ -650,7 +650,7 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(0, Register8(Rd), Register8(Rr), &Register8(Rd));
 #else
         __asm__ __volatile__(
-		  "sub %1, %0\n\t"
+          "sub %1, %0\n\t"
           : "+r"(Register8(Rd))
           : "r"(Register8(Rr))
           : "cc");
@@ -680,10 +680,10 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(GETF_CARRY(), Register8(Rd), Register8(Rr), &Register8(Rd));
 #else
         __asm__ __volatile__(
-		  "bt %2, 0\n\t"
-		  "sbb %1, %0\n\t"
+          "bt %3, %2\n\t"
+          "sbb %1, %0\n\t"
           : "+r"(Register8(Rd))
-          : "r"(Register8(Rr)),"r"((uint16_t)SREG)
+          : "r"(Register8(Rr)),"r"((uint16_t)SREG), "i"(0)
           : "cc");
 #endif
 
@@ -710,7 +710,7 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(0, Register8(Rd), K, &Register8(Rd));
 #else
         __asm__ __volatile__(
-		  "sub %1, %0\n\t"
+          "sub %1, %0\n\t"
           : "+r"(Register8(Rd))
           : "r"(K)
           : "cc");
@@ -740,10 +740,10 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(GETF_CARRY(), Register8(Rd), K, &Register8(Rd));
 #else
         __asm__ __volatile__(
-		  "bt %2, 0\n\t"
-		  "sbb %1, %0\n\t"
+          "bt %3, %2\n\t"
+          "sbb %1, %0\n\t"
           : "+r"(Register8(Rd))
-          : "r"(K),"r"((uint16_t)SREG)
+          : "r"(K),"r"((uint16_t)SREG), "i"(0)
           : "cc");
 #endif
 
@@ -919,7 +919,7 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(0, Register8(Rd), Register8(Rr), &nu.u8);
 #else
         __asm__ __volatile__(
-		  "sub %1, %0\n\t"
+          "sub %1, %0\n\t"
           :: "r"(Register8(Rd)), "r"(Register8(Rr))
           : "cc");
 #endif
@@ -949,9 +949,9 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(GETF_CARRY(), Register8(Rd), Register8(Rr), &nu.u8);
 #else
         __asm__ __volatile__(
-		  "bt %2, 0\n\t"
-		  "sub %1, %0\n\t"
-          :: "r"(Register8(Rd)), "r"(Register8(Rr)), "r"((uint16_t)SREG)
+          "bt %3, %2\n\t"
+          "sub %1, %0\n\t"
+          :: "r"(Register8(Rd)), "r"(Register8(Rr)), "r"((uint16_t)SREG), "i"(0)
           : "cc");
 #endif
 
@@ -978,7 +978,7 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 		_subborrow_u8(0, Register8(Rd), K, &nu.u8);
 #else
         __asm__ __volatile__(
-		  "sub %0, %1\n\t"
+          "sub %0, %1\n\t"
           :: "r"(Register8(Rd)), "r"(K)
           : "cc");
 #endif
@@ -1067,11 +1067,11 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 #ifdef _MSC_VER
 		_addcarry_u16(0, Register16(Rd), (uint16_t)K, &Register16(Rd));
 #else
-        __asm__ __volatile__(
-		  "add %0, %1\n\t"
-		   : "+r"(Register16(Rd))
-		   : "r"((uint16_t)K)
-		   : "cc");
+    __asm__ __volatile__(
+      "add %0, %1\n\t"
+      : "+r"(Register16(Rd))
+      : "r"((uint16_t)K)
+      : "cc");
 #endif
 
         eflags = __readeflags();
@@ -1095,10 +1095,10 @@ SIM_IMPORT_EXPORT int AVRCore::Step() {
 #ifdef _MSC_VER
 		_subborrow_u16(0, Register16(Rd), (uint16_t)K, &Register16(Rd));
 #else
-        __asm__ __volatile__(
-		  "sub %0, %1\n\t"
-          :: "r"(Register16(Rd)), "r"((uint16_t)K)
-          : "cc");
+    __asm__ __volatile__(
+      "sub %0, %1\n\t"
+      :: "r"(Register16(Rd)), "r"((uint16_t)K)
+      : "cc");
 #endif
 
 		eflags = __readeflags();

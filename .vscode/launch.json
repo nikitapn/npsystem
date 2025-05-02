@@ -8,7 +8,13 @@
       "program": "${workspaceFolder}/build/linux/bin/${input:executableName}",
       "args": [],
       "cwd": "${workspaceFolder}/sim/test/firmware/out",
-      "stopAtEntry": false
+      "stopAtEntry": false,
+      "setupCommands": [
+        {
+          "description": "Enable Intel disassembly syntax",
+          "text": "-gdb-set disassembly-flavor intel"
+        }
+      ]
     }
   ],
   "inputs": [
