@@ -22,7 +22,7 @@ def run_process(command: list[str]):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--no_server", help="Do not start the server",
+    parser.add_argument("--no-server", help="Do not start the server",
                     action="store_true")
     args = parser.parse_args()
 

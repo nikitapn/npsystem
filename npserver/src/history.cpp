@@ -350,7 +350,7 @@ public:
 };
 
 History::History() {
-	std::filesystem::path data_path(g_cfg.data_dir);
+	std::filesystem::path data_path(g_cfg.data_dir());
 	data_path /= "history";
 	impl_ = std::make_unique<HistoryImpl>(data_path);
 }

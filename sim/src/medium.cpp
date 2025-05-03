@@ -13,28 +13,18 @@ Medium::Medium()
 	paused_.store(false);
 	running_.store(false);
 	controllers_.fill(nullptr);
-	cpu_frequency_ = (double)GetCpuFrequency(1);
 }
 
 void Medium::start() noexcept {
 	running_ = true;
-	medium_thread_ = std::move(std::thread(&Medium::MediumProc, this));
-	core_thread_ = std::move(std::thread(&Medium::CoreProc, this));
+	medium_thread_ = std::thread(&Medium::MediumProc, this);
+	core_thread_ = std::thread(&Medium::CoreProc, this);
 }
 
 void Medium::stop() noexcept {
 	running_ = false;
 	medium_thread_.join();
 	core_thread_.join();
-}
-
-uint64_t Medium::GetCpuFrequency(uint64_t seconds) {
-	volatile int i = 0;
-	for (; i < 1000000; i = i + 1);
-	auto a = __rdtsc();
-	std::this_thread::sleep_for(std::chrono::seconds(seconds));
-	auto b = __rdtsc();
-	return static_cast<uint64_t>((b - a) / seconds);
 }
 
 SIM_IMPORT_EXPORT
@@ -85,19 +75,18 @@ int Medium::CoreProc() noexcept {
 		while (running_.load(std::memory_order_relaxed)) {
 			wait_if_paused();
 			if (!controllers_count_) continue;
-			auto ca = __rdtsc();
-			auto duration = 0.0;
+			auto tp0 = std::chrono::high_resolution_clock::now();
+			uint64_t duration = 0ull;
 			for (size_t ix = 0; ix < controllers_count_; ++ix) {
-				duration += controllers_[ix]->ExecuteCore();
-			}
-			duration = duration / (double)controllers_count_;// -0.0000000118;
-			uint64_t cc_next = ca + static_cast<uint64_t>(duration * cpu_frequency_);
-			if (cc_next < __rdtsc()) {
-				// std::cerr << "$\n";
-				// runtime_simulation_failed_cnt++;
-				continue;
-			}
-			while (__rdtsc() < cc_next);
+				duration += controllers_[ix]->CoreStep();
+            }
+			duration = duration / controllers_count_;
+            std::chrono::high_resolution_clock::time_point tp1;
+			uint64_t real_duration;
+            do {
+				tp1 = std::chrono::high_resolution_clock::now();
+				real_duration = static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(tp1 - tp0).count());
+			} while (real_duration < duration);
 		}
 	} catch (std::exception& ex) {
 		std::cerr << "AVR EXECUTION ERROR: " << ex.what() << '\n';

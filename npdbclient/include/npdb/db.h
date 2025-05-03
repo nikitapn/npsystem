@@ -1353,8 +1353,7 @@ private:
 			"Cannot assign from a different objects");
 		assert(n.loaded());
 		id_ = n.id();
-		// TODO: change to shared_ptr pointer cast to avoid warning
-		ptr_ = reinterpret_cast<typename node_t::smart_pointer&>(const_cast<U&>(n).data_);
+		ptr_ = std::reinterpret_pointer_cast<typename node_t::smart_pointer::element_type>(const_cast<U&>(n).data_);
 	}
 	template<class U>
 	std::enable_if_t<U::node_type == WEAK_NODE> assign(const U& n) {
@@ -1363,7 +1362,7 @@ private:
 			std::is_base_of_v<typename U::type_t, type_t>,
 			"Cannot assign from a different objects");
 		id_ = n.id_;
-		// TODO: change to shared_ptr pointer cast to avoid warning
+		// ptr_ = std::reinterpret_pointer_cast<typename node_t::policy::weak_pointer>(const_cast<U&>(n).ptr_);
 		ptr_ = reinterpret_cast<typename node_t::policy::weak_pointer&>(const_cast<U&>(n).ptr_);
 	}
 };

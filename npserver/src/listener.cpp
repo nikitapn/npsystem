@@ -84,13 +84,12 @@ void listener::process_registers(std::shared_ptr<updated_registers_t> registers)
 		if (it == end) continue;
 	
 		for (const auto& ch : it->second) {
-			ar.push_back({});
-			auto& back = ar.back();
+			auto& back = ar.emplace_back();
 			
 			back.h = ch.first.handle;
 			auto type = ch.second;
 
-			//	cout << "type: " << std::hex << (int)type << endl;
+			// std::cout << "type: " << std::hex << (int)type << std::endl;
 
 			if (reg->op_available == RegStatus::REG_DEVICE_NOT_RESPONDED) {
 				back.s = nps::var_status::VST_DEVICE_NOT_RESPONDED;
@@ -111,10 +110,10 @@ void listener::process_registers(std::shared_ptr<updated_registers_t> registers)
 		}
 	}
 
-	//	cout << "Updated: " << upd_size << endl;
+	// std::cout << "Updated: " << ar.size() << std::endl;
 
 	if (!ar.empty()) OnDataChanged(ar);
-	task_count_--;
+	--task_count_;
 }
 
 // strand context

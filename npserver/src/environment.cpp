@@ -51,12 +51,10 @@ void environment::init() {
 
 	std::fill(br_map_.begin(), br_map_.end(), nullptr);
 
-#ifdef _MSC_VER
 	if (!v_pc_link_serv.fetch()) {
 		v_pc_link_serv.create(VirtualAvrPCLINK::Create());
 	}
 	br_map_[0] = v_pc_link_serv.get(); // pc? // virtual-pc-link
-#endif // _MSC_VER
 
 	br_map_[1] = br_udp.get(); // p-net bridge
 	vc_list_.fetch_all_nodes();
@@ -69,12 +67,10 @@ void environment::init() {
 		}
 	}
 
-#ifdef _MSC_VER
 	if (g_cfg.virtual_environment == 1) {
 		v_pc_link_serv->run();
 		std::cout << clr::color::green << "virtual pc link started." << clr::color::reset << std::endl;
 	}
-#endif // _MSC_VER
 }
 
 void environment::init_service_thread() {

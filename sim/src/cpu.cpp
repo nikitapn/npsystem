@@ -333,7 +333,7 @@ inline void AVRCore::normalize_pc()
 }
 
 // TODO: add sram memory boundary check
-SIM_IMPORT_EXPORT int AVRCore::Step()
+SIM_IMPORT_EXPORT uint64_t AVRCore::Step()
 {
   if (ev_list_.increase_tcnt0) {
     sram_[0x52]++;

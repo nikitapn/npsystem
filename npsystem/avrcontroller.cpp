@@ -356,8 +356,8 @@ bool CAVRController::LoadFirmware() noexcept {
 	// -c usbasp -p m8 -e -U flash:w:..\\atmega8\\build\\atmega8_4.hex:i
 	// -U eeprom:w:..\\atmega16\\build\\atmega16_2.eep:i
 	global.ChangeCurrentDirectory(CurrentDirectory::MODULE);
-	std::string hex = "..\\firmware\\" + controller_type + "_" + std::to_string(dev_addr) + ".hex";
-	std::string eeprom = "..\\firmware\\" + controller_type + "_" + std::to_string(dev_addr) + ".eep";
+	std::string hex = "data\\avr\\firmware\\" + controller_type + "_" + std::to_string(dev_addr) + ".hex";
+	std::string eeprom = "data\\avr\\firmware\\" + controller_type + "_" + std::to_string(dev_addr) + ".eep";
 	std::string cmd = g_cfg.avrdude_exe + " -c " + g_cfg.avr_programmer + " -p " + GetFirmwareInfo().mccfg.partno + fuses +
 		" -e -U flash:w:\"" + hex + "\":i -U eeprom:w:\"" + eeprom + "\":i ";
 	

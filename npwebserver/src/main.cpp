@@ -95,7 +95,7 @@ int main() {
 		auto oid = poa->activate_object(&web_server);
 		
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
-		odb::Database::init(nameserver.get(), poa, g_cfg.data_dir / "keys", "npwebserver");
+		odb::Database::init(nameserver.get(), poa, g_cfg.data_dir() / "keys", "npwebserver");
 
 		nameserver->Bind(oid, "npsystem_webserver");
 

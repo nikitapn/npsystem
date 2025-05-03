@@ -16,6 +16,7 @@
 #include "hexparserflash.h"
 #include <npdb/db_serialization.h>
 #include "../include/sim/medium.h"
+#include <cmath>
 
 class AvrMicrocontroller 
 	: public odb::common_interface<AvrMicrocontroller>
@@ -32,7 +33,7 @@ public:
 	virtual void PrintIOSpace() = 0;
 	virtual sram_t& GetSram() = 0;
 	virtual Flash& GetFlash() = 0;
-	virtual double GetTime() const = 0;
+	virtual uint64_t GetTime() const = 0;
 	virtual uint64_t GetFrequency() const noexcept = 0;
 };
 
@@ -78,14 +79,14 @@ protected:
 	std::unique_ptr<AVRCore> core;
 	uint8_t dev_addr_;
 
-	double time_internal_ = 0.0;
-	double last_instruction_duration_ = 0.0;
+	uint64_t time_internal_ = 0ull;
+	uint64_t last_instruction_duration_ = 0ull;
 public:
 	Microcontroller_Base() = default;
 	Microcontroller_Base(uint64_t frequency, uint8_t dev_addr) noexcept
 		: frequency_(frequency)
 		, tick_duration_s_(1.0 / (double)frequency)
-		, tick_duration_ns_(1'000'000'000 / frequency)
+		, tick_duration_ns_(std::llround(1'000'000'000.0 / (double)frequency))
 		, dev_addr_(dev_addr)
 	{
 
@@ -118,7 +119,7 @@ public:
 	{
 		return core.get();
 	}
-	virtual double GetTime() const { return time_internal_; };
+	virtual uint64_t GetTime() const { return time_internal_; };
 	virtual void PrintIOSpace() override
 	{
 	/*	int k = 1;
@@ -145,8 +146,8 @@ public:
 			if (result != -1) core->Interrupt(result);
 		});
 	}
-	virtual double ExecuteCore() final {
-		last_instruction_duration_ = (double)core->Step() * tick_duration_s_;
+	virtual uint64_t CoreStep() final {
+		last_instruction_duration_ = core->Step() * tick_duration_ns_;
 		time_internal_ += last_instruction_duration_;
 		return last_instruction_duration_;
 	}

@@ -45,7 +45,7 @@ class AVRCore
 
 	SIM_IMPORT_EXPORT AVRCore(MICROCONTROLLER mc, Flash& flash, sram_t& sram,  eeprom_t& eeprom, 
 		uint16_t* sp_ptr, uint8_t* sreg_ptr, uint8_t* ucsra_ptr, int page_size, uint8_t dev_addr);
-	SIM_IMPORT_EXPORT int Step();
+	SIM_IMPORT_EXPORT uint64_t Step();
 	SIM_IMPORT_EXPORT void PrintRegisterFile() const;
 	SIM_IMPORT_EXPORT void PrintSRAM() const;
 	SIM_IMPORT_EXPORT void PrintCurrentInstruction() const;

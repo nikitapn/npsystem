@@ -275,20 +275,15 @@ int start(int /* argc */, char** /* argv */) {
 		std::cout << "main_thread_id: " << std::this_thread::get_id() << std::endl;
 	}
 
-#ifdef _WIN32
-	avrinfo::AVRInfo::SetDataPath(nplib::config::GetExecutableRootPath() / "data");
-#else 
-	avrinfo::AVRInfo::SetDataPath(g_cfg.data_dir / "data");
-#endif
-
-	if (!std::filesystem::exists(g_cfg.data_dir)) {
-		std::cerr << "data directory not found: " << g_cfg.data_dir << '\n';
+	if (!std::filesystem::exists(g_cfg.data_dir())) {
+		std::cerr << "data directory not found: " << g_cfg.data_dir() << '\n';
 		return -1;
 	}
 
+	avrinfo::AVRInfo::SetDataPath(g_cfg.assets_dir());
+
 	try {
-		auto keypath = g_cfg.data_dir;
-		keypath /= "keys";
+		auto keypath = g_cfg.data_dir() / "keys";
 
 		nps::Server_ServantImpl server_servant1;
 

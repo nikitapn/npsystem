@@ -1,9 +1,9 @@
 
 add_custom_command(
     OUTPUT avr_firmware.stamp
-    COMMAND ${CMAKE_COMMAND} -E touch avr_firmware.stamp
     COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_SOURCE_DIR}/avr_firmware bash clean.sh
     COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_SOURCE_DIR}/avr_firmware perl build_all.pl
+    COMMAND ${CMAKE_COMMAND} -E touch avr_firmware.stamp
     DEPENDS
       src/core_c.c
       src/core_s.S

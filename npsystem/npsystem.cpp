@@ -133,7 +133,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 	g_cfg.load("npsystem");
 	global.init();
 
-	avrinfo::AVRInfo::SetDataPath(nplib::config::GetExecutableRootPath() / "data");
+	avrinfo::AVRInfo::SetDataPath(g_cfg.assets_dir());
 
 	auto hDll = LoadLibrary(TEXT("Msftedit.dll"));
 	ASSERT(hDll);

@@ -19,6 +19,17 @@ if (UNIX)
   set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 endif()
 
+if (WIN32)
+    # Debugging flags
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi /Od")
+    set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} /DEBUG")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /DEBUG")
+    set(CMAKE_PDB_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/pdb)
+
+    # Release flags
+    set(CMAKE_CXX_FLAGS_RELEASE "/O2")
+endif()
+
 if(WIN32)
   if ("${OPT_BOOST_INCLUDE_DIR}" STREQUAL "")
     message(FATAL_ERROR "-DOPT_BOOST_INCLUDE_DIR is not set")
@@ -127,20 +138,6 @@ if (NOT OPT_BUILD_ONLY_RPC)
   if(WIN32)
   #  add_subdirectory(npcompiler)
     add_subdirectory(npsystem)
-  #  add_subdirectory(tests)
-
-    add_subdirectory(avr_firmware)
-    add_subdirectory(make_info)
-
-    add_custom_command(
-      OUTPUT generate_info.stamp
-      COMMENT "Creating memory addresses file"
-      COMMAND ${CMAKE_COMMAND} -E touch generate_info.stamp
-      COMMAND make_info --out-dir $<TARGET_FILE_DIR:npsystem>/data
-      DEPENDS avr_firmware make_info
-    )
-
-    add_custom_target(avr DEPENDS generate_info.stamp)
-
+    include(avr.cmake)
   endif()
 endif()

@@ -18,7 +18,10 @@ class Medium;
 
 class IController {
 public:
-	virtual double ExecuteCore() = 0;
+	/**
+	   * Returns the time in nano seconds spent executing one single instruction.
+	   */
+	virtual uint64_t CoreStep() = 0;
 	virtual void ExecutePeripheral(uint64_t time_gap) = 0;
 	virtual void SetMedium(Medium* medium) noexcept = 0;
 };
@@ -30,7 +33,6 @@ public:
 	SIM_IMPORT_EXPORT bool RemoveController(IController* controller);
 	MediumState* GetState() noexcept { return &mstate_; }
 private:
-	uint64_t GetCpuFrequency(uint64_t seconds = 1);
 	template<typename Func>
 	void pause_execution(Func&& fn) {
 		if (running_.load(std::memory_order_relaxed) == false) { fn(); return; }
