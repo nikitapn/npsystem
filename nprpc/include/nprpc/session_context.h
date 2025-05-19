@@ -26,10 +26,6 @@ public:
 struct SessionContext {
 	EndPoint remote_endpoint;
 	ReferenceList ref_list;
-
-	bool operator==(const SessionContext& other) const noexcept { 
-		return remote_endpoint == other.remote_endpoint; 
-	}
 };
 
 NPRPC_API SessionContext& get_context();

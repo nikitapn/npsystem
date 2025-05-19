@@ -131,9 +131,11 @@ public:
     : Session(socket.get_executor())
     , socket_(std::move(socket))
   {
-    auto remote_endpoint = socket_.remote_endpoint();
-    ctx_.remote_endpoint.ip4 = remote_endpoint.address().to_v4().to_uint();
-    ctx_.remote_endpoint.port = remote_endpoint.port();
+    auto endpoint = socket_.remote_endpoint();
+    ctx_.remote_endpoint = EndPoint(
+      EndPointType::TcpTethered,
+      endpoint.address().to_v4().to_string(), 
+      endpoint.port());
   }
 };
 
