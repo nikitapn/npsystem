@@ -101,7 +101,7 @@ class IBenchmark_Servant
 public:
   static std::string_view _get_class() noexcept { return "benchmark/benchmark.Benchmark"; }
   std::string_view get_class() const noexcept override { return IBenchmark_Servant::_get_class(); }
-  void dispatch(nprpc::Buffers& bufs, nprpc::EndPoint remote_endpoint, bool from_parent, nprpc::ReferenceList& ref_list) override;
+  void dispatch(nprpc::Buffers& bufs, nprpc::SessionContext& ctx, bool from_parent) override;
   virtual Data rpc () = 0;
   virtual std::string json () = 0;
 };

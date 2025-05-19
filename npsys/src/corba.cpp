@@ -45,11 +45,12 @@ void NPRPC_System::init(
 	npsys_rpc->server_timeout_ = server_timeout;
 	npsys_rpc->notify_ = std::move(notify);
 
-	nprpc::Config rpc_cfg;
-	rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
-	rpc_cfg.port = 21500;
+	npsys_rpc->rpc = nprpc::RpcBuilder()
+		.set_debug_level(nprpc::DebugLevel::DebugLevel_Critical)
+		.set_listen_tcp_port(21500)
+		.set_listen_http_port(21501)
+		.build(ioc);
 
-	npsys_rpc->rpc = nprpc::init(ioc, std::move(rpc_cfg));
 	npsys_rpc->callback_poa = npsys_rpc->rpc->create_poa(256, 
 		{ std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get() });
 	

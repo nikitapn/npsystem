@@ -101,7 +101,7 @@ if(WIN32)
 
   add_compile_options(/W3 /bigobj /EHsc)
 else()
-  add_compile_options(-Wall -Wextra -ftemplate-backtrace-limit=0)
+  add_compile_options(-Wall -Wextra -ftemplate-backtrace-limit=0 -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-deprecated-declarations)
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 

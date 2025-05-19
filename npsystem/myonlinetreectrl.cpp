@@ -128,7 +128,7 @@ size_t CMyOnlineTreeView::AdviseImpl() {
 		if (!item_manager_) return 0;
 	}
 
-	auto this_oid = npsys_rpc->callback_poa->activate_object(this);
+	auto this_oid = npsys_rpc->callback_poa->activate_object(this, nprpc::ObjectActivationFlags::ALLOW_TCP);
 	item_manager_->Activate(this_oid);
 
 	std::vector<nps::var_handle> handles;

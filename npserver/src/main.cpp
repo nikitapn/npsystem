@@ -51,8 +51,8 @@ public:
 
 	virtual void CreateItemManager(nprpc::detail::flat::ObjectId_Direct im) {
 		auto item_manager = new ItemManagerImpl();
-		auto oid = item_manager_poa->activate_object(item_manager, &nprpc::get_context());
-		nprpc::assign_to_out(oid, im);
+		auto oid = item_manager_poa->activate_object(item_manager, nprpc::ObjectActivationFlags::ALLOW_TCP, &nprpc::get_context());
+		nprpc_base::flat::assign_from_cpp_ObjectId(im, oid.get_data());
 	}
 
 	virtual void SendRawData(nprpc::flat::Span<uint8_t> data) {
@@ -287,12 +287,11 @@ int start(int /* argc */, char** /* argv */) {
 
 		nps::Server_ServantImpl server_servant1;
 
-		nprpc::Config rpc_cfg;
-		rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
-		rpc_cfg.port = 21010;
-		rpc_cfg.websocket_port = 21011;
-
-		auto rpc = nprpc::init(thread_pool::get_instance().ctx(), std::move(rpc_cfg));
+		auto rpc = nprpc::RpcBuilder()
+			.set_debug_level(nprpc::DebugLevel::DebugLevel_Critical)
+			.set_listen_tcp_port(21010)
+			.set_listen_http_port(21011)
+			.build(thread_pool::get_instance().ctx());
 
 		server1_poa = rpc->create_poa(2, {
 			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get()
@@ -304,7 +303,7 @@ int start(int /* argc */, char** /* argv */) {
 
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
 		odb::Database::init(nameserver.get(), server1_poa, keypath, "npserver");
-		nameserver->Bind(server1_poa->activate_object(&server_servant1), "npsystem_server");
+		nameserver->Bind(server1_poa->activate_object(&server_servant1, nprpc::ObjectActivationFlags::ALLOW_TCP), "npsystem_server");
 
 		environment::get_instance().init();
 		proto = std::make_unique<protocol::protocol_service>();

@@ -1,5 +1,6 @@
-// Copyright (c) 2021 nikitapnn1@gmail.com
-// This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
+// Copyright (c) 2021-2025 nikitapnn1@gmail.com
+// This file is a part of npsystem (Distributed Control System) and covered by
+// LICENSING file in the topmost directory
 
 #include <iostream>
 #include <cstdint>
@@ -330,7 +331,7 @@ public:
 
 	virtual void advise(cbt1::oid_t id, nprpc::Object* client) {
 		auto it = std::find_if(advised_clients_.begin(), advised_clients_.end(), [client](client_nodes& c) {
-			return client->_data().object_id == c.client->_data().object_id;
+			return client->object_id() == c.client->object_id();
 			});
 
 		if (it == advised_clients_.end()) {
@@ -406,40 +407,48 @@ int start(int argc, char** argv) {
 		return -1;
 	}
 
+	nprpc::Rpc* rpc = nullptr;
+	int exit_code = 0;
 	try
 	{
-		nprpc::Config rpc_cfg;
-		rpc_cfg.debug_level = nprpc::DebugLevel::DebugLevel_Critical;
-		rpc_cfg.port = 21000;
-
-		auto rpc = nprpc::init(ioc, std::move(rpc_cfg));
+		rpc = nprpc::RpcBuilder()
+			.set_debug_level(nprpc::DebugLevel::DebugLevel_TraceAll)
+			.set_listen_tcp_port(21000)
+			.build(ioc);
 
 		poa = rpc->create_poa(1, {
 			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get()
 			});
 
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
-		nameserver->Bind(poa->activate_object(&db_impl), "npsystem_database");
+		nameserver->Bind(poa->activate_object(&db_impl, nprpc::ObjectActivationFlags::ALLOW_TCP), "npsystem_database");
 
 #ifdef _WIN32
 		if (ready) (*ready)();
 #else
 		if (as_service) sd_notify(0, "READY=1");
 #endif
-
 		ioc_thread.join();
-
-		std::cout << "npdbserver: Returned from ioc.run()." << std::endl;
-		rpc->destroy();
-
-		return 0;
 	} catch (nprpc::Exception& ex) {
 		std::cerr << "NPRPC::Exception: " << ex.what() << '\n';
+		exit_code = 1;
 	} catch (std::exception& ex) {
 		std::cerr << ex.what() << '\n';
+		exit_code = 1;
 	}
 
-	return -1;
+	ioc.stop();
+
+	if (ioc_thread.joinable())
+		ioc_thread.join();
+
+	std::cout << "[npdbserver] Returned from ioc.run()." << std::endl;
+
+	if (rpc) {
+		rpc->destroy();
+	}
+
+	return exit_code;
 }
 
 int main(int argc, char** argv) {

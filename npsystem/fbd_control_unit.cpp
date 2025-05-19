@@ -505,7 +505,7 @@ size_t CFBDControlUnit::AdviseImpl() {
 
 	//m_mr->_setTimeout(g_cfg.server_timeout_sec+3, 0);
 	
-	auto this_oid = npsys_rpc->callback_poa->activate_object(this);
+	auto this_oid = npsys_rpc->callback_poa->activate_object(this, nprpc::ObjectActivationFlags::ALLOW_TCP);
 	item_manager_->Activate(this_oid);
 
 	auto const size = m_loadedSlots.size();
