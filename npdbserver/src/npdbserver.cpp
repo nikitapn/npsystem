@@ -416,12 +416,15 @@ int start(int argc, char** argv) {
 			.set_listen_tcp_port(21000)
 			.build(ioc);
 
-		poa = rpc->create_poa(1, {
-			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get()
-			});
+		auto poa = nprpc::PoaBuilder(rpc)
+			.with_max_objects(1)
+			.with_lifespan(nprpc::PoaPolicy::Lifespan::Persistent)
+			.build();
 
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
-		nameserver->Bind(poa->activate_object(&db_impl, nprpc::ObjectActivationFlags::ALLOW_TCP), "npsystem_database");
+		auto server = poa->activate_object(&db_impl, nprpc::ObjectActivationFlags::ALLOW_TCP);
+
+		nameserver->Bind(server, "npsystem_database");
 
 #ifdef _WIN32
 		if (ready) (*ready)();

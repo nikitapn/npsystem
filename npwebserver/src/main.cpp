@@ -89,9 +89,11 @@ int main() {
 			.set_hostname("server.lan")
 			.build(thread_pool::get_instance().ctx());
 
-		auto p1 = std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent);
-		auto poa = rpc->create_poa(2, { p1.get() });
-		
+		auto poa = nprpc::PoaBuilder(rpc)
+			.with_max_objects(2)
+			.with_lifespan(nprpc::PoaPolicy::Lifespan::Persistent)
+			.build();
+
 		auto oid = poa->activate_object(&web_server, 
 			nprpc::ObjectActivationFlags::ALLOW_TCP | nprpc::ObjectActivationFlags::ALLOW_WEBSOCKET);
 		

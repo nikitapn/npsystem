@@ -17,7 +17,7 @@ void NPRPC_System::server_init() {
 
 	server.reset(nprpc::narrow<nps::Server>(obj));
 
-	assert(server->policy_lifespan() == nprpc::Policy_Lifespan::Persistent);
+	assert(server->policy_lifespan() == nprpc::PoaPolicy::Lifespan::Persistent);
 	
 	try {
 		server->Ping();
@@ -51,9 +51,11 @@ void NPRPC_System::init(
 		.set_listen_http_port(21501)
 		.build(ioc);
 
-	npsys_rpc->callback_poa = npsys_rpc->rpc->create_poa(256, 
-		{ std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get() });
-	
+	npsys_rpc->callback_poa = nprpc::PoaBuilder(npsys_rpc->rpc)
+		.with_max_objects(256)
+		.with_lifespan(nprpc::PoaPolicy::Lifespan::Persistent)
+		.build();
+
 	auto nameserver = npsys_rpc->rpc->get_nameserver(nameserver_ip);
 	odb::Database::init(nameserver.get(), npsys_rpc->callback_poa, key_file_path, module_name);
 

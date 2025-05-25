@@ -293,13 +293,15 @@ int start(int /* argc */, char** /* argv */) {
 			.set_listen_http_port(21011)
 			.build(thread_pool::get_instance().ctx());
 
-		server1_poa = rpc->create_poa(2, {
-			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Persistent).get()
-			});
+		auto server1_poa = nprpc::PoaBuilder(rpc)
+			.with_max_objects(2)
+			.with_lifespan(nprpc::PoaPolicy::Lifespan::Persistent)
+			.build();
 
-		item_manager_poa = rpc->create_poa(512, {
-			std::make_unique<nprpc::Policy_Lifespan>(nprpc::Policy_Lifespan::Transient).get()
-			});
+		auto item_manager_poa = nprpc::PoaBuilder(rpc)
+			.with_max_objects(512)
+			.with_lifespan(nprpc::PoaPolicy::Lifespan::Transient)
+			.build();
 
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
 		odb::Database::init(nameserver.get(), server1_poa, keypath, "npserver");
