@@ -22,7 +22,7 @@
 
 #include <signal.h>
 #include <filesystem>
-#include <nprpc/nprpc_nameserver.hpp>
+#include <nprpc_stub/nprpc_nameserver.hpp>
 #include <npc/server.hpp>
 
 npserver::Config g_cfg;
@@ -52,7 +52,7 @@ public:
 	virtual void CreateItemManager(nprpc::detail::flat::ObjectId_Direct im) {
 		auto item_manager = new ItemManagerImpl();
 		auto oid = item_manager_poa->activate_object(item_manager, nprpc::ObjectActivationFlags::ALLOW_TCP, &nprpc::get_context());
-		nprpc_base::flat::assign_from_cpp_ObjectId(im, oid.get_data());
+		nprpc::detail::helpers::assign_from_cpp_ObjectId(im, oid.get_data());
 	}
 
 	virtual void SendRawData(nprpc::flat::Span<uint8_t> data) {

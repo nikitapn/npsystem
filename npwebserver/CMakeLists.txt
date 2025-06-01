@@ -19,7 +19,6 @@ target_include_directories(npwebserver PRIVATE
 )
 
 target_link_libraries(npwebserver PUBLIC 
-  nprpcst
 	npdbstatic
 	npdbclient
 	nplib

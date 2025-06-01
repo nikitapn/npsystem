@@ -19,7 +19,6 @@ add_executable(test_compiler
 
 target_link_libraries(test_compiler
   GTest::gtest_main
-  nprpcst
 	npdbstatic
 	npdbclient
 	nplib

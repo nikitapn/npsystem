@@ -4,7 +4,7 @@
 #include <npsys/corba.h>
 #include <npsys/fat_data_callback.h>
 #include <npdb/db.h>
-#include <nprpc/nprpc_nameserver.hpp>
+#include <nprpc_stub/nprpc_nameserver.hpp>
 
 NPRPC_System* npsys_rpc;
 

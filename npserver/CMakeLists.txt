@@ -32,7 +32,6 @@ target_include_directories(npserver PRIVATE
 )
 
 target_link_libraries(npserver PUBLIC 
-  nprpcst
   leveldb
   npdbstatic
   npdbclient

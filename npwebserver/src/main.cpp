@@ -5,7 +5,7 @@
 #include <cassert>
 
 #include <nprpc/nprpc.hpp>
-#include <nprpc/nprpc_nameserver.hpp>
+#include <nprpc_stub/nprpc_nameserver.hpp>
 
 #include <nplib/utils/thread_pool.hpp>
 

@@ -22,5 +22,4 @@ target_link_libraries(npdbclient PRIVATE
   npdbstatic
   npc
   nprpc
-  nprpcst
 )

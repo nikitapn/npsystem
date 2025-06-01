@@ -27,7 +27,7 @@
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/asio/signal_set.hpp>
 #include <boost/beast/core/error.hpp>
-#include <nprpc/nprpc_nameserver.hpp>
+#include <nprpc_stub/nprpc_nameserver.hpp>
 #include <npc/db.hpp>
 
 #include "config.h"

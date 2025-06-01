@@ -1,43 +1,38 @@
-list(APPEND IDL_FILES_LIST 
-  idl/db.npidl 
-  idl/npsystem_constants.npidl
-  idl/server.npidl
-  idl/npwebserver.npidl
+include(${CMAKE_SOURCE_DIR}/nprpc/cmake/npidl.cmake)
+
+set(IDL_FILES 
+  ${CMAKE_SOURCE_DIR}/npc/idl/db.npidl 
+  ${CMAKE_SOURCE_DIR}/npc/idl/npsystem_constants.npidl
+  ${CMAKE_SOURCE_DIR}/npc/idl/server.npidl
+  ${CMAKE_SOURCE_DIR}/npc/idl/npwebserver.npidl
 )
 
-foreach(file ${IDL_FILES_LIST})
-  string(REPLACE "/" "_" tmp ${file})
-  string(REPLACE "idl/" "" filename ${file})
-  string(REPLACE ".npidl" ".cpp" filename_cpp ${filename})
-  string(REPLACE ".npidl" ".hpp" filename_hpp ${filename})
-  string(REPLACE ".npidl" ".ts" filename_ts ${filename})
-  add_custom_command(
-    OUTPUT ${CMAKE_SOURCE_DIR}/npc/include/npc/${filename_hpp} 
-      ${CMAKE_SOURCE_DIR}/npc/src/gen/${filename_cpp}
-      COMMAND npidl
-      --out-inc-dir ${CMAKE_SOURCE_DIR}/npc/include/npc 
-      --out-src-dir ${CMAKE_SOURCE_DIR}/npc/src/gen
-      --out-ts-dir ${CMAKE_SOURCE_DIR}/nprpc/idl/npwebserver/web/src/gen
-      ${CMAKE_SOURCE_DIR}/npc/idl/${filename}
-    DEPENDS ${file}
-    BYPRODUCTS ${CMAKE_SOURCE_DIR}/npc/include/npc/${filename_hpp} 
-       ${CMAKE_SOURCE_DIR}/npc/src/gen/${filename_cpp}
-       ${CMAKE_SOURCE_DIR}/nprpc/idl/npwebserver/web/src/gen/${filename_ts}
-  )
-endforeach()
+npidl_generate_idl_files("${IDL_FILES}" npc)
+
+add_custom_target(
+  npc_gen
+  DEPENDS ${NPC_GENERATED_SOURCES} ${NPC_GENERATED_HEADERS}
+  COMMENT "Generating all npc files"
+)
 
 add_library(npc STATIC
-  include/npc/db.hpp
-  include/npc/npsystem_constants.hpp
-  include/npc/npwebserver.hpp
-  include/npc/server.hpp
-  src/gen/db.cpp
-  src/gen/npwebserver.cpp
-  src/gen/server.cpp
+  ${npc_GENERATED_SOURCES}
+  ${npc_GENERATED_HEADERS}
+  # Add any additional non-generated source files here
 )
 
-target_include_directories(npc PRIVATE ./include/npc ../nprpc/include)
+# Make sure generated files are built before the library
+add_dependencies(npc npc_gen)
+
+target_include_directories(npc 
+  PUBLIC 
+    ${npc_INCLUDE_DIR}               # For generated headers
+  PRIVATE 
+    ../nprpc/include                 # For nprpc headers
+)
 
 if(UNIX)
   target_compile_options(npc PRIVATE -fPIC)
 endif()
+
+set(npc_INCLUDE_DIR ${npc_INCLUDE_DIR} PARENT_SCOPE)

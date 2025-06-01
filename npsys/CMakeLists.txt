@@ -1,3 +1,4 @@
+
 add_library(npsys STATIC
   src/alg.cpp
   src/corba.cpp
@@ -11,6 +12,7 @@ target_include_directories(npsys PRIVATE
   ../npc/include
   ../nplib/include
   ../nprpc/include
+  ${npc_INCLUDE_DIR}  # For generated headers
 )
 
 if(WIN32)

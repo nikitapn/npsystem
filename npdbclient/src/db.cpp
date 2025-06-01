@@ -7,7 +7,7 @@
 
 #include <npdb/db.h>
 #include <npc/db.hpp>
-#include <nprpc/nprpc_nameserver.hpp>
+#include <nprpc_stub/nprpc_nameserver.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>

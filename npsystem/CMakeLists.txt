@@ -215,7 +215,6 @@ target_include_directories(npsystem PRIVATE
 )
 
 target_link_libraries(npsystem PRIVATE
-  nprpcst
 	npdbstatic
 	npdbclient
 	nplib

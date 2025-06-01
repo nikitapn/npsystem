@@ -15,7 +15,6 @@ target_link_libraries(npdbserver
 	npc
 	npdbstatic
 	nprpc
-	nprpcst
 	nplib
 )
 
