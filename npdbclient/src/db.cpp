@@ -206,7 +206,7 @@ public:
 		db_->set_timeout(5000);
 
 		this_oid_ = poa->activate_object(this, nprpc::ObjectActivationFlags::ALLOW_TCP);
-		
+
 		auto uid = db_->get_database_uuid();
 		boost::uuids::uuid u;
 		memcpy(&u, &uid[0], 16);

@@ -400,9 +400,9 @@ int start(int argc, char** argv) {
 		logging::trivial::severity >= logging::trivial::trace
 	);
 
-	Database_impl db_impl;
+	Database_impl database;
 
-	if (!db_impl.open(g_cfg.db_name)) {
+	if (!database.open(g_cfg.db_name)) {
 		std::cerr << "cannot open database\n";
 		return -1;
 	}
@@ -421,10 +421,10 @@ int start(int argc, char** argv) {
 			.with_lifespan(nprpc::PoaPolicy::Lifespan::Persistent)
 			.build();
 
+		auto oid = poa->activate_object(&database, nprpc::ObjectActivationFlags::ALLOW_TCP);
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
-		auto server = poa->activate_object(&db_impl, nprpc::ObjectActivationFlags::ALLOW_TCP);
 
-		nameserver->Bind(server, "npsystem_database");
+		nameserver->Bind(oid, "npsystem_database");
 
 #ifdef _WIN32
 		if (ready) (*ready)();
