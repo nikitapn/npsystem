@@ -40,7 +40,7 @@ foreach(file ${IDL_FILES_LIST})
   
   set(gen_hpp ${CMAKE_BINARY_DIR}/gen/${basename}.hpp)
   set(gen_cpp ${CMAKE_BINARY_DIR}/gen/${basename}.cpp)
-  set(gen_ts ${CMAKE_BINARY_DIR}/gen/web/${basename}.ts)
+  set(gen_ts ${CMAKE_BINARY_DIR}/gen/js/${basename}.ts)
   
   list(APPEND GENERATED_HEADERS ${gen_hpp})
   list(APPEND GENERATED_SOURCES ${gen_cpp})
@@ -49,11 +49,11 @@ foreach(file ${IDL_FILES_LIST})
   add_custom_command(
     OUTPUT ${gen_hpp} ${gen_cpp}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/gen
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/gen/web
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/gen/js
     COMMAND your_generator
       --out-hpp ${CMAKE_BINARY_DIR}/gen
       --out-cpp ${CMAKE_BINARY_DIR}/gen
-      --out-ts ${CMAKE_BINARY_DIR}/gen/web
+      --out-ts ${CMAKE_BINARY_DIR}/gen/js
       ${CMAKE_SOURCE_DIR}/${file}
     DEPENDS ${file} your_generator
     BYPRODUCTS ${gen_ts}

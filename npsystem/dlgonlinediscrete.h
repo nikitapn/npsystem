@@ -7,7 +7,7 @@
 #include "control_unit_ext.h"
 #include "error.h"
 #include "dlgbase.h"
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 
 class CDlg_OnlineDiscrete : public CMyDlgBase<CDlg_OnlineDiscrete> {
 	using base = CMyDlgBase<CDlg_OnlineDiscrete>;

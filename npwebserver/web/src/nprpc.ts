@@ -1,1 +1,1 @@
-export * from '../../../nprpc/web/dist'
+export * from '../../../nprpc/js/dist'

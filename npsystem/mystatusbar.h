@@ -5,7 +5,7 @@
 
 #include "View.h"
 #include "gdiglobal.h"
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 
 class CMyStatusBar : public CWindowImpl<CMyStatusBar, CWindow>
 {

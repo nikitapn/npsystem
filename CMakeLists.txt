@@ -135,6 +135,8 @@ if (NOT OPT_BUILD_ONLY_RPC)
   add_subdirectory(npserver)
   add_subdirectory(npwebserver)
 
+  add_dependencies(npsys npc)
+
   if(WIN32)
   #  add_subdirectory(npcompiler)
     add_subdirectory(npsystem)

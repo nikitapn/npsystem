@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "avrcommand.h"
 #include "error.h"
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 #include "config.h"
 #include <avr_info/avr_info.h>
 #include <avr_firmware/net.h>

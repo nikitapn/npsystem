@@ -12,7 +12,7 @@
 #include "error.h"
 #include "view_algorithm.h"
 #include "dlgalgorithmproperties.h"
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 #include "network_ext.h"
 #include <npsys/algcat.h>
 #include <npsys/algsubcat.h>

@@ -17,7 +17,7 @@
 #include "error.h"
 #include "Global.h"
 #include "GDIGlobal.h"
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 #include "config.h"
 #include <nplib/utils/log.h>
 #include <npdb/db.h>

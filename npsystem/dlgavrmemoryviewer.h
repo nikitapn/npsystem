@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 
 class Dlg_AVRMemoryViewer 
 	: public CDialogImpl<Dlg_AVRMemoryViewer> {

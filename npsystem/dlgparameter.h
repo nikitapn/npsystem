@@ -6,7 +6,7 @@
 #include "dlgbase.h"
 #include <npsys/header.h>
 #include <npsys/fbdblock.h>
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 
 class CDlg_Parameter : public CMyDlgBase<CDlg_Parameter> {
 	using base = CMyDlgBase<CDlg_Parameter>;

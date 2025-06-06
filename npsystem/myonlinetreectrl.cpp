@@ -6,7 +6,7 @@
 #include "config.h"
 #include "tr_item.h"
 #include <npsys/variable.h>
-#include <npsys/corba.h>
+#include <npsys/common_rpc.hpp>
 
 CMyOnlineTreeView::CMyOnlineTreeView() 
 	: header_(tree, items_)
