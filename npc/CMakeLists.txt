@@ -9,12 +9,6 @@ set(IDL_FILES
 
 npidl_generate_idl_files("${IDL_FILES}" npc)
 
-add_custom_target(
-  npc_gen
-  DEPENDS ${NPC_GENERATED_SOURCES} ${NPC_GENERATED_HEADERS}
-  COMMENT "Generating all npc files"
-)
-
 add_library(npc STATIC
   ${npc_GENERATED_SOURCES}
   ${npc_GENERATED_HEADERS}
