@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 4.0.1)
 
 set(BOOST_LIB_PREFIX "/usr/lib" CACHE STRING "Location of the boost libs")
 option(OPT_BUILD_ONLY_RPC "Enable if only nprpc is needed" OFF)
+option(OPT_NPRPC_SKIP_TESTS "Enable if tests should be built" OFF)
 
 #set(OUTPUT_LIB_DIR ${CMAKE_BINARY_DIR}/lib)
 #link_directories(${OUTPUT_DIR_LIB})
@@ -108,16 +109,17 @@ endif()
 
 project(npsystem)
 
-# setting up GoogleTest
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
+if (NOT OPT_NPRPC_SKIP_TESTS)
+  # setting up GoogleTest
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+  )
+  # For Windows: Prevent overriding the parent project's compiler/linker settings
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+  FetchContent_MakeAvailable(googletest)
+endif()
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
