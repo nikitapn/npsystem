@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 4.0.1)
 
+# third-party libraries
+add_subdirectory(3rd)
+
 set(BOOST_LIB_PREFIX "/usr/lib" CACHE STRING "Location of the boost libs")
 option(OPT_BUILD_ONLY_RPC "Enable if only nprpc is needed" OFF)
 option(OPT_NPRPC_SKIP_TESTS "Enable if tests should be built" OFF)
