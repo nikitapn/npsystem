@@ -1,20 +1,45 @@
 #!/bin/bash
 
+set -e
+
 if [ $# -eq 0 ]; then
   echo "No arguments supplied"
   exit -1
 fi
 
-if [ ! -f "$1" ]; then
+INPUT_FILE="$1"
+OUTPUT_DIR="$2"
+
+if [ ! -f "$INPUT_FILE" ]; then
   echo "$1 does not exist."
   exit -1
 fi
 
+if [[ "$INPUT_FILE" != *.svg ]]; then
+  echo "Input file must be a .svg file."
+  exit -1
+fi
+
+if [ -z "$OUTPUT_DIR" ]; then
+  OUTPUT_DIR="."
+fi
+
+TMP_DIR=$(mktemp -d)
+trap 'rm -rf "$TMP_DIR"' EXIT
+
 for size in 19 24 32 48 128 256; do
-  inkscape -z -e $size.png -w $size -h $size $1 >/dev/null 2>/dev/null
+  inkscape \
+    --export-area-page \
+    --export-png-color-mode=RGBA_8 \
+    --export-filename="$1_$size.png" \
+    --export-width=$size --export-height=$size $1 \
+    -o "$TMP_DIR/$size.png" >/dev/null 2>/dev/null
+
+  #inkscape -z -e $size.png -w $size -h $size $1 >/dev/null 2>/dev/null
 done
 
-convert out/19.png out/24.png out/32.png out/48.png out/128.png out/256.png ../npsystem/res/`basename $1 .svg`.ico
+magick convert $TMP_DIR/19.png $TMP_DIR/24.png $TMP_DIR/32.png \
+  $TMP_DIR/48.png $TMP_DIR/128.png $TMP_DIR/256.png \
+  `basename $1 .svg`.ico
 
-[ $? -eq 0 ] && exit 0  || exit 1
-
+cp "$TMP_DIR/256.png" "$OUTPUT_DIR/`basename $1 .svg`.png"
