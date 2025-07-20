@@ -42,3 +42,5 @@ if(WIN32)
 else()
   target_compile_options(nplib PRIVATE -fPIC)
 endif()
+
+add_subdirectory(test)

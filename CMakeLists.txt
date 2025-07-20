@@ -130,6 +130,8 @@ add_subdirectory(nplib)
 add_subdirectory(nprpc)
 
 if (NOT OPT_BUILD_ONLY_RPC)
+  
+  # add_subdirectory(npdatabase)
 
   add_subdirectory(npc)
   add_subdirectory(npdbclient)
