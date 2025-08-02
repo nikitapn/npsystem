@@ -43,4 +43,6 @@ else()
   target_compile_options(nplib PRIVATE -fPIC)
 endif()
 
-add_subdirectory(test)
+if(NOT OPT_NPRPC_SKIP_TESTS)
+  add_subdirectory(test)
+endif()

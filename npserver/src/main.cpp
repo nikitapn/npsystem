@@ -27,13 +27,12 @@
 
 npserver::Config g_cfg;
 
-static nprpc::Poa* server1_poa;
-static nprpc::Poa* item_manager_poa;
-
 namespace nps {
 class Server_ServantImpl
 	: public IServer_Servant
 {
+	nprpc::Poa* item_manager_poa_;
+
 	template<class F>
 	int process_cmd(F&& fn) {
 		int n = g_cfg.cmd_n_try, code;
@@ -47,11 +46,23 @@ class Server_ServantImpl
 		throw nps::NPNetCommunicationError(code);
 	}
 public:
+	Server_ServantImpl(nprpc::Rpc* rpc)
+	{
+		item_manager_poa_ = nprpc::PoaBuilder(rpc)
+			.with_max_objects(512)
+			.with_lifespan(nprpc::PoaPolicy::Lifespan::Transient)
+			.build();
+	}
+
 	virtual void Ping() {}
 
 	virtual void CreateItemManager(nprpc::detail::flat::ObjectId_Direct im) {
 		auto item_manager = new ItemManagerImpl();
-		auto oid = item_manager_poa->activate_object(item_manager, nprpc::ObjectActivationFlags::ALLOW_TCP, &nprpc::get_context());
+		auto oid = item_manager_poa_->activate_object(
+			item_manager,
+			nprpc::ObjectActivationFlags::ALLOW_TCP,
+			&nprpc::get_context());
+
 		nprpc::detail::helpers::assign_from_cpp_ObjectId(im, oid.get_data());
 	}
 
@@ -255,7 +266,7 @@ void watch_x() {
 
 #ifdef _WIN32
 int start(int /* argc */, char** /* argv */, Service::ready_t* ready = nullptr) {
-#else 
+#else
 int start(int /* argc */, char** /* argv */) {
 #endif
 
@@ -285,8 +296,6 @@ int start(int /* argc */, char** /* argv */) {
 	try {
 		auto keypath = g_cfg.data_dir() / "keys";
 
-		nps::Server_ServantImpl server_servant1;
-
 		auto rpc = nprpc::RpcBuilder()
 			.set_debug_level(nprpc::DebugLevel::DebugLevel_Critical)
 			.set_listen_tcp_port(21010)
@@ -298,10 +307,7 @@ int start(int /* argc */, char** /* argv */) {
 			.with_lifespan(nprpc::PoaPolicy::Lifespan::Persistent)
 			.build();
 
-		auto item_manager_poa = nprpc::PoaBuilder(rpc)
-			.with_max_objects(512)
-			.with_lifespan(nprpc::PoaPolicy::Lifespan::Transient)
-			.build();
+		nps::Server_ServantImpl server_servant1(rpc);
 
 		auto nameserver = rpc->get_nameserver(g_cfg.nameserver_ip);
 		odb::Database::init(nameserver.get(), server1_poa, keypath, "npserver");
