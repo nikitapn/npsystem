@@ -3,6 +3,11 @@
 
 namespace test {
 
+interface ServerControl {
+	// All tests performed, safe to shutdown the server
+	void Shutdown();
+}
+
 AAA: flat {
 	a: u32;
 	b: string;

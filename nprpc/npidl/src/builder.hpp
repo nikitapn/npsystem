@@ -70,7 +70,8 @@ public:
 	}
 
 	BlockDepth& operator --() {
-		assert(depth_);
+		// assert(depth_);
+		if (depth_ == 0) depth_ = 1;
 		--depth_;
 		return *this;
 	}
@@ -115,4 +116,3 @@ inline std::ostream& operator<<(std::ostream& os, const BlockDepth& block) {
 	for (size_t i = 0; i < block.depth_; ++i) os << "  ";
 	return os;
 }
-

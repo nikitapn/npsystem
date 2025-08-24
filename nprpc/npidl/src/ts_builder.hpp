@@ -15,11 +15,16 @@ struct _ns {
 		TypescriptBuilder& bulder_;
 		Namespace* nm;
 	};
+template<typename Fn>
+struct OstreamWrapper {
+		Fn fn;
+};
 private:
 	friend std::ostream& operator<<(std::ostream&, const TypescriptBuilder::_ns&);
 
 	std::ofstream out;
 	std::stringstream spans;
+	BlockDepth block_depth_;
 
 	void emit_parameter_type_for_proxy_call_r(AstTypeDecl* type, std::ostream& os, bool input);
 	void emit_parameter_type_for_proxy_call(AstFunctionArgument* arg, std::ostream& os);
@@ -36,8 +41,40 @@ private:
 	void emit_flat_type(AstTypeDecl* type, std::ostream& os);
 	void emit_struct2(AstStructDecl* s, bool is_exception);
 	void emit_struct_helpers();
+	void emit_variable(AstTypeDecl* type, std::string name, std::ostream& os);
 
 	_ns ns(Namespace* nm);
+
+	auto emit_type(AstTypeDecl* type) {
+		return OstreamWrapper{[type, this](std::ostream& os) { this->emit_type(type, os); }};
+	}
+
+	auto emit_flat_type(AstTypeDecl* type) {
+		return OstreamWrapper{[type, this](std::ostream& os) { this->emit_flat_type(type, os); }};
+	}
+
+	auto bb(bool newline = true) {
+		return OstreamWrapper{[this, newline](std::ostream& os) {
+			if (newline)
+				os << block_depth_ << "{\n";
+			++block_depth_;
+		}};
+	}
+
+	auto eb(bool newline = true) {
+		return OstreamWrapper{[this, newline](std::ostream& os) {
+			--block_depth_;
+			if (newline)
+				os << block_depth_ << "}\n";
+		}};
+	}
+
+	auto bl() {
+		return OstreamWrapper{[this](std::ostream& os) {
+			os << block_depth_;
+		}};
+	}
+
 public:
 	virtual void emit_constant(const std::string& name, AstNumber* number);
 	virtual void emit_struct(AstStructDecl* s);
@@ -51,3 +88,9 @@ public:
 
 	TypescriptBuilder(Context& ctx, std::filesystem::path file_path, std::filesystem::path out_dir);
 };
+
+template<typename Fn>
+inline std::ostream& operator<<(std::ostream& os, const TypescriptBuilder::OstreamWrapper<Fn>& wrapper) {
+	wrapper.fn(os);
+	return os;
+}
