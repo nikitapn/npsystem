@@ -3,16 +3,75 @@
 
 #pragma once
 
-#include "dbtypes.h"
-#include "mapped.h"
-#include "bfsiterator.h"
 #include <type_traits>
 #include <optional>
 #include <ostream>
 #include <array>
+#include <memory>
+
+#include "dbtypes.hpp"
+#include "bfsiterator.hpp"
+
+// Add new paging system headers
+#include "impl/buffer_pool_manager.hpp"
+#include "page.hpp"
 
 namespace npdb {
-#pragma warning(disable : 26495)
+
+// Forward declarations for paging system
+class BufferPoolManager;
+struct Page;
+
+// Replace mapped_ptr with page-based pointer
+template<typename T>
+class page_ptr {
+private:
+    uint32_t page_id_;
+    BufferPoolManager* buffer_pool_;
+    Page* page_;
+    
+public:
+    page_ptr(uint32_t page_id, BufferPoolManager* buffer_pool) 
+        : page_id_(page_id), buffer_pool_(buffer_pool) {
+        page_ = buffer_pool_->FetchPage(page_id_);
+    }
+    
+    ~page_ptr() {
+        if (page_) {
+            buffer_pool_->UnpinPage(page_id_, false);
+        }
+    }
+    
+    T* get() const {
+        return reinterpret_cast<T*>(page_->data.data());
+    }
+    
+    T* operator->() const { return get(); }
+    T& operator*() const { return *get(); }
+    
+    uint32_t page_id() const { return page_id_; }
+    
+    // Move constructor/assignment
+    page_ptr(page_ptr&& other) noexcept 
+        : page_id_(other.page_id_), buffer_pool_(other.buffer_pool_), page_(other.page_) {
+        other.page_ = nullptr;
+    }
+    
+    page_ptr& operator=(page_ptr&& other) noexcept {
+        if (this != &other) {
+            if (page_) buffer_pool_->UnpinPage(page_id_, false);
+            page_id_ = other.page_id_;
+            buffer_pool_ = other.buffer_pool_;
+            page_ = other.page_;
+            other.page_ = nullptr;
+        }
+        return *this;
+    }
+    
+    // Disable copy
+    page_ptr(const page_ptr&) = delete;
+    page_ptr& operator=(const page_ptr&) = delete;
+};
 
 template<typename Key, typename Value>
 struct KeyValueT {
@@ -83,14 +142,14 @@ private:
 	friend bfs_iterator;
 
 	template<typename BNode>
-	friend bool verify(mapped_ptr<BNode>, std::optional<typename BNode::KeyValue>, std::optional<typename BNode::KeyValue>);
+	friend bool verify(page_ptr<BNode>, std::optional<typename BNode::KeyValue>, std::optional<typename BNode::KeyValue>);
 
 
 	static constexpr auto max_keys_size = 2 * Degree - 1;
 	static constexpr auto max_childs_size = 2 * Degree;
 
 	std::array<KeyValue, max_keys_size> keys_;
-	alignas(16) std::array<mapped_ptr_base, max_childs_size> nodes_;
+	alignas(16) std::array<page_ptr_base, max_childs_size> nodes_;
 
 	size_t n_keys_;
 	bool leaf_;
@@ -115,7 +174,7 @@ private:
 		//return std::distance(node->keys_.begin(), founded);
 	}
 
-	static void insert_simple(Self* node, mapped_ptr<Self>& l, mapped_ptr<Self>& r, size_t index, const KeyValue& kv) {
+	static void insert_simple(Self* node, page_ptr<Self>& l, page_ptr<Self>& r, size_t index, const KeyValue& kv) {
 		assert(!node->is_full());
 		std::move(
 			node->nodes_.begin() + index + 1,
@@ -135,8 +194,8 @@ private:
 		node->n_keys_ = node->n_keys_ + 1;
 	}
 
-	static std::tuple<mapped_ptr<Self>, mapped_ptr<Self>, KeyValue>
-		split_half(mapped_ptr_fixed<TreeMeta>& meta, mapped_ptr<Self>& node) {
+	static std::tuple<page_ptr<Self>, page_ptr<Self>, KeyValue>
+		split_half(page_ptr_fixed<TreeMeta>& meta, page_ptr<Self>& node) {
 		assert(node->is_full() && !node->is_leaf());
 
 		constexpr auto ksize = (max_keys_size - 1) / 2;
@@ -144,7 +203,7 @@ private:
 
 		node->n_keys_ = ksize;
 
-		auto new_right_node = make_mapped<Self>(node.db(), meta, ksize, false);
+		auto new_right_node = make_page<Self>(node.db(), meta, ksize, false);
 		std::copy(node->keys_.begin() + ksize + 1, node->keys_.end(), new_right_node->keys_.begin());
 		std::copy(node->nodes_.begin() + nsize, node->nodes_.end(), new_right_node->nodes_.begin());
 
@@ -169,24 +228,24 @@ public:
 	}
 
 
-	[[nodiscard]] mapped_ptr<Self> insert(mapped_ptr_fixed<TreeMeta>& meta, const KeyValue& kv, mapped_ptr<Self>& root) {
-		mapped_ptr<Self> new_root(root);
+	[[nodiscard]] page_ptr<Self> insert(page_ptr_fixed<TreeMeta>& meta, const KeyValue& kv, page_ptr<Self>& root) {
+		page_ptr<Self> new_root(root);
 		insert_impl(meta, kv, root, root, -1, new_root);
 		return new_root;
 	}
 
 	std::optional<
 		std::tuple<
-		mapped_ptr<Self>, 
-		mapped_ptr<Self>, KeyValue>
+		page_ptr<Self>, 
+		page_ptr<Self>, KeyValue>
 	>
 		static insert_impl(
-			mapped_ptr_fixed<TreeMeta>& meta, 
+			page_ptr_fixed<TreeMeta>& meta, 
 			const KeyValue& kv, 
-			mapped_ptr<Self>& self, 
-			mapped_ptr<Self>& parent, 
+			page_ptr<Self>& self, 
+			page_ptr<Self>& parent, 
 			size_t index_in_parent, 
-			mapped_ptr<Self>& new_root) 
+			page_ptr<Self>& new_root) 
 	{
 		if (self->is_leaf()) {
 			if (self->n_keys_ == 0) {
@@ -199,7 +258,7 @@ public:
 
 				auto median_kv = self->keys_[left_childs_keys_size];
 
-				auto new_right_node = make_mapped<Self>(parent.db(), meta, right_childs_keys_size, true);
+				auto new_right_node = make_page<Self>(parent.db(), meta, right_childs_keys_size, true);
 				std::copy(self->keys_.begin() + left_childs_keys_size + 1, self->keys_.end(), new_right_node->keys_.begin());
 
 				self->n_keys_ = left_childs_keys_size;
@@ -211,7 +270,7 @@ public:
 				}
 
 				if (parent == self) [[unlikely]] {
-					new_root = make_mapped<Self>(parent.db(), meta, 1, false);
+					new_root = make_page<Self>(parent.db(), meta, 1, false);
 					new_root->keys_[0] = median_kv;
 					new_root->nodes_[0] = self;
 					new_root->nodes_[1] = new_right_node;
@@ -240,12 +299,12 @@ public:
 			}
 		} else { // not a leaf
 			size_t index = find_index(self.get(), kv);
-			auto node = mapped_ptr<Self>(self->nodes_[index], self.db());
+			auto node = page_ptr<Self>(self->nodes_[index], self.db());
 			auto x = node->insert_impl(meta, kv, node, self, index, new_root);
 			if (x) {
 				auto [left, right, kv] = *x;
 				if (parent == self) {
-					new_root = make_mapped<Self>(parent.db(), meta, 1, false);
+					new_root = make_page<Self>(parent.db(), meta, 1, false);
 					new_root->keys_[0] = kv;
 					new_root->nodes_[0] = left;
 					new_root->nodes_[1] = right;
@@ -270,7 +329,7 @@ public:
 		return {};
 	}
 
-	static auto find(mapped_ptr<Self> from, const Key& key, Database& db) noexcept {
+	static auto find(page_ptr<Self> from, const Key& key, Database& db) noexcept {
 		using return_t = std::conditional_t<std::is_same_v<Value, void>, bool, std::optional<Value>>;
 		
 		auto ptr_unsafe = from.get();
@@ -288,7 +347,7 @@ public:
 
 		if (ptr_unsafe->is_leaf()) return return_t{};
 
-		return find(mapped_ptr<Self>{ptr_unsafe->nodes_[index], db}, key, db);
+		return find(page_ptr<Self>{ptr_unsafe->nodes_[index], db}, key, db);
 	}
 
 	BTreeNode()
@@ -321,7 +380,7 @@ std::ostream& operator << (std::ostream& os, const BTreeNode<__Key, __Value, __D
 
 template<typename BNode>
 bool verify(
-	mapped_ptr<BNode> node, 
+	page_ptr<BNode> node, 
 	std::optional<typename BNode::KeyValue> left_kv, 
 	std::optional<typename BNode::KeyValue> right_kv) {
 	for (size_t i = 0; i < node->n_keys_ - 1; ++i) {
@@ -343,14 +402,14 @@ bool verify(
 	if (node->is_leaf() == false) {
 		for (size_t i = 0; i < node->n_keys_; ++i) {
 			bool ok = verify<BNode>(
-				mapped_ptr<BNode>(node->nodes_[i], node.db()),
+				page_ptr<BNode>(node->nodes_[i], node.db()),
 				i == 0 ? std::optional<typename BNode::KeyValue>{} : node->keys_[i - 1], 
 				node->keys_[i]
 				);
 			if (!ok) return ok;
 		}
 		return verify<BNode>(
-			mapped_ptr<BNode>(node->nodes_[node->n_keys_], node.db()),
+			page_ptr<BNode>(node->nodes_[node->n_keys_], node.db()),
 			node->keys_[node->n_keys_ - 1], 
 			std::optional<typename BNode::KeyValue>{}
 			);
@@ -366,8 +425,8 @@ public:
 	using btree_node_ptr = btree_node*;
 	using KeyValue = typename btree_node::KeyValue;
 private:
-	mapped_ptr_fixed<TreeMeta> meta_;
-	mapped_ptr<btree_node> root_;
+	page_ptr_fixed<TreeMeta> meta_;
+	page_ptr<btree_node> root_;
 	Database& db_;
 public:
 	auto root() {return root_; }
@@ -387,7 +446,7 @@ public:
 		return btree_node::find(root_, key, db_);
 	}
 
-	BTree(mapped_ptr_fixed<TreeMeta> meta)
+	BTree(page_ptr_fixed<TreeMeta> meta)
 		: meta_{meta}
 		, root_{meta->root, meta.db()}
 		, db_{meta.db()}

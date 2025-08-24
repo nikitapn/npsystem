@@ -4,7 +4,8 @@
 #pragma once
 
 #include <queue>
-#include "mapped.h"
+
+#include "mapped.hpp"
 
 namespace npdb {
 
