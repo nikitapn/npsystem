@@ -5,7 +5,7 @@ add_subdirectory(3rd)
 
 set(BOOST_LIB_PREFIX "/usr/lib" CACHE STRING "Location of the boost libs")
 option(OPT_BUILD_ONLY_RPC "Enable if only nprpc is needed" OFF)
-option(OPT_NPRPC_SKIP_TESTS "Enable if tests should be built" OFF)
+option(OPT_NPRPC_SKIP_TESTS "Enable if tests should be skipped" OFF)
 
 #set(OUTPUT_LIB_DIR ${CMAKE_BINARY_DIR}/lib)
 #link_directories(${OUTPUT_DIR_LIB})
