@@ -14,12 +14,13 @@
 namespace nplib::format {
 
 template<typename T>
+	requires std::integral<T> || std::floating_point<T>
 inline std::string to_hex(T val) noexcept {
-	static_assert(std::is_arithmetic_v<T>, "T is not arithmetic type");
 	std::stringstream ss;
 	ss << "0x" << std::hex << std::setfill('0') << std::setw(sizeof(T)*2) << static_cast<uint64_t>(val);
 	return ss.str();
 }
+
 template<typename T>
 inline int from_hex(T& str) noexcept {
 	int value;
@@ -27,6 +28,16 @@ inline int from_hex(T& str) noexcept {
 	ss << std::hex << str; ss >> value;
 	return value;
 }
+
+inline std::string to_hex(std::string_view str) noexcept {
+  std::string result;
+  for (auto c : str) {
+    auto b = (unsigned char)c;
+    result += "0123456789ABCDEF"[b >> 4];
+    result += "0123456789ABCDEF"[b & 0x0F];
+  }
+  return result;
+};
 
 template<typename ... Args>
 std::string string_format(std::string_view format, Args ... args) {
