@@ -89,6 +89,13 @@
     "valarray": "cpp",
     "variant": "cpp",
     "*.inc": "cpp",
-    "expected": "cpp"
+    "expected": "cpp",
+    "__locale": "cpp",
+    "__node_handle": "cpp",
+    "__tree": "cpp",
+    "__verbose_abort": "cpp",
+    "execution": "cpp",
+    "ios": "cpp",
+    "locale": "cpp"
   }
 }
