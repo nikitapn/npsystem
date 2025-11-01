@@ -7,6 +7,8 @@
 build/
 generated
 npsystem_db
+/nprpc/include/nprpc_stub
+/nprpc/nprpc_js/src/gen
 
 # User-specific files
 *.suo
