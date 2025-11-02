@@ -45,7 +45,7 @@ target_link_libraries(npserver PUBLIC
 
 if(UNIX)
   target_link_libraries(npserver PUBLIC
-    ${BOOST_LIB_PREFIX}/libboost_system.a
+    # ${BOOST_LIB_PREFIX}/libboost_system.a
     ${BOOST_LIB_PREFIX}/libboost_thread.a
     ${BOOST_LIB_PREFIX}/libboost_serialization.a
     ${BOOST_LIB_PREFIX}/libboost_log.a

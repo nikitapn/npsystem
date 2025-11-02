@@ -20,7 +20,7 @@ target_link_libraries(test_sim PRIVATE
 
 if(UNIX)
   target_link_libraries(test_sim PUBLIC
-    ${BOOST_LIB_PREFIX}/libboost_system.a
+    # ${BOOST_LIB_PREFIX}/libboost_system.a
     ${BOOST_LIB_PREFIX}/libboost_thread.a
     ${BOOST_LIB_PREFIX}/libboost_serialization.a
     ${BOOST_LIB_PREFIX}/libboost_log.a
