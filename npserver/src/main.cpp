@@ -22,7 +22,7 @@
 
 #include <signal.h>
 #include <filesystem>
-#include <nprpc_stub/nprpc_nameserver.hpp>
+#include <nprpc_nameserver.hpp>
 #include <npc/server.hpp>
 
 npserver::Config g_cfg;

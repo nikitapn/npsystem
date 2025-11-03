@@ -98,6 +98,7 @@
     "execution": "cpp",
     "ios": "cpp",
     "locale": "cpp",
-    "__config": "cpp"
+    "__config": "cpp",
+    "print": "cpp"
   }
 }

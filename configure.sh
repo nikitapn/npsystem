@@ -7,4 +7,6 @@ set -ex
 
 mkdir -p build/linux
 # Use Unix Makefiles to avoid ninja color output issues and broken C++/Intellisense in VSCode
-cmake -G "Unix Makefiles" -B build/linux -S . $*
+cmake -G "Unix Makefiles" -B build/linux -S . \
+  -DCMAKE_BUILD_TYPE=Debug \
+  $*

@@ -6,7 +6,7 @@
 #include <sstream>
 
 #include <npdb/db.h>
-#include <nprpc_stub/nprpc_nameserver.hpp>
+#include <nprpc_nameserver.hpp>
 
 #include <nplib/utils/format.h>
 

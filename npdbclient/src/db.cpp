@@ -7,7 +7,7 @@
 
 #include <npdb/db.h>
 #include <npc/db.hpp>
-#include <nprpc_stub/nprpc_nameserver.hpp>
+#include <nprpc_nameserver.hpp>
 
 #include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid_io.hpp>
@@ -192,7 +192,7 @@ public:
 		write_key_file();
 	}
 
-	DatabaseImpl(nprpc::Nameserver* nameserver, 
+	DatabaseImpl(nprpc::common::Nameserver* nameserver, 
 		nprpc::Poa* poa, std::filesystem::path keys_path, std::string_view key_file) {
 	
 		nprpc::Object* obj;
@@ -297,7 +297,7 @@ Database::~Database() {
 
 NPDB_IMPORT_EXPORT
 void Database::init(
-	nprpc::Nameserver* nameserver, 
+	nprpc::common::Nameserver* nameserver, 
 	nprpc::Poa* poa, 
 	std::filesystem::path keys_path, 
 	std::string_view key_file) {
