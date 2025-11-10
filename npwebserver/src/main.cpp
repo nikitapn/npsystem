@@ -1,11 +1,11 @@
-// Copyright (c) 2021 nikitapnn1@gmail.com
+// Copyright (c) 2021-2025, Nikita Pennie <nikitapnn1@gmail.com>
 // This file is a part of npsystem (Distributed Control System) and covered by LICENSING file in the topmost directory
 
 #include <iostream>
 #include <cassert>
 
 #include <nprpc/nprpc.hpp>
-#include <nprpc_stub/nprpc_nameserver.hpp>
+#include <nprpc_nameserver.hpp>
 
 #include <nplib/utils/thread_pool.hpp>
 

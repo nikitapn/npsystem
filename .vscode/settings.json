@@ -1,5 +1,9 @@
 {
+  // "npidl.lsp.path": "/home/nikita/projects/npsystem/build/linux/bin",
+  // "npidl.lsp.trace.server": "verbose",
+
   "files.associations": {
+    ".args": "gn",
     "iostream": "cpp",
     "any": "cpp",
     "array": "cpp",
@@ -96,6 +100,10 @@
     "__verbose_abort": "cpp",
     "execution": "cpp",
     "ios": "cpp",
-    "locale": "cpp"
+    "locale": "cpp",
+    "__config": "cpp",
+    "print": "cpp",
+    "__bit_reference": "cpp",
+    "__split_buffer": "cpp"
   }
 }

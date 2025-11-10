@@ -7,7 +7,8 @@
 build/
 generated
 npsystem_db
-/nprpc/include/nprpc_stub
+/nprpc/include/nprpc_base.hpp
+/nprpc/include/nprpc_nameserver.hpp
 /nprpc/nprpc_js/src/gen
 
 # User-specific files

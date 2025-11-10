@@ -29,7 +29,7 @@ target_link_libraries(npwebserver PUBLIC
 
 if(UNIX)
   target_link_libraries(npwebserver PUBLIC 
-    ${BOOST_LIB_PREFIX}/libboost_system.a
+    # ${BOOST_LIB_PREFIX}/libboost_system.a
     ${BOOST_LIB_PREFIX}/libboost_thread.a
     ${BOOST_LIB_PREFIX}/libboost_serialization.a
     pthread

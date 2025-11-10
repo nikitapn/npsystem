@@ -19,7 +19,7 @@ target_include_directories(make_info PRIVATE
 
 if(UNIX)
   target_link_libraries(make_info PUBLIC 
-    ${BOOST_LIB_PREFIX}/libboost_system.a
+    # ${BOOST_LIB_PREFIX}/libboost_system.a
     ${BOOST_LIB_PREFIX}/libboost_serialization.a
     boost_program_options
   )

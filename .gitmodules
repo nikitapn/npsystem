@@ -1,3 +1,6 @@
 [submodule "3rd/spdlog"]
 	path = 3rd/spdlog
 	url = git@github.com:gabime/spdlog.git
+[submodule "3rd/glaze"]
+	path = 3rd/glaze
+	url = git@github.com:stephenberry/glaze.git

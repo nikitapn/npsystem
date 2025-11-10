@@ -6,7 +6,7 @@ import { expect } from 'chai';
 // Use the Node.js compatible build
 // const NPRPC = require('nprpc/index.node.js');
 import * as NPRPC from 'nprpc';
-import * as test from '../src/gen/test';
+import * as test from '../src/gen/nprpc_test';
 import { ServerManager } from './server-manager';
 
 // Test data constants (matching C++ tests)
@@ -161,7 +161,6 @@ describe('NPRPC Integration Tests', function() {
                 await testBasic.InException();
                 expect.fail('Expected InException to throw an exception');
             } catch (error) {
-                console.log(`Caught SimpleException: ${JSON.stringify(error)}`);
                 expect(error).to.be.instanceOf(test.SimpleException);
                 const simpleEx = error as unknown as test.SimpleException;
                 expect(simpleEx.message).to.equal('This is a test exception');
