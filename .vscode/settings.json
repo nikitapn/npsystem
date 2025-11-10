@@ -102,6 +102,8 @@
     "ios": "cpp",
     "locale": "cpp",
     "__config": "cpp",
-    "print": "cpp"
+    "print": "cpp",
+    "__bit_reference": "cpp",
+    "__split_buffer": "cpp"
   }
 }
