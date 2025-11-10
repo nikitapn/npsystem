@@ -1,6 +1,6 @@
 {
-  "npidl.lsp.path": "/home/nikita/projects/npsystem/build/linux/bin",
-  "npidl.lsp.trace.server": "verbose",
+  // "npidl.lsp.path": "/home/nikita/projects/npsystem/build/linux/bin",
+  // "npidl.lsp.trace.server": "verbose",
 
   "files.associations": {
     ".args": "gn",
