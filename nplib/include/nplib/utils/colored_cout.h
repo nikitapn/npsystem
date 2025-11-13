@@ -49,7 +49,7 @@ namespace clr
 //           << clr::reset;
 
 #ifdef _WIN32
-    enum class color
+    enum color
     {
         reset     = 0
         , blue    = FOREGROUND_BLUE | FOREGROUND_INTENSITY
