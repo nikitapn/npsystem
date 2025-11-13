@@ -20,7 +20,7 @@
 
 npwebserver::Config g_cfg;
 
-// using thread_pool = nplib::thread_pool_2;
+using thread_pool = nplib::thread_pool_2;
 using namespace std::chrono_literals;
 
 

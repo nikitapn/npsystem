@@ -5,4 +5,4 @@
 
 #include <nplib/utils/thread_pool.hpp>
 
-// using thread_pool = nplib::thread_pool_6;
+using thread_pool = nplib::thread_pool_6;
